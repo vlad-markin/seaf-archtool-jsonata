@@ -217,6 +217,7 @@ internal object Messages {
         "X0006" to "{{value}} cannot be called from an expression and cannot be registered as a function name",
         "X0007" to "{{value}} is a standard library function; register it with overridesStandard to replace it",
         "X0008" to "Internal engine error: {{{message}}}",
+        "X0009" to "The evaluation was cancelled",
     )
 
     // populateMessage: {{{field}}} is replaced with the raw field, {{field}} with JSON.stringify(err[field]).

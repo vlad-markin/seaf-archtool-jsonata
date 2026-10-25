@@ -153,6 +153,8 @@ public class EvaluationOptions @JvmOverloads constructor(
      * reaches the caller unchanged, so the place comes this way, once per exception object, from the innermost node.
      */
     public val hostErrors: HostErrorListener? = null,
+    /** Cancels the evaluation from another thread (X0009); `Thread.interrupt()` of the evaluating thread does too. */
+    public val cancellation: CancellationToken? = null,
     /**
      * Receives probe hits of deliberate differences from jsonata-js 2.2.2 (`docs/deviations.md`): the evaluation went
      * through a branch where the result may differ from the reference. Null: probes cost one null check.
@@ -192,6 +194,12 @@ public interface CallContext {
 
     /** Invokes a function value (a lambda, a native, a partial application) synchronously. */
     public fun call(function: FunctionValue, args: List<Value?>): Value?
+
+    /** Cancellation of the evaluation: a long host function checks it; a blocking one is interrupted instead. */
+    public val cancellation: CancellationSignal
+
+    /** Nanoseconds left before the deadline of the evaluation (timeouts of host calls), [Long.MAX_VALUE] without one. */
+    public fun remainingNanos(): Long
 }
 
 /**

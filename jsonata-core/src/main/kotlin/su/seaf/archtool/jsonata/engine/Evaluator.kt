@@ -51,6 +51,7 @@ internal object Evaluator {
         if (input is ArrayValue && !input.isSequence) {
             focus = ArrayValue.sequence(input).also { it.outerWrapper = true }
         }
+        ctx.start()
         try {
             // an expression known to go deep starts on a segment thread (one hand-over instead of one per crossing)
             if (deep && !SegmentPool.onSegmentThread()) return ctx.fromSegment { root.evaluate(focus, env) }
@@ -64,6 +65,8 @@ internal object Evaluator {
             // an exception of a host function leaves unchanged (CAP-9 p. 4); anything else is a bug of the engine
             if (ctx.isHost(e)) throw e
             throw JsonataException("X0008", details = mapOf("message" to (e.javaClass.simpleName + (e.message?.let { ": $it" } ?: ""))), cause = e)
+        } finally {
+            ctx.finish()
         }
     }
 
@@ -87,15 +90,26 @@ internal object Evaluator {
     /** Calls a native function; an exception of a host function (not the standard library) is marked to leave unchanged. */
     private fun invokeNative(proc: NativeFunction, c: CallContextImpl, args: List<Value?>, ctx: EvalContext, callNode: Node?): Value? {
         if (proc.source == su.seaf.archtool.jsonata.FunctionSource.STDLIB) return proc.implementation.invoke(c, args)
+        ctx.enterHost()
+        var exited = false
         try {
             return proc.implementation.invoke(c, args)
         } catch (e: JsonataException) {
             throw e
+        } catch (e: InterruptedException) {
+            // a blocking host call was interrupted: by the token (its interrupt is consumed) or by the host itself
+            // (the flag is restored for the host)
+            exited = true
+            val byToken = ctx.exitHostInterrupted()
+            if (!byToken) Thread.currentThread().interrupt()
+            throw ctx.cancelled(e)
         } catch (e: RuntimeException) {
             ctx.markHost(e)
             // the call node is the innermost place (a tail call is not evaluated through its node)
             if (callNode != null) ctx.locate(e, callNode)
             throw e
+        } finally {
+            if (!exited) ctx.exitHost()
         }
     }
 
@@ -745,7 +759,7 @@ internal object Evaluator {
     }
 
     private fun EvalContext.checkpointIfGuarded() {
-        if (guarded) checkpoint()
+        checkpoint()
     }
 
     // ---- operators and helpers from functions.js / utils.js ----

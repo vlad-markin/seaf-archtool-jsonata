@@ -80,7 +80,11 @@ internal class EvalContext(
     @JvmField var depth: Int = 0
     private val maxDepth = options.maxDepth
     private val deadline = if (options.timeoutMillis > 0) System.nanoTime() + options.timeoutMillis * 1_000_000 else 0L
-    @JvmField val guarded: Boolean = options.maxDepth > 0 || options.timeoutMillis > 0
+
+    /** Time the evaluation spent paused by a debugger: it does not count against the deadline (story 4 step 4.5). */
+    @Volatile private var pausedNanos = 0L
+
+    private val token = options.cancellation
 
     /** True when the evaluation has a deadline: long native operations (regex matching) then check it too. */
     @JvmField val hasDeadline: Boolean = options.timeoutMillis > 0
@@ -124,12 +128,23 @@ internal class EvalContext(
     }
 
     /**
-     * The single checkpoint every evaluation step passes through (jsonata.js: evaluate → guardrails). Phase 7 adds
-     * cancellation and budgets here; without limits it costs a counter increment and a field test.
+     * The single checkpoint every evaluation step passes through (jsonata.js: evaluate → guardrails): the depth limit
+     * (exact, as the `stack` option of jsonata-js) and a step counter; every [CHECK_INTERVAL] steps [slowPath] checks
+     * cancellation and the deadline. One increment and two compares per node.
      */
     fun enter() {
         depth++
-        if (guarded) checkpoint()
+        if (maxDepth > 0 && depth > maxDepth) throw JsonataException("D1011", value = maxDepth.toDouble())
+        if (++steps >= nextCheck) slowPath()
+    }
+
+    /** Evaluation steps so far (nodes entered). */
+    @JvmField var steps: Long = 0
+    private var nextCheck: Long = CHECK_INTERVAL
+
+    private fun slowPath() {
+        nextCheck = steps + CHECK_INTERVAL
+        checkpoint()
     }
 
     private var ticks = 0
@@ -149,15 +164,101 @@ internal class EvalContext(
 
     /**
      * The checkpoint for loops inside native code (ranges, higher-order functions, `**`, `$clone`, `$string`,
-     * sorting): a counter, with the full [checkpoint] every 1024 iterations (review RV-6).
+     * sorting, regex matching): a counter, with the full [checkpoint] every 1024 iterations (review RV-6).
      */
     fun tick() {
-        if (guarded && (++ticks and 1023) == 0) checkpoint()
+        if ((++ticks and 1023) == 0) checkpoint()
     }
 
+    /** Cancellation (token or interrupt of the current thread) and the deadline. */
     fun checkpoint() {
-        if (maxDepth > 0 && depth > maxDepth) throw JsonataException("D1011", value = maxDepth.toDouble())
-        if (deadline != 0L && System.nanoTime() - deadline > 0) throw JsonataException("D1012", value = options.timeoutMillis.toDouble())
+        if (token != null && token.isCancelled) throw cancelled(null)
+        // an interrupt the host set itself: X0009, the flag stays with the host
+        if (Thread.currentThread().isInterrupted) throw cancelled(null)
+        if (deadline != 0L && System.nanoTime() - pausedNanos - deadline > 0) throw JsonataException("D1012", value = options.timeoutMillis.toDouble())
+    }
+
+    // ---- cancellation (design §2.4): RUNNING -> IN_HOST -> RUNNING; IN_HOST -> INTERRUPTING -> INTERRUPTED; DONE
+
+    private val state = java.util.concurrent.atomic.AtomicInteger(RUNNING)
+    @Volatile private var hostThread: Thread? = null
+
+    val isCancelled: Boolean get() = (token != null && token.isCancelled) || Thread.currentThread().isInterrupted
+
+    fun cancelled(cause: Throwable?): JsonataException = JsonataException("X0009", cause = cause)
+
+    fun isCancelledByToken(): Boolean = token != null && token.isCancelled
+
+    /** Remaining time before the deadline in nanoseconds, [Long.MAX_VALUE] without one. */
+    fun remainingNanos(): Long = if (deadline == 0L) Long.MAX_VALUE else maxOf(0L, deadline + pausedNanos - System.nanoTime())
+
+    /** Before a host function runs: a cancellation now interrupts this thread. */
+    fun enterHost() {
+        hostThread = Thread.currentThread()
+        if (!state.compareAndSet(RUNNING, IN_HOST)) return
+        if (token != null && token.isCancelled) cancelFromToken()
+    }
+
+    /**
+     * After a host function returned or threw: back to RUNNING, or, when a cancellation interrupted the call, wait
+     * until the interrupt is delivered, clear this thread's flag and fail with X0009.
+     */
+    fun exitHost() {
+        if (state.compareAndSet(IN_HOST, RUNNING)) return
+        if (state.get() == RUNNING || state.get() == DONE) return
+        while (state.get() == INTERRUPTING) Thread.onSpinWait()
+        Thread.interrupted()
+        state.compareAndSet(INTERRUPTED, RUNNING)
+        throw cancelled(null)
+    }
+
+    /**
+     * After a host function failed with InterruptedException: back to RUNNING; true when the interrupt came from the
+     * token (then this thread's flag is cleared), false when the host interrupted the thread itself.
+     */
+    fun exitHostInterrupted(): Boolean {
+        if (state.compareAndSet(IN_HOST, RUNNING)) return isCancelledByToken()
+        while (state.get() == INTERRUPTING) Thread.onSpinWait()
+        Thread.interrupted()
+        state.compareAndSet(INTERRUPTED, RUNNING)
+        return true
+    }
+
+    /** Called by the token: interrupts the thread of a running host call; JSONata code sees the token itself. */
+    fun cancelFromToken() {
+        if (!state.compareAndSet(IN_HOST, INTERRUPTING)) return
+        hostThread?.interrupt()
+        state.set(INTERRUPTED)
+    }
+
+    /** Registers with the token at the start of the evaluation. */
+    fun start() {
+        if (token == null) return
+        token.register(this)
+        if (token.isCancelled) {
+            token.unregister(this)
+            throw cancelled(null)
+        }
+    }
+
+    /** At the end: later cancellations do nothing (no interrupt flag is left on any thread). */
+    fun finish() {
+        state.set(DONE)
+        token?.unregister(this)
+    }
+
+    /** Runs [block] (a debugger pause) without counting its time against the deadline. */
+    inline fun <T> paused(block: () -> T): T {
+        val t0 = System.nanoTime()
+        try {
+            return block()
+        } finally {
+            addPaused(System.nanoTime() - t0)
+        }
+    }
+
+    fun addPaused(nanos: Long) {
+        pausedNanos += nanos
     }
 
     /** jsonata.js: createSequence with the `sequence` limit of the options. */
@@ -213,6 +314,15 @@ internal class EvalContext(
     }
 
     companion object {
+        /** Evaluation steps between two checks of cancellation and deadline (tens of microseconds). */
+        const val CHECK_INTERVAL: Long = 1024
+
+        private const val RUNNING = 0
+        private const val IN_HOST = 1
+        private const val INTERRUPTING = 2
+        private const val INTERRUPTED = 3
+        private const val DONE = 4
+
         /** On the caller's thread, whose stack size is unknown (a virtual thread, a 512 KB worker): conservative. */
         const val FIRST_SEGMENT_LIMIT: Int = 120
         /** Segment threads: a 256 MB stack reservation (committed only as used) for 20 000 nested evaluations. */

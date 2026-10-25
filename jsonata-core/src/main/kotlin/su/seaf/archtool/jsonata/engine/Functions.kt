@@ -95,6 +95,15 @@ internal class CallContextImpl(
 ) : CallContext {
     override val timestamp: Long get() = frame.ctx.timestamp
 
+    override val cancellation: su.seaf.archtool.jsonata.CancellationSignal = object : su.seaf.archtool.jsonata.CancellationSignal {
+        override val isCancelled: Boolean get() = frame.ctx.isCancelled
+        override fun throwIfCancelled() {
+            if (frame.ctx.isCancelled) throw frame.ctx.cancelled(null)
+        }
+    }
+
+    override fun remainingNanos(): Long = frame.ctx.remainingNanos()
+
     /**
      * jsonata.js wraps function arguments in a closure that calls `apply(fn, args, null, environment)`: the context of
      * such a call is JS `null` (it reaches signature checks and tail calls), not undefined.
