@@ -17,6 +17,10 @@
 | X0011 | X-WATCH | Function {{value}} is not available in a watch expression | выражение наблюдения, условие точки или logpoint вызывает функцию с `sideEffects` |
 | X0012 | X-SCHEMA | Invalid schema in $jsonschema: {{{message}}} | `$jsonschema`: схема, которую ajv ядра не компилирует (строгий режим, метасхема draft-07, regex, `$ref`) |
 | X0013 | — | The value is too deep to validate against a JSON Schema (more than {{value}} levels) | `$jsonschema` и проверка функций манифеста: значение глубже 1000 уровней (`docs/limits.md`) |
+| X0014 | X-MF-CONFLICT | Manifest functions conflict with built-in functions: {{{message}}} | `SeafEnvironment.create`: id функции манифеста совпадает с функцией stdlib или ядра; в `message` — все конфликты: `id (stdlib|core): rename the manifest function` |
+| X0015 | X-MF-PARAMS | Ошибка валидации входных параметров функции [{{{value}}}] + JSON нарушений с отступом 4 | аргументы функции манифеста не прошли `params`; нарушения — `details["violations"]` (`instancePath`, `schemaPath`, `keyword`, `params`, `message`), `functionId` — id |
+| X0016 | X-MF-RESULT | Ошибка валидации результата функции [{{{value}}}] + JSON нарушений с отступом 4 | результат не прошёл `result` |
+| X0017 | X-MF-SCHEMA | Ошибка схемы {{{part}}} в декларации функции [{{{value}}}]: {{{message}}} | схема `params` или `result` не компилируется (как ajv ядра) — при первом вызове; `part` — «входных параметров» или «результата» |
 | X0900–X0999 | — | шаблон хоста (`HostErrorCodes.register`) | функции хоста со своим кодом; коды эталона и `X0001`–`X0899` регистрировать нельзя |
 
 Кроме кода, у ошибки есть `position` (как у эталона), диапазон узла `start`/`end`, `token`, `value`, стек кадров `frames` (имя функции или лямбды, место вызова; кадры хвостовых вызовов заменяются, как стек трамплина) и `functionId` функции манифеста (история 3). Исключение функции хоста выходит наружу тем же объектом; место в выражении хост получает через `EvaluationOptions.hostErrors` (один раз на объект исключения).

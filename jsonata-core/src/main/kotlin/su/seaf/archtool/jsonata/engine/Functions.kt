@@ -123,11 +123,15 @@ internal class CallContextImpl(
         env.bind("$", input)
         var focus = input
         if (input is ArrayValue && !input.isSequence) focus = ArrayValue.sequence(input).also { it.outerWrapper = true }
+        ctx.listener?.let { l -> if (ctx.announce(expression)) l.source(expression.mainSource) }
         // `$$` of the nested expression is its own input, as in a separate jsonata-js evaluation
         val outerRoot = ctx.rootInput
         ctx.rootInput = input
         try {
             return root.evaluate(focus, env)
+        } catch (e: su.seaf.archtool.jsonata.parser.JsonataException) {
+            if (e.functionId == null) e.functionId = frameName
+            throw e
         } finally {
             ctx.rootInput = outerRoot
         }

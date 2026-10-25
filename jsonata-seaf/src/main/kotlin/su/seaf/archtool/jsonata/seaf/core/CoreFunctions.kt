@@ -196,6 +196,9 @@ internal class CoreFunctions(private val host: SeafHost) {
         /** Errors `$tryexecute` lets through (design §2.3): limits, cancellation, budgets, engine faults. */
         val UNCATCHABLE: Set<String> = setOf("D1011", "D1012", "D2015", "X0002", "X0005", "X0008", "X0009", "X0010", "X0011")
 
+        /** All 12 functions of the core, including the ones not implemented yet: manifest functions may not take these names. */
+        val ALL_NAMES: Set<String> = setOf("lookup", "parsesource", "tryexecute", "manifestschema", "sourcetype", "wcard", "mergedeep", "jsonschema", "log", "set", "get", "versions")
+
         /** Names of the core functions this module registers. */
         val NAMES: List<String> = listOf("lookup", "tryexecute", "jsonschema", "set", "get", "log", "parsesource", "manifestschema", "versions")
     }

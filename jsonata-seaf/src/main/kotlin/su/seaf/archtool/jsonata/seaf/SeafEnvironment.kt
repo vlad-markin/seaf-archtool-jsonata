@@ -5,6 +5,7 @@ import su.seaf.archtool.jsonata.EvaluationOptions
 import su.seaf.archtool.jsonata.FunctionRegistry
 import su.seaf.archtool.jsonata.Jsonata
 import su.seaf.archtool.jsonata.seaf.core.CoreFunctions
+import su.seaf.archtool.jsonata.seaf.manifest.ManifestFunctions
 import su.seaf.archtool.jsonata.value.Value
 
 /**
@@ -17,6 +18,8 @@ public class SeafEnvironment private constructor(
     public val limits: SeafLimits,
     /** Standard library + core functions + manifest functions, frozen. */
     public val registry: FunctionRegistry,
+    /** Manifest functions that were skipped (an id that cannot be called from an expression). */
+    public val warnings: List<SeafWarning>,
 ) {
     /** Compiles an expression with the functions of this environment. */
     @JvmOverloads
@@ -47,13 +50,27 @@ public class SeafEnvironment private constructor(
         /** Key of the [SeafRequest] in [EvaluationOptions.attributes]. */
         public const val REQUEST: String = "seaf.request"
 
-        /** Creates the environment of one manifest version: the standard library and the core functions; manifest `functions` come with step 3.4. */
+        /**
+         * Creates the environment of one manifest version: the standard library, the core functions and the manifest
+         * [manifestFunctions] (the `functions` section). A manifest function named like a built-in one fails with
+         * X0014 listing all such names; the code of each function is compiled here, its schemas at the first call.
+         */
         @JvmStatic
         @JvmOverloads
-        public fun create(host: SeafHost, limits: SeafLimits = SeafLimits.TEMPORARY): SeafEnvironment {
-            val registry = FunctionRegistry.create()
-            CoreFunctions(host).registerAll(registry)
-            return SeafEnvironment(host, limits, registry.freeze())
+        public fun create(host: SeafHost, manifestFunctions: Value? = null, limits: SeafLimits = SeafLimits.TEMPORARY): SeafEnvironment {
+            val core = FunctionRegistry.create()
+            CoreFunctions(host).registerAll(core)
+            val functions = ManifestFunctions.parse(manifestFunctions)
+            val warnings = ArrayList<SeafWarning>()
+            val registry = if (functions.isEmpty()) core.freeze() else {
+                val frozenCore = core.freeze()
+                val manifest = frozenCore.extend()
+                val callables = ManifestFunctions.register(functions, manifest, warnings)
+                val frozen = manifest.freeze()
+                for (c in callables) c.compile(frozen)
+                frozen
+            }
+            return SeafEnvironment(host, limits, registry, warnings)
         }
     }
 }

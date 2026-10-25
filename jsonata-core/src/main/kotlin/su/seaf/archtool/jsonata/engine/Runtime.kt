@@ -108,6 +108,14 @@ internal class EvalContext(
         return m.getOrPut(key, init) as T
     }
 
+    private var announced: java.util.IdentityHashMap<Any, Boolean>? = null
+
+    /** True the first time [expression] (a nested expression) is seen in this evaluation: its source goes to the listener. */
+    fun announce(expression: Any): Boolean {
+        val m = announced ?: java.util.IdentityHashMap<Any, Boolean>().also { announced = it }
+        return m.put(expression, true) == null
+    }
+
     /** Ids of the `$eval` sources reported to the listener. */
     @JvmField var evalSources: Int = 0
 

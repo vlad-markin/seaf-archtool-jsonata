@@ -18,6 +18,8 @@ public class JsonataException(
     /** Extra fields some templates use: `type` (T0412), `exp` (D3061), `message` (D3137, D3141), `functionName` (D3140). */
     public val details: Map<String, Any?> = emptyMap(),
     cause: Throwable? = null,
+    /** Id of the manifest function the error is raised for (a host building manifest functions sets it). */
+    functionId: String? = null,
 ) : RuntimeException(null as String?, cause) {
     public var position: Int? = position
         internal set
@@ -46,7 +48,7 @@ public class JsonataException(
     public val frames: List<ErrorFrame> get() = frameList ?: emptyList()
 
     /** Id of the manifest function the error was raised in (story 3), null elsewhere. */
-    public var functionId: String? = null
+    public var functionId: String? = functionId
         internal set
 
     /** Fills [start]/[end] when [nodePosition] is the error position and the range is not known for it yet. */
@@ -222,6 +224,10 @@ internal object Messages {
         "X0010" to "The evaluation exceeded the {{{budget}}} budget ({{value}})",
         "X0012" to "Invalid schema in \$jsonschema: {{{message}}}",
         "X0013" to "The value is too deep to validate against a JSON Schema (more than {{value}} levels)",
+        "X0014" to "Manifest functions conflict with built-in functions: {{{message}}}",
+        "X0015" to "Ошибка валидации входных параметров функции [{{{value}}}]\n{{{message}}}",
+        "X0016" to "Ошибка валидации результата функции [{{{value}}}]\n{{{message}}}",
+        "X0017" to "Ошибка схемы {{{part}}} в декларации функции [{{{value}}}]: {{{message}}}",
     )
 
     // populateMessage: {{{field}}} is replaced with the raw field, {{field}} with JSON.stringify(err[field]).

@@ -62,7 +62,7 @@ public class Jsonata private constructor(
 
     internal fun debugTree(): DebugTree {
         debugTree.get()?.let { return it }
-        val compiler = Compiler(true, ranges)
+        val compiler = Compiler(true, ranges, options.sourceId)
         val tree = compiler.compile(ast)
         debugTree.compareAndSet(null, DebugTree(tree, compiler.infos.toList()))
         return debugTree.get()!!
@@ -70,7 +70,10 @@ public class Jsonata private constructor(
 
     internal fun debugRoot(): Node = if (options.debug) root else debugTree().root
 
-    private val mainSource = su.seaf.archtool.jsonata.debug.SourceInfo("main", expression, su.seaf.archtool.jsonata.debug.SourceInfo.Kind.MAIN)
+    internal val mainSource = su.seaf.archtool.jsonata.debug.SourceInfo(
+        options.sourceId, expression,
+        if (options.sourceId.startsWith("manifest:")) su.seaf.archtool.jsonata.debug.SourceInfo.Kind.MANIFEST_FUNCTION else su.seaf.archtool.jsonata.debug.SourceInfo.Kind.MAIN,
+    )
 
     internal val compiledRoot: Node get() = root
 
@@ -80,7 +83,7 @@ public class Jsonata private constructor(
         @JvmOverloads
         public fun compile(expression: String, options: CompileOptions = CompileOptions.DEFAULT): Jsonata {
             val parsed = JsonataParser.parseWithRanges(expression)
-            val compiler = Compiler(options.debug, parsed.ranges)
+            val compiler = Compiler(options.debug, parsed.ranges, options.sourceId)
             val root = compiler.compile(parsed.ast)
             return Jsonata(expression, parsed.ast, root, options, compiler.recursive, parsed.ranges)
         }
@@ -135,6 +138,11 @@ public class CompileOptions @JvmOverloads constructor(
      * calls at all.
      */
     public val debug: Boolean = false,
+    /**
+     * Id of the source text for the debugger and errors: `main` for an expression of its own, `manifest:functions/<id>`
+     * for the code of a manifest function (evaluated through [CallContext.evaluate]).
+     */
+    public val sourceId: String = "main",
 ) {
     public companion object {
         @JvmField public val DEFAULT: CompileOptions = CompileOptions()
@@ -242,7 +250,9 @@ public interface CallContext {
     /**
      * Evaluates [expression] (compiled with a registry of this evaluation's chain) inside this evaluation: depth,
      * deadline, budgets, cancellation, listener and [local] state are shared; the variables are only [bindings] plus
-     * `$`/`$$` = [input]. The debugger shows it as a frame named [frameName] (a manifest function: its id).
+     * `$`/`$$` = [input]. The debugger shows it as a frame named [frameName] (a manifest function: its id), is told
+     * about the source of [expression] once per evaluation, and errors raised inside get [frameName] as
+     * [su.seaf.archtool.jsonata.parser.JsonataException.functionId].
      */
     public fun evaluate(expression: Jsonata, input: Value?, bindings: Map<String, Value?>, frameName: String): Value?
 }

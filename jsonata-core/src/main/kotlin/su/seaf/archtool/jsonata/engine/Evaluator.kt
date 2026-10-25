@@ -178,6 +178,9 @@ internal object Evaluator {
                         // DEV-10: jsonata-js overwrites the position of an error raised inside a lambda with the
                         // position of the (last) call; the engine keeps the position of the failing operator
                         if (e.position != s.position) env.ctx.deviation(Deviations.POSITION_IN_LAMBDA.id, e.position)
+                    } else if (e.functionId != null && e.position != null) {
+                        // raised inside the code of a manifest function (CallContext.evaluate): the position is in
+                        // that code (CAP-5 p. 7), the call is in the error's frames
                     } else {
                         e.position = s.position
                     }
