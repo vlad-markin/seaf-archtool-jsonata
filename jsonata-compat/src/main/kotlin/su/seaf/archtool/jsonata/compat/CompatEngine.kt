@@ -2,7 +2,9 @@ package su.seaf.archtool.jsonata.compat
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import su.seaf.archtool.jsonata.CompileOptions
 import su.seaf.archtool.jsonata.EvaluationOptions
+import su.seaf.archtool.jsonata.FunctionRegistry
 import su.seaf.archtool.jsonata.Jsonata
 import su.seaf.archtool.jsonata.parser.AstNode
 import su.seaf.archtool.jsonata.value.ArrayValue
@@ -38,7 +40,13 @@ interface CompatEngine {
     fun evaluate(case: SuiteCase): Outcome
 }
 
-object KotlinEngine : CompatEngine {
+/** The engine as the harness runs it. */
+object KotlinEngine : CompatEngine by KotlinEngineImpl(debug = false)
+
+/** The same engine compiled with debugging on: results must be identical (decision 15, review RV-1). */
+object DebugKotlinEngine : CompatEngine by KotlinEngineImpl(debug = true)
+
+class KotlinEngineImpl(private val debug: Boolean) : CompatEngine {
     override fun ast(expr: String): JsonNode = try {
         toJson(JsonataParser.ast(expr))
     } catch (e: JsonataException) {
@@ -46,7 +54,7 @@ object KotlinEngine : CompatEngine {
     }
     override fun evaluate(case: SuiteCase): Outcome {
         val expr = try {
-            Jsonata.compile(case.expr)
+            Jsonata.compile(case.expr, CompileOptions(FunctionRegistry.standard(), debug))
         } catch (e: JsonataException) {
             return Outcome.Failed(EngineError(e.code, e.position, e.token?.toString(), e.message))
         }

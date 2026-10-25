@@ -39,9 +39,37 @@ internal abstract class Node(@JvmField val ast: AstNode) {
     @JvmField var ancestorLabel: String? = null
     @JvmField var consarray: Boolean = false
 
+    /**
+     * Set by the compiler when the expression is compiled with debugging: then [evaluate] reports to the hook of the
+     * evaluation. The node itself and its evaluation are the same either way (decision 15: the hook never changes the
+     * result); without debugging the only cost is this field test.
+     */
+    @JvmField var debug: Boolean = false
+
     abstract fun eval(input: Value?, env: Frame): Value?
 
-    open fun evaluate(input: Value?, env: Frame): Value? {
+    fun evaluate(input: Value?, env: Frame): Value? {
+        if (debug) {
+            val hook = env.ctx.hook
+            if (hook != null) return evaluateDebug(hook, input, env)
+        }
+        return evaluateNode(input, env)
+    }
+
+    private fun evaluateDebug(hook: DebugHook, input: Value?, env: Frame): Value? {
+        hook.enter(this, input, env)
+        val result = try {
+            evaluateNode(input, env)
+        } catch (e: Throwable) {
+            hook.error(this, input, env, e)
+            throw e
+        }
+        hook.exit(this, input, env, result)
+        return result
+    }
+
+    /** jsonata.js: evaluate — checkpoint and depth, predicates, group-by, collapse of singleton sequences. */
+    private fun evaluateNode(input: Value?, env: Frame): Value? {
         val ctx = env.ctx
         ctx.enter()
         try {
@@ -59,26 +87,6 @@ internal abstract class Node(@JvmField val ast: AstNode) {
         } finally {
             ctx.depth--
         }
-    }
-}
-
-/** Debugger wrapper, present only in expressions compiled with debugging on. */
-internal class DebugNode(private val inner: Node) : Node(inner.ast) {
-    val innerNode: Node get() = inner
-
-    override fun eval(input: Value?, env: Frame): Value? = inner.eval(input, env)
-
-    override fun evaluate(input: Value?, env: Frame): Value? {
-        val hook = env.ctx.hook ?: return inner.evaluate(input, env)
-        hook.enter(inner, input, env)
-        val result = try {
-            inner.evaluate(input, env)
-        } catch (e: Throwable) {
-            hook.error(inner, input, env, e)
-            throw e
-        }
-        hook.exit(inner, input, env, result)
-        return result
     }
 }
 

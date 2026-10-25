@@ -38,8 +38,16 @@ class CompatRatchetTest {
                     .map { "${it.id} ${it.status} ${it.detail ?: ""}".trim() })
             }
         }
+        // decision 15: the debug compilation gives the same outcome on every case
+        val debugHarness = Harness(DebugKotlinEngine, suite, AstSnapshots(root))
+        val debugDiffs = runs.getValue("eval").zip(cases.map(debugHarness::runEval))
+            .filter { (plain, debug) -> plain.status != debug.status || plain.detail != debug.detail }
+            .filter { (plain, _) -> listOf("\$random", "\$shuffle", "\$now", "\$millis").none { cases.first { c -> c.id == plain.id }.expr.contains(it) } }
+            .map { (plain, debug) -> "${plain.id}: ${plain.status} ${plain.detail ?: ""} / debug ${debug.status} ${debug.detail ?: ""}" }
+        report.putPOJO("debugDiffs", debugDiffs)
         File(System.getProperty("jsonata.compat.report")).apply { parentFile.mkdirs() }
             .writeText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(report))
         assertTrue(regressions.isEmpty(), "regressions: ${regressions.joinToString("\n")}")
+        assertTrue(debugDiffs.isEmpty(), "debug compilation differs:\n${debugDiffs.joinToString("\n")}")
     }
 }

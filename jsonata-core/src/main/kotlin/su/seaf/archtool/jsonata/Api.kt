@@ -41,6 +41,9 @@ public class Jsonata private constructor(
     internal fun evaluate(input: Value?, hook: su.seaf.archtool.jsonata.engine.DebugHook): Value? =
         Evaluator.run(root, input, emptyMap(), options, EvaluationOptions.DEFAULT, hook)
 
+    internal fun evaluate(input: Value?, bindings: Map<String, Value?>, evaluation: EvaluationOptions, hook: su.seaf.archtool.jsonata.engine.DebugHook): Value? =
+        Evaluator.run(root, input, bindings, options, evaluation, hook)
+
     internal val compiledRoot: Node get() = root
 
     public companion object {

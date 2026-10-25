@@ -141,9 +141,9 @@ class EngineTest {
         assertEquals("42", JsonWriter.stringify(result))
         assertTrue("binary" in entered && "lambda" in entered && "function" in entered, entered.toString())
         assertEquals(1, maxStack)
-        // without the debug flag the compiled tree has no debugger nodes
-        assertTrue(Jsonata.compile("1 + 2").compiledRoot !is DebugNode)
-        assertTrue(Jsonata.compile("1 + 2", CompileOptions(debug = true)).compiledRoot is DebugNode)
+        // the debug flag only marks the nodes
+        assertTrue(!Jsonata.compile("1 + 2").compiledRoot.debug)
+        assertTrue(Jsonata.compile("1 + 2", CompileOptions(debug = true)).compiledRoot.debug)
     }
 
     @Test

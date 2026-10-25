@@ -11,12 +11,12 @@ import su.seaf.archtool.jsonata.value.StringValue
 
 /**
  * Compiles the processed AST (the jsonata-js `ast()` shape) into a tree of [Node]s, once per expression. With [debug]
- * every node is wrapped in a [DebugNode]; without it the tree has no debugging code on the evaluation path.
+ * every node reports to the evaluation's debug hook (the tree is otherwise identical); without it no node does.
  */
 internal class Compiler(private val debug: Boolean) {
     fun compile(ast: AstNode): Node {
         val node = compileNode(ast)
-        return if (debug) DebugNode(node) else node
+        return node
     }
 
     private fun compileNode(ast: AstNode): Node {
@@ -76,6 +76,7 @@ internal class Compiler(private val debug: Boolean) {
             else -> throw JsonataException("S0206", ast.position, type)
         }
         applyCommon(node, ast)
+        node.debug = debug
         return node
     }
 

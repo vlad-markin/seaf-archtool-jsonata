@@ -43,18 +43,16 @@ internal object Evaluator {
     fun apply(proc: Value?, args: List<Value?>, input: Value?, env: Frame, site: CallSite?, callNode: Node? = null): Value? {
         var result = applyInner(proc, args, input, env, site, callNode)
         while (result is Lambda && result.thunk) {
-            val body = unwrap(result.body) as FunctionCallNode
+            val body = result.body as FunctionCallNode
             val procedure = body.procedure
             val next = procedure.evaluate(result.input, result.env)
-            val token = (unwrap(procedure) as? VariableNode)?.name
+            val token = (procedure as? VariableNode)?.name
             val nextArgs = ArrayList<Value?>(body.arguments.size)
             for (a in body.arguments) nextArgs.add(a.evaluate(result.input, result.env))
             result = applyInner(next, nextArgs, input, env, CallSite(token, procedure.position), body)
         }
         return result
     }
-
-    private fun unwrap(node: Node): Node = if (node is DebugNode) node.innerNode else node
 
     /** jsonata.js: applyInner. */
     private fun applyInner(proc: Value?, args: List<Value?>, input: Value?, env: Frame, site: CallSite?, callNode: Node?): Value? {
