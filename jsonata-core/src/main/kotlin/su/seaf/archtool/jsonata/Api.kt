@@ -207,6 +207,9 @@ public class FunctionRegistry private constructor(
         return this
     }
 
+    /** Names registered in this registry itself, without the parents (tests, the future catalog). */
+    internal fun ownNames(): Set<String> = functions.keys.toSet()
+
     /** The function registered under [name] here or in a parent, or null. */
     public fun lookup(name: String): FunctionValue? = functions[name] ?: parent?.lookup(name)
 
