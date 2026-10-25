@@ -12,7 +12,7 @@ if (!process.versions.node.startsWith('22.')) {
 }
 const dir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../traps');
 const out = [];
-for (const file of ['divergences.jsonl', 'targeted.jsonl', 'review.jsonl']) {
+for (const file of ['divergences.jsonl', 'targeted.jsonl', 'review.jsonl', 'fuzz.jsonl']) {
   for (const line of fs.readFileSync(path.join(dir, file), 'utf8').split('\n')) {
     if (!line.trim()) continue;
     const c = JSON.parse(line);

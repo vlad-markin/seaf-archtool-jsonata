@@ -27,6 +27,9 @@ class TrapsTest {
         "RV-11#4" to "DEV-06: dotless i folds to I",
         "RV-11#5" to "DEV-06: sharp s folds to capital sharp s",
         "RV-11#6" to "DEV-06: a back reference to a group not captured yet fails in Java, matches empty in JS",
+        "FZ-04#2" to "DEV-02: roman numerals of huge numbers exhaust the JS stack (RangeError); we report X0002",
+        "FZ-05#1" to "DEV-08: jsonata-js pushes undefined into the empty input array",
+        "FZ-05#2" to "DEV-08: jsonata-js pushes undefined into the empty array of the clone",
     )
 
     private fun outcome(c: com.fasterxml.jackson.databind.JsonNode): String {
@@ -68,7 +71,7 @@ class TrapsTest {
             val n = mapper.readTree(l)
             n.get("id").asText() to expected(n)
         }
-        val cases = listOf("divergences.jsonl", "targeted.jsonl", "review.jsonl").flatMap { f -> File(root, f).readLines().filter { it.isNotBlank() } }
+        val cases = listOf("divergences.jsonl", "targeted.jsonl", "review.jsonl", "fuzz.jsonl").flatMap { f -> File(root, f).readLines().filter { it.isNotBlank() } }
             .map { mapper.readTree(it) }.filter { !it.has("functions") }
         val mismatches = ArrayList<String>()
         for (c in cases) {

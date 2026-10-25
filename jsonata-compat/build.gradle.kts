@@ -24,3 +24,16 @@ tasks.register<JavaExec>("bench") {
     args(rootProject.file("compat").absolutePath, providers.gradleProperty("benchIterations").getOrElse("10"))
     jvmArgs("-Xmx2g")
 }
+tasks.register<JavaExec>("fuzz") {
+    description = "Differential fuzzing against jsonata 2.2.2 (needs Node 22 and npm ci in compat/node): -Pseed=1 -Pcount=5000, or -Pcases=file.jsonl to replay cases."
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("su.seaf.archtool.jsonata.compat.fuzz.DiffFuzzKt")
+    args(
+        rootProject.file("compat").absolutePath,
+        providers.gradleProperty("seed").getOrElse("1"),
+        providers.gradleProperty("count").getOrElse("5000"),
+        layout.buildDirectory.dir("fuzz").get().asFile.absolutePath,
+        providers.gradleProperty("cases").getOrElse(""),
+    )
+    jvmArgs("-Xmx2g")
+}

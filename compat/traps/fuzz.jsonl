@@ -1,0 +1,18 @@
+{"id": "FZ-01#1", "tags": ["fuzz"], "expr": "$formatBase(1e21, 36)"}
+{"id": "FZ-01#2", "tags": ["fuzz"], "expr": "$formatBase(123456789012345680000, 36)"}
+{"id": "FZ-01#3", "tags": ["fuzz"], "expr": "$formatBase(6.02e23, 36)"}
+{"id": "FZ-01#4", "tags": ["fuzz"], "expr": "$formatBase(1e300, 2)"}
+{"id": "FZ-02#1", "tags": ["fuzz"], "expr": "$fromMillis($toMillis(\"2018-13-01\"), \"[D1o] [MNn] [Y]\")"}
+{"id": "FZ-02#2", "tags": ["fuzz"], "expr": "$fromMillis($toMillis(\"2018-13-01\"), \"[FNn], [D] [MNn] [Y]\")"}
+{"id": "FZ-03#1", "tags": ["fuzz"], "expr": "$map([\"a\"], function($v){$uppercase()})"}
+{"id": "FZ-03#2", "tags": ["fuzz"], "expr": "$filter(3.5, function($v){$pad(1234.5678)})"}
+{"id": "FZ-03#3", "tags": ["fuzz"], "expr": "$map([1], function($v){$string()})"}
+{"id": "FZ-03#4", "tags": ["fuzz"], "expr": "\"x\" ~> function($v){$uppercase()}"}
+{"id": "FZ-04#1", "tags": ["fuzz"], "expr": "$formatInteger(1000000, \"I\")"}
+{"id": "FZ-04#2", "tags": ["fuzz"], "expr": "$formatInteger(9007199254740991, \"i\")"}
+{"id": "FZ-05#1", "tags": ["fuzz"], "expr": "(a{\"k\":1}; $count(a))", "input": {"a": []}}
+{"id": "FZ-05#2", "tags": ["fuzz"], "expr": "[[], \"x\"] ~> |$|{}|"}
+{"id": "FZ-06#1", "tags": ["fuzz"], "expr": "/zz/ ?: 1"}
+{"id": "FZ-06#2", "tags": ["fuzz"], "expr": "$exists(/a/ ?? 1)"}
+{"id": "FZ-07#1", "tags": ["fuzz"], "expr": "$base64decode(\"Привет мир\")"}
+{"id": "FZ-08#1", "tags": ["fuzz"], "expr": "$map(true, $uppercase)"}
