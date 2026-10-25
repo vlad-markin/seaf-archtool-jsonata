@@ -3,6 +3,7 @@ package su.seaf.archtool.jsonata.engine
 import su.seaf.archtool.jsonata.CompileOptions
 import su.seaf.archtool.jsonata.EvaluationOptions
 import su.seaf.archtool.jsonata.FunctionRegistry
+import su.seaf.archtool.jsonata.deviation.Deviations
 import su.seaf.archtool.jsonata.parser.JsonataException
 import su.seaf.archtool.jsonata.parser.JsonataParser
 import su.seaf.archtool.jsonata.value.ArrayValue
@@ -95,7 +96,15 @@ internal object Evaluator {
             val s = if (proc is Lambda) env.ctx.lastCall(proc) else site
             if (s != null) {
                 if (e.token == null && s.token != null) e.token = s.token
-                if (s.position != null) e.position = s.position
+                if (s.position != null) {
+                    if (proc is Lambda && e.position != null) {
+                        // DEV-10: jsonata-js overwrites the position of an error raised inside a lambda with the
+                        // position of the (last) call; the engine keeps the position of the failing operator
+                        if (e.position != s.position) env.ctx.deviation(Deviations.POSITION_IN_LAMBDA.id, e.position)
+                    } else {
+                        e.position = s.position
+                    }
+                }
             } else if (e.token == null) {
                 // jsonata-js keeps the name of the last direct call on the shared function object, so a library
                 // function called by $map or `~>` still reports its own name

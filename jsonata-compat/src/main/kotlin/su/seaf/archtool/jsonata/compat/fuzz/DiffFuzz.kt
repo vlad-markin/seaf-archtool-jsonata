@@ -2,6 +2,7 @@ package su.seaf.archtool.jsonata.compat.fuzz
 
 import com.fasterxml.jackson.databind.JsonNode
 import su.seaf.archtool.jsonata.EvaluationOptions
+import su.seaf.archtool.jsonata.deviation.Deviations
 import su.seaf.archtool.jsonata.Jsonata
 import su.seaf.archtool.jsonata.compat.mapper
 import su.seaf.archtool.jsonata.compat.toValue
@@ -98,10 +99,13 @@ class DiffFuzz(private val nodeDir: File) {
 
     /** The engine outcome: `json <JSON.stringify text>` (functions as "<function>"), `undefined`, `error <code>`. */
     fun outcomeOf(c: FuzzCase): String {
+        val hits = java.util.Collections.synchronizedSet(java.util.TreeSet<String>())
+        probeHits[c.id] = hits
         val future = executor.submit<String> {
             try {
                 val expr = Jsonata.compile(c.expr)
-                val r = expr.evaluate(c.input?.let { toValue(it) }, emptyMap(), EvaluationOptions(timeoutMillis = 5000))
+                val options = EvaluationOptions(timeoutMillis = 5000, deviations = { id, _ -> hits.add(id) })
+                val r = expr.evaluate(c.input?.let { toValue(it) }, emptyMap(), options)
                 if (r == null) "undefined" else "json " + JsonWriter.stringify(markFunctions(r))
             } catch (e: JsonataException) {
                 "error " + e.code + " @" + (e.position?.toString() ?: "null") + " " + engineToken(e.token)
@@ -125,6 +129,9 @@ class DiffFuzz(private val nodeDir: File) {
         else -> v
     }
 
+    /** Deviation probes that fired per case id: a difference is explained by a deviation only when its probe fired. */
+    val probeHits = HashMap<String, Set<String>>()
+
     /** Engine time per case id (ms), for the report's slowest cases. */
     val engineMillis = HashMap<String, Double>()
     var referenceSeconds = 0.0
@@ -143,7 +150,11 @@ class DiffFuzz(private val nodeDir: File) {
                     engineMillis[c.id] = (System.nanoTime() - t0) / 1e6
                     if (want != got) {
                         val category = if (codeOnly(want) == codeOnly(got)) "error-position-token" else category(want, got)
-                        val known = if (category == "error-position-token" && want.substringAfter(" @").substringAfter(' ') == got.substringAfter(" @").substringAfter(' ')) {
+                        // DEV-10 changes only the position of an error
+                        val fired = probeHits[c.id].orEmpty().filter { it != Deviations.POSITION_IN_LAMBDA.id || category == "error-position-token" }
+                        val known = if (fired.isNotEmpty()) {
+                            fired.joinToString(", ") { id -> "$id: " + (Deviations.byId(id)?.title ?: "deviation") } + " (probe fired)"
+                        } else if (category == "error-position-token" && want.substringAfter(" @").substringAfter(' ') == got.substringAfter(" @").substringAfter(' ')) {
                             "reference instability: position kept on a shared function object from an earlier call"
                         } else if (category == "error-position-token" && functionAsValue.containsMatchIn(c.expr)) {
                             "reference instability: token of a library function passed as a value depends on earlier calls in the process"

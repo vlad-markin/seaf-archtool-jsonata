@@ -138,6 +138,11 @@ public class EvaluationOptions @JvmOverloads constructor(
     public val maxSequence: Int = DEFAULT_MAX_SEQUENCE,
     /** Clock for `$now()`/`$millis()` (milliseconds since the epoch), read once per evaluation. */
     public val clock: () -> Long = { System.currentTimeMillis() },
+    /**
+     * Receives probe hits of deliberate differences from jsonata-js 2.2.2 (`docs/deviations.md`): the evaluation went
+     * through a branch where the result may differ from the reference. Null: probes cost one null check.
+     */
+    public val deviations: su.seaf.archtool.jsonata.deviation.DeviationSink? = null,
 ) {
     public companion object {
         public const val DEFAULT_MAX_DEPTH: Int = 1_000_000

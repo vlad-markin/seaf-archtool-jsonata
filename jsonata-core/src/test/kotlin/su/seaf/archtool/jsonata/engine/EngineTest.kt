@@ -85,9 +85,11 @@ class EngineTest {
 
     @Test
     fun `one lambda failing in several evaluations at once reports each call site (RV-9)`() {
-        val f = Jsonata.compile("function(\$x){ \$x + 'a' }").evaluate(null)
+        // a signature error has no position of its own: it takes the call site (an error raised by an operator in
+        // the body keeps the operator's position, DEV-10)
+        val f = Jsonata.compile("function(\$x)<n:n>{ \$x }").evaluate(null)
         val pool = Executors.newFixedThreadPool(8)
-        val exprs = listOf("\$f(1)", "  \$f(1)", "    \$f(1)", "      \$f(1)")
+        val exprs = listOf("\$f('a')", "  \$f('a')", "    \$f('a')", "      \$f('a')")
         val futures = (0 until 400).map { i ->
             val expr = exprs[i % exprs.size]
             pool.submit<Pair<Int?, Int>> {

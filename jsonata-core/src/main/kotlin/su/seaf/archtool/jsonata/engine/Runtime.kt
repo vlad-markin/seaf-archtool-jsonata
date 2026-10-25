@@ -86,6 +86,13 @@ internal class EvalContext(
     @JvmField val hasDeadline: Boolean = options.timeoutMillis > 0
     @JvmField val maxSequence: Int = options.maxSequence
 
+    private val deviationSink = options.deviations
+
+    /** Probe of a deliberate difference from jsonata-js 2.2.2 (`docs/deviations.md`): the result here may differ. */
+    fun deviation(id: String, position: Int?) {
+        deviationSink?.hit(id, position)
+    }
+
     /**
      * The single checkpoint every evaluation step passes through (jsonata.js: evaluate → guardrails). Phase 7 adds
      * cancellation and budgets here; without limits it costs a counter increment and a field test.
