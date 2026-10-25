@@ -150,6 +150,13 @@ class EngineTest {
     }
 
     @Test
+    fun `runaway recursion stops at the default depth limit`() {
+        val e = error("(\$f := function(\$n){ 1 + \$f(\$n + 1) }; \$f(0))")
+        assertEquals("D1011", e.code)
+        assertEquals(EvaluationOptions.DEFAULT_MAX_DEPTH.toDouble(), e.value)
+    }
+
+    @Test
     fun `recursion over data 100 000 levels deep (RV-4)`() {
         val depth = 100_000
         val deep = nested(depth - 1, ObjectValue.of("x" to NumberValue.of(1)))

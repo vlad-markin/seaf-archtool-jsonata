@@ -75,15 +75,23 @@ public class CompileOptions @JvmOverloads constructor(
 /**
  * Limits of one evaluation, as the jsonata-js 2.2.2 options: [maxDepth] (`stack`, error D1011) counts nested
  * evaluation steps, [timeoutMillis] (`timeout`, D1012), [maxSequence] (`sequence`, D2015). Zero means no limit.
+ *
+ * The defaults are temporary conservative values (owner's decision on review RV-4; exact values after measurements on
+ * real architecture lakes): jsonata-js has no limits by default, but without one a runaway recursion would consume
+ * the memory of the process. [DEFAULT_MAX_DEPTH] allows about 200 000 levels of non-tail recursion (jsonata-js reaches
+ * 100 000), [DEFAULT_MAX_SEQUENCE] equals the size limit jsonata-js puts on ranges (D2014).
  */
 public class EvaluationOptions @JvmOverloads constructor(
-    public val maxDepth: Int = 0,
+    public val maxDepth: Int = DEFAULT_MAX_DEPTH,
     public val timeoutMillis: Long = 0,
-    public val maxSequence: Int = 0,
+    public val maxSequence: Int = DEFAULT_MAX_SEQUENCE,
     /** Clock for `$now()`/`$millis()` (milliseconds since the epoch), read once per evaluation. */
     public val clock: () -> Long = { System.currentTimeMillis() },
 ) {
     public companion object {
+        public const val DEFAULT_MAX_DEPTH: Int = 1_000_000
+        public const val DEFAULT_MAX_SEQUENCE: Int = 10_000_000
+
         @JvmField public val DEFAULT: EvaluationOptions = EvaluationOptions()
     }
 }
