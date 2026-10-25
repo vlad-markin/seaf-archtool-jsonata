@@ -1,0 +1,15 @@
+{"id": "RV-10#1", "tags": ["review"], "expr": "$match(\"ab\", /(?<my_name>a)/)"}
+{"id": "RV-10#2", "tags": ["review"], "expr": "$match(\"ab\", /(?<$n>a)/)"}
+{"id": "RV-10#3", "tags": ["review"], "expr": "$match(\"ab\", /(?<имя>a)(?<b>b)/)"}
+{"id": "RV-10#4", "tags": ["review"], "expr": "$contains(\"a\", /(?<_a>a)/)"}
+{"id": "RV-10#5", "tags": ["review"], "expr": "$match(\"abab\", /(?<x>ab)\\k<x>/)"}
+{"id": "RV-10#6", "tags": ["review"], "expr": "$match(\"aa\", /(?<имя>a)\\k<имя>/)"}
+{"id": "RV-10#7", "tags": ["review"], "expr": "$replace(\"ab\", /(?<n_1>a)/, \"[$1]\")"}
+{"id": "RV-11#1", "tags": ["review"], "expr": "$match(\"ſ\", /s/i)"}
+{"id": "RV-11#2", "tags": ["review"], "expr": "$match(\"K\", /K/i)"}
+{"id": "RV-11#3", "tags": ["review"], "expr": "$match(\"İ\", /i/i)"}
+{"id": "RV-11#4", "tags": ["review"], "expr": "$match(\"ı\", /I/i)"}
+{"id": "RV-11#5", "tags": ["review"], "expr": "$match(\"ß\", /ẞ/i)"}
+{"id": "RV-11#6", "tags": ["review"], "expr": "$match(\"ab\", /(a)\\2(b)/)"}
+{"id": "RV-11#7", "tags": ["review"], "expr": "$match(\"ÀÉ\", /àé/i)"}
+{"id": "RV-11#8", "tags": ["review"], "expr": "$match(\"ПРИВЕТ\", /привет/i)"}

@@ -21,6 +21,12 @@ class TrapsTest {
         "RE-01#4" to "jsonata-js fails with a JS SyntaxError (not a JSONata error); we report X0003 (docs/deviations.md DEV-04)",
         "RE-01#5" to "the same: (?i) is Java syntax, invalid in JS",
         "AHEAD-01#1" to "jsonata-js 2.2.2 crashes with a TypeError on an undefined matcher; we report T1006",
+        "RV-11#1" to "case folding with the i flag is java.util.regex Unicode folding (DEV-06, owner's decision)",
+        "RV-11#2" to "DEV-06: Kelvin sign folds to k",
+        "RV-11#3" to "DEV-06: dotted capital I folds to i",
+        "RV-11#4" to "DEV-06: dotless i folds to I",
+        "RV-11#5" to "DEV-06: sharp s folds to capital sharp s",
+        "RV-11#6" to "DEV-06: a back reference to a group not captured yet fails in Java, matches empty in JS",
     )
 
     private fun outcome(c: com.fasterxml.jackson.databind.JsonNode): String {
@@ -62,7 +68,7 @@ class TrapsTest {
             val n = mapper.readTree(l)
             n.get("id").asText() to expected(n)
         }
-        val cases = listOf("divergences.jsonl", "targeted.jsonl").flatMap { f -> File(root, f).readLines().filter { it.isNotBlank() } }
+        val cases = listOf("divergences.jsonl", "targeted.jsonl", "review.jsonl").flatMap { f -> File(root, f).readLines().filter { it.isNotBlank() } }
             .map { mapper.readTree(it) }.filter { !it.has("functions") }
         val mismatches = ArrayList<String>()
         for (c in cases) {

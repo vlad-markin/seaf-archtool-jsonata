@@ -66,15 +66,26 @@ internal object JsRegexTranslator {
 
     fun translate(src: String, multiline: Boolean, dotAll: Boolean = false): String {
         val groups = countGroups(src)
-        val hasNamed = src.contains("(?<") && Regex("\\(\\?<[^=!]").containsMatchIn(src)
+        val names = namedGroups(src)
         val sb = StringBuilder(src.length + 16)
         var i = 0
         val n = src.length
         while (i < n) {
             val c = src[i]
             when (c) {
-                '\\' -> i = escape(src, i, sb, false, groups, hasNamed)
+                '\\' -> i = escape(src, i, sb, false, groups, names)
                 '[' -> i = charClass(src, i, sb)
+                '(' -> {
+                    val name = groupNameAt(src, i)
+                    if (name != null) {
+                        // JS group names (`_`, `$`, any letter) are not all valid in Java: groups are renamed g1, g2…
+                        sb.append("(?<").append(names[name]).append('>')
+                        i += 4 + name.length
+                    } else {
+                        sb.append('(')
+                        i++
+                    }
+                }
                 '.' -> { sb.append(if (dotAll) "[\\s\\S]" else "[^$LINE_TERMINATORS]"); i++ }
                 '$' -> { sb.append(if (multiline) "(?=[$LINE_TERMINATORS]|\\z)" else "\\z"); i++ }
                 '^' -> { sb.append(if (multiline) "(?:^|(?<=[$LINE_TERMINATORS]))" else "^"); i++ }
@@ -147,6 +158,33 @@ internal object JsRegexTranslator {
         }
     }
 
+    /** The name of the named group opening at [i] (`(?<name>`), or null. */
+    private fun groupNameAt(src: String, i: Int): String? {
+        if (!src.startsWith("(?<", i)) return null
+        val c = src.getOrNull(i + 3)
+        if (c == null || c == '=' || c == '!') return null
+        val end = src.indexOf('>', i + 3)
+        return if (end < 0) null else src.substring(i + 3, end)
+    }
+
+    /** Named groups in order of appearance → internal Java names. */
+    private fun namedGroups(src: String): Map<String, String> {
+        val names = LinkedHashMap<String, String>()
+        var i = 0
+        var inClass = false
+        while (i < src.length) {
+            val c = src[i]
+            when {
+                c == '\\' -> i++
+                inClass -> if (c == ']') inClass = false
+                c == '[' -> inClass = true
+                c == '(' -> groupNameAt(src, i)?.let { if (it !in names) names[it] = "g" + (names.size + 1) }
+            }
+            i++
+        }
+        return names
+    }
+
     private fun countGroups(src: String): Int {
         var count = 0
         var i = 0
@@ -165,7 +203,7 @@ internal object JsRegexTranslator {
     }
 
     /** Translates the escape at [start] (a backslash); returns the index after it. */
-    private fun escape(src: String, start: Int, sb: StringBuilder, inClass: Boolean, groups: Int, hasNamed: Boolean): Int {
+    private fun escape(src: String, start: Int, sb: StringBuilder, inClass: Boolean, groups: Int, names: Map<String, String>): Int {
         if (start + 1 >= src.length) {
             sb.append("\\\\")
             return start + 1
@@ -212,10 +250,11 @@ internal object JsRegexTranslator {
                 }
             }
             'k' -> {
-                if (hasNamed && !inClass && src.getOrNull(i) == '<') {
+                if (names.isNotEmpty() && !inClass && src.getOrNull(i) == '<') {
                     val end = src.indexOf('>', i)
                     if (end > 0) {
-                        sb.append("\\k").append(src, i, end + 1)
+                        val name = src.substring(i + 1, end)
+                        sb.append("\\k<").append(names[name] ?: name).append('>')
                         i = end + 1
                     } else {
                         sb.append('k')
@@ -278,7 +317,7 @@ internal object JsRegexTranslator {
         while (i < src.length && src[i] != ']') {
             val c = src[i]
             when (c) {
-                '\\' -> i = escape(src, i, sb, true, 0, false)
+                '\\' -> i = escape(src, i, sb, true, 0, emptyMap())
                 '[', '&', '^', '~' -> { sb.append('\\').append(c); i++ }
                 else -> { sb.append(JsRegexPattern.unit(c)); i++ }
             }
