@@ -165,4 +165,28 @@ class ControlTest {
         Jsonata.compile("\$left()", CompileOptions(registry)).evaluate(null)
         assertEquals(Long.MAX_VALUE, seen.get())
     }
+
+    @Test
+    fun `a debugger pause does not count against the deadline (TC-18)`() {
+        var paused = false
+        val hook = object : su.seaf.archtool.jsonata.engine.DebugHook {
+            override fun enter(node: su.seaf.archtool.jsonata.engine.Node, input: Value?, frame: su.seaf.archtool.jsonata.engine.Frame) {
+                if (!paused && node.ast.type == "function") {
+                    paused = true
+                    frame.ctx.paused { Thread.sleep(1000) }
+                }
+            }
+            override fun exit(node: su.seaf.archtool.jsonata.engine.Node, input: Value?, frame: su.seaf.archtool.jsonata.engine.Frame, result: Value?) {}
+        }
+        val expr = Jsonata.compile("\$sum([1..1000])", CompileOptions(debug = true))
+        val r = expr.evaluate(null, emptyMap(), EvaluationOptions(timeoutMillis = 500), hook)
+        assertTrue(paused)
+        assertEquals(NumberValue.of(500500), r)
+        // the same wait outside a pause does count
+        val sleepy = FunctionRegistry.create().register("sleep", "<n:n>", { _, a -> Thread.sleep((a[0] as NumberValue).value.toLong()); a[0] })
+        val e = runCatching {
+            Jsonata.compile("\$sleep(1000) + \$sum([1..2000])", CompileOptions(sleepy)).evaluate(null, emptyMap(), EvaluationOptions(timeoutMillis = 500))
+        }.exceptionOrNull() as JsonataException
+        assertEquals("D1012", e.code)
+    }
 }
