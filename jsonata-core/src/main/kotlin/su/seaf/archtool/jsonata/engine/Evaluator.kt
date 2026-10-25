@@ -20,7 +20,7 @@ import java.util.IdentityHashMap
 internal object Evaluator {
     /** jsonata.js: jsonata(expr).evaluate(input, bindings). */
     fun run(root: Node, input: Value?, bindings: Map<String, Value?>, options: CompileOptions, evaluation: EvaluationOptions): Value? {
-        val ctx = EvalContext(options.functions, evaluation, evaluation.clock(), null)
+        val ctx = EvalContext(options.functions, evaluation, evaluation.clock(), null, options.compatibility)
         val env = Frame(null, ctx)
         for ((k, v) in bindings) env.bind(k, v)
         env.bind("$", input)
@@ -32,8 +32,8 @@ internal object Evaluator {
         try {
             return root.evaluate(focus, env)
         } catch (_: StackOverflowError) {
-            // jsonata-js fails with a JS RangeError here; the closest JSONata error is D1011 (see docs/deviations.md)
-            throw JsonataException("D1011", value = 0.0)
+            // jsonata-js fails with a JS RangeError (no JSONata code) here
+            throw JsonataException("X0002")
         }
     }
 

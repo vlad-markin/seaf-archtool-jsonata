@@ -48,6 +48,14 @@ public class Jsonata private constructor(
     }
 }
 
+/**
+ * Compatibility mode (decision 17): one engine setting. [JSONATA_JS] behaves as jsonata-js 2.2.2, bugs included, and is
+ * what the 2.2.2 test-suite runs in. [AGREED] enables the deviations agreed with the owner and recorded in
+ * `docs/deviations.md` (none yet); every such deviation is implemented behind this setting, never instead of the
+ * reference behaviour.
+ */
+public enum class Compatibility { JSONATA_JS, AGREED }
+
 /** Compile-time options. */
 public class CompileOptions @JvmOverloads constructor(
     /** Functions visible to the expression: the standard library plus the caller's own. */
@@ -57,6 +65,8 @@ public class CompileOptions @JvmOverloads constructor(
      * calls at all.
      */
     public val debug: Boolean = false,
+    /** Compatibility mode (decision 17); the default reproduces jsonata-js 2.2.2 including its bugs. */
+    public val compatibility: Compatibility = Compatibility.JSONATA_JS,
 ) {
     public companion object {
         @JvmField public val DEFAULT: CompileOptions = CompileOptions()
@@ -99,18 +109,17 @@ public interface CallContext {
 /**
  * The functions an expression can call, by name without `$`. Registries form a chain: [standard] holds the jsonata-js
  * 2.2.2 library, [extend] creates a child for the caller's functions (decision 14: the main way the language grows).
- * A child cannot replace a standard function unless created with `allowOverride`. Configure a registry before
- * compiling expressions with it; it is read concurrently afterwards.
+ * Registering a name that is already taken, by the standard library or by another registered function, fails with
+ * X0001 (decision 18): there is no silent replacement. Configure a registry before compiling expressions with it; it
+ * is read concurrently afterwards.
  */
 public class FunctionRegistry private constructor(
     private val parent: FunctionRegistry?,
-    private val allowOverride: Boolean,
 ) {
     private val functions = HashMap<String, FunctionValue>()
 
     /** Creates a registry whose own functions are looked up before this one's. */
-    @JvmOverloads
-    public fun extend(allowOverride: Boolean = false): FunctionRegistry = FunctionRegistry(this, allowOverride)
+    public fun extend(): FunctionRegistry = FunctionRegistry(this)
 
     /**
      * Registers a native function. [signature] uses the JSONata syntax (`<s-n?:s>`), or null for no checks. [arity]
@@ -124,8 +133,8 @@ public class FunctionRegistry private constructor(
     }
 
     internal fun register(function: NativeFunction): FunctionRegistry {
-        if (!allowOverride && parent?.lookup(function.name) != null) {
-            throw IllegalArgumentException("function \$${function.name} is already defined; use extend(allowOverride = true) to replace it")
+        if (lookup(function.name) != null) {
+            throw su.seaf.archtool.jsonata.parser.JsonataException("X0001", value = su.seaf.archtool.jsonata.value.StringValue.of(function.name))
         }
         functions[function.name] = function
         return this
@@ -135,7 +144,7 @@ public class FunctionRegistry private constructor(
     public fun lookup(name: String): FunctionValue? = functions[name] ?: parent?.lookup(name)
 
     public companion object {
-        private val STANDARD: FunctionRegistry by lazy { FunctionRegistry(null, false).also { StandardLibrary.registerAll(it) } }
+        private val STANDARD: FunctionRegistry by lazy { FunctionRegistry(null).also { StandardLibrary.registerAll(it) } }
 
         /** The jsonata-js 2.2.2 standard library (shared, do not register into it). */
         @JvmStatic

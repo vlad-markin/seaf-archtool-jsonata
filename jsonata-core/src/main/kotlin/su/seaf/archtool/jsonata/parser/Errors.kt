@@ -136,9 +136,18 @@ internal object Messages {
         "D3141" to "{{{message}}}",
     )
 
+    /**
+     * Errors of this engine that jsonata-js does not have (decision 18): same code format, letter X. Reference codes
+     * (S, T, D, U) are never reused for them.
+     */
+    private val engineTemplates = mapOf(
+        "X0001" to "A function named {{value}} is already registered; registered names cannot be replaced",
+        "X0002" to "The evaluation exhausted the JVM stack. Check for non-terminating recursion or rewrite it as tail-recursive",
+    )
+
     // populateMessage: {{{field}}} is replaced with the raw field, {{field}} with JSON.stringify(err[field]).
     fun format(e: JsonataException): String {
-        val template = templates[e.code] ?: return e.code
+        val template = templates[e.code] ?: engineTemplates[e.code] ?: return e.code
         fun field(name: String): Any? = when (name) {
             "token" -> e.token
             "value" -> e.value
