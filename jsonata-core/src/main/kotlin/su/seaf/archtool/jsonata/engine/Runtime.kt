@@ -81,6 +81,9 @@ internal class EvalContext(
     private val maxDepth = options.maxDepth
     private val deadline = if (options.timeoutMillis > 0) System.nanoTime() + options.timeoutMillis * 1_000_000 else 0L
     @JvmField val guarded: Boolean = options.maxDepth > 0 || options.timeoutMillis > 0
+
+    /** True when the evaluation has a deadline: long native operations (regex matching) then check it too. */
+    @JvmField val hasDeadline: Boolean = options.timeoutMillis > 0
     @JvmField val maxSequence: Int = options.maxSequence
 
     /**

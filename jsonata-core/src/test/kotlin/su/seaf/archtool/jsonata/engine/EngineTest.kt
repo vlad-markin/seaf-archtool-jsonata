@@ -180,6 +180,11 @@ class EngineTest {
     }
 
     @Test
+    fun `regex backtracking stops at the deadline (RV-8)`() {
+        assertTimesOut("\$contains(\$, /(?:a*)*?b\\0/)", StringValue.of("a".repeat(30) + "!"), 50)
+    }
+
+    @Test
     fun `runaway recursion stops at the default depth limit`() {
         val e = error("(\$f := function(\$n){ 1 + \$f(\$n + 1) }; \$f(0))")
         assertEquals("D1011", e.code)

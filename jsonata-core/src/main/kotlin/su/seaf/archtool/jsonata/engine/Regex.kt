@@ -289,6 +289,17 @@ internal object JsRegexTranslator {
 }
 
 /** The matcher function a regex literal evaluates to (jsonata.js: evaluateRegex). */
+/** A subject for `java.util.regex` that passes the evaluation checkpoint while the regex engine reads it. */
+internal class CheckedChars(private val s: CharSequence, private val ctx: EvalContext) : CharSequence {
+    override val length: Int get() = s.length
+    override fun get(index: Int): Char {
+        ctx.tick()
+        return s[index]
+    }
+    override fun subSequence(startIndex: Int, endIndex: Int): CharSequence = s.subSequence(startIndex, endIndex)
+    override fun toString(): String = s.toString()
+}
+
 internal object RegexMatcher {
     fun create(regex: JsRegexPattern, position: Int?): InternalFunction {
         val state = intArrayOf(0) // the RegExp's lastIndex, shared by the match objects it returns
@@ -297,21 +308,23 @@ internal object RegexMatcher {
         // creation per match made iterating over a long string quadratic (review RV-5)
         var lastSubject: String? = null
         var matcher: java.util.regex.Matcher? = null
-        fun matcherFor(str: String): java.util.regex.Matcher {
+        fun matcherFor(str: String, ctx: EvalContext): java.util.regex.Matcher {
             val cached = matcher
             if (cached != null && lastSubject === str) return cached
-            val m = regex.pattern.matcher(JsRegexPattern.subject(str))
+            val subject: CharSequence = JsRegexPattern.subject(str)
+            // with a deadline, backtracking passes the checkpoint through the subject's charAt (review RV-8)
+            val m = regex.pattern.matcher(if (ctx.hasDeadline) CheckedChars(subject, ctx) else subject)
             lastSubject = str
             matcher = m
             return m
         }
-        fun exec(str: String, fromIndex: Int): Value? {
+        fun exec(str: String, fromIndex: Int, ctx: EvalContext): Value? {
             state[0] = fromIndex
             if (fromIndex > str.length) {
                 state[0] = 0
                 return null
             }
-            val m = matcherFor(str)
+            val m = matcherFor(str, ctx)
             if (!m.find(fromIndex)) {
                 state[0] = 0
                 return null
@@ -324,11 +337,11 @@ internal object RegexMatcher {
             val groups = ArrayValue(m.groupCount())
             for (g in 1..m.groupCount()) groups.addNullable(if (m.start(g) < 0) null else StringValue.of(str.substring(m.start(g), m.end(g))))
             result.put("groups", groups)
-            result.put("next", InternalFunction(0) { _, _ ->
+            result.put("next", InternalFunction(0) { c, _ ->
                 if (state[0] >= str.length) {
                     null
                 } else {
-                    val next = exec(str, state[0])
+                    val next = exec(str, state[0], c.frame.ctx)
                     if (next is ObjectValue && (next["match"] as StringValue).value.isEmpty()) {
                         throw JsonataException("D1004", position, value = StringValue.of(regex.source))
                     }
@@ -337,14 +350,14 @@ internal object RegexMatcher {
             })
             return result
         }
-        closure = InternalFunction(2) { _, args ->
+        closure = InternalFunction(2) { c, args ->
             val str = when (val s = args.getOrNull(0)) {
                 null -> "undefined"
                 is StringValue -> s.value
                 else -> Evaluator.string(s)
             }
             val from = (args.getOrNull(1) as? NumberValue)?.value?.toInt() ?: 0
-            exec(str, from)
+            exec(str, from, c.frame.ctx)
         }
         return closure
     }
