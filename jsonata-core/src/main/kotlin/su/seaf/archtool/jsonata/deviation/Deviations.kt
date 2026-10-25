@@ -40,13 +40,13 @@ public object Deviations {
     private const val V010 = "0.1.0"
 
     public val POSITION_IN_LAMBDA: Deviation =
-        Deviation("DEV-10", "ERR (position)", V010, true, "An error inside a lambda keeps the position of the failing operator")
+        Deviation("DEV-10", "ERR-POS", V010, true, "An error inside a lambda keeps the position of the failing operator")
 
     public val BASE64_UTF8: Deviation =
         Deviation("DEV-11", "STR-03", V010, true, "\$base64encode/\$base64decode use UTF-8")
 
     public val UNDEFINED_IN_SEQUENCES: Deviation =
-        Deviation("DEV-12", "SEQ (undefined)", V010, true, "Undefined does not enter sequences; a step after a filtered array constructor iterates its item")
+        Deviation("DEV-12", "UND-SEQ", V010, true, "Undefined does not enter sequences; a step after a filtered array constructor iterates its item")
 
     /** Deviations that have a probe or a static rule here, by id. */
     public val all: List<Deviation> = listOf(POSITION_IN_LAMBDA, BASE64_UTF8, UNDEFINED_IN_SEQUENCES)
