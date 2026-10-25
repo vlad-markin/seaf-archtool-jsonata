@@ -804,12 +804,12 @@ internal object DateTimeFunctions {
     private fun dateParse(s: String): Double {
         val m = isoFull.matcher(s)
         if (!m.matches()) return Double.NaN // V8 falls back to its legacy parser here (e.g. "2018.5"), not reproduced
-        val year = m.group(1).toDouble()
-        val month = m.group(2)?.toDouble() ?: 1.0
-        val day = m.group(3)?.toDouble() ?: 1.0
-        val hour = m.group(4)?.toDouble() ?: 0.0
-        val minute = m.group(5)?.toDouble() ?: 0.0
-        val second = m.group(6)?.toDouble() ?: 0.0
+        val year = digitsOf(s, m, 1, 0.0)
+        val month = digitsOf(s, m, 2, 1.0)
+        val day = digitsOf(s, m, 3, 1.0)
+        val hour = digitsOf(s, m, 4, 0.0)
+        val minute = digitsOf(s, m, 5, 0.0)
+        val second = digitsOf(s, m, 6, 0.0)
         val ms = m.group(7)?.let { (it + "00").substring(0, 3).toDouble() } ?: 0.0
         if (month < 1 || month > 12 || day < 1 || day > 31) return Double.NaN
         if (hour > 24 || minute > 59 || second > 59) return Double.NaN
@@ -825,6 +825,15 @@ internal object DateTimeFunctions {
             t -= sign * (oh * 60 + om) * 60_000
         }
         return timeClip(t)
+    }
+
+    /** The ASCII digits of group [g] of [m] over [s] as a number, [absent] when the group did not take part. */
+    private fun digitsOf(s: String, m: java.util.regex.Matcher, g: Int, absent: Double): Double {
+        val start = m.start(g)
+        if (start < 0) return absent
+        var v = 0L
+        for (i in start until m.end(g)) v = v * 10 + (s[i] - '0')
+        return v.toDouble()
     }
 
     /** datetime.js: parseDateTime. */

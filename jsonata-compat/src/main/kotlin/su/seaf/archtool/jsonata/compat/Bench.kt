@@ -9,14 +9,16 @@ import java.io.File
 
 /**
  * Rough timing (not JMH: orders of magnitude only) of compat/bench/cases.json, the same cases and scaling as
- * compat/node/bench.mjs runs on jsonata@2.2.2. `./gradlew :jsonata-compat:bench`.
+ * compat/node/bench.mjs runs on jsonata@2.2.2. `./gradlew :jsonata-compat:bench` (`-PbenchFilter=text` runs the cases whose name contains it).
  */
 fun main(args: Array<String>) {
     val root = File(args.getOrElse(0) { "compat" })
     val iterations = args.getOrElse(1) { "10" }.toInt()
+    val filter = args.getOrElse(2) { "" }
     val cases = mapper.readTree(File(root, "bench/cases.json"))
     println(String.format("%-36s %10s %10s  %s", "case", "median ms", "min ms", "result"))
     for (c in cases) {
+        if (filter.isNotEmpty() && !c.get("name").asText().contains(filter)) continue
         val input = load(root, c)?.let { toValue(it) }
         val expr = Jsonata.compile(c.get("expr").asText())
         val times = ArrayList<Double>()

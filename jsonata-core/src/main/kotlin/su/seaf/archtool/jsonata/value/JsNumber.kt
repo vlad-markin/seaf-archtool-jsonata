@@ -10,12 +10,16 @@ import java.math.RoundingMode
  * through here.
  */
 public object JsNumber {
+    private const val SAFE_INTEGER_LIMIT = 9007199254740992.0
+
     /** JS `String(d)` / `Number.prototype.toString()`. */
     @JvmStatic
     public fun toString(d: Double): String {
         if (d.isNaN()) return "NaN"
         if (d == 0.0) return "0"
         if (d.isInfinite()) return if (d > 0) "Infinity" else "-Infinity"
+        // an integer below 2^53 is its own shortest round-tripping decimal
+        if (Math.abs(d) < SAFE_INTEGER_LIMIT && d == Math.rint(d)) return d.toLong().toString()
         val negative = d < 0
         val (digits, n) = shortestDigits(Math.abs(d))
         val k = digits.length
@@ -61,7 +65,9 @@ public object JsNumber {
         while (lead < all.length - 1 && all[lead] == '0') lead++
         all = all.substring(lead)
         n -= lead
-        all = all.trimEnd('0')
+        var end = all.length
+        while (end > 0 && all[end - 1] == '0') end--
+        all = all.substring(0, end)
         if (all.isEmpty()) return "0" to 1
         if (all.length == 2) {
             // try a 1-digit decimal that round-trips (JS picks the shortest first)
@@ -132,6 +138,17 @@ public object JsNumber {
         if (d.isNaN()) return "NaN"
         if (Math.abs(d) >= 1e21 || d.isInfinite()) return toString(d)
         val negative = d < 0
+        if (Math.abs(d) < SAFE_INTEGER_LIMIT && d == Math.rint(d) && digits in 0..100) {
+            // an integer is exact: its digits and `digits` zeros (-0 has no sign, as in JS)
+            val sb = StringBuilder(24)
+            if (negative) sb.append('-')
+            sb.append(Math.abs(d).toLong())
+            if (digits > 0) {
+                sb.append('.')
+                repeat(digits) { sb.append('0') }
+            }
+            return sb.toString()
+        }
         val bd = BigDecimal(Math.abs(d)).setScale(digits, RoundingMode.HALF_UP)
         val s = bd.toPlainString()
         return if (negative && bd.signum() != 0) "-$s" else if (negative) "-$s" else s

@@ -346,6 +346,17 @@ class EngineTest {
     }
 
     @Test
+    fun `cached number pictures and parsed dates give the reference results`() {
+        // expectations from jsonata@2.2.2; the same picture alternates with and without options
+        val expr = "[\$formatNumber(1234.5, '#,##0.00'), \$formatNumber(1234.5, '#.##0,00', {'decimal-separator': ',', 'grouping-separator': '.'}), " +
+            "\$formatNumber(-1234.5, '#,##0.00'), \$formatNumber(1234.5, '#,##\u0660.\u0660\u0660', {'zero-digit': '\u0660'}), \$formatNumber(1234.5, '#,##0.00')]"
+        assertEquals("[\"1,234.50\",\"1.234,50\",\"-1,234.50\",\"\u0661,\u0662\u0663\u0664.\u0665\u0660\",\"1,234.50\"]", eval(expr))
+        assertEquals("D3091", error("\$formatNumber(1, '#,##0.00', {'decimal-separator': ',', 'grouping-separator': '.'})").code)
+        repeat(2) { assertEquals("D3081", error("\$formatNumber(1, '#.#.#')").code) }
+        assertEquals("1517472733500", eval("\$toMillis('2018-02-01T09:42:13.5+01:30')"))
+    }
+
+    @Test
     fun `regex over a long string with surrogates is linear (RV-5)`() {
         val s = StringValue.of("ab".repeat(80_000) + "\uD83D\uDE00")
         val t0 = System.nanoTime()

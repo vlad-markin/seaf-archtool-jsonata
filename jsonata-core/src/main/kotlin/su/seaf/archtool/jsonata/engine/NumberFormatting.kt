@@ -42,17 +42,34 @@ internal object NumberFormatting {
     /** JS `s.charAt(i)` ("" outside the string). */
     private fun charAt(s: String, i: Int): String = if (i >= 0 && i < s.length) s[i].toString() else ""
 
+    /** A picture analysed under a set of properties (functions.js: formatNumber up to the formatting of the value). */
+    private class Compiled(val properties: Map<String, String>, val decimalDigitFamily: List<String>, val variables: List<Analysis>)
+
+    private const val CACHE_LIMIT = 1000
+
+    /** Pictures analysed with the default properties: the analysis is deterministic, and repeated per value otherwise. */
+    private val cache = java.util.concurrent.ConcurrentHashMap<String, Compiled>()
+
+    private fun defaultProperties(): LinkedHashMap<String, String> = linkedMapOf(
+        "decimal-separator" to ".", "grouping-separator" to ",", "exponent-separator" to "e", "infinity" to "Infinity",
+        "minus-sign" to "-", "NaN" to "NaN", "percent" to "%", "per-mille" to "‰", "zero-digit" to "0",
+        "digit" to "#", "pattern-separator" to ";",
+    )
+
     private fun formatNumber(valueArg: Value?, pictureArg: Value?, optionsArg: Value?): Value? {
         val value = (valueArg as? NumberValue)?.value ?: return null
         val picture = (pictureArg as? StringValue)?.value ?: "undefined"
-        val properties = linkedMapOf(
-            "decimal-separator" to ".", "grouping-separator" to ",", "exponent-separator" to "e", "infinity" to "Infinity",
-            "minus-sign" to "-", "NaN" to "NaN", "percent" to "%", "per-mille" to "‰", "zero-digit" to "0",
-            "digit" to "#", "pattern-separator" to ";",
-        )
-        if (optionsArg is ObjectValue) {
+        val compiled = if (optionsArg is ObjectValue) {
+            val properties = defaultProperties()
             optionsArg.forEach { k, v -> properties[k] = if (v is StringValue) v.value else Evaluator.string(v) }
+            compile(picture, properties)
+        } else {
+            cache[picture] ?: compile(picture, defaultProperties()).also { if (cache.size < CACHE_LIMIT) cache[picture] = it }
         }
+        return format(value, compiled)
+    }
+
+    private fun compile(picture: String, properties: Map<String, String>): Compiled {
         val decimalSep = properties["decimal-separator"]!!
         val groupingSep = properties["grouping-separator"]!!
         val exponentSep = properties["exponent-separator"]!!
@@ -203,6 +220,20 @@ internal object NumberFormatting {
                 v.suffix, v.picture,
             )
         }
+        return Compiled(properties, decimalDigitFamily, variables)
+    }
+
+    private fun format(value: Double, compiled: Compiled): Value {
+        val properties = compiled.properties
+        val decimalSep = properties["decimal-separator"]!!
+        val groupingSep = properties["grouping-separator"]!!
+        val exponentSep = properties["exponent-separator"]!!
+        val percent = properties["percent"]!!
+        val perMille = properties["per-mille"]!!
+        val zeroDigit = properties["zero-digit"]!!
+        val minusSign = properties["minus-sign"]!!
+        val decimalDigitFamily = compiled.decimalDigitFamily
+        val variables = compiled.variables
 
         val pic = if (value >= 0) variables[0] else variables[1]
         val adjustedNumber = when {
