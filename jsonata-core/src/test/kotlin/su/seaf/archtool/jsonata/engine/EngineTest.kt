@@ -84,6 +84,20 @@ class EngineTest {
     }
 
     @Test
+    fun `transform with a user clone returning its argument leaves the input unchanged (RV-2)`() {
+        val input = json("""{"a":{"b":1}}""")
+        val r = Jsonata.compile("(\$clone := function(\$x){\$x}; \$ ~> |a|{\"b\":99}|)").evaluate(input)
+        assertEquals("""{"a":{"b":99}}""", JsonWriter.stringify(r))
+        assertEquals("""{"a":{"b":1}}""", JsonWriter.stringify(input))
+        // a clone from the bindings that returns the argument
+        val identity = FunctionRegistry.function(null, { _, a -> a[0] }, 1)
+        val input2 = json("""{"a":{"b":1},"c":[{"d":2}]}""")
+        val r2 = Jsonata.compile("\$ ~> |c|{\"e\":3},['d']|").evaluate(input2, mapOf("clone" to identity))
+        assertEquals("""{"a":{"b":1},"c":[{"e":3}]}""", JsonWriter.stringify(r2))
+        assertEquals("""{"a":{"b":1},"c":[{"d":2}]}""", JsonWriter.stringify(input2))
+    }
+
+    @Test
     fun `tail calls do not grow the JVM stack`() {
         assertEquals("0", eval("(\$f := function(\$n){ \$n = 0 ? 0 : \$f(\$n - 1) }; \$f(200000))"))
         assertEquals("125", eval(ackermann(3, 4), limits = EvaluationOptions(maxDepth = 500, timeoutMillis = 10_000)))

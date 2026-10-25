@@ -2,6 +2,7 @@ package su.seaf.archtool.jsonata.engine
 
 import su.seaf.archtool.jsonata.CompileOptions
 import su.seaf.archtool.jsonata.EvaluationOptions
+import su.seaf.archtool.jsonata.FunctionRegistry
 import su.seaf.archtool.jsonata.parser.JsonataException
 import su.seaf.archtool.jsonata.parser.JsonataParser
 import su.seaf.archtool.jsonata.value.ArrayValue
@@ -149,7 +150,10 @@ internal object Evaluator {
         val env = proc.env
         val cloneFunction = env.lookup("clone")
         if (cloneFunction !is FunctionValue) throw JsonataException("T2013", node.position)
-        val result = apply(cloneFunction, listOf(obj), null, env, null)
+        var result = apply(cloneFunction, listOf(obj), null, env, null)
+        // a user-defined $clone may return (parts of) its argument: its result is copied before it is updated, so
+        // that the input document is never modified (decision 8, review RV-2); the standard $clone is already a copy
+        if (cloneFunction !== FunctionRegistry.standard().lookup("clone")) result = copyContainers(result)
         var matches = node.pattern.evaluate(result, env)
         if (matches != null) {
             if (matches !is ArrayValue) matches = ArrayValue.sequence(matches)
@@ -182,6 +186,47 @@ internal object Evaluator {
             }
         }
         return result
+    }
+
+    /** A structural copy of arrays and objects (values, sequence flags and undefined items kept as they are). */
+    fun copyContainers(v: Value?): Value? {
+        if (v !is ArrayValue && v !is ObjectValue) return v
+        fun shallow(x: Value): Value = when (x) {
+            is ArrayValue -> ArrayValue(x.size).also { c ->
+                c.isSequence = x.isSequence
+                c.keepSingleton = x.keepSingleton
+                c.outerWrapper = x.outerWrapper
+                c.cons = x.cons
+                for (i in 0 until x.size) c.addNullable(x.raw(i))
+            }
+            is ObjectValue -> ObjectValue().also { c -> x.forEach { k, value -> c.put(k, value) } }
+            else -> x
+        }
+        val root = shallow(v)
+        val stack = ArrayList<Value>()
+        stack += root
+        while (stack.isNotEmpty()) {
+            when (val c = stack.removeAt(stack.size - 1)) {
+                is ArrayValue -> for (i in 0 until c.size) {
+                    val item = c.raw(i)
+                    if (item is ArrayValue || item is ObjectValue) {
+                        val copy = shallow(item)
+                        c.set(i, copy)
+                        stack += copy
+                    }
+                }
+                is ObjectValue -> for (k in c.keys) {
+                    val item = c[k]
+                    if (item is ArrayValue || item is ObjectValue) {
+                        val copy = shallow(item)
+                        c.put(k, copy)
+                        stack += copy
+                    }
+                }
+                else -> {}
+            }
+        }
+        return root
     }
 
     private fun collectContainers(v: Value?, out: IdentityHashMap<Value, Boolean>) {
