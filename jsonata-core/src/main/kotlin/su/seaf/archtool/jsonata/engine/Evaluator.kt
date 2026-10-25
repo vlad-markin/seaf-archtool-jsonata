@@ -244,7 +244,7 @@ internal object Evaluator {
             // the reference updates the matched objects in place; only objects of the clone may change, so that the
             // input document is never modified (a pattern such as `$$.x` would otherwise update the input)
             val owned = IdentityHashMap<Value, Boolean>()
-            collectContainers(result, owned)
+            collectContainers(result, owned, env.ctx)
             for (i in 0 until matches.size) {
                 val match = matches.raw(i)
                 val update = node.update.evaluate(match, env)
@@ -314,10 +314,11 @@ internal object Evaluator {
         return root
     }
 
-    private fun collectContainers(v: Value?, out: IdentityHashMap<Value, Boolean>) {
+    private fun collectContainers(v: Value?, out: IdentityHashMap<Value, Boolean>, ctx: EvalContext) {
         val stack = ArrayList<Value>()
         if (v != null) stack += v
         while (stack.isNotEmpty()) {
+            ctx.tick()
             val x = stack.removeAt(stack.size - 1)
             when (x) {
                 is ObjectValue -> if (out.put(x, true) == null) x.forEach { _, c -> stack += c }

@@ -235,11 +235,40 @@ class EngineTest {
         assertTimesOut("\$count(\$append(\$, \$))", nums)
         assertTimesOut("\$count(\$keys(\$))", big)
         assertTimesOut("\$count(\$zip(\$, \$))", nums)
+        // story 4 step 4.2: aggregates, $join, $merge, $reverse, $spread and the transform's copy check too
+        val words = ArrayValue(1_000_000).also { a -> repeat(1_000_000) { a.add(StringValue.of("w")) } }
+        assertTimesOut("\$sum(\$) + \$max(\$) + \$min(\$) + \$average(\$) + \$sum(\$) + \$max(\$)", nums)
+        assertTimesOut("\$length(\$join(\$))", words)
+        assertTimesOut("\$count(\$keys(\$merge(\$)))", big)
+        assertTimesOut("\$count(\$reverse(\$))", nums)
+        assertTimesOut("\$count(\$spread(\$))", big)
+        assertTimesOut("\$count(\$ ~> |\$|{}|)", big)
     }
 
     @Test
     fun `regex backtracking stops at the deadline (RV-8)`() {
         assertTimesOut("\$contains(\$, /(?:a*)*?b\\0/)", StringValue.of("a".repeat(30) + "!"), 50)
+    }
+
+    @Test
+    fun `regex backtracking stops on an interrupt without any option (story 4 step 4_2)`() {
+        var code: String? = null
+        val t = Thread {
+            code = try {
+                Jsonata.compile("\$contains(\$, /(?:a*)*?b\\0/)").evaluate(StringValue.of("a".repeat(30) + "!"))
+                "finished"
+            } catch (e: JsonataException) {
+                e.code
+            }
+        }
+        t.start()
+        Thread.sleep(200)
+        val t0 = System.nanoTime()
+        t.interrupt()
+        t.join(5000)
+        val ms = (System.nanoTime() - t0) / 1_000_000
+        assertEquals("X0009", code)
+        assertTrue(ms < 250, "stopped $ms ms after the interrupt")
     }
 
     @Test

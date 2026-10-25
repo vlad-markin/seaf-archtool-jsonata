@@ -23,11 +23,11 @@ import su.seaf.archtool.jsonata.value.Value
  */
 internal object StandardLibrary {
     fun registerAll(r: FunctionRegistry) {
-        def(r, "sum", "<a<n>:n>", 1) { _, a -> sum(a[0]) }
+        def(r, "sum", "<a<n>:n>", 1) { c, a -> sum(ctx(c), a[0]) }
         def(r, "count", "<a:n>", 1) { _, a -> NumberValue.of((a[0] as ArrayValue?)?.size ?: 0) }
-        def(r, "max", "<a<n>:n>", 1) { _, a -> extreme(a[0], true) }
-        def(r, "min", "<a<n>:n>", 1) { _, a -> extreme(a[0], false) }
-        def(r, "average", "<a<n>:n>", 1) { _, a -> average(a[0]) }
+        def(r, "max", "<a<n>:n>", 1) { c, a -> extreme(ctx(c), a[0], true) }
+        def(r, "min", "<a<n>:n>", 1) { c, a -> extreme(ctx(c), a[0], false) }
+        def(r, "average", "<a<n>:n>", 1) { c, a -> average(ctx(c), a[0]) }
         def(r, "string", "<x-b?:s>", 1, 2) { c, a -> a[0]?.let { StringValue.of(Evaluator.string(it, (a.getOrNull(1) as? BooleanValue)?.value == true, ctx(c))) } }
         def(r, "substring", "<s-nn?:s>", 3) { _, a -> substring(a[0], a[1], a[2]) }
         def(r, "substringBefore", "<s-s:s>", 2) { _, a -> str(a[0])?.let { s -> val p = s.indexOf(str(a[1]) ?: "undefined"); StringValue.of(if (p > -1) s.substring(0, p) else s) } }
@@ -47,10 +47,11 @@ internal object StandardLibrary {
         def(r, "contains", "<s-(sf):b>", 2) { c, a -> contains(c, a[0], a[1]) }
         def(r, "replace", "<s-(sf)(sf)n?:s>", 4) { c, a -> replace(c, a[0], a[1], a[2], a[3]) }
         def(r, "split", "<s-(sf)n?:a<s>>", 3) { c, a -> split(c, a[0], a[1], a[2]) }
-        def(r, "join", "<a<s>s?:s>", 2) { _, a ->
+        def(r, "join", "<a<s>s?:s>", 2) { c, a ->
             (a[0] as ArrayValue?)?.let { arr ->
                 val sep = str(a.getOrNull(1)) ?: ""
-                StringValue.of((0 until arr.size).joinToString(sep) { (arr.raw(it) as? StringValue)?.value ?: "" })
+                val context = ctx(c)
+                StringValue.of((0 until arr.size).joinToString(sep) { context.tick(); (arr.raw(it) as? StringValue)?.value ?: "" })
             }
         }
         def(r, "formatBase", "<n-n?:s>", 2) { _, a -> formatBase(a[0], a[1]) }
@@ -80,8 +81,8 @@ internal object StandardLibrary {
         def(r, "append", "<xx:a>", 2) { c, a -> append(c, a[0], a[1]) }
         def(r, "exists", "<x:b>", 1) { _, a -> BooleanValue.of(a[0] != null) }
         def(r, "spread", "<x-:a<o>>", 1) { c, a -> spread(c, a[0]) }
-        def(r, "merge", "<a<o>:o>", 1) { _, a -> merge(a[0]) }
-        def(r, "reverse", "<a:a>", 1) { _, a -> reverse(a[0]) }
+        def(r, "merge", "<a<o>:o>", 1) { c, a -> merge(ctx(c), a[0]) }
+        def(r, "reverse", "<a:a>", 1) { c, a -> reverse(ctx(c), a[0]) }
         def(r, "each", "<o-f:a>", 2) { c, a -> each(c, a[0], a[1]) }
         def(r, "error", "<s?:x>", 1) { _, a ->
             val m = str(a.getOrNull(0))
@@ -123,29 +124,36 @@ internal object StandardLibrary {
 
     // ---- aggregation ----
 
-    private fun sum(arg: Value?): Value? {
+    private fun sum(ctx: EvalContext, arg: Value?): Value? {
         val arr = arg as ArrayValue? ?: return null
         var total = 0.0
-        for (i in 0 until arr.size) total += (arr.raw(i) as NumberValue).value
+        for (i in 0 until arr.size) {
+            ctx.tick()
+            total += (arr.raw(i) as NumberValue).value
+        }
         return NumberValue.of(total)
     }
 
-    private fun extreme(arg: Value?, max: Boolean): Value? {
+    private fun extreme(ctx: EvalContext, arg: Value?, max: Boolean): Value? {
         val arr = arg as ArrayValue? ?: return null
         if (arr.size == 0) return null
         var result = if (max) Double.NEGATIVE_INFINITY else Double.POSITIVE_INFINITY
         for (i in 0 until arr.size) {
+            ctx.tick()
             val d = (arr.raw(i) as NumberValue).value
             result = if (max) Math.max(result, d) else Math.min(result, d)
         }
         return NumberValue.of(result)
     }
 
-    private fun average(arg: Value?): Value? {
+    private fun average(ctx: EvalContext, arg: Value?): Value? {
         val arr = arg as ArrayValue? ?: return null
         if (arr.size == 0) return null
         var total = 0.0
-        for (i in 0 until arr.size) total += (arr.raw(i) as NumberValue).value
+        for (i in 0 until arr.size) {
+            ctx.tick()
+            total += (arr.raw(i) as NumberValue).value
+        }
         return NumberValue.of(total / arr.size)
     }
 
@@ -706,7 +714,10 @@ internal object StandardLibrary {
     private fun spread(c: CallContext, arg: Value?): Value? {
         var result: Value? = ArrayValue.sequence()
         if (arg is ArrayValue) {
-            for (i in 0 until arg.size) result = append(c, result, spread(c, arg.raw(i)))
+            for (i in 0 until arg.size) {
+                ctx(c).tick()
+                result = append(c, result, spread(c, arg.raw(i)))
+            }
         } else if (arg is ObjectValue) {
             val seq = result as ArrayValue
             for (k in arg.keys) seq.add(ObjectValue.of(k to arg[k]!!))
@@ -716,21 +727,25 @@ internal object StandardLibrary {
         return result
     }
 
-    private fun merge(arg: Value?): Value? {
+    private fun merge(ctx: EvalContext, arg: Value?): Value? {
         val arr = arg as ArrayValue? ?: return null
         val result = ObjectValue()
         for (i in 0 until arr.size) {
+            ctx.tick()
             val o = arr.raw(i) as? ObjectValue ?: continue
             o.forEach { k, v -> result.put(k, v) }
         }
         return result
     }
 
-    private fun reverse(arg: Value?): Value? {
+    private fun reverse(ctx: EvalContext, arg: Value?): Value? {
         val arr = arg as ArrayValue? ?: return null
         if (arr.size <= 1) return arr
         val result = ArrayValue(arr.size)
-        for (i in arr.size - 1 downTo 0) result.addNullable(arr.raw(i))
+        for (i in arr.size - 1 downTo 0) {
+            ctx.tick()
+            result.addNullable(arr.raw(i))
+        }
         return result
     }
 

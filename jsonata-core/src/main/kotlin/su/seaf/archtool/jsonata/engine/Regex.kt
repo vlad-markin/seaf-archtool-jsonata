@@ -393,7 +393,9 @@ internal class RegexFunction(val regex: JsRegexPattern, val position: Int?) : In
         if (cached != null && lastSubject === str) return cached
         val subject: CharSequence = JsRegexPattern.subject(str)
         // with a deadline, backtracking passes the checkpoint through the subject's charAt (review RV-8)
-        val m = regex.pattern.matcher(if (ctx.hasDeadline) CheckedChars(subject, ctx) else subject)
+        // the checkpoint passes through the subject's charAt, so that backtracking stops on cancellation and the
+        // deadline (review RV-8, design §2.4)
+        val m = regex.pattern.matcher(CheckedChars(subject, ctx))
         lastSubject = str
         matcher = m
         return m
