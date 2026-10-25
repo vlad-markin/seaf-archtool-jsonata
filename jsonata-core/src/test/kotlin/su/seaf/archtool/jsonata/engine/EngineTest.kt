@@ -323,6 +323,29 @@ class EngineTest {
     }
 
     @Test
+    fun `library functions give the same results with and without the matcher protocol`() {
+        // a lambda around the regex hides it from the fast path, so the call goes through {match, start, end, groups, next}
+        val subjects = listOf("", "ab", "ababbabbcc", "a-b--c", "x\uD83D\uDE00y\uD83D\uDE00", "aaa")
+        val patterns = listOf("/a(b+)/", "/(x)?b/", "/-/", "/\\uD83D\\uDE00/", "/a|(z)/i", "/x*/", "/(?<n>a)(b)?/")
+        val calls = listOf(
+            "\$match(\$s, R)", "\$match(\$s, R, 1)", "\$match(\$s, R, 0)",
+            "\$replace(\$s, R, '[\$0|\$1|\$2|\$\$|\$9]')", "\$replace(\$s, R, '<\$1>', 2)",
+            "\$split(\$s, R)", "\$split(\$s, R, 2)", "\$contains(\$s, R)",
+        )
+        for (subject in subjects) for (pattern in patterns) for (call in calls) {
+            fun run(regex: String) = try {
+                eval("(\$r := $pattern; \$f := function(\$x) { \$r(\$x) }; \$s := '$subject'; ${call.replace("R", regex)})")
+            } catch (e: JsonataException) {
+                "error ${e.code}"
+            }
+            assertEquals(run("\$f"), run("\$r"), "$call with $pattern on '$subject'")
+        }
+        assertEquals("\"x[ab|b||$|][abb|bb||$|]cc\"", eval("\$replace('xababbcc', /a(b+)/, '[\$0|\$1|\$2|\$\$|\$9]', 2)"))
+        assertEquals("[\"a\",\"b\",\"\",\"c\"]", eval("\$split('a-b--c', /-/)"))
+        assertEquals("D1004", error("\$match('aaa', /x*/)").code)
+    }
+
+    @Test
     fun `regex over a long string with surrogates is linear (RV-5)`() {
         val s = StringValue.of("ab".repeat(80_000) + "\uD83D\uDE00")
         val t0 = System.nanoTime()

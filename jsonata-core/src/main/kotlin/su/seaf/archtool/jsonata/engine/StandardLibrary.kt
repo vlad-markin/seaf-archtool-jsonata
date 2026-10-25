@@ -218,6 +218,7 @@ internal object StandardLibrary {
         val s = str(strArg) ?: return null
         if (token == null) return null
         if (token is StringValue) return BooleanValue.of(s.indexOf(token.value) != -1)
+        if (token is RegexFunction) return BooleanValue.of(token.firstMatch(s, ctx(c)) != null)
         return BooleanValue.of(evaluateMatcher(c, token, strArg) != null)
     }
 
@@ -226,6 +227,20 @@ internal object StandardLibrary {
         val limit = num(limitArg)
         if (limit != null && limit < 0) throw JsonataException("D3040", value = limitArg, index = 3)
         val result = ArrayValue.sequence()
+        if (regex is RegexFunction && strArg is StringValue) {
+            // the built-in matcher without its {match, start, end, groups, next} protocol objects
+            if (limit == null || limit > 0) {
+                val str = strArg.value
+                regex.forEachMatch(str, ctx(c), limit) { m ->
+                    val item = ObjectValue()
+                    item.put("match", StringValue.of(str.substring(m.start(), m.end())))
+                    item.put("index", NumberValue.of(m.start()))
+                    item.put("groups", regex.groups(str, m))
+                    result.add(item)
+                }
+            }
+            return result
+        }
         if (limit == null || limit > 0) {
             var count = 0
             var matches = evaluateMatcher(c, regex, strArg)
@@ -249,7 +264,7 @@ internal object StandardLibrary {
         val limit = num(limitArg)
         if (limit != null && limit < 0) throw JsonataException("D3011", value = limitArg, index = 4)
         val replacer: (ObjectValue) -> Value? = if (replacement is StringValue) {
-            { m -> StringValue.of(substitute(replacement.value, m)) }
+            { m -> StringValue.of(substitute(replacement.value, (m["match"] as? StringValue)?.value ?: "undefined", m["groups"] as? ArrayValue)) }
         } else {
             { m -> c.call(replacement as? FunctionValue ?: throw JsonataException("T1006"), listOf(m)) }
         }
@@ -272,6 +287,17 @@ internal object StandardLibrary {
                 index = s.indexOf(p, position)
             }
             result.append(s.substring(position))
+            return StringValue.of(result.toString())
+        }
+        if (pattern is RegexFunction && replacement is StringValue) {
+            // the built-in matcher without its protocol objects (a function replacer still receives them)
+            val first = pattern.firstMatch(s, ctx(c)) ?: return StringValue.of(s)
+            pattern.forEachMatchFrom(first, s, ctx(c), limit) { m ->
+                result.append(s, position, m.start())
+                result.append(substitute(replacement.value, s.substring(m.start(), m.end()), pattern.groups(s, m)))
+                position = m.end()
+            }
+            result.append(s, position, s.length)
             return StringValue.of(result.toString())
         }
         var matches = evaluateMatcher(c, pattern, strArg) ?: return StringValue.of(s)
@@ -298,10 +324,8 @@ internal object StandardLibrary {
     }
 
     /** The `$n` substitution of functions.js: replace (string replacement). */
-    private fun substitute(replacement: String, m: ObjectValue): String {
-        val groups = m["groups"] as? ArrayValue
+    private fun substitute(replacement: String, matched: String, groups: ArrayValue?): String {
         val groupCount = groups?.size ?: 0
-        val matched = (m["match"] as? StringValue)?.value ?: "undefined"
         val sb = StringBuilder()
         var position = 0
         var index = replacement.indexOf('$', position)
@@ -362,6 +386,21 @@ internal object StandardLibrary {
                 if (result.size >= lim) break
                 result.add(StringValue.of(part))
             }
+            return result
+        }
+        if (separator is RegexFunction) {
+            // the built-in matcher without its protocol objects
+            val first = separator.firstMatch(s, ctx(c))
+            if (first == null) {
+                result.add(StringValue.of(s))
+                return result
+            }
+            var start = 0
+            val count = separator.forEachMatchFrom(first, s, ctx(c), limit) { m ->
+                result.add(StringValue.of(s.substring(start, m.start())))
+                start = m.end()
+            }
+            if (limit == null || count < limit) result.add(StringValue.of(s.substring(start)))
             return result
         }
         var count = 0

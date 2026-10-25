@@ -62,9 +62,9 @@ internal class PartialNative(
 }
 
 /** An engine function implemented in Kotlin that behaves as a plain JS function (no signature, no call-site token). */
-internal class InternalFunction(
+internal open class InternalFunction(
     override val arity: Int,
-    val body: (CallContextImpl, List<Value?>) -> Value?,
+    open val body: (CallContextImpl, List<Value?>) -> Value?,
 ) : EngineFunction() {
     override val jsObject: Boolean get() = false
 }
