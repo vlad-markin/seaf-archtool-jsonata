@@ -3,6 +3,7 @@ package su.seaf.archtool.jsonata.engine
 import su.seaf.archtool.jsonata.parser.AstNode
 import su.seaf.archtool.jsonata.parser.JsRegex
 import su.seaf.archtool.jsonata.parser.JsonataException
+import su.seaf.archtool.jsonata.parser.SourceRanges
 import su.seaf.archtool.jsonata.parser.Signature
 import su.seaf.archtool.jsonata.value.BooleanValue
 import su.seaf.archtool.jsonata.value.NullValue
@@ -13,7 +14,11 @@ import su.seaf.archtool.jsonata.value.StringValue
  * Compiles the processed AST (the jsonata-js `ast()` shape) into a tree of [Node]s, once per expression. With [debug]
  * every node reports to the evaluation's debug hook (the tree is otherwise identical); without it no node does.
  */
-internal class Compiler(private val debug: Boolean) {
+internal class Compiler(
+    private val debug: Boolean,
+    /** Source ranges of the AST nodes (null: nodes get no range, e.g. internal helper expressions). */
+    private val ranges: SourceRanges? = null,
+) {
     /**
      * True when the expression binds a lambda that refers to its own name (`$f := function(){ ... $f(...) }`): such
      * an expression may recurse deeper than the caller's first stack segment, so it starts on a segment thread
@@ -93,6 +98,7 @@ internal class Compiler(private val debug: Boolean) {
         }
         applyCommon(node, ast)
         node.debug = debug
+        ranges?.get(ast)?.let { node.start = it.start; node.end = it.end }
         return node
     }
 

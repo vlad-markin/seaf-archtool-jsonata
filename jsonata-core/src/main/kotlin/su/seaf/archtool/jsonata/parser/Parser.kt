@@ -4,8 +4,19 @@ package su.seaf.archtool.jsonata.parser
  * Port of jsonata-js 2.2.2 parser.js: Pratt parser + processAST. The AST equals `jsonata(expr).ast()` of the reference.
  * The `recover` mode of the reference is not ported (core does not use it).
  */
-internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = null) {
+internal class Parser(
+    private val source: String,
+    onToken: ((Token) -> Unit)? = null,
+    /** Record the source range of every node (CAP-9, CAP-10): [parseWithRanges]. */
+    private val withRanges: Boolean = false,
+) {
     private val lexer = Tokenizer(source, onToken)
+
+    /** Own ranges: the token of a node, extended to its closing bracket; children are added by [ranges]. */
+    private val own = java.util.IdentityHashMap<AstNode, IntArray>()
+
+    /** End offset of the token consumed by the last [advance] (the closing bracket after `advance(")")`). */
+    private var consumedEnd = -1
     private val symbols = HashMap<String, Symbol>()
     private lateinit var node: AstNode
 
@@ -40,6 +51,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
             val code = if (node.id == "(end)") "S0203" else "S0202"
             handleError(JsonataException(code, node.position, token = node.value, value = id))
         }
+        if (withRanges && ::node.isInitialized) consumedEnd = node.position ?: consumedEnd
         val nextToken = lexer.next(infix)
         if (nextToken == null) {
             // the (end) symbol object itself is the node, as in the reference
@@ -60,7 +72,52 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
         node["value"] = value
         node["type"] = type
         node["position"] = nextToken.end.toDouble()
+        if (withRanges) own[node] = intArrayOf(nextToken.start, nextToken.end)
         return node
+    }
+
+    /** Extends the own range of [self] to the token just consumed (a closing bracket). */
+    private fun closed(self: AstNode) {
+        if (!withRanges) return
+        val r = own[self] ?: return
+        if (consumedEnd > r[1]) r[1] = consumedEnd
+    }
+
+    /** Gives [target] the own range of [from] (a node made from it). */
+    private fun sameRange(target: AstNode, from: AstNode) {
+        if (!withRanges || own.containsKey(target)) return
+        own[from]?.let { own[target] = it.copyOf() }
+    }
+
+    /** Widens the own range of [target] over [nodes] (the `@`/`#` operator and its variable, which are dropped). */
+    private fun widen(target: AstNode, vararg nodes: AstNode?) {
+        if (!withRanges) return
+        for (n in nodes) {
+            val r = own[n ?: continue] ?: continue
+            val t = own[target]
+            if (t == null) own[target] = r.copyOf() else { t[0] = minOf(t[0], r[0]); t[1] = maxOf(t[1], r[1]) }
+        }
+    }
+
+    /**
+     * `JSON.parse(JSON.stringify(left))` of `??` and `?:`: every node of the copy takes the range of the operator
+     * [op], so that the condition the parser synthesizes points at the operator and the original operand keeps the
+     * source of `left` (design §2.2: one source place, the outermost executable node gets the breakpoint).
+     */
+    private fun copyWithRanges(value: AstNode, op: AstNode): AstNode {
+        val copy = AstNode.jsonCopy(value) as AstNode
+        if (withRanges) own[op]?.let { r -> markAll(copy, r) }
+        return copy
+    }
+
+    private fun markAll(v: Any?, r: IntArray) {
+        when (v) {
+            is AstNode -> {
+                own[v] = r.copyOf()
+                for (x in v.values) markAll(x, r)
+            }
+            is List<*> -> for (x in v) markAll(x, r)
+        }
     }
 
     private lateinit var endNode: AstNode
@@ -126,12 +183,17 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
         // coalescing operator
         infix("??", bp("??")) { self, left ->
             self["type"] = "condition"
-            self["condition"] = AstNode.of(
+            val exists = AstNode.of("type" to "variable", "value" to "exists")
+            val condition = AstNode.of(
                 "type" to "function",
                 "value" to "(",
-                "procedure" to AstNode.of("type" to "variable", "value" to "exists"),
-                "arguments" to mutableListOf(AstNode.jsonCopy(left)),
+                "procedure" to exists,
+                "arguments" to mutableListOf<Any?>(copyWithRanges(left, self)),
             )
+            // the synthetic $exists(left) takes the range of the operator
+            sameRange(condition, self)
+            sameRange(exists, self)
+            self["condition"] = condition
             self["then"] = left
             self["else"] = expression(0)
             self
@@ -153,6 +215,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                 advance(";")
             }
             advance(")", true)
+            closed(self)
             self["type"] = "block"
             self["expressions"] = expressions
             self
@@ -177,6 +240,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                 }
             }
             advance("]", true)
+            closed(self)
             self["expressions"] = a
             self["type"] = "unary"
             self
@@ -196,6 +260,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                 self["rhs"] = expression(bp("]"))
                 self["type"] = "binary"
                 advance("]", true)
+                closed(self)
                 self
             }
         }
@@ -218,6 +283,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                 advance(",")
             }
             advance(")")
+            closed(self)
             self["lhs"] = left
             self["rhs"] = terms
             self["type"] = "binary"
@@ -271,7 +337,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
         // elvis/default operator
         infix("?:", bp("?:")) { self, left ->
             self["type"] = "condition"
-            self["condition"] = AstNode.jsonCopy(left)
+            self["condition"] = copyWithRanges(left, self)
             self["then"] = left
             self["else"] = expression(0)
             self
@@ -288,6 +354,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                 self["delete"] = expression(0)
             }
             advance("|")
+            closed(self)
             self
         }
     }
@@ -313,6 +380,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
             }
         }
         advance(")", true)
+        closed(self)
         // if the name of the function is 'function' or λ, then this is function definition (lambda function)
         if (left["type"] == "name" && (left.value == "function" || left.value == "λ")) {
             // all of the args must be VARIABLE tokens
@@ -323,6 +391,8 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                 }
             }
             self["type"] = "lambda"
+            // the lambda starts at the `function`/`λ` keyword, which is not kept as a child
+            if (withRanges) own[left]?.let { l -> own[self]?.let { r -> r[0] = minOf(r[0], l[0]) } }
             // is the next token a '<' - if so, parse the function signature
             if (node.id == "<") {
                 val sigPos = node.position ?: 0
@@ -345,6 +415,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
             advance("{")
             self["body"] = expression(0)
             advance("}")
+            closed(self)
         }
         return self
     }
@@ -362,6 +433,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
             }
         }
         advance("}", true)
+        closed(self)
         if (left == null) {
             // NUD - unary prefix form
             self["lhs"] = a
@@ -529,7 +601,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                         }
                         pushAncestry(step, predicate)
                     }
-                    step.nodes(type)!! += AstNode.of("type" to "filter", "expr" to predicate, "position" to expr.prop("position"))
+                    step.nodes(type)!! += AstNode.of("type" to "filter", "expr" to predicate, "position" to expr.prop("position")).also { sameRange(it, expr) }
                 }
                 "{" -> {
                     // group-by: LHS is a step or a predicated step, RHS is the object constructor expr
@@ -542,13 +614,14 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                             mutableListOf<Any?>(processAST(pair[0] as AstNode), processAST(pair[1] as AstNode))
                         },
                         "position" to expr.prop("position"),
-                    )
+                    ).also { sameRange(it, expr) }
                 }
                 "^" -> {
                     // order-by: LHS is the array to be ordered, RHS defines the terms
                     result = processAST(expr.node("lhs")!!)
                     if (result["type"] != "path") result = AstNode.of("type" to "path", "steps" to mutableListOf<Any?>(result))
                     val sortStep = AstNode.of("type" to "sort", "position" to expr.prop("position"))
+                    sameRange(sortStep, expr)
                     sortStep["terms"] = expr.nodes("rhs")!!.mapTo(ArrayList()) { t ->
                         t as AstNode
                         val expression = processAST(t.node("expression")!!)
@@ -575,6 +648,7 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                     if (expr.truthy("keepArray")) step["keepArray"] = true
                     step["focus"] = expr.node("rhs")!!["value"]
                     step["tuple"] = true
+                    widen(step, expr, expr.node("rhs"))
                 }
                 "#" -> {
                     result = processAST(expr.node("lhs")!!)
@@ -592,8 +666,10 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
                         step["index"] = expr.node("rhs")!!["value"]
                     } else {
                         step.nodes("stages")!! += AstNode.of("type" to "index", "value" to expr.node("rhs")!!["value"], "position" to expr.prop("position"))
+                            .also { sameRange(it, expr); widen(it, expr.node("rhs")) }
                     }
                     step["tuple"] = true
+                    widen(step, expr, expr.node("rhs"))
                 }
                 "~>" -> {
                     result = AstNode.of("type" to "apply", "value" to expr.value, "position" to expr.prop("position"))
@@ -723,7 +799,52 @@ internal class Parser(private val source: String, onToken: ((Token) -> Unit)? = 
             }
         }
         if (expr.truthy("keepArray")) result["keepArray"] = true
+        sameRange(result, expr)
         return result
+    }
+
+    /** [parse] with the source range of every node (the parser must be created with `withRanges`). */
+    fun parseWithRanges(): ParsedExpression {
+        val ast = parse()
+        return ParsedExpression(ast, ranges(ast))
+    }
+
+    /** Keys that refer to other nodes without containing them. */
+    private val notChildren = setOf("ancestor", "slot", "seekingParent", "signature")
+
+    /** Final ranges, bottom-up: a node covers its own range and those of its children (iterative: deep expressions). */
+    private fun ranges(root: AstNode): SourceRanges {
+        val result = java.util.IdentityHashMap<AstNode, SourceRange>()
+        val visited = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<AstNode, Boolean>())
+        val stack = ArrayList<Pair<AstNode, Boolean>>()
+        stack.add(root to false)
+        while (stack.isNotEmpty()) {
+            val (n, done) = stack.removeAt(stack.size - 1)
+            if (!done) {
+                if (!visited.add(n)) continue
+                stack.add(n to true)
+                forEachChild(n) { stack.add(it to false) }
+                continue
+            }
+            var start = Int.MAX_VALUE
+            var end = Int.MIN_VALUE
+            own[n]?.let { start = it[0]; end = it[1] }
+            forEachChild(n) { c -> result[c]?.let { r -> start = minOf(start, r.start); end = maxOf(end, r.end) } }
+            if (start <= end) result[n] = SourceRange(start, end)
+        }
+        return SourceRanges(result)
+    }
+
+    private inline fun forEachChild(n: AstNode, action: (AstNode) -> Unit) {
+        for ((k, v) in n) {
+            if (k in notChildren) continue
+            when (v) {
+                is AstNode -> action(v)
+                is List<*> -> for (x in v) {
+                    if (x is AstNode) action(x) else if (x is List<*>) for (y in x) if (y is AstNode) action(y)
+                }
+            }
+        }
     }
 
     fun parse(): AstNode {

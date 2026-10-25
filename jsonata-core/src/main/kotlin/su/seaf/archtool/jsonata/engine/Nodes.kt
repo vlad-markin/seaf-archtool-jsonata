@@ -29,6 +29,10 @@ internal class GroupSpec(@JvmField val pairs: Array<Array<Node>>, @JvmField val 
 internal abstract class Node(@JvmField val ast: AstNode) {
     @JvmField val position: Int? = ast.position
 
+    /** Source range of the node and its children (UTF-16 offsets, end exclusive); -1 when unknown. */
+    @JvmField var start: Int = -1
+    @JvmField var end: Int = -1
+
     @JvmField var predicates: Array<Node>? = null
     @JvmField var group: GroupSpec? = null
     @JvmField var keepArray: Boolean = false

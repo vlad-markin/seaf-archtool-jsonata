@@ -13,13 +13,16 @@ public object JsonataParser {
     /** jsonata-js `jsonata(expr).ast()`; throws [JsonataException] with the reference code, position and token. */
     public fun ast(expression: String): AstNode = Parser(expression).parse()
 
+    /** The AST of [ast] with the source range of every node (compilation, error ranges, the debugger). */
+    internal fun parseWithRanges(expression: String): ParsedExpression = Parser(expression, withRanges = true).parseWithRanges()
+
     /**
      * Parses and also returns the tokens in source order and the comments, for highlighting. On a syntax error the
      * tokens before the error are kept and the rest of the text is tokenized as far as possible.
      */
     public fun analyze(expression: String): ParseResult {
         val tokens = ArrayList<Token>()
-        val parser = Parser(expression) { tokens += it }
+        val parser = Parser(expression, onToken = { tokens += it })
         return try {
             ParseResult(parser.parse(), null, tokens.distinctBy { it.start }, parser.comments)
         } catch (e: JsonataException) {

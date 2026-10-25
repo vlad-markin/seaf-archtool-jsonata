@@ -23,6 +23,8 @@ public class Jsonata private constructor(
     private val root: Node,
     private val options: CompileOptions,
     recursive: Boolean,
+    /** Source ranges of the AST nodes (errors, the debugger). */
+    internal val ranges: su.seaf.archtool.jsonata.parser.SourceRanges,
 ) {
     /**
      * Set when the expression binds a recursive lambda, or once an evaluation of it has needed a stack segment:
@@ -61,10 +63,10 @@ public class Jsonata private constructor(
         @JvmStatic
         @JvmOverloads
         public fun compile(expression: String, options: CompileOptions = CompileOptions.DEFAULT): Jsonata {
-            val ast = JsonataParser.ast(expression)
-            val compiler = Compiler(options.debug)
-            val root = compiler.compile(ast)
-            return Jsonata(expression, ast, root, options, compiler.recursive)
+            val parsed = JsonataParser.parseWithRanges(expression)
+            val compiler = Compiler(options.debug, parsed.ranges)
+            val root = compiler.compile(parsed.ast)
+            return Jsonata(expression, parsed.ast, root, options, compiler.recursive, parsed.ranges)
         }
     }
 }
