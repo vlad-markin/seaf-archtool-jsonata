@@ -1,0 +1,19 @@
+.gradle/
+.intellijPlatform/
+.kotlin/
+**/build/
+node_modules/
+**/node_modules/
+out/
+**/out/
+*.vsix
+**/*.vsix
+.idea/
+.vscode-test/
+**/idea-sandbox/
+**/downloaded-ide/
+compat/node/node_modules/
+
+# SEAF corpus stays local (see compat/corpus/README.md)
+compat/corpus/*.jsonata
+compat/snapshots/ast/_corpus.json

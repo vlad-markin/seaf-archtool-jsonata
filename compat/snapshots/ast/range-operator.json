@@ -1,0 +1,816 @@
+{
+ "case000": {
+  "expr": "[0..9]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 0,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": 9,
+      "type": "number",
+      "position": 5
+     }
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "[0..9][$ % 2 = 0]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 0,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": 9,
+      "type": "number",
+      "position": 5
+     }
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "binary",
+      "value": "=",
+      "position": 14,
+      "lhs": {
+       "type": "binary",
+       "value": "%",
+       "position": 10,
+       "lhs": {
+        "value": "",
+        "type": "variable",
+        "position": 8
+       },
+       "rhs": {
+        "value": 2,
+        "type": "number",
+        "position": 12
+       }
+      },
+      "rhs": {
+       "value": 0,
+       "type": "number",
+       "position": 16
+      }
+     },
+     "position": 7
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "[0, 4..9, 20, 22]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 0,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 7,
+     "lhs": {
+      "value": 4,
+      "type": "number",
+      "position": 5
+     },
+     "rhs": {
+      "value": 9,
+      "type": "number",
+      "position": 8
+     }
+    },
+    {
+     "value": 20,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": 22,
+     "type": "number",
+     "position": 16
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "[5..2]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 5,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": 2,
+      "type": "number",
+      "position": 5
+     }
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "[5..2, 2..5]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 5,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": 2,
+      "type": "number",
+      "position": 5
+     }
+    },
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 10,
+     "lhs": {
+      "value": 2,
+      "type": "number",
+      "position": 8
+     },
+     "rhs": {
+      "value": 5,
+      "type": "number",
+      "position": 11
+     }
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "[-2..2]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 5,
+     "lhs": {
+      "value": -2,
+      "type": "number",
+      "position": 3
+     },
+     "rhs": {
+      "value": 2,
+      "type": "number",
+      "position": 6
+     }
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "[-2..2].($*$)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "..",
+       "position": 5,
+       "lhs": {
+        "value": -2,
+        "type": "number",
+        "position": 3
+       },
+       "rhs": {
+        "value": 2,
+        "type": "number",
+        "position": 6
+       }
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "*",
+       "position": 11,
+       "lhs": {
+        "value": "",
+        "type": "variable",
+        "position": 10
+       },
+       "rhs": {
+        "value": "",
+        "type": "variable",
+        "position": 12
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "[-2..blah]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 5,
+     "lhs": {
+      "value": -2,
+      "type": "number",
+      "position": 3
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "blah",
+        "type": "name",
+        "position": 9
+       }
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "[blah..5, 3, -2..blah]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 7,
+     "lhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "blah",
+        "type": "name",
+        "position": 5
+       }
+      ]
+     },
+     "rhs": {
+      "value": 5,
+      "type": "number",
+      "position": 8
+     }
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 11
+    },
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 17,
+     "lhs": {
+      "value": -2,
+      "type": "number",
+      "position": 15
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "blah",
+        "type": "name",
+        "position": 21
+       }
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "[1.1 .. 5]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 7,
+     "lhs": {
+      "value": 1.1,
+      "type": "number",
+      "position": 4
+     },
+     "rhs": {
+      "value": 5,
+      "type": "number",
+      "position": 9
+     }
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "[1 .. 5.5]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 5,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": 5.5,
+      "type": "number",
+      "position": 9
+     }
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "[10..1.5]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 5,
+     "lhs": {
+      "value": 10,
+      "type": "number",
+      "position": 3
+     },
+     "rhs": {
+      "value": 1.5,
+      "type": "number",
+      "position": 8
+     }
+    }
+   ]
+  }
+ },
+ "case012": {
+  "expr": "[true..false]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 7,
+     "lhs": {
+      "value": true,
+      "type": "value",
+      "position": 5
+     },
+     "rhs": {
+      "value": false,
+      "type": "value",
+      "position": 12
+     }
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "['dogs'..'cats']",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 9,
+     "lhs": {
+      "value": "dogs",
+      "type": "string",
+      "position": 7
+     },
+     "rhs": {
+      "value": "cats",
+      "type": "string",
+      "position": 15
+     }
+    }
+   ]
+  }
+ },
+ "case014": {
+  "expr": "[1..'']",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": "",
+      "type": "string",
+      "position": 6
+     }
+    }
+   ]
+  }
+ },
+ "case015": {
+  "expr": "[1..[]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 5,
+      "expressions": []
+     }
+    }
+   ]
+  }
+ },
+ "case016": {
+  "expr": "[1..{}]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 5,
+      "lhs": []
+     }
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "[1..false]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": false,
+      "type": "value",
+      "position": 9
+     }
+    }
+   ]
+  }
+ },
+ "case018": {
+  "expr": "[2..true]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 2,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": true,
+      "type": "value",
+      "position": 8
+     }
+    }
+   ]
+  }
+ },
+ "case019": {
+  "expr": "[$x..true]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 5,
+     "lhs": {
+      "value": "x",
+      "type": "variable",
+      "position": 3
+     },
+     "rhs": {
+      "value": true,
+      "type": "value",
+      "position": 9
+     }
+    }
+   ]
+  }
+ },
+ "case020": {
+  "expr": "[false..$x]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 8,
+     "lhs": {
+      "value": false,
+      "type": "value",
+      "position": 6
+     },
+     "rhs": {
+      "value": "x",
+      "type": "variable",
+      "position": 10
+     }
+    }
+   ]
+  }
+ },
+ "case021": {
+  "expr": "[1..10000000] ~> $count()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 16,
+   "lhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "type": "binary",
+      "value": "..",
+      "position": 4,
+      "lhs": {
+       "value": 1,
+       "type": "number",
+       "position": 2
+      },
+      "rhs": {
+       "value": 10000000,
+       "type": "number",
+       "position": 12
+      }
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 24,
+    "arguments": [],
+    "procedure": {
+     "value": "count",
+     "type": "variable",
+     "position": 23
+    }
+   }
+  }
+ },
+ "case022": {
+  "expr": "[0..10000000] ~> $count()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 16,
+   "lhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "type": "binary",
+      "value": "..",
+      "position": 4,
+      "lhs": {
+       "value": 0,
+       "type": "number",
+       "position": 2
+      },
+      "rhs": {
+       "value": 10000000,
+       "type": "number",
+       "position": 12
+      }
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 24,
+    "arguments": [],
+    "procedure": {
+     "value": "count",
+     "type": "variable",
+     "position": 23
+    }
+   }
+  }
+ },
+ "case023": {
+  "expr": "[1..10000001] ~> $count()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 16,
+   "lhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "type": "binary",
+      "value": "..",
+      "position": 4,
+      "lhs": {
+       "value": 1,
+       "type": "number",
+       "position": 2
+      },
+      "rhs": {
+       "value": 10000001,
+       "type": "number",
+       "position": 12
+      }
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 24,
+    "arguments": [],
+    "procedure": {
+     "value": "count",
+     "type": "variable",
+     "position": 23
+    }
+   }
+  }
+ },
+ "case024": {
+  "expr": "[100..10000099] ~> $count()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 18,
+   "lhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "type": "binary",
+      "value": "..",
+      "position": 6,
+      "lhs": {
+       "value": 100,
+       "type": "number",
+       "position": 4
+      },
+      "rhs": {
+       "value": 10000099,
+       "type": "number",
+       "position": 14
+      }
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 26,
+    "arguments": [],
+    "procedure": {
+     "value": "count",
+     "type": "variable",
+     "position": 25
+    }
+   }
+  }
+ }
+}

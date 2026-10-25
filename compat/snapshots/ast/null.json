@@ -1,0 +1,147 @@
+{
+ "case000": {
+  "expr": "null",
+  "ast": {
+   "value": null,
+   "type": "value",
+   "position": 4
+  }
+ },
+ "case001": {
+  "expr": "[null]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 5
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "[null, null]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 5
+    },
+    {
+     "value": null,
+     "type": "value",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "$not(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 9
+    }
+   ],
+   "procedure": {
+    "value": "not",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case004": {
+  "expr": "null = null",
+  "ast": {
+   "type": "binary",
+   "value": "=",
+   "position": 6,
+   "lhs": {
+    "value": null,
+    "type": "value",
+    "position": 4
+   },
+   "rhs": {
+    "value": null,
+    "type": "value",
+    "position": 11
+   }
+  }
+ },
+ "case005": {
+  "expr": "null != null",
+  "ast": {
+   "type": "binary",
+   "value": "!=",
+   "position": 7,
+   "lhs": {
+    "value": null,
+    "type": "value",
+    "position": 4
+   },
+   "rhs": {
+    "value": null,
+    "type": "value",
+    "position": 12
+   }
+  }
+ },
+ "case006": {
+  "expr": "{\"true\": true, \"false\":false, \"null\": null}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "true",
+      "type": "string",
+      "position": 7
+     },
+     {
+      "value": true,
+      "type": "value",
+      "position": 13
+     }
+    ],
+    [
+     {
+      "value": "false",
+      "type": "string",
+      "position": 22
+     },
+     {
+      "value": false,
+      "type": "value",
+      "position": 28
+     }
+    ],
+    [
+     {
+      "value": "null",
+      "type": "string",
+      "position": 36
+     },
+     {
+      "value": null,
+      "type": "value",
+      "position": 42
+     }
+    ]
+   ]
+  }
+ }
+}

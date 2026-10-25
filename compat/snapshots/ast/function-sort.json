@@ -1,0 +1,754 @@
+{
+ "case000": {
+  "expr": "$sort(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sort",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "$sort(1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 7
+    }
+   ],
+   "procedure": {
+    "value": "sort",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$sort([1,3,2])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 8
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 10
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sort",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case003": {
+  "expr": "$sort([1,3,22,11])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 8
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 10
+      },
+      {
+       "value": 22,
+       "type": "number",
+       "position": 13
+      },
+      {
+       "value": 11,
+       "type": "number",
+       "position": 16
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sort",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case004": {
+  "expr": "[[$], [$sort($)], [$]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 2,
+     "expressions": [
+      {
+       "value": "",
+       "type": "variable",
+       "position": 3
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 13,
+       "arguments": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 14
+        }
+       ],
+       "procedure": {
+        "value": "sort",
+        "type": "variable",
+        "position": 12
+       }
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 19,
+     "expressions": [
+      {
+       "value": "",
+       "type": "variable",
+       "position": 20
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "$sort(Account.Order.Product.Price)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 33
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sort",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case006": {
+  "expr": "$sort(Account.Order.Product.\"Product Name\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      },
+      {
+       "value": "Product Name",
+       "type": "name",
+       "position": 42
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sort",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case007": {
+  "expr": "$sort(Account.Order.Product)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sort",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case008": {
+  "expr": "$sort(Account.Order.Product, function($a, $b) { $a.(Price * Quantity) > $b.(Price * Quantity) }).(Price & \" x \" & Quantity)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 6,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 13
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 19
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 27
+        }
+       ]
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "a",
+         "type": "variable",
+         "position": 40
+        },
+        {
+         "value": "b",
+         "type": "variable",
+         "position": 44
+        }
+       ],
+       "position": 38,
+       "body": {
+        "type": "binary",
+        "value": ">",
+        "position": 71,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "a",
+           "type": "variable",
+           "position": 50
+          },
+          {
+           "type": "block",
+           "position": 52,
+           "expressions": [
+            {
+             "type": "binary",
+             "value": "*",
+             "position": 59,
+             "lhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "Price",
+                "type": "name",
+                "position": 57
+               }
+              ]
+             },
+             "rhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "Quantity",
+                "type": "name",
+                "position": 68
+               }
+              ]
+             }
+            }
+           ]
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 74
+          },
+          {
+           "type": "block",
+           "position": 76,
+           "expressions": [
+            {
+             "type": "binary",
+             "value": "*",
+             "position": 83,
+             "lhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "Price",
+                "type": "name",
+                "position": 81
+               }
+              ]
+             },
+             "rhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "Quantity",
+                "type": "name",
+                "position": 92
+               }
+              ]
+             }
+            }
+           ]
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "procedure": {
+      "value": "sort",
+      "type": "variable",
+      "position": 5
+     }
+    },
+    {
+     "type": "block",
+     "position": 98,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 113,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 105,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 103
+          }
+         ]
+        },
+        "rhs": {
+         "value": " x ",
+         "type": "string",
+         "position": 111
+        }
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Quantity",
+          "type": "name",
+          "position": 122
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "$sort(Account.Order.Product, function($a, $b) { $a.Price > $b.Price }).SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 6,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 13
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 19
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 27
+        }
+       ]
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "a",
+         "type": "variable",
+         "position": 40
+        },
+        {
+         "value": "b",
+         "type": "variable",
+         "position": 44
+        }
+       ],
+       "position": 38,
+       "body": {
+        "type": "binary",
+        "value": ">",
+        "position": 58,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "a",
+           "type": "variable",
+           "position": 50
+          },
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 56
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 61
+          },
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 67
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "procedure": {
+      "value": "sort",
+      "type": "variable",
+      "position": 5
+     }
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 74
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "\n                (Account.Order.Product\n                  ~> $sort(λ($a,$b){$a.Quantity < $b.Quantity})\n                  ~> $sort(λ($a,$b){$a.Price > $b.Price})\n                ).SKU\n            ",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "block",
+     "position": 18,
+     "expressions": [
+      {
+       "type": "apply",
+       "value": "~>",
+       "position": 124,
+       "lhs": {
+        "type": "apply",
+        "value": "~>",
+        "position": 60,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Account",
+           "type": "name",
+           "position": 25
+          },
+          {
+           "value": "Order",
+           "type": "name",
+           "position": 31
+          },
+          {
+           "value": "Product",
+           "type": "name",
+           "position": 39
+          }
+         ]
+        },
+        "rhs": {
+         "type": "function",
+         "value": "(",
+         "position": 67,
+         "arguments": [
+          {
+           "type": "lambda",
+           "arguments": [
+            {
+             "value": "a",
+             "type": "variable",
+             "position": 71
+            },
+            {
+             "value": "b",
+             "type": "variable",
+             "position": 74
+            }
+           ],
+           "position": 69,
+           "body": {
+            "type": "binary",
+            "value": "<",
+            "position": 89,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "a",
+               "type": "variable",
+               "position": 78
+              },
+              {
+               "value": "Quantity",
+               "type": "name",
+               "position": 87
+              }
+             ]
+            },
+            "rhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "b",
+               "type": "variable",
+               "position": 92
+              },
+              {
+               "value": "Quantity",
+               "type": "name",
+               "position": 101
+              }
+             ]
+            }
+           }
+          }
+         ],
+         "procedure": {
+          "value": "sort",
+          "type": "variable",
+          "position": 66
+         }
+        }
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 131,
+        "arguments": [
+         {
+          "type": "lambda",
+          "arguments": [
+           {
+            "value": "a",
+            "type": "variable",
+            "position": 135
+           },
+           {
+            "value": "b",
+            "type": "variable",
+            "position": 138
+           }
+          ],
+          "position": 133,
+          "body": {
+           "type": "binary",
+           "value": ">",
+           "position": 150,
+           "lhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "a",
+              "type": "variable",
+              "position": 142
+             },
+             {
+              "value": "Price",
+              "type": "name",
+              "position": 148
+             }
+            ]
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "b",
+              "type": "variable",
+              "position": 153
+             },
+             {
+              "value": "Price",
+              "type": "name",
+              "position": 159
+             }
+            ]
+           }
+          }
+         }
+        ],
+        "procedure": {
+         "value": "sort",
+         "type": "variable",
+         "position": 130
+        }
+       }
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 183
+    }
+   ]
+  }
+ }
+}

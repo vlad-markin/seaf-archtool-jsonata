@@ -1,0 +1,195 @@
+{
+ "case000": {
+  "expr": "$keys(Account)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "keys",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "$keys(Account.Order.Product)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "keys",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$keys({})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 7,
+     "lhs": []
+    }
+   ],
+   "procedure": {
+    "value": "keys",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case003": {
+  "expr": "$keys({\"foo\":{}})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 7,
+     "lhs": [
+      [
+       {
+        "value": "foo",
+        "type": "string",
+        "position": 12
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 14,
+        "lhs": []
+       }
+      ]
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "keys",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case004": {
+  "expr": "$keys(\"foo\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "keys",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case005": {
+  "expr": "$keys(function(){1})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "lambda",
+     "arguments": [],
+     "position": 15,
+     "body": {
+      "value": 1,
+      "type": "number",
+      "position": 18
+     }
+    }
+   ],
+   "procedure": {
+    "value": "keys",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case006": {
+  "expr": "$keys([\"foo\", \"bar\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "value": "foo",
+       "type": "string",
+       "position": 12
+      },
+      {
+       "value": "bar",
+       "type": "string",
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "keys",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ }
+}

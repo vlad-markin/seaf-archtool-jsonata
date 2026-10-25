@@ -1,0 +1,617 @@
+{
+ "case000": {
+  "expr": "$count(Account.Order.Product.(Price * Quantity))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 14
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 20
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 28
+      },
+      {
+       "type": "block",
+       "position": 30,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "*",
+         "position": 37,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Price",
+            "type": "name",
+            "position": 35
+           }
+          ]
+         },
+         "rhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Quantity",
+            "type": "name",
+            "position": 46
+           }
+          ]
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case001": {
+  "expr": "Account.Order.$count(Product.(Price * Quantity))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 21,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 28
+        },
+        {
+         "type": "block",
+         "position": 30,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "*",
+           "position": 37,
+           "lhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Price",
+              "type": "name",
+              "position": 35
+             }
+            ]
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Quantity",
+              "type": "name",
+              "position": 46
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "count",
+      "type": "variable",
+      "position": 20
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "Account.Order.(OrderID & \": \" & $count(Product.(Price*Quantity)))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "block",
+     "position": 15,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 31,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 24,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 22
+          }
+         ]
+        },
+        "rhs": {
+         "value": ": ",
+         "type": "string",
+         "position": 29
+        }
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 39,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Product",
+            "type": "name",
+            "position": 46
+           },
+           {
+            "type": "block",
+            "position": 48,
+            "expressions": [
+             {
+              "type": "binary",
+              "value": "*",
+              "position": 54,
+              "lhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Price",
+                 "type": "name",
+                 "position": 53
+                }
+               ]
+              },
+              "rhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Quantity",
+                 "type": "name",
+                 "position": 62
+                }
+               ]
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "count",
+         "type": "variable",
+         "position": 38
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "$count([])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case004": {
+  "expr": "$count([1,2,3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 11
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case005": {
+  "expr": "$count([\"1\",\"2\",\"3\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "value": "1",
+       "type": "string",
+       "position": 11
+      },
+      {
+       "value": "2",
+       "type": "string",
+       "position": 15
+      },
+      {
+       "value": "3",
+       "type": "string",
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case006": {
+  "expr": "$count([\"1\",\"2\",3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "value": "1",
+       "type": "string",
+       "position": 11
+      },
+      {
+       "value": "2",
+       "type": "string",
+       "position": 15
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case007": {
+  "expr": "$count(1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 8
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case008": {
+  "expr": "$count([],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 11,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case009": {
+  "expr": "$count([1,2,3],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 11
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 13
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 16,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case010": {
+  "expr": "$count([],[],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 11,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case011": {
+  "expr": "$count([1,2],[],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 17,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case012": {
+  "expr": "$count(undefined)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "undefined",
+       "type": "name",
+       "position": 16
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case013": {
+  "expr": "$count([1,2,3,4]) / 2",
+  "ast": {
+   "type": "binary",
+   "value": "/",
+   "position": 19,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 7,
+    "arguments": [
+     {
+      "type": "unary",
+      "value": "[",
+      "position": 8,
+      "expressions": [
+       {
+        "value": 1,
+        "type": "number",
+        "position": 9
+       },
+       {
+        "value": 2,
+        "type": "number",
+        "position": 11
+       },
+       {
+        "value": 3,
+        "type": "number",
+        "position": 13
+       },
+       {
+        "value": 4,
+        "type": "number",
+        "position": 15
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "value": "count",
+     "type": "variable",
+     "position": 6
+    }
+   },
+   "rhs": {
+    "value": 2,
+    "type": "number",
+    "position": 21
+   }
+  }
+ }
+}

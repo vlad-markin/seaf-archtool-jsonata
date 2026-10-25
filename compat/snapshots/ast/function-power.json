@@ -1,0 +1,192 @@
+{
+ "case000": {
+  "expr": "$power(4, 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 4,
+     "type": "number",
+     "position": 8
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "power",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case001": {
+  "expr": "$power(4, 0.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 4,
+     "type": "number",
+     "position": 8
+    },
+    {
+     "value": 0.5,
+     "type": "number",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "power",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case002": {
+  "expr": "$power(10, -2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 10,
+     "type": "number",
+     "position": 9
+    },
+    {
+     "value": -2,
+     "type": "number",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "power",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case003": {
+  "expr": "$power(-2, 3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": -2,
+     "type": "number",
+     "position": 9
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "power",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case004": {
+  "expr": "$power(nothing, 3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 17
+    }
+   ],
+   "procedure": {
+    "value": "power",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case005": {
+  "expr": "$power(-2, 1/3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": -2,
+     "type": "number",
+     "position": 9
+    },
+    {
+     "type": "binary",
+     "value": "/",
+     "position": 13,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 12
+     },
+     "rhs": {
+      "value": 3,
+      "type": "number",
+      "position": 14
+     }
+    }
+   ],
+   "procedure": {
+    "value": "power",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case006": {
+  "expr": "$power(100, 1000)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 100,
+     "type": "number",
+     "position": 10
+    },
+    {
+     "value": 1000,
+     "type": "number",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "power",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ }
+}

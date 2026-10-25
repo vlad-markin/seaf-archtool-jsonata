@@ -1,0 +1,286 @@
+{
+ "case000": {
+  "expr": "nothing[x=6][y=3].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nothing",
+     "type": "name",
+     "position": 7,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 10,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "x",
+           "type": "name",
+           "position": 9
+          }
+         ]
+        },
+        "rhs": {
+         "value": 6,
+         "type": "number",
+         "position": 11
+        }
+       },
+       "position": 8
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 15,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "y",
+           "type": "name",
+           "position": 14
+          }
+         ]
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 16
+        }
+       },
+       "position": 13
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 24
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "clues[x=6][y=3].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "clues",
+     "type": "name",
+     "position": 5,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 8,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "x",
+           "type": "name",
+           "position": 7
+          }
+         ]
+        },
+        "rhs": {
+         "value": 6,
+         "type": "number",
+         "position": 9
+        }
+       },
+       "position": 6
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 13,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "y",
+           "type": "name",
+           "position": 12
+          }
+         ]
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 14
+        }
+       },
+       "position": 11
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 22
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "$[x=6][y=3].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 4,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "x",
+           "type": "name",
+           "position": 3
+          }
+         ]
+        },
+        "rhs": {
+         "value": 6,
+         "type": "number",
+         "position": 5
+        }
+       },
+       "position": 2
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 9,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "y",
+           "type": "name",
+           "position": 8
+          }
+         ]
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 10
+        }
+       },
+       "position": 7
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 18
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "Account.Order.Product[$lowercase(Description.Colour) = \"purple\"][0].Price",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 54,
+        "lhs": {
+         "type": "function",
+         "value": "(",
+         "position": 33,
+         "arguments": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "Description",
+             "type": "name",
+             "position": 44
+            },
+            {
+             "value": "Colour",
+             "type": "name",
+             "position": 51
+            }
+           ]
+          }
+         ],
+         "procedure": {
+          "value": "lowercase",
+          "type": "variable",
+          "position": 32
+         }
+        },
+        "rhs": {
+         "value": "purple",
+         "type": "string",
+         "position": 63
+        }
+       },
+       "position": 22
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 66
+       },
+       "position": 65
+      }
+     ]
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 73
+    }
+   ]
+  }
+ }
+}

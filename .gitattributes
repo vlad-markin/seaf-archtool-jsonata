@@ -1,0 +1,3 @@
+# Vendored jsonata-js v2.2.2: keep bytes as released.
+compat/jsonata-js/** -text
+gradlew.bat eol=crlf

@@ -1,0 +1,191 @@
+{
+ "case000": {
+  "expr": "[1..10][[1..3,8,-1]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": 10,
+      "type": "number",
+      "position": 6
+     }
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "unary",
+      "value": "[",
+      "position": 9,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 12,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 10
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       {
+        "value": 8,
+        "type": "number",
+        "position": 15
+       },
+       {
+        "value": -1,
+        "type": "number",
+        "position": 18
+       }
+      ]
+     },
+     "position": 8
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "[1..10][[1..3,8,5]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": 10,
+      "type": "number",
+      "position": 6
+     }
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "unary",
+      "value": "[",
+      "position": 9,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 12,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 10
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       {
+        "value": 8,
+        "type": "number",
+        "position": 15
+       },
+       {
+        "value": 5,
+        "type": "number",
+        "position": 17
+       }
+      ]
+     },
+     "position": 8
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "[1..10][[1..3,8,false]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "binary",
+     "value": "..",
+     "position": 4,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     "rhs": {
+      "value": 10,
+      "type": "number",
+      "position": 6
+     }
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "unary",
+      "value": "[",
+      "position": 9,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 12,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 10
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       {
+        "value": 8,
+        "type": "number",
+        "position": 15
+       },
+       {
+        "value": false,
+        "type": "value",
+        "position": 21
+       }
+      ]
+     },
+     "position": 8
+    }
+   ]
+  }
+ }
+}

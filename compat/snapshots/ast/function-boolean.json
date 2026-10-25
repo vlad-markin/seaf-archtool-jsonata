@@ -1,0 +1,629 @@
+{
+ "case000": {
+  "expr": "$boolean(\"Hello World\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case001": {
+  "expr": "$boolean(\"\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "",
+     "type": "string",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case002": {
+  "expr": "$boolean(true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": true,
+     "type": "value",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case003": {
+  "expr": "$boolean(false)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": false,
+     "type": "value",
+     "position": 14
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case004": {
+  "expr": "$boolean(0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": 0,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case005": {
+  "expr": "$boolean(10)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": 10,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case006": {
+  "expr": "$boolean(-0.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": -0.5,
+     "type": "number",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case007": {
+  "expr": "$boolean(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case008": {
+  "expr": "$boolean([])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case009": {
+  "expr": "$boolean([0])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 0,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case010": {
+  "expr": "$boolean([1])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case011": {
+  "expr": "$boolean([1,2,3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 11
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 13
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case012": {
+  "expr": "$boolean([0,0])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 0,
+       "type": "number",
+       "position": 11
+      },
+      {
+       "value": 0,
+       "type": "number",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case013": {
+  "expr": "$boolean([[]])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 11,
+       "expressions": []
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case014": {
+  "expr": "$boolean([[null]])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 11,
+       "expressions": [
+        {
+         "value": null,
+         "type": "value",
+         "position": 15
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case015": {
+  "expr": "$boolean([[[true]]])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 11,
+       "expressions": [
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 12,
+         "expressions": [
+          {
+           "value": true,
+           "type": "value",
+           "position": 16
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case016": {
+  "expr": "$boolean({})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 10,
+     "lhs": []
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case017": {
+  "expr": "$boolean({\"hello\":\"world\"})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 10,
+     "lhs": [
+      [
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 17
+       },
+       {
+        "value": "world",
+        "type": "string",
+        "position": 25
+       }
+      ]
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case018": {
+  "expr": "$boolean(Account)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 16
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case019": {
+  "expr": "$boolean(Account.Order.Product.Price)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 16
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 22
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 30
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 36
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case020": {
+  "expr": "$boolean(Account.blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 16
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 21
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case021": {
+  "expr": "$boolean($boolean)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "boolean",
+     "type": "variable",
+     "position": 17
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case022": {
+  "expr": "$boolean(function(){true})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "lambda",
+     "arguments": [],
+     "position": 18,
+     "body": {
+      "value": true,
+      "type": "value",
+      "position": 24
+     }
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case023": {
+  "expr": "$boolean(2,3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": 2,
+     "type": "number",
+     "position": 10
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "boolean",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ }
+}

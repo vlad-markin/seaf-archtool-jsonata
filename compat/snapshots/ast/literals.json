@@ -1,0 +1,564 @@
+{
+ "array-inputs[0]": {
+  "expr": "{'fgFoo:0:hausnummer': {'type': 'de.example.api.PossibleValuesList', 'value': [{'label': '', 'value': ''}] }}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "fgFoo:0:hausnummer",
+      "type": "string",
+      "position": 21
+     },
+     {
+      "type": "unary",
+      "value": "{",
+      "position": 24,
+      "lhs": [
+       [
+        {
+         "value": "type",
+         "type": "string",
+         "position": 30
+        },
+        {
+         "value": "de.example.api.PossibleValuesList",
+         "type": "string",
+         "position": 67
+        }
+       ],
+       [
+        {
+         "value": "value",
+         "type": "string",
+         "position": 76
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 79,
+         "expressions": [
+          {
+           "type": "unary",
+           "value": "{",
+           "position": 80,
+           "lhs": [
+            [
+             {
+              "value": "label",
+              "type": "string",
+              "position": 87
+             },
+             {
+              "value": "",
+              "type": "string",
+              "position": 91
+             }
+            ],
+            [
+             {
+              "value": "value",
+              "type": "string",
+              "position": 100
+             },
+             {
+              "value": "",
+              "type": "string",
+              "position": 104
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "array-inputs[1]": {
+  "expr": "{'fgFoo:0:hausnummer': {'type': 'de.example.api.PossibleValuesList', 'value': [{'label': '', 'value': ''}] }}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "fgFoo:0:hausnummer",
+      "type": "string",
+      "position": 21
+     },
+     {
+      "type": "unary",
+      "value": "{",
+      "position": 24,
+      "lhs": [
+       [
+        {
+         "value": "type",
+         "type": "string",
+         "position": 30
+        },
+        {
+         "value": "de.example.api.PossibleValuesList",
+         "type": "string",
+         "position": 67
+        }
+       ],
+       [
+        {
+         "value": "value",
+         "type": "string",
+         "position": 76
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 79,
+         "expressions": [
+          {
+           "type": "unary",
+           "value": "{",
+           "position": 80,
+           "lhs": [
+            [
+             {
+              "value": "label",
+              "type": "string",
+              "position": 87
+             },
+             {
+              "value": "",
+              "type": "string",
+              "position": 91
+             }
+            ],
+            [
+             {
+              "value": "value",
+              "type": "string",
+              "position": 100
+             },
+             {
+              "value": "",
+              "type": "string",
+              "position": 104
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "array-inputs[2]": {
+  "expr": "{'fgFoo:0:hausnummer': {'type': 'de.example.api.PossibleValuesList', 'value': [{'label': '', 'value': ''}] }}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "fgFoo:0:hausnummer",
+      "type": "string",
+      "position": 21
+     },
+     {
+      "type": "unary",
+      "value": "{",
+      "position": 24,
+      "lhs": [
+       [
+        {
+         "value": "type",
+         "type": "string",
+         "position": 30
+        },
+        {
+         "value": "de.example.api.PossibleValuesList",
+         "type": "string",
+         "position": 67
+        }
+       ],
+       [
+        {
+         "value": "value",
+         "type": "string",
+         "position": 76
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 79,
+         "expressions": [
+          {
+           "type": "unary",
+           "value": "{",
+           "position": 80,
+           "lhs": [
+            [
+             {
+              "value": "label",
+              "type": "string",
+              "position": 87
+             },
+             {
+              "value": "",
+              "type": "string",
+              "position": 91
+             }
+            ],
+            [
+             {
+              "value": "value",
+              "type": "string",
+              "position": 100
+             },
+             {
+              "value": "",
+              "type": "string",
+              "position": 104
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "array-inputs[3]": {
+  "expr": "{'fgFoo:0:hausnummer': {'type': 'de.example.api.PossibleValuesList', 'value': [{'label': '', 'value': ''}] }}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "fgFoo:0:hausnummer",
+      "type": "string",
+      "position": 21
+     },
+     {
+      "type": "unary",
+      "value": "{",
+      "position": 24,
+      "lhs": [
+       [
+        {
+         "value": "type",
+         "type": "string",
+         "position": 30
+        },
+        {
+         "value": "de.example.api.PossibleValuesList",
+         "type": "string",
+         "position": 67
+        }
+       ],
+       [
+        {
+         "value": "value",
+         "type": "string",
+         "position": 76
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 79,
+         "expressions": [
+          {
+           "type": "unary",
+           "value": "{",
+           "position": 80,
+           "lhs": [
+            [
+             {
+              "value": "label",
+              "type": "string",
+              "position": 87
+             },
+             {
+              "value": "",
+              "type": "string",
+              "position": 91
+             }
+            ],
+            [
+             {
+              "value": "value",
+              "type": "string",
+              "position": 100
+             },
+             {
+              "value": "",
+              "type": "string",
+              "position": 104
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "case000": {
+  "expr": "\"hello\"",
+  "ast": {
+   "value": "hello",
+   "type": "string",
+   "position": 7
+  }
+ },
+ "case001": {
+  "expr": "'hello'",
+  "ast": {
+   "value": "hello",
+   "type": "string",
+   "position": 7
+  }
+ },
+ "case002": {
+  "expr": "\"Wayne's World\"",
+  "ast": {
+   "value": "Wayne's World",
+   "type": "string",
+   "position": 15
+  }
+ },
+ "case003": {
+  "expr": "42",
+  "ast": {
+   "value": 42,
+   "type": "number",
+   "position": 2
+  }
+ },
+ "case004": {
+  "expr": "-42",
+  "ast": {
+   "value": -42,
+   "type": "number",
+   "position": 3
+  }
+ },
+ "case005": {
+  "expr": "3.14159",
+  "ast": {
+   "value": 3.14159,
+   "type": "number",
+   "position": 7
+  }
+ },
+ "case006": {
+  "expr": "6.022e23",
+  "ast": {
+   "value": 6.022e+23,
+   "type": "number",
+   "position": 8
+  }
+ },
+ "case007": {
+  "expr": "1.602E-19",
+  "ast": {
+   "value": 1.602e-19,
+   "type": "number",
+   "position": 9
+  }
+ },
+ "case008": {
+  "expr": "10e1000",
+  "error": {
+   "code": "S0102",
+   "position": 0,
+   "token": "10e1000"
+  }
+ },
+ "case009": {
+  "expr": "\"hello\\tworld\"",
+  "ast": {
+   "value": "hello\tworld",
+   "type": "string",
+   "position": 14
+  }
+ },
+ "case010": {
+  "expr": "\"hello\\nworld\"",
+  "ast": {
+   "value": "hello\nworld",
+   "type": "string",
+   "position": 14
+  }
+ },
+ "case011": {
+  "expr": "\"hello \\\"world\\\"\"",
+  "ast": {
+   "value": "hello \"world\"",
+   "type": "string",
+   "position": 17
+  }
+ },
+ "case012": {
+  "expr": "\"C:\\\\Test\\\\test.txt\"",
+  "ast": {
+   "value": "C:\\Test\\test.txt",
+   "type": "string",
+   "position": 20
+  }
+ },
+ "case013": {
+  "expr": "\"\\u03BB-calculus rocks\"",
+  "ast": {
+   "value": "λ-calculus rocks",
+   "type": "string",
+   "position": 23
+  }
+ },
+ "case014": {
+  "expr": "\"𝄞\"",
+  "ast": {
+   "value": "𝄞",
+   "type": "string",
+   "position": 4
+  }
+ },
+ "case015": {
+  "expr": "\"\\y\"",
+  "error": {
+   "code": "S0103",
+   "position": 2,
+   "token": "y"
+  }
+ },
+ "case016": {
+  "expr": "\"\\u\"",
+  "error": {
+   "code": "S0104",
+   "position": 2
+  }
+ },
+ "case017": {
+  "expr": "\"\\u123t\"",
+  "error": {
+   "code": "S0104",
+   "position": 2
+  }
+ },
+ "case018": {
+  "expr": "{ 'foo': { 'sequence': 123, 'bar': 'baz' } } ",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "foo",
+      "type": "string",
+      "position": 7
+     },
+     {
+      "type": "unary",
+      "value": "{",
+      "position": 10,
+      "lhs": [
+       [
+        {
+         "value": "sequence",
+         "type": "string",
+         "position": 21
+        },
+        {
+         "value": 123,
+         "type": "number",
+         "position": 26
+        }
+       ],
+       [
+        {
+         "value": "bar",
+         "type": "string",
+         "position": 33
+        },
+        {
+         "value": "baz",
+         "type": "string",
+         "position": 40
+        }
+       ]
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "case019": {
+  "expr": "{ 'foo': { 'sequence': true, 'bar': 'baz' } } ",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "foo",
+      "type": "string",
+      "position": 7
+     },
+     {
+      "type": "unary",
+      "value": "{",
+      "position": 10,
+      "lhs": [
+       [
+        {
+         "value": "sequence",
+         "type": "string",
+         "position": 21
+        },
+        {
+         "value": true,
+         "type": "value",
+         "position": 27
+        }
+       ],
+       [
+        {
+         "value": "bar",
+         "type": "string",
+         "position": 34
+        },
+        {
+         "value": "baz",
+         "type": "string",
+         "position": 41
+        }
+       ]
+      ]
+     }
+    ]
+   ]
+  }
+ }
+}

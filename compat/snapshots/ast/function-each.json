@@ -1,0 +1,227 @@
+{
+ "case000": {
+  "expr": "$each(Address, λ($v, $k) {$k & \": \" & $v})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Address",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 19
+      },
+      {
+       "value": "k",
+       "type": "variable",
+       "position": 23
+      }
+     ],
+     "position": 17,
+     "body": {
+      "type": "binary",
+      "value": "&",
+      "position": 37,
+      "lhs": {
+       "type": "binary",
+       "value": "&",
+       "position": 30,
+       "lhs": {
+        "value": "k",
+        "type": "variable",
+        "position": 28
+       },
+       "rhs": {
+        "value": ": ",
+        "type": "string",
+        "position": 35
+       }
+      },
+      "rhs": {
+       "value": "v",
+       "type": "variable",
+       "position": 40
+      }
+     }
+    }
+   ],
+   "procedure": {
+    "value": "each",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "$each({'a': 'hello', 'b': 'world'}, $uppercase)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 7,
+     "lhs": [
+      [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 10
+       },
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 19
+       }
+      ],
+      [
+       {
+        "value": "b",
+        "type": "string",
+        "position": 24
+       },
+       {
+        "value": "world",
+        "type": "string",
+        "position": 33
+       }
+      ]
+     ]
+    },
+    {
+     "value": "uppercase",
+     "type": "variable",
+     "position": 46
+    }
+   ],
+   "procedure": {
+    "value": "each",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$each(function($v, $k) {$k[$v>2]})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 17
+      },
+      {
+       "value": "k",
+       "type": "variable",
+       "position": 21
+      }
+     ],
+     "position": 15,
+     "body": {
+      "value": "k",
+      "type": "variable",
+      "position": 26,
+      "predicate": [
+       {
+        "type": "filter",
+        "expr": {
+         "type": "binary",
+         "value": ">",
+         "position": 30,
+         "lhs": {
+          "value": "v",
+          "type": "variable",
+          "position": 29
+         },
+         "rhs": {
+          "value": 2,
+          "type": "number",
+          "position": 31
+         }
+        },
+        "position": 27
+       }
+      ]
+     }
+    }
+   ],
+   "procedure": {
+    "value": "each",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case003": {
+  "expr": "$each(input.data, function($v, $k) {$v})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "input",
+       "type": "name",
+       "position": 11
+      },
+      {
+       "value": "data",
+       "type": "name",
+       "position": 16
+      }
+     ]
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 29
+      },
+      {
+       "value": "k",
+       "type": "variable",
+       "position": 33
+      }
+     ],
+     "position": 27,
+     "body": {
+      "value": "v",
+      "type": "variable",
+      "position": 38
+     }
+    }
+   ],
+   "procedure": {
+    "value": "each",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ }
+}

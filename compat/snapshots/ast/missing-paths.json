@@ -1,0 +1,142 @@
+{
+ "case000": {
+  "expr": "fdf",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "fdf",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "fdf.ett",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "fdf",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "ett",
+     "type": "name",
+     "position": 7
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "fdf.ett[10]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "fdf",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "ett",
+     "type": "name",
+     "position": 7,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 10,
+        "type": "number",
+        "position": 10
+       },
+       "position": 8
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "fdf.ett[vc > 10]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "fdf",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "ett",
+     "type": "name",
+     "position": 7,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": ">",
+        "position": 12,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "vc",
+           "type": "name",
+           "position": 10
+          }
+         ]
+        },
+        "rhs": {
+         "value": 10,
+         "type": "number",
+         "position": 15
+        }
+       },
+       "position": 8
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "fdf.ett + 27",
+  "ast": {
+   "type": "binary",
+   "value": "+",
+   "position": 9,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "fdf",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "ett",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   },
+   "rhs": {
+    "value": 27,
+    "type": "number",
+    "position": 12
+   }
+  }
+ },
+ "case005": {
+  "expr": "$fdsd",
+  "ast": {
+   "value": "fdsd",
+   "type": "variable",
+   "position": 5
+  }
+ }
+}

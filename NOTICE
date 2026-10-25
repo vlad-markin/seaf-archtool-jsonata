@@ -1,0 +1,9 @@
+seaf-archtool-jsonata
+Copyright 2026 SEAF ArchTool contributors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The parser in jsonata-core is a port of jsonata-js 2.2.2 (src/parser.js, src/signature.js),
+© Copyright IBM Corp. 2016, 2018, licensed under the MIT License.
+The reference sources and the official test suite of jsonata-js 2.2.2 are vendored
+unchanged in compat/jsonata-js/ under their original MIT License (compat/jsonata-js/LICENSE).

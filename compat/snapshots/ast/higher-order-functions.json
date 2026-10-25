@@ -1,0 +1,668 @@
+{
+ "case000": {
+  "expr": "($twice:=function($f){function($x){$f($f($x))}}; $add3:=function($y){$y+3}; $add6:=$twice($add3); $add6(7))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 9,
+     "lhs": {
+      "value": "twice",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "f",
+        "type": "variable",
+        "position": 20
+       }
+      ],
+      "position": 18,
+      "body": {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 33
+        }
+       ],
+       "position": 31,
+       "body": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 38,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 38,
+         "arguments": [
+          {
+           "type": "function",
+           "value": "(",
+           "position": 41,
+           "arguments": [
+            {
+             "value": "x",
+             "type": "variable",
+             "position": 43
+            }
+           ],
+           "procedure": {
+            "value": "f",
+            "type": "variable",
+            "position": 40
+           }
+          }
+         ],
+         "procedure": {
+          "value": "f",
+          "type": "variable",
+          "position": 37
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 56,
+     "lhs": {
+      "value": "add3",
+      "type": "variable",
+      "position": 54
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "y",
+        "type": "variable",
+        "position": 67
+       }
+      ],
+      "position": 65,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 72,
+       "lhs": {
+        "value": "y",
+        "type": "variable",
+        "position": 71
+       },
+       "rhs": {
+        "value": 3,
+        "type": "number",
+        "position": 73
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 83,
+     "lhs": {
+      "value": "add6",
+      "type": "variable",
+      "position": 81
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 90,
+      "arguments": [
+       {
+        "value": "add3",
+        "type": "variable",
+        "position": 95
+       }
+      ],
+      "procedure": {
+       "value": "twice",
+       "type": "variable",
+       "position": 89
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 104,
+     "arguments": [
+      {
+       "value": 7,
+       "type": "number",
+       "position": 105
+      }
+     ],
+     "procedure": {
+      "value": "add6",
+      "type": "variable",
+      "position": 103
+     }
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "λ($f) { λ($x) { $x($x) }( λ($g) { $f( (λ($a) {$g($g)($a)}))})}(λ($f) { λ($n) { $n < 2 ? 1 : $n * $f($n - 1) } })(6)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 113,
+   "arguments": [
+    {
+     "value": 6,
+     "type": "number",
+     "position": 114
+    }
+   ],
+   "procedure": {
+    "type": "function",
+    "value": "(",
+    "position": 63,
+    "arguments": [
+     {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "f",
+        "type": "variable",
+        "position": 67
+       }
+      ],
+      "position": 65,
+      "body": {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "n",
+         "type": "variable",
+         "position": 75
+        }
+       ],
+       "position": 73,
+       "body": {
+        "type": "condition",
+        "position": 87,
+        "condition": {
+         "type": "binary",
+         "value": "<",
+         "position": 83,
+         "lhs": {
+          "value": "n",
+          "type": "variable",
+          "position": 81
+         },
+         "rhs": {
+          "value": 2,
+          "type": "number",
+          "position": 85
+         }
+        },
+        "then": {
+         "value": 1,
+         "type": "number",
+         "position": 89
+        },
+        "else": {
+         "type": "binary",
+         "value": "*",
+         "position": 96,
+         "lhs": {
+          "value": "n",
+          "type": "variable",
+          "position": 94
+         },
+         "rhs": {
+          "type": "function",
+          "value": "(",
+          "position": 100,
+          "arguments": [
+           {
+            "type": "binary",
+            "value": "-",
+            "position": 104,
+            "lhs": {
+             "value": "n",
+             "type": "variable",
+             "position": 102
+            },
+            "rhs": {
+             "value": 1,
+             "type": "number",
+             "position": 106
+            }
+           }
+          ],
+          "procedure": {
+           "value": "f",
+           "type": "variable",
+           "position": 99
+          }
+         }
+        }
+       }
+      }
+     }
+    ],
+    "procedure": {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "f",
+       "type": "variable",
+       "position": 4
+      }
+     ],
+     "position": 2,
+     "body": {
+      "type": "lambda",
+      "thunk": true,
+      "arguments": [],
+      "position": 25,
+      "body": {
+       "type": "function",
+       "value": "(",
+       "position": 25,
+       "arguments": [
+        {
+         "type": "lambda",
+         "arguments": [
+          {
+           "value": "g",
+           "type": "variable",
+           "position": 30
+          }
+         ],
+         "position": 28,
+         "body": {
+          "type": "lambda",
+          "thunk": true,
+          "arguments": [],
+          "position": 37,
+          "body": {
+           "type": "function",
+           "value": "(",
+           "position": 37,
+           "arguments": [
+            {
+             "type": "block",
+             "position": 39,
+             "expressions": [
+              {
+               "type": "lambda",
+               "arguments": [
+                {
+                 "value": "a",
+                 "type": "variable",
+                 "position": 43
+                }
+               ],
+               "position": 41,
+               "body": {
+                "type": "lambda",
+                "thunk": true,
+                "arguments": [],
+                "position": 53,
+                "body": {
+                 "type": "function",
+                 "value": "(",
+                 "position": 53,
+                 "arguments": [
+                  {
+                   "value": "a",
+                   "type": "variable",
+                   "position": 55
+                  }
+                 ],
+                 "procedure": {
+                  "type": "function",
+                  "value": "(",
+                  "position": 49,
+                  "arguments": [
+                   {
+                    "value": "g",
+                    "type": "variable",
+                    "position": 51
+                   }
+                  ],
+                  "procedure": {
+                   "value": "g",
+                   "type": "variable",
+                   "position": 48
+                  }
+                 }
+                }
+               }
+              }
+             ]
+            }
+           ],
+           "procedure": {
+            "value": "f",
+            "type": "variable",
+            "position": 36
+           }
+          }
+         }
+        }
+       ],
+       "procedure": {
+        "type": "lambda",
+        "arguments": [
+         {
+          "value": "x",
+          "type": "variable",
+          "position": 12
+         }
+        ],
+        "position": 10,
+        "body": {
+         "type": "lambda",
+         "thunk": true,
+         "arguments": [],
+         "position": 19,
+         "body": {
+          "type": "function",
+          "value": "(",
+          "position": 19,
+          "arguments": [
+           {
+            "value": "x",
+            "type": "variable",
+            "position": 21
+           }
+          ],
+          "procedure": {
+           "value": "x",
+           "type": "variable",
+           "position": 18
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "case002": {
+  "expr": "λ($f) { λ($x) { $x($x) }( λ($g) { $f( (λ($a) {$g($g)($a)}))})}(λ($f) { λ($n) { $n <= 1 ? $n : $f($n-1) + $f($n-2) } })(6) ",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 119,
+   "arguments": [
+    {
+     "value": 6,
+     "type": "number",
+     "position": 120
+    }
+   ],
+   "procedure": {
+    "type": "function",
+    "value": "(",
+    "position": 63,
+    "arguments": [
+     {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "f",
+        "type": "variable",
+        "position": 67
+       }
+      ],
+      "position": 65,
+      "body": {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "n",
+         "type": "variable",
+         "position": 75
+        }
+       ],
+       "position": 73,
+       "body": {
+        "type": "condition",
+        "position": 88,
+        "condition": {
+         "type": "binary",
+         "value": "<=",
+         "position": 84,
+         "lhs": {
+          "value": "n",
+          "type": "variable",
+          "position": 81
+         },
+         "rhs": {
+          "value": 1,
+          "type": "number",
+          "position": 86
+         }
+        },
+        "then": {
+         "value": "n",
+         "type": "variable",
+         "position": 91
+        },
+        "else": {
+         "type": "binary",
+         "value": "+",
+         "position": 104,
+         "lhs": {
+          "type": "function",
+          "value": "(",
+          "position": 97,
+          "arguments": [
+           {
+            "type": "binary",
+            "value": "-",
+            "position": 100,
+            "lhs": {
+             "value": "n",
+             "type": "variable",
+             "position": 99
+            },
+            "rhs": {
+             "value": 1,
+             "type": "number",
+             "position": 101
+            }
+           }
+          ],
+          "procedure": {
+           "value": "f",
+           "type": "variable",
+           "position": 96
+          }
+         },
+         "rhs": {
+          "type": "function",
+          "value": "(",
+          "position": 108,
+          "arguments": [
+           {
+            "type": "binary",
+            "value": "-",
+            "position": 111,
+            "lhs": {
+             "value": "n",
+             "type": "variable",
+             "position": 110
+            },
+            "rhs": {
+             "value": 2,
+             "type": "number",
+             "position": 112
+            }
+           }
+          ],
+          "procedure": {
+           "value": "f",
+           "type": "variable",
+           "position": 107
+          }
+         }
+        }
+       }
+      }
+     }
+    ],
+    "procedure": {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "f",
+       "type": "variable",
+       "position": 4
+      }
+     ],
+     "position": 2,
+     "body": {
+      "type": "lambda",
+      "thunk": true,
+      "arguments": [],
+      "position": 25,
+      "body": {
+       "type": "function",
+       "value": "(",
+       "position": 25,
+       "arguments": [
+        {
+         "type": "lambda",
+         "arguments": [
+          {
+           "value": "g",
+           "type": "variable",
+           "position": 30
+          }
+         ],
+         "position": 28,
+         "body": {
+          "type": "lambda",
+          "thunk": true,
+          "arguments": [],
+          "position": 37,
+          "body": {
+           "type": "function",
+           "value": "(",
+           "position": 37,
+           "arguments": [
+            {
+             "type": "block",
+             "position": 39,
+             "expressions": [
+              {
+               "type": "lambda",
+               "arguments": [
+                {
+                 "value": "a",
+                 "type": "variable",
+                 "position": 43
+                }
+               ],
+               "position": 41,
+               "body": {
+                "type": "lambda",
+                "thunk": true,
+                "arguments": [],
+                "position": 53,
+                "body": {
+                 "type": "function",
+                 "value": "(",
+                 "position": 53,
+                 "arguments": [
+                  {
+                   "value": "a",
+                   "type": "variable",
+                   "position": 55
+                  }
+                 ],
+                 "procedure": {
+                  "type": "function",
+                  "value": "(",
+                  "position": 49,
+                  "arguments": [
+                   {
+                    "value": "g",
+                    "type": "variable",
+                    "position": 51
+                   }
+                  ],
+                  "procedure": {
+                   "value": "g",
+                   "type": "variable",
+                   "position": 48
+                  }
+                 }
+                }
+               }
+              }
+             ]
+            }
+           ],
+           "procedure": {
+            "value": "f",
+            "type": "variable",
+            "position": 36
+           }
+          }
+         }
+        }
+       ],
+       "procedure": {
+        "type": "lambda",
+        "arguments": [
+         {
+          "value": "x",
+          "type": "variable",
+          "position": 12
+         }
+        ],
+        "position": 10,
+        "body": {
+         "type": "lambda",
+         "thunk": true,
+         "arguments": [],
+         "position": 19,
+         "body": {
+          "type": "function",
+          "value": "(",
+          "position": 19,
+          "arguments": [
+           {
+            "value": "x",
+            "type": "variable",
+            "position": 21
+           }
+          ],
+          "procedure": {
+           "value": "x",
+           "type": "variable",
+           "position": 18
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

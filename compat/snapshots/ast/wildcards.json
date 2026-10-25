@@ -1,0 +1,442 @@
+{
+ "case000": {
+  "expr": "foo.*",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 5
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "foo.*.baz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 5
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 9
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "foo.*.bazz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 5
+    },
+    {
+     "value": "bazz",
+     "type": "name",
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "foo.*.baz.*",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 5
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 9
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "foo.*.baz.*",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 5
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 9
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "foo.*.baz.*",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 5
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 9
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "*[type=\"home\"]",
+  "ast": {
+   "value": "*",
+   "type": "wildcard",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "binary",
+      "value": "=",
+      "position": 7,
+      "lhs": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "type",
+         "type": "name",
+         "position": 6
+        }
+       ]
+      },
+      "rhs": {
+       "value": "home",
+       "type": "string",
+       "position": 13
+      }
+     },
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "Account[$$.Account.\"Account Name\" = \"Firefly\"].*[OrderID=\"order104\"].Product.Price",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 35,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "$",
+           "type": "variable",
+           "position": 10
+          },
+          {
+           "value": "Account",
+           "type": "name",
+           "position": 18
+          },
+          {
+           "value": "Account Name",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "value": "Firefly",
+         "type": "string",
+         "position": 45
+        }
+       },
+       "position": 8
+      }
+     ]
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 48,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 57,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 56
+          }
+         ]
+        },
+        "rhs": {
+         "value": "order104",
+         "type": "string",
+         "position": 67
+        }
+       },
+       "position": 49
+      }
+     ]
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 76
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 82
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "Account[$$.Account.`Account Name` = \"Firefly\"].*[OrderID=\"order104\"].Product.Price",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 35,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "$",
+           "type": "variable",
+           "position": 10
+          },
+          {
+           "value": "Account",
+           "type": "name",
+           "position": 18
+          },
+          {
+           "value": "Account Name",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "value": "Firefly",
+         "type": "string",
+         "position": 45
+        }
+       },
+       "position": 8
+      }
+     ]
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 48,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 57,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 56
+          }
+         ]
+        },
+        "rhs": {
+         "value": "order104",
+         "type": "string",
+         "position": 67
+        }
+       },
+       "position": 49
+      }
+     ]
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 76
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 82
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "*",
+  "ast": {
+   "value": "*",
+   "type": "wildcard",
+   "position": 1
+  }
+ },
+ "case010[0]": {
+  "expr": "$sum.*",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "sum",
+     "type": "variable",
+     "position": 4
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 6
+    }
+   ]
+  }
+ },
+ "case010[1]": {
+  "expr": "[$sum, $count].*",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "value": "sum",
+       "type": "variable",
+       "position": 5
+      },
+      {
+       "value": "count",
+       "type": "variable",
+       "position": 13
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 16
+    }
+   ]
+  }
+ },
+ "case010[2]": {
+  "expr": "/a/.*",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": {
+      "@regex": "a",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 3
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 5
+    }
+   ]
+  }
+ }
+}

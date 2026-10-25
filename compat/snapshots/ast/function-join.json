@@ -1,0 +1,417 @@
+{
+ "case000": {
+  "expr": "$join(\"hello\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "$join([\"hello\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "value": "hello",
+       "type": "string",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$join([\"hello\", \"world\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "value": "hello",
+       "type": "string",
+       "position": 14
+      },
+      {
+       "value": "world",
+       "type": "string",
+       "position": 23
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case003": {
+  "expr": "$join([\"hello\", \"world\"], \", \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "value": "hello",
+       "type": "string",
+       "position": 14
+      },
+      {
+       "value": "world",
+       "type": "string",
+       "position": 23
+      }
+     ]
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case004": {
+  "expr": "$join([], \", \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": []
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 14
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case005": {
+  "expr": "$join(Account.Order.Product.Description.Colour, \", \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      },
+      {
+       "value": "Description",
+       "type": "name",
+       "position": 39
+      },
+      {
+       "value": "Colour",
+       "type": "name",
+       "position": 46
+      }
+     ]
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 52
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case006": {
+  "expr": "$join(Account.Order.Product.Description.Colour, no.sep)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      },
+      {
+       "value": "Description",
+       "type": "name",
+       "position": 39
+      },
+      {
+       "value": "Colour",
+       "type": "name",
+       "position": 46
+      }
+     ]
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "no",
+       "type": "name",
+       "position": 50
+      },
+      {
+       "value": "sep",
+       "type": "name",
+       "position": 54
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case007": {
+  "expr": "$join(Account.blah.Product.Description.Colour, \", \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 18
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 26
+      },
+      {
+       "value": "Description",
+       "type": "name",
+       "position": 38
+      },
+      {
+       "value": "Colour",
+       "type": "name",
+       "position": 45
+      }
+     ]
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 51
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case008": {
+  "expr": "$join(true, \", \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": true,
+     "type": "value",
+     "position": 10
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case009": {
+  "expr": "$join([1,2,3], \", \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 8
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 10
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 12
+      }
+     ]
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case010": {
+  "expr": "$join([\"hello\"], 3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "value": "hello",
+       "type": "string",
+       "position": 14
+      }
+     ]
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 18
+    }
+   ],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case011": {
+  "expr": "$join()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [],
+   "procedure": {
+    "value": "join",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ }
+}

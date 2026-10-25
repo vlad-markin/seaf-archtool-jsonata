@@ -1,0 +1,67 @@
+{
+ "case000": {
+  "expr": "$decodeUrlComponent(\"%3Fx%3Dtest\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "value": "%3Fx%3Dtest",
+     "type": "string",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "decodeUrlComponent",
+    "type": "variable",
+    "position": 19
+   }
+  }
+ },
+ "case001": {
+  "expr": "$decodeUrlComponent(blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 24
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "decodeUrlComponent",
+    "type": "variable",
+    "position": 19
+   }
+  }
+ },
+ "case002": {
+  "expr": "$decodeUrlComponent('%E0%A4%A')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "value": "%E0%A4%A",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "decodeUrlComponent",
+    "type": "variable",
+    "position": 19
+   }
+  }
+ }
+}

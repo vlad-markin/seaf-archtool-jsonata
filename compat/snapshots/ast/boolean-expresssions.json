@@ -1,0 +1,878 @@
+{
+ "case000": {
+  "expr": "true",
+  "ast": {
+   "value": true,
+   "type": "value",
+   "position": 4
+  }
+ },
+ "case001": {
+  "expr": "false",
+  "ast": {
+   "value": false,
+   "type": "value",
+   "position": 5
+  }
+ },
+ "case002": {
+  "expr": "false or false",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 8,
+   "lhs": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "rhs": {
+    "value": false,
+    "type": "value",
+    "position": 14
+   }
+  }
+ },
+ "case003": {
+  "expr": "false or true",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 8,
+   "lhs": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "rhs": {
+    "value": true,
+    "type": "value",
+    "position": 13
+   }
+  }
+ },
+ "case004": {
+  "expr": "true or false",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 7,
+   "lhs": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "rhs": {
+    "value": false,
+    "type": "value",
+    "position": 13
+   }
+  }
+ },
+ "case005": {
+  "expr": "true or true",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 7,
+   "lhs": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "rhs": {
+    "value": true,
+    "type": "value",
+    "position": 12
+   }
+  }
+ },
+ "case006": {
+  "expr": "false and false",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 9,
+   "lhs": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "rhs": {
+    "value": false,
+    "type": "value",
+    "position": 15
+   }
+  }
+ },
+ "case007": {
+  "expr": "false and true",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 9,
+   "lhs": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "rhs": {
+    "value": true,
+    "type": "value",
+    "position": 14
+   }
+  }
+ },
+ "case008": {
+  "expr": "true and false",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 8,
+   "lhs": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "rhs": {
+    "value": false,
+    "type": "value",
+    "position": 14
+   }
+  }
+ },
+ "case009": {
+  "expr": "true and true",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 8,
+   "lhs": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "rhs": {
+    "value": true,
+    "type": "value",
+    "position": 13
+   }
+  }
+ },
+ "case010": {
+  "expr": "$not(false)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": false,
+     "type": "value",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "not",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case011": {
+  "expr": "$not(true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": true,
+     "type": "value",
+     "position": 9
+    }
+   ],
+   "procedure": {
+    "value": "not",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case012": {
+  "expr": "and=1 and or=2",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 9,
+   "lhs": {
+    "type": "binary",
+    "value": "=",
+    "position": 4,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "and",
+       "type": "name",
+       "position": 3
+      }
+     ]
+    },
+    "rhs": {
+     "value": 1,
+     "type": "number",
+     "position": 5
+    }
+   },
+   "rhs": {
+    "type": "binary",
+    "value": "=",
+    "position": 13,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "or",
+       "type": "name",
+       "position": 12
+      }
+     ]
+    },
+    "rhs": {
+     "value": 2,
+     "type": "number",
+     "position": 14
+    }
+   }
+  }
+ },
+ "case013": {
+  "expr": "and>1 or or<=2",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 8,
+   "lhs": {
+    "type": "binary",
+    "value": ">",
+    "position": 4,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "and",
+       "type": "name",
+       "position": 3
+      }
+     ]
+    },
+    "rhs": {
+     "value": 1,
+     "type": "number",
+     "position": 5
+    }
+   },
+   "rhs": {
+    "type": "binary",
+    "value": "<=",
+    "position": 13,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "or",
+       "type": "name",
+       "position": 11
+      }
+     ]
+    },
+    "rhs": {
+     "value": 2,
+     "type": "number",
+     "position": 14
+    }
+   }
+  }
+ },
+ "case014": {
+  "expr": "and>1 or or!=2",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 8,
+   "lhs": {
+    "type": "binary",
+    "value": ">",
+    "position": 4,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "and",
+       "type": "name",
+       "position": 3
+      }
+     ]
+    },
+    "rhs": {
+     "value": 1,
+     "type": "number",
+     "position": 5
+    }
+   },
+   "rhs": {
+    "type": "binary",
+    "value": "!=",
+    "position": 13,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "or",
+       "type": "name",
+       "position": 11
+      }
+     ]
+    },
+    "rhs": {
+     "value": 2,
+     "type": "number",
+     "position": 14
+    }
+   }
+  }
+ },
+ "case015": {
+  "expr": "and and and",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 7,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "and",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "and",
+      "type": "name",
+      "position": 11
+     }
+    ]
+   }
+  }
+ },
+ "case016": {
+  "expr": "$[].content.origin.$lowercase(name)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "keepArray": true
+    },
+    {
+     "value": "content",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "value": "origin",
+     "type": "name",
+     "position": 18
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 30,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "name",
+         "type": "name",
+         "position": 34
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "lowercase",
+      "type": "variable",
+      "position": 29
+     }
+    }
+   ],
+   "keepSingletonArray": true
+  }
+ },
+ "case017": {
+  "expr": "true or foo",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 7,
+   "lhs": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 11
+     }
+    ]
+   }
+  }
+ },
+ "case018": {
+  "expr": "foo or true",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 6,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "rhs": {
+    "value": true,
+    "type": "value",
+    "position": 11
+   }
+  }
+ },
+ "case019": {
+  "expr": "false or foo",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 8,
+   "lhs": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 12
+     }
+    ]
+   }
+  }
+ },
+ "case020": {
+  "expr": "foo or false",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 6,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "rhs": {
+    "value": false,
+    "type": "value",
+    "position": 12
+   }
+  }
+ },
+ "case021": {
+  "expr": "foo or bar",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 6,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "bar",
+      "type": "name",
+      "position": 10
+     }
+    ]
+   }
+  }
+ },
+ "case022": {
+  "expr": "true and foo",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 8,
+   "lhs": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 12
+     }
+    ]
+   }
+  }
+ },
+ "case023": {
+  "expr": "foo and true",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 7,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "rhs": {
+    "value": true,
+    "type": "value",
+    "position": 12
+   }
+  }
+ },
+ "case024": {
+  "expr": "false and foo",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 9,
+   "lhs": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 13
+     }
+    ]
+   }
+  }
+ },
+ "case025": {
+  "expr": "foo and false",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 7,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "rhs": {
+    "value": false,
+    "type": "value",
+    "position": 13
+   }
+  }
+ },
+ "case026": {
+  "expr": "foo and bar",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 7,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "bar",
+      "type": "name",
+      "position": 11
+     }
+    ]
+   }
+  }
+ },
+ "case027": {
+  "expr": "$not(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "not",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case028": {
+  "expr": "foo = '' or $number(foo) = 0",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 11,
+   "lhs": {
+    "type": "binary",
+    "value": "=",
+    "position": 5,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 3
+      }
+     ]
+    },
+    "rhs": {
+     "value": "",
+     "type": "string",
+     "position": 8
+    }
+   },
+   "rhs": {
+    "type": "binary",
+    "value": "=",
+    "position": 26,
+    "lhs": {
+     "type": "function",
+     "value": "(",
+     "position": 20,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "foo",
+         "type": "name",
+         "position": 23
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "number",
+      "type": "variable",
+      "position": 19
+     }
+    },
+    "rhs": {
+     "value": 0,
+     "type": "number",
+     "position": 28
+    }
+   }
+  }
+ },
+ "case029": {
+  "expr": "$type(data) = 'number' and data > 10",
+  "ast": {
+   "type": "binary",
+   "value": "and",
+   "position": 26,
+   "lhs": {
+    "type": "binary",
+    "value": "=",
+    "position": 13,
+    "lhs": {
+     "type": "function",
+     "value": "(",
+     "position": 6,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "data",
+         "type": "name",
+         "position": 10
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 5
+     }
+    },
+    "rhs": {
+     "value": "number",
+     "type": "string",
+     "position": 22
+    }
+   },
+   "rhs": {
+    "type": "binary",
+    "value": ">",
+    "position": 33,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "data",
+       "type": "name",
+       "position": 31
+      }
+     ]
+    },
+    "rhs": {
+     "value": 10,
+     "type": "number",
+     "position": 36
+    }
+   }
+  }
+ },
+ "case030": {
+  "expr": "$type(age) = 'number' or $number(age) > 0",
+  "ast": {
+   "type": "binary",
+   "value": "or",
+   "position": 24,
+   "lhs": {
+    "type": "binary",
+    "value": "=",
+    "position": 12,
+    "lhs": {
+     "type": "function",
+     "value": "(",
+     "position": 6,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "age",
+         "type": "name",
+         "position": 9
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 5
+     }
+    },
+    "rhs": {
+     "value": "number",
+     "type": "string",
+     "position": 21
+    }
+   },
+   "rhs": {
+    "type": "binary",
+    "value": ">",
+    "position": 39,
+    "lhs": {
+     "type": "function",
+     "value": "(",
+     "position": 33,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "age",
+         "type": "name",
+         "position": 36
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "number",
+      "type": "variable",
+      "position": 32
+     }
+    },
+    "rhs": {
+     "value": 0,
+     "type": "number",
+     "position": 41
+    }
+   }
+  }
+ }
+}

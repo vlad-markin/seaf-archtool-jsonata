@@ -1,0 +1,2812 @@
+{
+ "case000": {
+  "expr": "λ($arg)<b:b>{$not($arg)}(true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 25,
+   "arguments": [
+    {
+     "value": true,
+     "type": "value",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<b:b>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 18,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 18,
+      "arguments": [
+       {
+        "value": "arg",
+        "type": "variable",
+        "position": 22
+       }
+      ],
+      "procedure": {
+       "value": "not",
+       "type": "variable",
+       "position": 17
+      }
+     }
+    }
+   }
+  }
+ },
+ "case001": {
+  "expr": "λ($arg)<b:b>{$not($arg)}(foo)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 25,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 28
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<b:b>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 18,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 18,
+      "arguments": [
+       {
+        "value": "arg",
+        "type": "variable",
+        "position": 22
+       }
+      ],
+      "procedure": {
+       "value": "not",
+       "type": "variable",
+       "position": 17
+      }
+     }
+    }
+   }
+  }
+ },
+ "case002": {
+  "expr": "λ($arg)<x:b>{$not($arg)}(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 25,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<x:b>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 18,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 18,
+      "arguments": [
+       {
+        "value": "arg",
+        "type": "variable",
+        "position": 22
+       }
+      ],
+      "procedure": {
+       "value": "not",
+       "type": "variable",
+       "position": 17
+      }
+     }
+    }
+   }
+  }
+ },
+ "case003": {
+  "expr": "function($x,$y)<n-n:n>{$x+$y}(2, 6)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 30,
+   "arguments": [
+    {
+     "value": 2,
+     "type": "number",
+     "position": 31
+    },
+    {
+     "value": 6,
+     "type": "number",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "x",
+      "type": "variable",
+      "position": 11
+     },
+     {
+      "value": "y",
+      "type": "variable",
+      "position": 14
+     }
+    ],
+    "signature": {
+     "definition": "<n-n:n>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 9,
+    "body": {
+     "type": "binary",
+     "value": "+",
+     "position": 26,
+     "lhs": {
+      "value": "x",
+      "type": "variable",
+      "position": 25
+     },
+     "rhs": {
+      "value": "y",
+      "type": "variable",
+      "position": 28
+     }
+    }
+   }
+  }
+ },
+ "case004": {
+  "expr": "[1..5].function($x,$y)<n-n:n>{$x+$y}(6)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "..",
+       "position": 4,
+       "lhs": {
+        "value": 1,
+        "type": "number",
+        "position": 2
+       },
+       "rhs": {
+        "value": 5,
+        "type": "number",
+        "position": 5
+       }
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 37,
+     "arguments": [
+      {
+       "value": 6,
+       "type": "number",
+       "position": 38
+      }
+     ],
+     "procedure": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 18
+       },
+       {
+        "value": "y",
+        "type": "variable",
+        "position": 21
+       }
+      ],
+      "signature": {
+       "definition": "<n-n:n>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 16,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 33,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 32
+       },
+       "rhs": {
+        "value": "y",
+        "type": "variable",
+        "position": 35
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "[1..5].function($x,$y)<n-n:n>{$x+$y}(2, 6)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "..",
+       "position": 4,
+       "lhs": {
+        "value": 1,
+        "type": "number",
+        "position": 2
+       },
+       "rhs": {
+        "value": 5,
+        "type": "number",
+        "position": 5
+       }
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 37,
+     "arguments": [
+      {
+       "value": 2,
+       "type": "number",
+       "position": 38
+      },
+      {
+       "value": 6,
+       "type": "number",
+       "position": 41
+      }
+     ],
+     "procedure": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 18
+       },
+       {
+        "value": "y",
+        "type": "variable",
+        "position": 21
+       }
+      ],
+      "signature": {
+       "definition": "<n-n:n>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 16,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 33,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 32
+       },
+       "rhs": {
+        "value": "y",
+        "type": "variable",
+        "position": 35
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "Age.function($x,$y)<n-n:n>{$x+$y}(6)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Age",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 34,
+     "arguments": [
+      {
+       "value": 6,
+       "type": "number",
+       "position": 35
+      }
+     ],
+     "procedure": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 15
+       },
+       {
+        "value": "y",
+        "type": "variable",
+        "position": 18
+       }
+      ],
+      "signature": {
+       "definition": "<n-n:n>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 13,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 30,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 29
+       },
+       "rhs": {
+        "value": "y",
+        "type": "variable",
+        "position": 32
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "λ($str)<s->{$uppercase($str)}(\"hello\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 30,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 37
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "str",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<s->",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 23,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 23,
+      "arguments": [
+       {
+        "value": "str",
+        "type": "variable",
+        "position": 27
+       }
+      ],
+      "procedure": {
+       "value": "uppercase",
+       "type": "variable",
+       "position": 22
+      }
+     }
+    }
+   }
+  }
+ },
+ "case008": {
+  "expr": "Account.Order.Product.Description.Colour.λ($str)<s->{$uppercase($str)}()",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "value": "Description",
+     "type": "name",
+     "position": 33
+    },
+    {
+     "value": "Colour",
+     "type": "name",
+     "position": 40
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 71,
+     "arguments": [],
+     "procedure": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "str",
+        "type": "variable",
+        "position": 47
+       }
+      ],
+      "signature": {
+       "definition": "<s->",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 43,
+      "body": {
+       "type": "lambda",
+       "thunk": true,
+       "arguments": [],
+       "position": 64,
+       "body": {
+        "type": "function",
+        "value": "(",
+        "position": 64,
+        "arguments": [
+         {
+          "value": "str",
+          "type": "variable",
+          "position": 68
+         }
+        ],
+        "procedure": {
+         "value": "uppercase",
+         "type": "variable",
+         "position": 63
+        }
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "λ($str, $prefix)<s-s>{$prefix & $str}(\"World\", \"Hello \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 38,
+   "arguments": [
+    {
+     "value": "World",
+     "type": "string",
+     "position": 45
+    },
+    {
+     "value": "Hello ",
+     "type": "string",
+     "position": 55
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "str",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "prefix",
+      "type": "variable",
+      "position": 15
+     }
+    ],
+    "signature": {
+     "definition": "<s-s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "binary",
+     "value": "&",
+     "position": 31,
+     "lhs": {
+      "value": "prefix",
+      "type": "variable",
+      "position": 29
+     },
+     "rhs": {
+      "value": "str",
+      "type": "variable",
+      "position": 36
+     }
+    }
+   }
+  }
+ },
+ "case010": {
+  "expr": "FirstName.λ($str, $prefix)<s-s>{$prefix & $str}(\"Hello \")",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "FirstName",
+     "type": "name",
+     "position": 9
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 48,
+     "arguments": [
+      {
+       "value": "Hello ",
+       "type": "string",
+       "position": 56
+      }
+     ],
+     "procedure": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "str",
+        "type": "variable",
+        "position": 16
+       },
+       {
+        "value": "prefix",
+        "type": "variable",
+        "position": 25
+       }
+      ],
+      "signature": {
+       "definition": "<s-s>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 12,
+      "body": {
+       "type": "binary",
+       "value": "&",
+       "position": 41,
+       "lhs": {
+        "value": "prefix",
+        "type": "variable",
+        "position": 39
+       },
+       "rhs": {
+        "value": "str",
+        "type": "variable",
+        "position": 46
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "λ($arr, $sep)<a<s>s?:s>{$join($arr, $sep)}(\"a\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 43,
+   "arguments": [
+    {
+     "value": "a",
+     "type": "string",
+     "position": 46
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "sep",
+      "type": "variable",
+      "position": 12
+     }
+    ],
+    "signature": {
+     "definition": "<a<s>s?:s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 30,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 30,
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 34
+       },
+       {
+        "value": "sep",
+        "type": "variable",
+        "position": 40
+       }
+      ],
+      "procedure": {
+       "value": "join",
+       "type": "variable",
+       "position": 29
+      }
+     }
+    }
+   }
+  }
+ },
+ "case012": {
+  "expr": "λ($arr, $sep)<a<s>s?:s>{$join($arr, $sep)}([\"a\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 43,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 44,
+     "expressions": [
+      {
+       "value": "a",
+       "type": "string",
+       "position": 47
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "sep",
+      "type": "variable",
+      "position": 12
+     }
+    ],
+    "signature": {
+     "definition": "<a<s>s?:s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 30,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 30,
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 34
+       },
+       {
+        "value": "sep",
+        "type": "variable",
+        "position": 40
+       }
+      ],
+      "procedure": {
+       "value": "join",
+       "type": "variable",
+       "position": 29
+      }
+     }
+    }
+   }
+  }
+ },
+ "case013": {
+  "expr": "λ($arr, $sep)<a<s>s?:s>{$join($arr, $sep)}(\"a\", \"-\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 43,
+   "arguments": [
+    {
+     "value": "a",
+     "type": "string",
+     "position": 46
+    },
+    {
+     "value": "-",
+     "type": "string",
+     "position": 51
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "sep",
+      "type": "variable",
+      "position": 12
+     }
+    ],
+    "signature": {
+     "definition": "<a<s>s?:s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 30,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 30,
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 34
+       },
+       {
+        "value": "sep",
+        "type": "variable",
+        "position": 40
+       }
+      ],
+      "procedure": {
+       "value": "join",
+       "type": "variable",
+       "position": 29
+      }
+     }
+    }
+   }
+  }
+ },
+ "case014": {
+  "expr": "λ($arr, $sep)<a<s>s?:s>{$join($arr, $sep)}([\"a\"], \"-\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 43,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 44,
+     "expressions": [
+      {
+       "value": "a",
+       "type": "string",
+       "position": 47
+      }
+     ]
+    },
+    {
+     "value": "-",
+     "type": "string",
+     "position": 53
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "sep",
+      "type": "variable",
+      "position": 12
+     }
+    ],
+    "signature": {
+     "definition": "<a<s>s?:s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 30,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 30,
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 34
+       },
+       {
+        "value": "sep",
+        "type": "variable",
+        "position": 40
+       }
+      ],
+      "procedure": {
+       "value": "join",
+       "type": "variable",
+       "position": 29
+      }
+     }
+    }
+   }
+  }
+ },
+ "case015": {
+  "expr": "λ($arr, $sep)<a<s>s?:s>{$join($arr, $sep)}([\"a\", \"b\"], \"-\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 43,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 44,
+     "expressions": [
+      {
+       "value": "a",
+       "type": "string",
+       "position": 47
+      },
+      {
+       "value": "b",
+       "type": "string",
+       "position": 52
+      }
+     ]
+    },
+    {
+     "value": "-",
+     "type": "string",
+     "position": 58
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "sep",
+      "type": "variable",
+      "position": 12
+     }
+    ],
+    "signature": {
+     "definition": "<a<s>s?:s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 30,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 30,
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 34
+       },
+       {
+        "value": "sep",
+        "type": "variable",
+        "position": 40
+       }
+      ],
+      "procedure": {
+       "value": "join",
+       "type": "variable",
+       "position": 29
+      }
+     }
+    }
+   }
+  }
+ },
+ "case016": {
+  "expr": "λ($arr, $sep)<as?:s>{$join($arr, $sep)}([\"a\", \"b\"], \"-\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 40,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 41,
+     "expressions": [
+      {
+       "value": "a",
+       "type": "string",
+       "position": 44
+      },
+      {
+       "value": "b",
+       "type": "string",
+       "position": 49
+      }
+     ]
+    },
+    {
+     "value": "-",
+     "type": "string",
+     "position": 55
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "sep",
+      "type": "variable",
+      "position": 12
+     }
+    ],
+    "signature": {
+     "definition": "<as?:s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 27,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 27,
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 31
+       },
+       {
+        "value": "sep",
+        "type": "variable",
+        "position": 37
+       }
+      ],
+      "procedure": {
+       "value": "join",
+       "type": "variable",
+       "position": 26
+      }
+     }
+    }
+   }
+  }
+ },
+ "case017": {
+  "expr": "λ($arr, $sep)<a<s>s?:s>{$join($arr, $sep)}([], \"-\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 43,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 44,
+     "expressions": []
+    },
+    {
+     "value": "-",
+     "type": "string",
+     "position": 50
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "sep",
+      "type": "variable",
+      "position": 12
+     }
+    ],
+    "signature": {
+     "definition": "<a<s>s?:s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 30,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 30,
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 34
+       },
+       {
+        "value": "sep",
+        "type": "variable",
+        "position": 40
+       }
+      ],
+      "procedure": {
+       "value": "join",
+       "type": "variable",
+       "position": 29
+      }
+     }
+    }
+   }
+  }
+ },
+ "case018": {
+  "expr": "λ($arr, $sep)<a<s>s?:s>{$join($arr, $sep)}(foo, \"-\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 43,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 46
+      }
+     ]
+    },
+    {
+     "value": "-",
+     "type": "string",
+     "position": 51
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     },
+     {
+      "value": "sep",
+      "type": "variable",
+      "position": 12
+     }
+    ],
+    "signature": {
+     "definition": "<a<s>s?:s>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 30,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 30,
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 34
+       },
+       {
+        "value": "sep",
+        "type": "variable",
+        "position": 40
+       }
+      ],
+      "procedure": {
+       "value": "join",
+       "type": "variable",
+       "position": 29
+      }
+     }
+    }
+   }
+  }
+ },
+ "case019": {
+  "expr": "λ($obj)<o>{$obj}({\"hello\": \"world\"})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 18,
+     "lhs": [
+      [
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 25
+       },
+       {
+        "value": "world",
+        "type": "string",
+        "position": 34
+       }
+      ]
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "obj",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<o>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "value": "obj",
+     "type": "variable",
+     "position": 15
+    }
+   }
+  }
+ },
+ "case020": {
+  "expr": "λ($arr)<a<a<n>>>{$arr}([[1]])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 23,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 24,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 25,
+       "expressions": [
+        {
+         "value": 1,
+         "type": "number",
+         "position": 26
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<a<a<n>>>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "value": "arr",
+     "type": "variable",
+     "position": 21
+    }
+   }
+  }
+ },
+ "case021": {
+  "expr": "λ($num)<(ns)-:n>{$number($num)}(5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 32,
+   "arguments": [
+    {
+     "value": 5,
+     "type": "number",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "num",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<(ns)-:n>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 25,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 25,
+      "arguments": [
+       {
+        "value": "num",
+        "type": "variable",
+        "position": 29
+       }
+      ],
+      "procedure": {
+       "value": "number",
+       "type": "variable",
+       "position": 24
+      }
+     }
+    }
+   }
+  }
+ },
+ "case022": {
+  "expr": "λ($num)<(ns)-:n>{$number($num)}(\"5\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 32,
+   "arguments": [
+    {
+     "value": "5",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "num",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<(ns)-:n>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "lambda",
+     "thunk": true,
+     "arguments": [],
+     "position": 25,
+     "body": {
+      "type": "function",
+      "value": "(",
+      "position": 25,
+      "arguments": [
+       {
+        "value": "num",
+        "type": "variable",
+        "position": 29
+       }
+      ],
+      "procedure": {
+       "value": "number",
+       "type": "variable",
+       "position": 24
+      }
+     }
+    }
+   }
+  }
+ },
+ "case023": {
+  "expr": "[1..5].λ($num)<(ns)-:n>{$number($num)}()",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "..",
+       "position": 4,
+       "lhs": {
+        "value": 1,
+        "type": "number",
+        "position": 2
+       },
+       "rhs": {
+        "value": 5,
+        "type": "number",
+        "position": 5
+       }
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 39,
+     "arguments": [],
+     "procedure": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "num",
+        "type": "variable",
+        "position": 13
+       }
+      ],
+      "signature": {
+       "definition": "<(ns)-:n>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 9,
+      "body": {
+       "type": "lambda",
+       "thunk": true,
+       "arguments": [],
+       "position": 32,
+       "body": {
+        "type": "function",
+        "value": "(",
+        "position": 32,
+        "arguments": [
+         {
+          "value": "num",
+          "type": "variable",
+          "position": 36
+         }
+        ],
+        "procedure": {
+         "value": "number",
+         "type": "variable",
+         "position": 31
+        }
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case024": {
+  "expr": "($twice := function($f)<f:f>{function($x)<n:n>{$f($f($x))}};$add2 := function($x)<n:n>{$x+2};$add4 := $twice($add2);$add4(5))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "twice",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "f",
+        "type": "variable",
+        "position": 22
+       }
+      ],
+      "signature": {
+       "definition": "<f:f>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 20,
+      "body": {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 40
+        }
+       ],
+       "signature": {
+        "definition": "<n:n>",
+        "validate": {
+         "@function": "validate"
+        }
+       },
+       "position": 38,
+       "body": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 50,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 50,
+         "arguments": [
+          {
+           "type": "function",
+           "value": "(",
+           "position": 53,
+           "arguments": [
+            {
+             "value": "x",
+             "type": "variable",
+             "position": 55
+            }
+           ],
+           "procedure": {
+            "value": "f",
+            "type": "variable",
+            "position": 52
+           }
+          }
+         ],
+         "procedure": {
+          "value": "f",
+          "type": "variable",
+          "position": 49
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 68,
+     "lhs": {
+      "value": "add2",
+      "type": "variable",
+      "position": 65
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 80
+       }
+      ],
+      "signature": {
+       "definition": "<n:n>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 78,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 90,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 89
+       },
+       "rhs": {
+        "value": 2,
+        "type": "number",
+        "position": 91
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 101,
+     "lhs": {
+      "value": "add4",
+      "type": "variable",
+      "position": 98
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 109,
+      "arguments": [
+       {
+        "value": "add2",
+        "type": "variable",
+        "position": 114
+       }
+      ],
+      "procedure": {
+       "value": "twice",
+       "type": "variable",
+       "position": 108
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 122,
+     "arguments": [
+      {
+       "value": 5,
+       "type": "number",
+       "position": 123
+      }
+     ],
+     "procedure": {
+      "value": "add4",
+      "type": "variable",
+      "position": 121
+     }
+    }
+   ]
+  }
+ },
+ "case025": {
+  "expr": "($twice := function($f)<f<n:n>:f<n:n>>{function($x)<n:n>{$f($f($x))}};$add2 := function($x)<n:n>{$x+2};$add4 := $twice($add2);$add4(5))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "twice",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "f",
+        "type": "variable",
+        "position": 22
+       }
+      ],
+      "signature": {
+       "definition": "<f<n:n>:f<n:n>>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 20,
+      "body": {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 50
+        }
+       ],
+       "signature": {
+        "definition": "<n:n>",
+        "validate": {
+         "@function": "validate"
+        }
+       },
+       "position": 48,
+       "body": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 60,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 60,
+         "arguments": [
+          {
+           "type": "function",
+           "value": "(",
+           "position": 63,
+           "arguments": [
+            {
+             "value": "x",
+             "type": "variable",
+             "position": 65
+            }
+           ],
+           "procedure": {
+            "value": "f",
+            "type": "variable",
+            "position": 62
+           }
+          }
+         ],
+         "procedure": {
+          "value": "f",
+          "type": "variable",
+          "position": 59
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 78,
+     "lhs": {
+      "value": "add2",
+      "type": "variable",
+      "position": 75
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 90
+       }
+      ],
+      "signature": {
+       "definition": "<n:n>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 88,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 100,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 99
+       },
+       "rhs": {
+        "value": 2,
+        "type": "number",
+        "position": 101
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 111,
+     "lhs": {
+      "value": "add4",
+      "type": "variable",
+      "position": 108
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 119,
+      "arguments": [
+       {
+        "value": "add2",
+        "type": "variable",
+        "position": 124
+       }
+      ],
+      "procedure": {
+       "value": "twice",
+       "type": "variable",
+       "position": 118
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 132,
+     "arguments": [
+      {
+       "value": 5,
+       "type": "number",
+       "position": 133
+      }
+     ],
+     "procedure": {
+      "value": "add4",
+      "type": "variable",
+      "position": 131
+     }
+    }
+   ]
+  }
+ },
+ "case026": {
+  "expr": "λ($arg)<n<n>>{$arg}(5)",
+  "error": {
+   "code": "S0401",
+   "position": 10
+  }
+ },
+ "case027": {
+  "expr": "λ($arg1, $arg2)<nn:a>{[$arg1, $arg2]}(1,\"2\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 38,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 39
+    },
+    {
+     "value": "2",
+     "type": "string",
+     "position": 43
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     }
+    ],
+    "signature": {
+     "definition": "<nn:a>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "[",
+     "position": 23,
+     "expressions": [
+      {
+       "value": "arg1",
+       "type": "variable",
+       "position": 28
+      },
+      {
+       "value": "arg2",
+       "type": "variable",
+       "position": 35
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case028": {
+  "expr": "λ($arg1, $arg2)<nn:a>{[$arg1, $arg2]}(1,3,\"2\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 38,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 39
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 41
+    },
+    {
+     "value": "2",
+     "type": "string",
+     "position": 45
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     }
+    ],
+    "signature": {
+     "definition": "<nn:a>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "[",
+     "position": 23,
+     "expressions": [
+      {
+       "value": "arg1",
+       "type": "variable",
+       "position": 28
+      },
+      {
+       "value": "arg2",
+       "type": "variable",
+       "position": 35
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case029": {
+  "expr": "λ($arg1, $arg2)<nn+:a>{[$arg1, $arg2]}(1,3, 2,\"g\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 39,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 40
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 42
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 45
+    },
+    {
+     "value": "g",
+     "type": "string",
+     "position": 49
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     }
+    ],
+    "signature": {
+     "definition": "<nn+:a>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "[",
+     "position": 24,
+     "expressions": [
+      {
+       "value": "arg1",
+       "type": "variable",
+       "position": 29
+      },
+      {
+       "value": "arg2",
+       "type": "variable",
+       "position": 36
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case030": {
+  "expr": "λ($arr)<a<n>>{$arr}([\"3\"]) ",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 21,
+     "expressions": [
+      {
+       "value": "3",
+       "type": "string",
+       "position": 24
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<a<n>>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "value": "arr",
+     "type": "variable",
+     "position": 18
+    }
+   }
+  }
+ },
+ "case031": {
+  "expr": "λ($arr)<a<n>>{$arr}([1, 2, \"3\"]) ",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 21,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 22
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 25
+      },
+      {
+       "value": "3",
+       "type": "string",
+       "position": 30
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<a<n>>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "value": "arr",
+     "type": "variable",
+     "position": 18
+    }
+   }
+  }
+ },
+ "case032": {
+  "expr": "λ($arr)<a<n>>{$arr}(\"f\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "value": "f",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arr",
+      "type": "variable",
+      "position": 6
+     }
+    ],
+    "signature": {
+     "definition": "<a<n>>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "value": "arr",
+     "type": "variable",
+     "position": 18
+    }
+   }
+  }
+ },
+ "case033": {
+  "expr": "($fun := λ($arr)<a<n>>{$arr};$fun(\"f\"))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 8,
+     "lhs": {
+      "value": "fun",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 15
+       }
+      ],
+      "signature": {
+       "definition": "<a<n>>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 11,
+      "body": {
+       "value": "arr",
+       "type": "variable",
+       "position": 27
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 34,
+     "arguments": [
+      {
+       "value": "f",
+       "type": "string",
+       "position": 37
+      }
+     ],
+     "procedure": {
+      "value": "fun",
+      "type": "variable",
+      "position": 33
+     }
+    }
+   ]
+  }
+ },
+ "case034": {
+  "expr": "λ($arr)<(sa<n>)>>{$arr}([[1]])",
+  "error": {
+   "code": "S0402",
+   "position": 9
+  }
+ },
+ "case035": {
+  "expr": "λ($arg1, $arg2)<n+n:o>{{\"$arg1\": $arg1, \"$arg2\": $arg2}}(1, 2, 3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 57,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 58
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 61
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 64
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     }
+    ],
+    "signature": {
+     "definition": "<n+n:o>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "{",
+     "position": 24,
+     "lhs": [
+      [
+       {
+        "value": "$arg1",
+        "type": "string",
+        "position": 31
+       },
+       {
+        "value": "arg1",
+        "type": "variable",
+        "position": 38
+       }
+      ],
+      [
+       {
+        "value": "$arg2",
+        "type": "string",
+        "position": 47
+       },
+       {
+        "value": "arg2",
+        "type": "variable",
+        "position": 54
+       }
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "case036": {
+  "expr": "λ($arg1, $arg2, $arg3)<n+s:a<n>>{[$arg1, $arg2, $arg3]}(1, 2, \"a\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 56,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 57
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 60
+    },
+    {
+     "value": "a",
+     "type": "string",
+     "position": 65
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     },
+     {
+      "value": "arg3",
+      "type": "variable",
+      "position": 21
+     }
+    ],
+    "signature": {
+     "definition": "<n+s:a<n>>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "[",
+     "position": 34,
+     "expressions": [
+      {
+       "value": "arg1",
+       "type": "variable",
+       "position": 39
+      },
+      {
+       "value": "arg2",
+       "type": "variable",
+       "position": 46
+      },
+      {
+       "value": "arg3",
+       "type": "variable",
+       "position": 53
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case037": {
+  "expr": "λ($arg1, $arg2, $arg3)<n+s-:a<n>>{[$arg1, $arg2, $arg3]}(1, 2, \"a\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 57,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 58
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 61
+    },
+    {
+     "value": "a",
+     "type": "string",
+     "position": 66
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     },
+     {
+      "value": "arg3",
+      "type": "variable",
+      "position": 21
+     }
+    ],
+    "signature": {
+     "definition": "<n+s-:a<n>>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "[",
+     "position": 35,
+     "expressions": [
+      {
+       "value": "arg1",
+       "type": "variable",
+       "position": 40
+      },
+      {
+       "value": "arg2",
+       "type": "variable",
+       "position": 47
+      },
+      {
+       "value": "arg3",
+       "type": "variable",
+       "position": 54
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case038": {
+  "expr": "λ($arg1, $arg2, $arg3)<n+s-:a<n>>{[$arg1, $arg2, $arg3]}(1, 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 57,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 58
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 61
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     },
+     {
+      "value": "arg3",
+      "type": "variable",
+      "position": 21
+     }
+    ],
+    "signature": {
+     "definition": "<n+s-:a<n>>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "[",
+     "position": 35,
+     "expressions": [
+      {
+       "value": "arg1",
+       "type": "variable",
+       "position": 40
+      },
+      {
+       "value": "arg2",
+       "type": "variable",
+       "position": 47
+      },
+      {
+       "value": "arg3",
+       "type": "variable",
+       "position": 54
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case039": {
+  "expr": "λ($arg1, $arg2)<a<n>+:o>{{'$arg1': $arg1, '$arg2': $arg2}}([1, 2], [3, 4], [5, 6])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 59,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 60,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 61
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 64
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 68,
+     "expressions": [
+      {
+       "value": 3,
+       "type": "number",
+       "position": 69
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 72
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 76,
+     "expressions": [
+      {
+       "value": 5,
+       "type": "number",
+       "position": 77
+      },
+      {
+       "value": 6,
+       "type": "number",
+       "position": 80
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     }
+    ],
+    "signature": {
+     "definition": "<a<n>+:o>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "{",
+     "position": 26,
+     "lhs": [
+      [
+       {
+        "value": "$arg1",
+        "type": "string",
+        "position": 33
+       },
+       {
+        "value": "arg1",
+        "type": "variable",
+        "position": 40
+       }
+      ],
+      [
+       {
+        "value": "$arg2",
+        "type": "string",
+        "position": 49
+       },
+       {
+        "value": "arg2",
+        "type": "variable",
+        "position": 56
+       }
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "case040": {
+  "expr": "λ($arg1, $arg2)<s?n+:a<n>>{[$arg1, $arg2]}(1, 2, 3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 43,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 44
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 47
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 50
+    }
+   ],
+   "procedure": {
+    "type": "lambda",
+    "arguments": [
+     {
+      "value": "arg1",
+      "type": "variable",
+      "position": 7
+     },
+     {
+      "value": "arg2",
+      "type": "variable",
+      "position": 14
+     }
+    ],
+    "signature": {
+     "definition": "<s?n+:a<n>>",
+     "validate": {
+      "@function": "validate"
+     }
+    },
+    "position": 2,
+    "body": {
+     "type": "unary",
+     "value": "[",
+     "position": 28,
+     "expressions": [
+      {
+       "value": "arg1",
+       "type": "variable",
+       "position": 33
+      },
+      {
+       "value": "arg2",
+       "type": "variable",
+       "position": 40
+      }
+     ]
+    }
+   }
+  }
+ }
+}

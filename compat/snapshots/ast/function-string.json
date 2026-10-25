@@ -1,0 +1,1303 @@
+{
+ "case000": {
+  "expr": "$string(5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 5,
+     "type": "number",
+     "position": 9
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "$string(22/7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "/",
+     "position": 11,
+     "lhs": {
+      "value": 22,
+      "type": "number",
+      "position": 10
+     },
+     "rhs": {
+      "value": 7,
+      "type": "number",
+      "position": 12
+     }
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case002": {
+  "expr": "$string(1e100)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 1e+100,
+     "type": "number",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case003": {
+  "expr": "$string(1e-100)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 1e-100,
+     "type": "number",
+     "position": 14
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case004": {
+  "expr": "$string(1e-6)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 0.000001,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case005": {
+  "expr": "$string(1e-7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 1e-7,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case006": {
+  "expr": "$string(1e20)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 100000000000000000000,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case007": {
+  "expr": "$string(1e21)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 1e+21,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case008": {
+  "expr": "Account.Order.$string($sum(Product.(Price* Quantity)))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 22,
+     "arguments": [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 27,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Product",
+           "type": "name",
+           "position": 34
+          },
+          {
+           "type": "block",
+           "position": 36,
+           "expressions": [
+            {
+             "type": "binary",
+             "value": "*",
+             "position": 42,
+             "lhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "Price",
+                "type": "name",
+                "position": 41
+               }
+              ]
+             },
+             "rhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "Quantity",
+                "type": "name",
+                "position": 51
+               }
+              ]
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "procedure": {
+        "value": "sum",
+        "type": "variable",
+        "position": 26
+       }
+      }
+     ],
+     "procedure": {
+      "value": "string",
+      "type": "variable",
+      "position": 21
+     }
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "$string(true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": true,
+     "type": "value",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case010": {
+  "expr": "$string(false)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": false,
+     "type": "value",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case011": {
+  "expr": "$string(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case012": {
+  "expr": "$string(blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case013": {
+  "expr": "$string($string)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "string",
+     "type": "variable",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case014": {
+  "expr": "$string(function(){true})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "lambda",
+     "arguments": [],
+     "position": 17,
+     "body": {
+      "value": true,
+      "type": "value",
+      "position": 23
+     }
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case015": {
+  "expr": "$string(function(){1})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "lambda",
+     "arguments": [],
+     "position": 17,
+     "body": {
+      "value": 1,
+      "type": "number",
+      "position": 20
+     }
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case016": {
+  "expr": "$string({\"string\": \"hello\"})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "string",
+        "type": "string",
+        "position": 17
+       },
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 26
+       }
+      ]
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case017": {
+  "expr": "$string([\"string\", 5])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "value": "string",
+       "type": "string",
+       "position": 17
+      },
+      {
+       "value": 5,
+       "type": "number",
+       "position": 20
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case018": {
+  "expr": "$string({  \"string\": \"hello\",  \"number\": 78.8 / 2,  \"null\":null,  \"boolean\": false,  \"function\": $sum,  \"lambda\": function(){true},  \"object\": {    \"str\": \"another\",    \"lambda2\": function($n){$n}  },  \"array\": []})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "string",
+        "type": "string",
+        "position": 19
+       },
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 28
+       }
+      ],
+      [
+       {
+        "value": "number",
+        "type": "string",
+        "position": 39
+       },
+       {
+        "type": "binary",
+        "value": "/",
+        "position": 47,
+        "lhs": {
+         "value": 78.8,
+         "type": "number",
+         "position": 45
+        },
+        "rhs": {
+         "value": 2,
+         "type": "number",
+         "position": 49
+        }
+       }
+      ],
+      [
+       {
+        "value": "null",
+        "type": "string",
+        "position": 58
+       },
+       {
+        "value": null,
+        "type": "value",
+        "position": 63
+       }
+      ],
+      [
+       {
+        "value": "boolean",
+        "type": "string",
+        "position": 75
+       },
+       {
+        "value": false,
+        "type": "value",
+        "position": 82
+       }
+      ],
+      [
+       {
+        "value": "function",
+        "type": "string",
+        "position": 95
+       },
+       {
+        "value": "sum",
+        "type": "variable",
+        "position": 101
+       }
+      ],
+      [
+       {
+        "value": "lambda",
+        "type": "string",
+        "position": 112
+       },
+       {
+        "type": "lambda",
+        "arguments": [],
+        "position": 123,
+        "body": {
+         "value": true,
+         "type": "value",
+         "position": 129
+        }
+       }
+      ],
+      [
+       {
+        "value": "object",
+        "type": "string",
+        "position": 141
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 144,
+        "lhs": [
+         [
+          {
+           "value": "str",
+           "type": "string",
+           "position": 153
+          },
+          {
+           "value": "another",
+           "type": "string",
+           "position": 164
+          }
+         ],
+         [
+          {
+           "value": "lambda2",
+           "type": "string",
+           "position": 178
+          },
+          {
+           "type": "lambda",
+           "arguments": [
+            {
+             "value": "n",
+             "type": "variable",
+             "position": 191
+            }
+           ],
+           "position": 189,
+           "body": {
+            "value": "n",
+            "type": "variable",
+            "position": 195
+           }
+          }
+         ]
+        ]
+       }
+      ],
+      [
+       {
+        "value": "array",
+        "type": "string",
+        "position": 209
+       },
+       {
+        "type": "unary",
+        "value": "[",
+        "position": 212,
+        "expressions": []
+       }
+      ]
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case019": {
+  "expr": "$string(1/0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "/",
+     "position": 10,
+     "lhs": {
+      "value": 1,
+      "type": "number",
+      "position": 9
+     },
+     "rhs": {
+      "value": 0,
+      "type": "number",
+      "position": 11
+     }
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case020": {
+  "expr": "$string({\"inf\": 1/0})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "inf",
+        "type": "string",
+        "position": 14
+       },
+       {
+        "type": "binary",
+        "value": "/",
+        "position": 18,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 17
+        },
+        "rhs": {
+         "value": 0,
+         "type": "number",
+         "position": 19
+        }
+       }
+      ]
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case021": {
+  "expr": "$string(2,3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 2,
+     "type": "number",
+     "position": 9
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case022": {
+  "expr": "$string()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case023": {
+  "expr": "$string({\"string\": \"hello\"}, false)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "string",
+        "type": "string",
+        "position": 17
+       },
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 26
+       }
+      ]
+     ]
+    },
+    {
+     "value": false,
+     "type": "value",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case024": {
+  "expr": "$string({\"string\": \"hello\"}, true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "string",
+        "type": "string",
+        "position": 17
+       },
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 26
+       }
+      ]
+     ]
+    },
+    {
+     "value": true,
+     "type": "value",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case025": {
+  "expr": "$string([\"string\", 5], false)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "value": "string",
+       "type": "string",
+       "position": 17
+      },
+      {
+       "value": 5,
+       "type": "number",
+       "position": 20
+      }
+     ]
+    },
+    {
+     "value": false,
+     "type": "value",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case026": {
+  "expr": "$string([\"string\", 5], true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "value": "string",
+       "type": "string",
+       "position": 17
+      },
+      {
+       "value": 5,
+       "type": "number",
+       "position": 20
+      }
+     ]
+    },
+    {
+     "value": true,
+     "type": "value",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case027": {
+  "expr": "$string({  \"string\": \"hello\",  \"number\": 78.8 / 2,  \"null\":null,  \"boolean\": false,  \"function\": $sum,  \"lambda\": function(){true},  \"object\": {    \"str\": \"another\",    \"lambda2\": function($n){$n}  },  \"array\": []}, false)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "string",
+        "type": "string",
+        "position": 19
+       },
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 28
+       }
+      ],
+      [
+       {
+        "value": "number",
+        "type": "string",
+        "position": 39
+       },
+       {
+        "type": "binary",
+        "value": "/",
+        "position": 47,
+        "lhs": {
+         "value": 78.8,
+         "type": "number",
+         "position": 45
+        },
+        "rhs": {
+         "value": 2,
+         "type": "number",
+         "position": 49
+        }
+       }
+      ],
+      [
+       {
+        "value": "null",
+        "type": "string",
+        "position": 58
+       },
+       {
+        "value": null,
+        "type": "value",
+        "position": 63
+       }
+      ],
+      [
+       {
+        "value": "boolean",
+        "type": "string",
+        "position": 75
+       },
+       {
+        "value": false,
+        "type": "value",
+        "position": 82
+       }
+      ],
+      [
+       {
+        "value": "function",
+        "type": "string",
+        "position": 95
+       },
+       {
+        "value": "sum",
+        "type": "variable",
+        "position": 101
+       }
+      ],
+      [
+       {
+        "value": "lambda",
+        "type": "string",
+        "position": 112
+       },
+       {
+        "type": "lambda",
+        "arguments": [],
+        "position": 123,
+        "body": {
+         "value": true,
+         "type": "value",
+         "position": 129
+        }
+       }
+      ],
+      [
+       {
+        "value": "object",
+        "type": "string",
+        "position": 141
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 144,
+        "lhs": [
+         [
+          {
+           "value": "str",
+           "type": "string",
+           "position": 153
+          },
+          {
+           "value": "another",
+           "type": "string",
+           "position": 164
+          }
+         ],
+         [
+          {
+           "value": "lambda2",
+           "type": "string",
+           "position": 178
+          },
+          {
+           "type": "lambda",
+           "arguments": [
+            {
+             "value": "n",
+             "type": "variable",
+             "position": 191
+            }
+           ],
+           "position": 189,
+           "body": {
+            "value": "n",
+            "type": "variable",
+            "position": 195
+           }
+          }
+         ]
+        ]
+       }
+      ],
+      [
+       {
+        "value": "array",
+        "type": "string",
+        "position": 209
+       },
+       {
+        "type": "unary",
+        "value": "[",
+        "position": 212,
+        "expressions": []
+       }
+      ]
+     ]
+    },
+    {
+     "value": false,
+     "type": "value",
+     "position": 221
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case028": {
+  "expr": "$string({  \"string\": \"hello\",  \"number\": 78.8 / 2,  \"null\":null,  \"boolean\": false,  \"function\": $sum,  \"lambda\": function(){true},  \"object\": {    \"str\": \"another\",    \"lambda2\": function($n){$n}  },  \"array\": []}, true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "string",
+        "type": "string",
+        "position": 19
+       },
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 28
+       }
+      ],
+      [
+       {
+        "value": "number",
+        "type": "string",
+        "position": 39
+       },
+       {
+        "type": "binary",
+        "value": "/",
+        "position": 47,
+        "lhs": {
+         "value": 78.8,
+         "type": "number",
+         "position": 45
+        },
+        "rhs": {
+         "value": 2,
+         "type": "number",
+         "position": 49
+        }
+       }
+      ],
+      [
+       {
+        "value": "null",
+        "type": "string",
+        "position": 58
+       },
+       {
+        "value": null,
+        "type": "value",
+        "position": 63
+       }
+      ],
+      [
+       {
+        "value": "boolean",
+        "type": "string",
+        "position": 75
+       },
+       {
+        "value": false,
+        "type": "value",
+        "position": 82
+       }
+      ],
+      [
+       {
+        "value": "function",
+        "type": "string",
+        "position": 95
+       },
+       {
+        "value": "sum",
+        "type": "variable",
+        "position": 101
+       }
+      ],
+      [
+       {
+        "value": "lambda",
+        "type": "string",
+        "position": 112
+       },
+       {
+        "type": "lambda",
+        "arguments": [],
+        "position": 123,
+        "body": {
+         "value": true,
+         "type": "value",
+         "position": 129
+        }
+       }
+      ],
+      [
+       {
+        "value": "object",
+        "type": "string",
+        "position": 141
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 144,
+        "lhs": [
+         [
+          {
+           "value": "str",
+           "type": "string",
+           "position": 153
+          },
+          {
+           "value": "another",
+           "type": "string",
+           "position": 164
+          }
+         ],
+         [
+          {
+           "value": "lambda2",
+           "type": "string",
+           "position": 178
+          },
+          {
+           "type": "lambda",
+           "arguments": [
+            {
+             "value": "n",
+             "type": "variable",
+             "position": 191
+            }
+           ],
+           "position": 189,
+           "body": {
+            "value": "n",
+            "type": "variable",
+            "position": 195
+           }
+          }
+         ]
+        ]
+       }
+      ],
+      [
+       {
+        "value": "array",
+        "type": "string",
+        "position": 209
+       },
+       {
+        "type": "unary",
+        "value": "[",
+        "position": 212,
+        "expressions": []
+       }
+      ]
+     ]
+    },
+    {
+     "value": true,
+     "type": "value",
+     "position": 220
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case029": {
+  "expr": "$string()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case030": {
+  "expr": "$string(big_id)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "big_id",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ }
+}

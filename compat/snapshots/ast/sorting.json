@@ -1,0 +1,1090 @@
+{
+ "case000": {
+  "expr": "Account.Order.Product.Price^($)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 27
+    },
+    {
+     "type": "sort",
+     "position": 28,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 30
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "Account.Order.Product.Price^(<$)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 27
+    },
+    {
+     "type": "sort",
+     "position": 28,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 31
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "Account.Order.Product.Price^(>$)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 27
+    },
+    {
+     "type": "sort",
+     "position": 28,
+     "terms": [
+      {
+       "descending": true,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 31
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "Account.Order.Product^(Price).Description.Colour",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 28
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "Description",
+     "type": "name",
+     "position": 41
+    },
+    {
+     "value": "Colour",
+     "type": "name",
+     "position": 48
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "Account.Order.Product^(Price).SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 28
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 33
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "Account.Order.Product^(Price * Quantity).Description.Colour",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "binary",
+        "value": "*",
+        "position": 30,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 28
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Quantity",
+           "type": "name",
+           "position": 39
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "value": "Description",
+     "type": "name",
+     "position": 52
+    },
+    {
+     "value": "Colour",
+     "type": "name",
+     "position": 59
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "Account.Order.Product^(Quantity, Description.Colour).Description.Colour",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Quantity",
+          "type": "name",
+          "position": 31
+         }
+        ]
+       }
+      },
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Description",
+          "type": "name",
+          "position": 44
+         },
+         {
+          "value": "Colour",
+          "type": "name",
+          "position": 51
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "Description",
+     "type": "name",
+     "position": 64
+    },
+    {
+     "value": "Colour",
+     "type": "name",
+     "position": 71
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "Account.Order.Product^(Quantity, >Description.Colour).Description.Colour",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Quantity",
+          "type": "name",
+          "position": 31
+         }
+        ]
+       }
+      },
+      {
+       "descending": true,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Description",
+          "type": "name",
+          "position": 45
+         },
+         {
+          "value": "Colour",
+          "type": "name",
+          "position": 52
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "Description",
+     "type": "name",
+     "position": 65
+    },
+    {
+     "value": "Colour",
+     "type": "name",
+     "position": 72
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "Account.Order.Product^(Price).SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 28
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 33
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "Account.Order.Product^(Price).SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 28
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 33
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "Account.Order.Product^(Price).SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 28
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 33
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "Account.Order.Product^(Price).SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 28
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 33
+    }
+   ]
+  }
+ },
+ "case012": {
+  "expr": "Account.Order.Product^(Price).SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 28
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 33
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "Account.Order.Product^(Price).SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "sort",
+     "position": 22,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 28
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 33
+    }
+   ]
+  }
+ },
+ "case014": {
+  "expr": "$^(age).name",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "sort",
+     "position": 2,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "age",
+          "type": "name",
+          "position": 6
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "name",
+     "type": "name",
+     "position": 12
+    }
+   ]
+  }
+ },
+ "case015": {
+  "expr": "($^(age)).name",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "block",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 2
+        },
+        {
+         "type": "sort",
+         "position": 3,
+         "terms": [
+          {
+           "descending": false,
+           "expression": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "age",
+              "type": "name",
+              "position": 7
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "value": "name",
+     "type": "name",
+     "position": 14
+    }
+   ]
+  }
+ },
+ "case016": {
+  "expr": "$^(age)[0].name",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "sort",
+     "position": 2,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "age",
+          "type": "name",
+          "position": 6
+         }
+        ]
+       }
+      }
+     ],
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 9
+       },
+       "position": 8
+      }
+     ]
+    },
+    {
+     "value": "name",
+     "type": "name",
+     "position": 15
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "($^(age))[0].name",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "block",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 2
+        },
+        {
+         "type": "sort",
+         "position": 3,
+         "terms": [
+          {
+           "descending": false,
+           "expression": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "age",
+              "type": "name",
+              "position": 7
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 11
+       },
+       "position": 10
+      }
+     ]
+    },
+    {
+     "value": "name",
+     "type": "name",
+     "position": 17
+    }
+   ]
+  }
+ },
+ "case018": {
+  "expr": "($^(age)[0]).name",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "block",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 2
+        },
+        {
+         "type": "sort",
+         "position": 3,
+         "terms": [
+          {
+           "descending": false,
+           "expression": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "age",
+              "type": "name",
+              "position": 7
+             }
+            ]
+           }
+          }
+         ],
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "value": 0,
+            "type": "number",
+            "position": 10
+           },
+           "position": 9
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "value": "name",
+     "type": "name",
+     "position": 17
+    }
+   ]
+  }
+ },
+ "case019": {
+  "expr": "$[0]^(age)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 3
+       },
+       "position": 2
+      }
+     ]
+    },
+    {
+     "type": "sort",
+     "position": 5,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "age",
+          "type": "name",
+          "position": 9
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case020": {
+  "expr": "Account.Order#$o.Product^(ProductID).{ 'Product': `Product Name`, 'Order Index': $o }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "index": "o",
+     "tuple": true
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 24
+    },
+    {
+     "type": "sort",
+     "position": 25,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "ProductID",
+          "type": "name",
+          "position": 35
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 38,
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 48
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 64
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Order Index",
+        "type": "string",
+        "position": 79
+       },
+       {
+        "value": "o",
+        "type": "variable",
+        "position": 83
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

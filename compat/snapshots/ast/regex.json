@@ -1,0 +1,1694 @@
+{
+ "case000": {
+  "expr": "$split(\"ababbxabbcc\",/b+/)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": {
+      "@regex": "b+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case001": {
+  "expr": "$split(\"ababbxabbcc\",/b+/, 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": {
+      "@regex": "b+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 25
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case002": {
+  "expr": "$split(\"ababbxabbcc\",/d+/)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": {
+      "@regex": "d+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case003": {
+  "expr": "$contains(\"ababbxabbcc\",/ab+/)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": {
+      "@regex": "ab+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "contains",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case004": {
+  "expr": "$contains(\"ababbxabbcc\",/ax+/)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": {
+      "@regex": "ax+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "contains",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case005": {
+  "expr": "Account.Order.Product[$contains($.\"Product Name\", /hat/)].ProductID",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "function",
+        "value": "(",
+        "position": 32,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "",
+            "type": "variable",
+            "position": 33
+           },
+           {
+            "value": "Product Name",
+            "type": "name",
+            "position": 48
+           }
+          ]
+         },
+         {
+          "value": {
+           "@regex": "hat",
+           "flags": "g"
+          },
+          "type": "regex",
+          "position": 55
+         }
+        ],
+        "procedure": {
+         "value": "contains",
+         "type": "variable",
+         "position": 31
+        }
+       },
+       "position": 22
+      }
+     ]
+    },
+    {
+     "value": "ProductID",
+     "type": "name",
+     "position": 67
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "Account.Order.Product[$contains($.\"Product Name\", /hat/i)].ProductID",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "function",
+        "value": "(",
+        "position": 32,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "",
+            "type": "variable",
+            "position": 33
+           },
+           {
+            "value": "Product Name",
+            "type": "name",
+            "position": 48
+           }
+          ]
+         },
+         {
+          "value": {
+           "@regex": "hat",
+           "flags": "gi"
+          },
+          "type": "regex",
+          "position": 56
+         }
+        ],
+        "procedure": {
+         "value": "contains",
+         "type": "variable",
+         "position": 31
+        }
+       },
+       "position": 22
+      }
+     ]
+    },
+    {
+     "value": "ProductID",
+     "type": "name",
+     "position": 68
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "$replace(\"ababbxabbcc\",/b+/, \"yy\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "b+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 27
+    },
+    {
+     "value": "yy",
+     "type": "string",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case008": {
+  "expr": "$replace(\"ababbxabbcc\",/b+/, \"yy\", 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "b+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 27
+    },
+    {
+     "value": "yy",
+     "type": "string",
+     "position": 33
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case009": {
+  "expr": "$replace(\"ababbxabbcc\",/b+/, \"yy\", 0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "b+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 27
+    },
+    {
+     "value": "yy",
+     "type": "string",
+     "position": 33
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case010": {
+  "expr": "$replace(\"ababbxabbcc\",/d+/, \"yy\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "ababbxabbcc",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "d+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 27
+    },
+    {
+     "value": "yy",
+     "type": "string",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case011": {
+  "expr": "$replace(\"John Smith\", /(\\w+)\\s(\\w+)/, \"$2, $1\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "John Smith",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": {
+      "@regex": "(\\w+)\\s(\\w+)",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 37
+    },
+    {
+     "value": "$2, $1",
+     "type": "string",
+     "position": 47
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case012": {
+  "expr": "$replace(\"265USD\", /([0-9]+)USD/, \"$$$1\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "265USD",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": {
+      "@regex": "([0-9]+)USD",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 32
+    },
+    {
+     "value": "$$$1",
+     "type": "string",
+     "position": 40
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case013": {
+  "expr": "$replace(\"265USD\", /([0-9]+)USD/, \"$w\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "265USD",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": {
+      "@regex": "([0-9]+)USD",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 32
+    },
+    {
+     "value": "$w",
+     "type": "string",
+     "position": 38
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case014": {
+  "expr": "$replace(\"265USD\", /([0-9]+)USD/, \"$0 -> $$$1\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "265USD",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": {
+      "@regex": "([0-9]+)USD",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 32
+    },
+    {
+     "value": "$0 -> $$$1",
+     "type": "string",
+     "position": 46
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case015": {
+  "expr": "$replace(\"265USD\", /([0-9]+)USD/, \"$0$1$2\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "265USD",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": {
+      "@regex": "([0-9]+)USD",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 32
+    },
+    {
+     "value": "$0$1$2",
+     "type": "string",
+     "position": 42
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case016": {
+  "expr": "$replace(\"abcd\", /(ab)|(a)/, \"[1=$1][2=$2]\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abcd",
+     "type": "string",
+     "position": 15
+    },
+    {
+     "value": {
+      "@regex": "(ab)|(a)",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 27
+    },
+    {
+     "value": "[1=$1][2=$2]",
+     "type": "string",
+     "position": 43
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case017": {
+  "expr": "$replace(\"abracadabra\", /bra/, \"*\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abracadabra",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "bra",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 29
+    },
+    {
+     "value": "*",
+     "type": "string",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case018": {
+  "expr": "$replace(\"abracadabra\", /a.*a/, \"*\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abracadabra",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "a.*a",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 30
+    },
+    {
+     "value": "*",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case019": {
+  "expr": "$replace(\"abracadabra\", /a.*?a/, \"*\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abracadabra",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "a.*?a",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 31
+    },
+    {
+     "value": "*",
+     "type": "string",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case020": {
+  "expr": "$replace(\"abracadabra\", /a/, \"\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abracadabra",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "a",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 27
+    },
+    {
+     "value": "",
+     "type": "string",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case021": {
+  "expr": "$replace(\"abracadabra\", /a(.)/, \"a$1$1\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abracadabra",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": "a(.)",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 30
+    },
+    {
+     "value": "a$1$1",
+     "type": "string",
+     "position": 39
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case022": {
+  "expr": "$replace(\"abracadabra\", /.*?/, \"$1\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abracadabra",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": {
+      "@regex": ".*?",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 29
+    },
+    {
+     "value": "$1",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case023": {
+  "expr": "$replace(\"AAAA\", /A+/, \"b\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "AAAA",
+     "type": "string",
+     "position": 15
+    },
+    {
+     "value": {
+      "@regex": "A+",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 21
+    },
+    {
+     "value": "b",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case024": {
+  "expr": "$replace(\"AAAA\", /A+?/, \"b\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "AAAA",
+     "type": "string",
+     "position": 15
+    },
+    {
+     "value": {
+      "@regex": "A+?",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 22
+    },
+    {
+     "value": "b",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case025": {
+  "expr": "$replace(\"darted\", /^(.*?)d(.*)$/, \"$1c$2\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "darted",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": {
+      "@regex": "^(.*?)d(.*)$",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 33
+    },
+    {
+     "value": "$1c$2",
+     "type": "string",
+     "position": 42
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case026": {
+  "expr": "$replace(\"abcdefghijklmno\", /(a)(b)(c)(d)(e)(f)(g)(h)(i)(j)(k)(l)(m)/, \"$8$5$12$12$18$123\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abcdefghijklmno",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": {
+      "@regex": "(a)(b)(c)(d)(e)(f)(g)(h)(i)(j)(k)(l)(m)",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 69
+    },
+    {
+     "value": "$8$5$12$12$18$123",
+     "type": "string",
+     "position": 90
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case027": {
+  "expr": "$replace(\"abcdefghijklmno\", /xyz/, \"$8$5$12$12$18$123\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abcdefghijklmno",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": {
+      "@regex": "xyz",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 33
+    },
+    {
+     "value": "$8$5$12$12$18$123",
+     "type": "string",
+     "position": 54
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case028": {
+  "expr": "$replace(\"abcdefghijklmno\", /ijk/, \"$8$5$12$12$18$123\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abcdefghijklmno",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": {
+      "@regex": "ijk",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 33
+    },
+    {
+     "value": "$8$5$12$12$18$123",
+     "type": "string",
+     "position": 54
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case029": {
+  "expr": "$replace(\"abcdefghijklmno\", /(ijk)/, \"$8$5$12$12$18$123\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abcdefghijklmno",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": {
+      "@regex": "(ijk)",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 35
+    },
+    {
+     "value": "$8$5$12$12$18$123",
+     "type": "string",
+     "position": 56
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case030": {
+  "expr": "$replace(\"abcdefghijklmno\", /ijk/, \"$x\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abcdefghijklmno",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": {
+      "@regex": "ijk",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 33
+    },
+    {
+     "value": "$x",
+     "type": "string",
+     "position": 39
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case031": {
+  "expr": "$replace(\"abcdefghijklmno\", /(ijk)/, \"$x$\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "abcdefghijklmno",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": {
+      "@regex": "(ijk)",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 35
+    },
+    {
+     "value": "$x$",
+     "type": "string",
+     "position": 42
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case032": {
+  "expr": "Account.Order.Product.$replace($.\"Product Name\", /hat/i, function($match) { \"foo\" })",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 31,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 32
+        },
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 47
+        }
+       ]
+      },
+      {
+       "value": {
+        "@regex": "hat",
+        "flags": "gi"
+       },
+       "type": "regex",
+       "position": 55
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "match",
+         "type": "variable",
+         "position": 72
+        }
+       ],
+       "position": 66,
+       "body": {
+        "value": "foo",
+        "type": "string",
+        "position": 81
+       }
+      }
+     ],
+     "procedure": {
+      "value": "replace",
+      "type": "variable",
+      "position": 30
+     }
+    }
+   ]
+  }
+ },
+ "case033": {
+  "expr": "Account.Order.Product.$replace($.\"Product Name\", /(h)(at)/i, function($match) { $uppercase($match.match) })",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 31,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 32
+        },
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 47
+        }
+       ]
+      },
+      {
+       "value": {
+        "@regex": "(h)(at)",
+        "flags": "gi"
+       },
+       "type": "regex",
+       "position": 59
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "match",
+         "type": "variable",
+         "position": 76
+        }
+       ],
+       "position": 70,
+       "body": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 91,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 91,
+         "arguments": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "match",
+             "type": "variable",
+             "position": 97
+            },
+            {
+             "value": "match",
+             "type": "name",
+             "position": 103
+            }
+           ]
+          }
+         ],
+         "procedure": {
+          "value": "uppercase",
+          "type": "variable",
+          "position": 90
+         }
+        }
+       }
+      }
+     ],
+     "procedure": {
+      "value": "replace",
+      "type": "variable",
+      "position": 30
+     }
+    }
+   ]
+  }
+ },
+ "case034": {
+  "expr": "$replace(\"temperature = 68F today\", /(-?\\d+(?:\\.\\d*)?)F\\b/, function($m) { ($number($m.groups[0]) - 32) * 5/9 & \"C\" })",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "temperature = 68F today",
+     "type": "string",
+     "position": 34
+    },
+    {
+     "value": {
+      "@regex": "(-?\\d+(?:\\.\\d*)?)F\\b",
+      "flags": "g"
+     },
+     "type": "regex",
+     "position": 58
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "m",
+       "type": "variable",
+       "position": 71
+      }
+     ],
+     "position": 69,
+     "body": {
+      "type": "binary",
+      "value": "&",
+      "position": 111,
+      "lhs": {
+       "type": "binary",
+       "value": "/",
+       "position": 108,
+       "lhs": {
+        "type": "binary",
+        "value": "*",
+        "position": 105,
+        "lhs": {
+         "type": "block",
+         "position": 76,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "-",
+           "position": 99,
+           "lhs": {
+            "type": "function",
+            "value": "(",
+            "position": 84,
+            "arguments": [
+             {
+              "type": "path",
+              "steps": [
+               {
+                "value": "m",
+                "type": "variable",
+                "position": 86
+               },
+               {
+                "value": "groups",
+                "type": "name",
+                "position": 93,
+                "stages": [
+                 {
+                  "type": "filter",
+                  "expr": {
+                   "value": 0,
+                   "type": "number",
+                   "position": 95
+                  },
+                  "position": 94
+                 }
+                ]
+               }
+              ]
+             }
+            ],
+            "procedure": {
+             "value": "number",
+             "type": "variable",
+             "position": 83
+            }
+           },
+           "rhs": {
+            "value": 32,
+            "type": "number",
+            "position": 102
+           }
+          }
+         ]
+        },
+        "rhs": {
+         "value": 5,
+         "type": "number",
+         "position": 107
+        }
+       },
+       "rhs": {
+        "value": 9,
+        "type": "number",
+        "position": 109
+       }
+      },
+      "rhs": {
+       "value": "C",
+       "type": "string",
+       "position": 115
+      }
+     }
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case035": {
+  "expr": "Account.Order.Product.$replace($.\"Product Name\", /hat/i, function($match) { true })",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 31,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 32
+        },
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 47
+        }
+       ]
+      },
+      {
+       "value": {
+        "@regex": "hat",
+        "flags": "gi"
+       },
+       "type": "regex",
+       "position": 55
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "match",
+         "type": "variable",
+         "position": 72
+        }
+       ],
+       "position": 66,
+       "body": {
+        "value": true,
+        "type": "value",
+        "position": 80
+       }
+      }
+     ],
+     "procedure": {
+      "value": "replace",
+      "type": "variable",
+      "position": 30
+     }
+    }
+   ]
+  }
+ },
+ "case036": {
+  "expr": "Account.Order.Product.$replace($.\"Product Name\", /hat/i, function($match) { 42 })",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 31,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 32
+        },
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 47
+        }
+       ]
+      },
+      {
+       "value": {
+        "@regex": "hat",
+        "flags": "gi"
+       },
+       "type": "regex",
+       "position": 55
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "match",
+         "type": "variable",
+         "position": 72
+        }
+       ],
+       "position": 66,
+       "body": {
+        "value": 42,
+        "type": "number",
+        "position": 78
+       }
+      }
+     ],
+     "procedure": {
+      "value": "replace",
+      "type": "variable",
+      "position": 30
+     }
+    }
+   ]
+  }
+ },
+ "case037": {
+  "expr": "$map($, $match(?, /^(\\w*\\s\\w*)/)).match",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 5,
+     "arguments": [
+      {
+       "value": "",
+       "type": "variable",
+       "position": 6
+      },
+      {
+       "type": "partial",
+       "value": "(",
+       "position": 15,
+       "arguments": [
+        {
+         "value": "?",
+         "type": "operator",
+         "position": 16
+        },
+        {
+         "value": {
+          "@regex": "^(\\w*\\s\\w*)",
+          "flags": "g"
+         },
+         "type": "regex",
+         "position": 31
+        }
+       ],
+       "procedure": {
+        "value": "match",
+        "type": "variable",
+        "position": 14
+       }
+      }
+     ],
+     "procedure": {
+      "value": "map",
+      "type": "variable",
+      "position": 4
+     }
+    },
+    {
+     "value": "match",
+     "type": "name",
+     "position": 39
+    }
+   ]
+  }
+ },
+ "case038": {
+  "expr": "$map($, function($i){ $match($i, /^(\\w*\\s\\w*)/) }).match",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 5,
+     "arguments": [
+      {
+       "value": "",
+       "type": "variable",
+       "position": 6
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "i",
+         "type": "variable",
+         "position": 19
+        }
+       ],
+       "position": 17,
+       "body": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 29,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 29,
+         "arguments": [
+          {
+           "value": "i",
+           "type": "variable",
+           "position": 31
+          },
+          {
+           "value": {
+            "@regex": "^(\\w*\\s\\w*)",
+            "flags": "g"
+           },
+           "type": "regex",
+           "position": 46
+          }
+         ],
+         "procedure": {
+          "value": "match",
+          "type": "variable",
+          "position": 28
+         }
+        }
+       }
+      }
+     ],
+     "procedure": {
+      "value": "map",
+      "type": "variable",
+      "position": 4
+     }
+    },
+    {
+     "value": "match",
+     "type": "name",
+     "position": 56
+    }
+   ]
+  }
+ }
+}

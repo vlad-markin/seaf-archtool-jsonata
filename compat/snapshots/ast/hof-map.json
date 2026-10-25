@@ -1,0 +1,1137 @@
+{
+ "case000": {
+  "expr": "(  $data := {    \"one\": [1,2,3,4,5],    \"two\": [5,4,3,2,1]  };  $add := function($x){$x*$x};  $map($data.one, $add) )  ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 13,
+      "lhs": [
+       [
+        {
+         "value": "one",
+         "type": "string",
+         "position": 22
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 25,
+         "expressions": [
+          {
+           "value": 1,
+           "type": "number",
+           "position": 26
+          },
+          {
+           "value": 2,
+           "type": "number",
+           "position": 28
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 30
+          },
+          {
+           "value": 4,
+           "type": "number",
+           "position": 32
+          },
+          {
+           "value": 5,
+           "type": "number",
+           "position": 34
+          }
+         ]
+        }
+       ],
+       [
+        {
+         "value": "two",
+         "type": "string",
+         "position": 45
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 48,
+         "expressions": [
+          {
+           "value": 5,
+           "type": "number",
+           "position": 49
+          },
+          {
+           "value": 4,
+           "type": "number",
+           "position": 51
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 53
+          },
+          {
+           "value": 2,
+           "type": "number",
+           "position": 55
+          },
+          {
+           "value": 1,
+           "type": "number",
+           "position": 57
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 71,
+     "lhs": {
+      "value": "add",
+      "type": "variable",
+      "position": 68
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 83
+       }
+      ],
+      "position": 81,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 88,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 87
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 90
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 99,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "data",
+         "type": "variable",
+         "position": 104
+        },
+        {
+         "value": "one",
+         "type": "name",
+         "position": 108
+        }
+       ]
+      },
+      {
+       "value": "add",
+       "type": "variable",
+       "position": 114
+      }
+     ],
+     "procedure": {
+      "value": "map",
+      "type": "variable",
+      "position": 98
+     }
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "(  $data := {    \"one\": [1,2,3,4,5],    \"two\": [5,4,3,2,1]  };  $add := function($x){$x*$x};  $map($add) )  ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 13,
+      "lhs": [
+       [
+        {
+         "value": "one",
+         "type": "string",
+         "position": 22
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 25,
+         "expressions": [
+          {
+           "value": 1,
+           "type": "number",
+           "position": 26
+          },
+          {
+           "value": 2,
+           "type": "number",
+           "position": 28
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 30
+          },
+          {
+           "value": 4,
+           "type": "number",
+           "position": 32
+          },
+          {
+           "value": 5,
+           "type": "number",
+           "position": 34
+          }
+         ]
+        }
+       ],
+       [
+        {
+         "value": "two",
+         "type": "string",
+         "position": 45
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 48,
+         "expressions": [
+          {
+           "value": 5,
+           "type": "number",
+           "position": 49
+          },
+          {
+           "value": 4,
+           "type": "number",
+           "position": 51
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 53
+          },
+          {
+           "value": 2,
+           "type": "number",
+           "position": 55
+          },
+          {
+           "value": 1,
+           "type": "number",
+           "position": 57
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 71,
+     "lhs": {
+      "value": "add",
+      "type": "variable",
+      "position": 68
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 83
+       }
+      ],
+      "position": 81,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 88,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 87
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 90
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 99,
+     "arguments": [
+      {
+       "value": "add",
+       "type": "variable",
+       "position": 103
+      }
+     ],
+     "procedure": {
+      "value": "map",
+      "type": "variable",
+      "position": 98
+     }
+    }
+   ]
+  }
+ },
+ "case0010": {
+  "expr": "( $square := function($x){$x*$x}; $map([1], $square)[] )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 12,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 9
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 24
+       }
+      ],
+      "position": 22,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 29,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 28
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 31
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 39,
+     "arguments": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 40,
+       "expressions": [
+        {
+         "value": 1,
+         "type": "number",
+         "position": 41
+        }
+       ]
+      },
+      {
+       "value": "square",
+       "type": "variable",
+       "position": 51
+      }
+     ],
+     "procedure": {
+      "value": "map",
+      "type": "variable",
+      "position": 38
+     },
+     "keepArray": true
+    }
+   ]
+  }
+ },
+ "case0011": {
+  "expr": "( $data := [1]; $square := function($x){$x*$x}; $data ~> $map($square)[] )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 12,
+      "expressions": [
+       {
+        "value": 1,
+        "type": "number",
+        "position": 13
+       }
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 26,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 23
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 38
+       }
+      ],
+      "position": 36,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 43,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 42
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 45
+       }
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 56,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 53
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 62,
+      "arguments": [
+       {
+        "value": "square",
+        "type": "variable",
+        "position": 69
+       }
+      ],
+      "procedure": {
+       "value": "map",
+       "type": "variable",
+       "position": 61
+      },
+      "keepArray": true
+     },
+     "keepArray": true
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "$map([1,2,3], $string)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    },
+    {
+     "value": "string",
+     "type": "variable",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "map",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case003": {
+  "expr": "Account.Order.Product ~> $map(λ($prod, $index) { $index+1 & \": \" & $prod.\"Product Name\" })",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 24,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 13
+     },
+     {
+      "value": "Product",
+      "type": "name",
+      "position": 21
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 30,
+    "arguments": [
+     {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "prod",
+        "type": "variable",
+        "position": 37
+       },
+       {
+        "value": "index",
+        "type": "variable",
+        "position": 45
+       }
+      ],
+      "position": 32,
+      "body": {
+       "type": "binary",
+       "value": "&",
+       "position": 66,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 59,
+        "lhs": {
+         "type": "binary",
+         "value": "+",
+         "position": 56,
+         "lhs": {
+          "value": "index",
+          "type": "variable",
+          "position": 55
+         },
+         "rhs": {
+          "value": 1,
+          "type": "number",
+          "position": 57
+         }
+        },
+        "rhs": {
+         "value": ": ",
+         "type": "string",
+         "position": 64
+        }
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "prod",
+          "type": "variable",
+          "position": 72
+         },
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 87
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "procedure": {
+     "value": "map",
+     "type": "variable",
+     "position": 29
+    }
+   }
+  }
+ },
+ "case004": {
+  "expr": "Account.Order.Product ~> $map(λ($prod, $index, $arr) { $index+1 & \"/\" & $count($arr) & \": \" & $prod.\"Product Name\" })",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 24,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 13
+     },
+     {
+      "value": "Product",
+      "type": "name",
+      "position": 21
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 30,
+    "arguments": [
+     {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "prod",
+        "type": "variable",
+        "position": 37
+       },
+       {
+        "value": "index",
+        "type": "variable",
+        "position": 45
+       },
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 51
+       }
+      ],
+      "position": 32,
+      "body": {
+       "type": "binary",
+       "value": "&",
+       "position": 93,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 86,
+        "lhs": {
+         "type": "binary",
+         "value": "&",
+         "position": 71,
+         "lhs": {
+          "type": "binary",
+          "value": "&",
+          "position": 65,
+          "lhs": {
+           "type": "binary",
+           "value": "+",
+           "position": 62,
+           "lhs": {
+            "value": "index",
+            "type": "variable",
+            "position": 61
+           },
+           "rhs": {
+            "value": 1,
+            "type": "number",
+            "position": 63
+           }
+          },
+          "rhs": {
+           "value": "/",
+           "type": "string",
+           "position": 69
+          }
+         },
+         "rhs": {
+          "type": "function",
+          "value": "(",
+          "position": 79,
+          "arguments": [
+           {
+            "value": "arr",
+            "type": "variable",
+            "position": 83
+           }
+          ],
+          "procedure": {
+           "value": "count",
+           "type": "variable",
+           "position": 78
+          }
+         }
+        },
+        "rhs": {
+         "value": ": ",
+         "type": "string",
+         "position": 91
+        }
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "prod",
+          "type": "variable",
+          "position": 99
+         },
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 114
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "procedure": {
+     "value": "map",
+     "type": "variable",
+     "position": 29
+    }
+   }
+  }
+ },
+ "case005": {
+  "expr": "$map(Phone, function($v, $i) {$i[$v.type=\"office\"]})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Phone",
+       "type": "name",
+       "position": 10
+      }
+     ]
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 23
+      },
+      {
+       "value": "i",
+       "type": "variable",
+       "position": 27
+      }
+     ],
+     "position": 21,
+     "body": {
+      "value": "i",
+      "type": "variable",
+      "position": 32,
+      "predicate": [
+       {
+        "type": "filter",
+        "expr": {
+         "type": "binary",
+         "value": "=",
+         "position": 41,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "v",
+            "type": "variable",
+            "position": 35
+           },
+           {
+            "value": "type",
+            "type": "name",
+            "position": 40
+           }
+          ]
+         },
+         "rhs": {
+          "value": "office",
+          "type": "string",
+          "position": 49
+         }
+        },
+        "position": 33
+       }
+      ]
+     }
+    }
+   ],
+   "procedure": {
+    "value": "map",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case006": {
+  "expr": "$map(Phone, function($v, $i) {$v.type=\"office\" ? $i})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Phone",
+       "type": "name",
+       "position": 10
+      }
+     ]
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 23
+      },
+      {
+       "value": "i",
+       "type": "variable",
+       "position": 27
+      }
+     ],
+     "position": 21,
+     "body": {
+      "type": "condition",
+      "position": 48,
+      "condition": {
+       "type": "binary",
+       "value": "=",
+       "position": 38,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "v",
+          "type": "variable",
+          "position": 32
+         },
+         {
+          "value": "type",
+          "type": "name",
+          "position": 37
+         }
+        ]
+       },
+       "rhs": {
+        "value": "office",
+        "type": "string",
+        "position": 46
+       }
+      },
+      "then": {
+       "value": "i",
+       "type": "variable",
+       "position": 51
+      }
+     }
+    }
+   ],
+   "procedure": {
+    "value": "map",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case007": {
+  "expr": "$map(Phone, function($v, $i) {$v.type=\"office\" ? $i: null})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Phone",
+       "type": "name",
+       "position": 10
+      }
+     ]
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 23
+      },
+      {
+       "value": "i",
+       "type": "variable",
+       "position": 27
+      }
+     ],
+     "position": 21,
+     "body": {
+      "type": "condition",
+      "position": 48,
+      "condition": {
+       "type": "binary",
+       "value": "=",
+       "position": 38,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "v",
+          "type": "variable",
+          "position": 32
+         },
+         {
+          "value": "type",
+          "type": "name",
+          "position": 37
+         }
+        ]
+       },
+       "rhs": {
+        "value": "office",
+        "type": "string",
+        "position": 46
+       }
+      },
+      "then": {
+       "value": "i",
+       "type": "variable",
+       "position": 51
+      },
+      "else": {
+       "value": null,
+       "type": "value",
+       "position": 57
+      }
+     }
+    }
+   ],
+   "procedure": {
+    "value": "map",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case008": {
+  "expr": "$map(Phone, function($v, $i) {$v.type=\"office\" ? $i: null})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Phone",
+       "type": "name",
+       "position": 10
+      }
+     ]
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 23
+      },
+      {
+       "value": "i",
+       "type": "variable",
+       "position": 27
+      }
+     ],
+     "position": 21,
+     "body": {
+      "type": "condition",
+      "position": 48,
+      "condition": {
+       "type": "binary",
+       "value": "=",
+       "position": 38,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "v",
+          "type": "variable",
+          "position": 32
+         },
+         {
+          "value": "type",
+          "type": "name",
+          "position": 37
+         }
+        ]
+       },
+       "rhs": {
+        "value": "office",
+        "type": "string",
+        "position": 46
+       }
+      },
+      "then": {
+       "value": "i",
+       "type": "variable",
+       "position": 51
+      },
+      "else": {
+       "value": null,
+       "type": "value",
+       "position": 57
+      }
+     }
+    }
+   ],
+   "procedure": {
+    "value": "map",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case009": {
+  "expr": "$map([0, 1, 2], $boolean)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 0,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 1,
+       "type": "number",
+       "position": 10
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 13
+      }
+     ]
+    },
+    {
+     "value": "boolean",
+     "type": "variable",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "map",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ }
+}

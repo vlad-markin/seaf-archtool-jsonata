@@ -1,0 +1,222 @@
+{
+ "case000": {
+  "expr": "$formatBase(100)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "value": 100,
+     "type": "number",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ },
+ "case001": {
+  "expr": "$formatBase(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ },
+ "case002": {
+  "expr": "$formatBase(100, 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "value": 100,
+     "type": "number",
+     "position": 15
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 18
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ },
+ "case003": {
+  "expr": "$formatBase(-100, 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "value": -100,
+     "type": "number",
+     "position": 16
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ },
+ "case004": {
+  "expr": "$formatBase(100, 36)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "value": 100,
+     "type": "number",
+     "position": 15
+    },
+    {
+     "value": 36,
+     "type": "number",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ },
+ "case005": {
+  "expr": "$formatBase(99.5, 2.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "value": 99.5,
+     "type": "number",
+     "position": 16
+    },
+    {
+     "value": 2.5,
+     "type": "number",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ },
+ "case006": {
+  "expr": "$formatBase(100, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "value": 100,
+     "type": "number",
+     "position": 15
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 18
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ },
+ "case007": {
+  "expr": "$formatBase(100, 37)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "value": 100,
+     "type": "number",
+     "position": 15
+    },
+    {
+     "value": 37,
+     "type": "number",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ },
+ "case008": {
+  "expr": "$formatBase(big_id)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 12,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "big_id",
+       "type": "name",
+       "position": 18
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "formatBase",
+    "type": "variable",
+    "position": 11
+   }
+  }
+ }
+}

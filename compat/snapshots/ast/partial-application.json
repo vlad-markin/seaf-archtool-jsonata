@@ -1,0 +1,355 @@
+{
+ "case000": {
+  "expr": "(  $add := function($x, $y){$x+$y};  $add2 := $add(?, 2);  $add2(3))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "add",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 22
+       },
+       {
+        "value": "y",
+        "type": "variable",
+        "position": 26
+       }
+      ],
+      "position": 20,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 31,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 30
+       },
+       "rhs": {
+        "value": "y",
+        "type": "variable",
+        "position": 33
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 45,
+     "lhs": {
+      "value": "add2",
+      "type": "variable",
+      "position": 42
+     },
+     "rhs": {
+      "type": "partial",
+      "value": "(",
+      "position": 51,
+      "arguments": [
+       {
+        "value": "?",
+        "type": "operator",
+        "position": 52
+       },
+       {
+        "value": 2,
+        "type": "number",
+        "position": 55
+       }
+      ],
+      "procedure": {
+       "value": "add",
+       "type": "variable",
+       "position": 50
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 65,
+     "arguments": [
+      {
+       "value": 3,
+       "type": "number",
+       "position": 66
+      }
+     ],
+     "procedure": {
+      "value": "add2",
+      "type": "variable",
+      "position": 64
+     }
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "(  $add := function($x, $y){$x+$y};  $add2 := $add(2, ?);  $add2(4))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "add",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 22
+       },
+       {
+        "value": "y",
+        "type": "variable",
+        "position": 26
+       }
+      ],
+      "position": 20,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 31,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 30
+       },
+       "rhs": {
+        "value": "y",
+        "type": "variable",
+        "position": 33
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 45,
+     "lhs": {
+      "value": "add2",
+      "type": "variable",
+      "position": 42
+     },
+     "rhs": {
+      "type": "partial",
+      "value": "(",
+      "position": 51,
+      "arguments": [
+       {
+        "value": 2,
+        "type": "number",
+        "position": 52
+       },
+       {
+        "value": "?",
+        "type": "operator",
+        "position": 55
+       }
+      ],
+      "procedure": {
+       "value": "add",
+       "type": "variable",
+       "position": 50
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 65,
+     "arguments": [
+      {
+       "value": 4,
+       "type": "number",
+       "position": 66
+      }
+     ],
+     "procedure": {
+      "value": "add2",
+      "type": "variable",
+      "position": 64
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "(  $firstn := $substring(?, 0, ?);  $first5 := $firstn(?, 5);  $first5(\"Hello World\"))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 13,
+     "lhs": {
+      "value": "firstn",
+      "type": "variable",
+      "position": 10
+     },
+     "rhs": {
+      "type": "partial",
+      "value": "(",
+      "position": 25,
+      "arguments": [
+       {
+        "value": "?",
+        "type": "operator",
+        "position": 26
+       },
+       {
+        "value": 0,
+        "type": "number",
+        "position": 29
+       },
+       {
+        "value": "?",
+        "type": "operator",
+        "position": 32
+       }
+      ],
+      "procedure": {
+       "value": "substring",
+       "type": "variable",
+       "position": 24
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 46,
+     "lhs": {
+      "value": "first5",
+      "type": "variable",
+      "position": 43
+     },
+     "rhs": {
+      "type": "partial",
+      "value": "(",
+      "position": 55,
+      "arguments": [
+       {
+        "value": "?",
+        "type": "operator",
+        "position": 56
+       },
+       {
+        "value": 5,
+        "type": "number",
+        "position": 59
+       }
+      ],
+      "procedure": {
+       "value": "firstn",
+       "type": "variable",
+       "position": 54
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 71,
+     "arguments": [
+      {
+       "value": "Hello World",
+       "type": "string",
+       "position": 84
+      }
+     ],
+     "procedure": {
+      "value": "first5",
+      "type": "variable",
+      "position": 70
+     }
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "substring(?, 0, ?)",
+  "ast": {
+   "type": "partial",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "?",
+     "type": "operator",
+     "position": 11
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 14
+    },
+    {
+     "value": "?",
+     "type": "operator",
+     "position": 17
+    }
+   ],
+   "procedure": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "substring",
+      "type": "name",
+      "position": 9
+     }
+    ]
+   }
+  }
+ },
+ "case004": {
+  "expr": "unknown(?)",
+  "ast": {
+   "type": "partial",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "?",
+     "type": "operator",
+     "position": 9
+    }
+   ],
+   "procedure": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "unknown",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   }
+  }
+ }
+}

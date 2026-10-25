@@ -1,0 +1,67 @@
+{
+ "case000": {
+  "expr": "$encodeUrlComponent(\"?x=test\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "value": "?x=test",
+     "type": "string",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "encodeUrlComponent",
+    "type": "variable",
+    "position": 19
+   }
+  }
+ },
+ "case001": {
+  "expr": "$encodeUrlComponent(blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 24
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "encodeUrlComponent",
+    "type": "variable",
+    "position": 19
+   }
+  }
+ },
+ "case002": {
+  "expr": "$encodeUrlComponent('\ud800')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 20,
+   "arguments": [
+    {
+     "value": "\ud800",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "encodeUrlComponent",
+    "type": "variable",
+    "position": 19
+   }
+  }
+ }
+}

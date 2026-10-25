@@ -1,0 +1,575 @@
+{
+ "case000": {
+  "expr": "(  $data := {    \"one\": [1,2,3,4,5],    \"two\": [5,4,3,2,1]  };  $map($zip($data.one, $data.two), $sum)) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 13,
+      "lhs": [
+       [
+        {
+         "value": "one",
+         "type": "string",
+         "position": 22
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 25,
+         "expressions": [
+          {
+           "value": 1,
+           "type": "number",
+           "position": 26
+          },
+          {
+           "value": 2,
+           "type": "number",
+           "position": 28
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 30
+          },
+          {
+           "value": 4,
+           "type": "number",
+           "position": 32
+          },
+          {
+           "value": 5,
+           "type": "number",
+           "position": 34
+          }
+         ]
+        }
+       ],
+       [
+        {
+         "value": "two",
+         "type": "string",
+         "position": 45
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 48,
+         "expressions": [
+          {
+           "value": 5,
+           "type": "number",
+           "position": 49
+          },
+          {
+           "value": 4,
+           "type": "number",
+           "position": 51
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 53
+          },
+          {
+           "value": 2,
+           "type": "number",
+           "position": 55
+          },
+          {
+           "value": 1,
+           "type": "number",
+           "position": 57
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 69,
+     "arguments": [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 74,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "data",
+           "type": "variable",
+           "position": 79
+          },
+          {
+           "value": "one",
+           "type": "name",
+           "position": 83
+          }
+         ]
+        },
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "data",
+           "type": "variable",
+           "position": 90
+          },
+          {
+           "value": "two",
+           "type": "name",
+           "position": 94
+          }
+         ]
+        }
+       ],
+       "procedure": {
+        "value": "zip",
+        "type": "variable",
+        "position": 73
+       }
+      },
+      {
+       "value": "sum",
+       "type": "variable",
+       "position": 101
+      }
+     ],
+     "procedure": {
+      "value": "map",
+      "type": "variable",
+      "position": 68
+     }
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "(  $data := {    \"one\": [1,2,3,4,5],    \"two\": [5,4,3,2,1]  };  $data.$zip(one, two) ~> $map($sum)) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 13,
+      "lhs": [
+       [
+        {
+         "value": "one",
+         "type": "string",
+         "position": 22
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 25,
+         "expressions": [
+          {
+           "value": 1,
+           "type": "number",
+           "position": 26
+          },
+          {
+           "value": 2,
+           "type": "number",
+           "position": 28
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 30
+          },
+          {
+           "value": 4,
+           "type": "number",
+           "position": 32
+          },
+          {
+           "value": 5,
+           "type": "number",
+           "position": 34
+          }
+         ]
+        }
+       ],
+       [
+        {
+         "value": "two",
+         "type": "string",
+         "position": 45
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 48,
+         "expressions": [
+          {
+           "value": 5,
+           "type": "number",
+           "position": 49
+          },
+          {
+           "value": 4,
+           "type": "number",
+           "position": 51
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 53
+          },
+          {
+           "value": 2,
+           "type": "number",
+           "position": 55
+          },
+          {
+           "value": 1,
+           "type": "number",
+           "position": 57
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 87,
+     "lhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "data",
+        "type": "variable",
+        "position": 69
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 75,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "one",
+            "type": "name",
+            "position": 78
+           }
+          ]
+         },
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "two",
+            "type": "name",
+            "position": 83
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "zip",
+         "type": "variable",
+         "position": 74
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 93,
+      "arguments": [
+       {
+        "value": "sum",
+        "type": "variable",
+        "position": 97
+       }
+      ],
+      "procedure": {
+       "value": "map",
+       "type": "variable",
+       "position": 92
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "(  $data := {    \"one\": [1],    \"two\": [5]  };  $data.$zip(one, two) ~> $map($sum)) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 13,
+      "lhs": [
+       [
+        {
+         "value": "one",
+         "type": "string",
+         "position": 22
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 25,
+         "expressions": [
+          {
+           "value": 1,
+           "type": "number",
+           "position": 26
+          }
+         ]
+        }
+       ],
+       [
+        {
+         "value": "two",
+         "type": "string",
+         "position": 37
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 40,
+         "expressions": [
+          {
+           "value": 5,
+           "type": "number",
+           "position": 41
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 71,
+     "lhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "data",
+        "type": "variable",
+        "position": 53
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 59,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "one",
+            "type": "name",
+            "position": 62
+           }
+          ]
+         },
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "two",
+            "type": "name",
+            "position": 67
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "zip",
+         "type": "variable",
+         "position": 58
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 77,
+      "arguments": [
+       {
+        "value": "sum",
+        "type": "variable",
+        "position": 81
+       }
+      ],
+      "procedure": {
+       "value": "map",
+       "type": "variable",
+       "position": 76
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "(  $data := {    \"one\": 1,    \"two\": 5  };  $data.$zip(one, two) ~> $map($sum)) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 13,
+      "lhs": [
+       [
+        {
+         "value": "one",
+         "type": "string",
+         "position": 22
+        },
+        {
+         "value": 1,
+         "type": "number",
+         "position": 25
+        }
+       ],
+       [
+        {
+         "value": "two",
+         "type": "string",
+         "position": 35
+        },
+        {
+         "value": 5,
+         "type": "number",
+         "position": 38
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 67,
+     "lhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "data",
+        "type": "variable",
+        "position": 49
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 55,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "one",
+            "type": "name",
+            "position": 58
+           }
+          ]
+         },
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "two",
+            "type": "name",
+            "position": 63
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "zip",
+         "type": "variable",
+         "position": 54
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 73,
+      "arguments": [
+       {
+        "value": "sum",
+        "type": "variable",
+        "position": 77
+       }
+      ],
+      "procedure": {
+       "value": "map",
+       "type": "variable",
+       "position": 72
+      }
+     }
+    }
+   ]
+  }
+ }
+}

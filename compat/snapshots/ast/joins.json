@@ -1,0 +1,4472 @@
+{
+ "employee-map-reduce[0]": {
+  "expr": "Employee@$e.(Contact)[ssn = $e.SSN].{ 'name': $e.(FirstName & ' ' & Surname), 'phone': Phone[type='mobile'].number }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 13,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Contact",
+         "type": "name",
+         "position": 20
+        }
+       ]
+      }
+     ],
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 27,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 25
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 30
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 34
+          }
+         ]
+        }
+       },
+       "position": 22
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 37,
+     "lhs": [
+      [
+       {
+        "value": "name",
+        "type": "string",
+        "position": 44
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "e",
+          "type": "variable",
+          "position": 48
+         },
+         {
+          "type": "block",
+          "position": 50,
+          "expressions": [
+           {
+            "type": "binary",
+            "value": "&",
+            "position": 67,
+            "lhs": {
+             "type": "binary",
+             "value": "&",
+             "position": 61,
+             "lhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "FirstName",
+                "type": "name",
+                "position": 59
+               }
+              ]
+             },
+             "rhs": {
+              "value": " ",
+              "type": "string",
+              "position": 65
+             }
+            },
+            "rhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "Surname",
+               "type": "name",
+               "position": 75
+              }
+             ]
+            }
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "phone",
+        "type": "string",
+        "position": 85
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Phone",
+          "type": "name",
+          "position": 92,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "type": "binary",
+             "value": "=",
+             "position": 98,
+             "lhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "type",
+                "type": "name",
+                "position": 97
+               }
+              ]
+             },
+             "rhs": {
+              "value": "mobile",
+              "type": "string",
+              "position": 106
+             }
+            },
+            "position": 93
+           }
+          ]
+         },
+         {
+          "value": "number",
+          "type": "name",
+          "position": 114
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "employee-map-reduce[1]": {
+  "expr": "Employee@$e.(Contact)[ssn = $e.SSN]{ $e.FirstName: Phone[type='mobile'].number }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 13,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Contact",
+         "type": "name",
+         "position": 20
+        }
+       ]
+      }
+     ],
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 27,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 25
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 30
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 34
+          }
+         ]
+        }
+       },
+       "position": 22
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "e",
+         "type": "variable",
+         "position": 39
+        },
+        {
+         "value": "FirstName",
+         "type": "name",
+         "position": 49
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Phone",
+         "type": "name",
+         "position": 56,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "type": "binary",
+            "value": "=",
+            "position": 62,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "type",
+               "type": "name",
+               "position": 61
+              }
+             ]
+            },
+            "rhs": {
+             "value": "mobile",
+             "type": "string",
+             "position": 70
+            }
+           },
+           "position": 57
+          }
+         ]
+        },
+        {
+         "value": "number",
+         "type": "name",
+         "position": 78
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 36
+   }
+  }
+ },
+ "employee-map-reduce[2]": {
+  "expr": "Employee@$e.Contact@$c[$c.ssn = $e.SSN]{ $e.(FirstName & ' ' & Surname): $join($c.Phone.number, ', ') }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 19,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 31,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 25
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 29
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 34
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 38
+          }
+         ]
+        }
+       },
+       "position": 23
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "e",
+         "type": "variable",
+         "position": 43
+        },
+        {
+         "type": "block",
+         "position": 45,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "&",
+           "position": 62,
+           "lhs": {
+            "type": "binary",
+            "value": "&",
+            "position": 56,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "FirstName",
+               "type": "name",
+               "position": 54
+              }
+             ]
+            },
+            "rhs": {
+             "value": " ",
+             "type": "string",
+             "position": 60
+            }
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Surname",
+              "type": "name",
+              "position": 70
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "type": "function",
+       "value": "(",
+       "position": 79,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 81
+          },
+          {
+           "value": "Phone",
+           "type": "name",
+           "position": 87
+          },
+          {
+           "value": "number",
+           "type": "name",
+           "position": 94
+          }
+         ]
+        },
+        {
+         "value": ", ",
+         "type": "string",
+         "position": 100
+        }
+       ],
+       "procedure": {
+        "value": "join",
+        "type": "variable",
+        "position": 78
+       }
+      }
+     ]
+    ],
+    "position": 40
+   }
+  }
+ },
+ "employee-map-reduce[3]": {
+  "expr": "Employee@$e.Contact@$c[$c.ssn = $e.SSN]{ $e.(FirstName & ' ' & Surname): $c.Phone[type != 'home'].number ~> $join(', ') }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 19,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 31,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 25
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 29
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 34
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 38
+          }
+         ]
+        }
+       },
+       "position": 23
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "e",
+         "type": "variable",
+         "position": 43
+        },
+        {
+         "type": "block",
+         "position": 45,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "&",
+           "position": 62,
+           "lhs": {
+            "type": "binary",
+            "value": "&",
+            "position": 56,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "FirstName",
+               "type": "name",
+               "position": 54
+              }
+             ]
+            },
+            "rhs": {
+             "value": " ",
+             "type": "string",
+             "position": 60
+            }
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Surname",
+              "type": "name",
+              "position": 70
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "type": "apply",
+       "value": "~>",
+       "position": 107,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "c",
+          "type": "variable",
+          "position": 75
+         },
+         {
+          "value": "Phone",
+          "type": "name",
+          "position": 81,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "type": "binary",
+             "value": "!=",
+             "position": 89,
+             "lhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "type",
+                "type": "name",
+                "position": 86
+               }
+              ]
+             },
+             "rhs": {
+              "value": "home",
+              "type": "string",
+              "position": 96
+             }
+            },
+            "position": 82
+           }
+          ]
+         },
+         {
+          "value": "number",
+          "type": "name",
+          "position": 104
+         }
+        ]
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 114,
+        "arguments": [
+         {
+          "value": ", ",
+          "type": "string",
+          "position": 118
+         }
+        ],
+        "procedure": {
+         "value": "join",
+         "type": "variable",
+         "position": 113
+        }
+       }
+      }
+     ]
+    ],
+    "position": 40
+   }
+  }
+ },
+ "employee-map-reduce[4]": {
+  "expr": "Employee@$e.Contact@$c[$c.ssn = $e.SSN]{ $e.(FirstName & ' ' & Surname): $c.Phone[type != 'home'].number }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 19,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 31,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 25
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 29
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 34
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 38
+          }
+         ]
+        }
+       },
+       "position": 23
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "e",
+         "type": "variable",
+         "position": 43
+        },
+        {
+         "type": "block",
+         "position": 45,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "&",
+           "position": 62,
+           "lhs": {
+            "type": "binary",
+            "value": "&",
+            "position": 56,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "FirstName",
+               "type": "name",
+               "position": 54
+              }
+             ]
+            },
+            "rhs": {
+             "value": " ",
+             "type": "string",
+             "position": 60
+            }
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Surname",
+              "type": "name",
+              "position": 70
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "c",
+         "type": "variable",
+         "position": 75
+        },
+        {
+         "value": "Phone",
+         "type": "name",
+         "position": 81,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "type": "binary",
+            "value": "!=",
+            "position": 89,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "type",
+               "type": "name",
+               "position": 86
+              }
+             ]
+            },
+            "rhs": {
+             "value": "home",
+             "type": "string",
+             "position": 96
+            }
+           },
+           "position": 82
+          }
+         ]
+        },
+        {
+         "value": "number",
+         "type": "name",
+         "position": 104
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 40
+   }
+  }
+ },
+ "employee-map-reduce[5]": {
+  "expr": "Employee@$e.Contact@$c[$c.ssn = $e.SSN]{ $e.(FirstName & ' ' & Surname): $c.Phone[type != 'home'].number[] }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 19,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 31,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 25
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 29
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 34
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 38
+          }
+         ]
+        }
+       },
+       "position": 23
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "e",
+         "type": "variable",
+         "position": 43
+        },
+        {
+         "type": "block",
+         "position": 45,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "&",
+           "position": 62,
+           "lhs": {
+            "type": "binary",
+            "value": "&",
+            "position": 56,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "FirstName",
+               "type": "name",
+               "position": 54
+              }
+             ]
+            },
+            "rhs": {
+             "value": " ",
+             "type": "string",
+             "position": 60
+            }
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Surname",
+              "type": "name",
+              "position": 70
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "c",
+         "type": "variable",
+         "position": 75
+        },
+        {
+         "value": "Phone",
+         "type": "name",
+         "position": 81,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "type": "binary",
+            "value": "!=",
+            "position": 89,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "type",
+               "type": "name",
+               "position": 86
+              }
+             ]
+            },
+            "rhs": {
+             "value": "home",
+             "type": "string",
+             "position": 96
+            }
+           },
+           "position": 82
+          }
+         ]
+        },
+        {
+         "value": "number",
+         "type": "name",
+         "position": 104,
+         "keepArray": true
+        }
+       ],
+       "keepSingletonArray": true
+      }
+     ]
+    ],
+    "position": 40
+   }
+  }
+ },
+ "employee-map-reduce[6]": {
+  "expr": "Employee@$e.Contact@$c[$c.ssn = $e.SSN]{ $e.FirstName: $c.Phone.number }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 19,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 31,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 25
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 29
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 34
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 38
+          }
+         ]
+        }
+       },
+       "position": 23
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "e",
+         "type": "variable",
+         "position": 43
+        },
+        {
+         "value": "FirstName",
+         "type": "name",
+         "position": 53
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "c",
+         "type": "variable",
+         "position": 57
+        },
+        {
+         "value": "Phone",
+         "type": "name",
+         "position": 63
+        },
+        {
+         "value": "number",
+         "type": "name",
+         "position": 70
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 40
+   }
+  }
+ },
+ "employee-map-reduce[7]": {
+  "expr": "Employee@$e^($e.Surname).Contact@$c[$e.SSN=$c.ssn].{ 'name': $e.Surname, 'phone': $c.Phone.number }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "type": "sort",
+     "position": 12,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "e",
+          "type": "variable",
+          "position": 15
+         },
+         {
+          "value": "Surname",
+          "type": "name",
+          "position": 23
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 32,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 43,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 38
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 42
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 45
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 49
+          }
+         ]
+        }
+       },
+       "position": 36
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 52,
+     "lhs": [
+      [
+       {
+        "value": "name",
+        "type": "string",
+        "position": 59
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "e",
+          "type": "variable",
+          "position": 63
+         },
+         {
+          "value": "Surname",
+          "type": "name",
+          "position": 71
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "phone",
+        "type": "string",
+        "position": 80
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "c",
+          "type": "variable",
+          "position": 84
+         },
+         {
+          "value": "Phone",
+          "type": "name",
+          "position": 90
+         },
+         {
+          "value": "number",
+          "type": "name",
+          "position": 97
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "employee-map-reduce[8]": {
+  "expr": "Employee@$e^($e.FirstName).Contact@$c[$e.SSN=$c.ssn].{ 'name': $e.Surname, 'phone': $c.Phone.number }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "type": "sort",
+     "position": 12,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "e",
+          "type": "variable",
+          "position": 15
+         },
+         {
+          "value": "FirstName",
+          "type": "name",
+          "position": 25
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 34,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 45,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 40
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 44
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 47
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 51
+          }
+         ]
+        }
+       },
+       "position": 38
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 54,
+     "lhs": [
+      [
+       {
+        "value": "name",
+        "type": "string",
+        "position": 61
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "e",
+          "type": "variable",
+          "position": 65
+         },
+         {
+          "value": "Surname",
+          "type": "name",
+          "position": 73
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "phone",
+        "type": "string",
+        "position": 82
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "c",
+          "type": "variable",
+          "position": 86
+         },
+         {
+          "value": "Phone",
+          "type": "name",
+          "position": 92
+         },
+         {
+          "value": "number",
+          "type": "name",
+          "position": 99
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "employee-map-reduce[9]": {
+  "expr": "Employee@$e.Contact@$c[$e.SSN=$c.ssn]{ $e.Surname: $c.Phone.number^($) }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 19,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 30,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 25
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 29
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 32
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 36
+          }
+         ]
+        }
+       },
+       "position": 23
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "e",
+         "type": "variable",
+         "position": 41
+        },
+        {
+         "value": "Surname",
+         "type": "name",
+         "position": 49
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "c",
+         "type": "variable",
+         "position": 53
+        },
+        {
+         "value": "Phone",
+         "type": "name",
+         "position": 59
+        },
+        {
+         "value": "number",
+         "type": "name",
+         "position": 66
+        },
+        {
+         "type": "sort",
+         "position": 67,
+         "terms": [
+          {
+           "descending": false,
+           "expression": {
+            "value": "",
+            "type": "variable",
+            "position": 69
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 38
+   }
+  }
+ },
+ "employee-map-reduce[10]": {
+  "expr": "Employee@$e.Contact@$c[$e.SSN=$c.ssn]{ $e.Surname: $c.Phone.number^(>$) }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employee",
+     "type": "name",
+     "position": 8,
+     "focus": "e",
+     "tuple": true
+    },
+    {
+     "value": "Contact",
+     "type": "name",
+     "position": 19,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 30,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "e",
+           "type": "variable",
+           "position": 25
+          },
+          {
+           "value": "SSN",
+           "type": "name",
+           "position": 29
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 32
+          },
+          {
+           "value": "ssn",
+           "type": "name",
+           "position": 36
+          }
+         ]
+        }
+       },
+       "position": 23
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "e",
+         "type": "variable",
+         "position": 41
+        },
+        {
+         "value": "Surname",
+         "type": "name",
+         "position": 49
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "c",
+         "type": "variable",
+         "position": 53
+        },
+        {
+         "value": "Phone",
+         "type": "name",
+         "position": 59
+        },
+        {
+         "value": "number",
+         "type": "name",
+         "position": 66
+        },
+        {
+         "type": "sort",
+         "position": 67,
+         "terms": [
+          {
+           "descending": true,
+           "expression": {
+            "value": "",
+            "type": "variable",
+            "position": 70
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 38
+   }
+  }
+ },
+ "employee-map-reduce[11]": {
+  "expr": "$@$i",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "focus": "i",
+   "tuple": true
+  }
+ },
+ "errors[0]": {
+  "expr": "Account.Order@o.Product",
+  "error": {
+   "code": "S0214",
+   "position": 15,
+   "token": "@"
+  }
+ },
+ "errors[1]": {
+  "expr": "Account.Order@$o#i.Product",
+  "error": {
+   "code": "S0214",
+   "position": 18,
+   "token": "#"
+  }
+ },
+ "errors[2]": {
+  "expr": "Account.Order[1]@$o.Product",
+  "error": {
+   "code": "S0215",
+   "position": 17
+  }
+ },
+ "errors[3]": {
+  "expr": "Account.Order^(>OrderID)@$o.Product.{ 'name':`Product Name`, 'orderid':$o.OrderID }",
+  "error": {
+   "code": "S0216",
+   "position": 25
+  }
+ },
+ "index[0]": {
+  "expr": "$#$pos[$pos<3]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 12,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 11
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       "position": 7
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "index[1]": {
+  "expr": "$#$pos[$pos<3] = $[[0..2]]",
+  "ast": {
+   "type": "binary",
+   "value": "=",
+   "position": 16,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "",
+      "type": "variable",
+      "position": 1,
+      "index": "pos",
+      "tuple": true,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "type": "binary",
+         "value": "<",
+         "position": 12,
+         "lhs": {
+          "value": "pos",
+          "type": "variable",
+          "position": 11
+         },
+         "rhs": {
+          "value": 3,
+          "type": "number",
+          "position": 13
+         }
+        },
+        "position": 7
+       }
+      ]
+     }
+    ]
+   },
+   "rhs": {
+    "value": "",
+    "type": "variable",
+    "position": 18,
+    "predicate": [
+     {
+      "type": "filter",
+      "expr": {
+       "type": "unary",
+       "value": "[",
+       "position": 20,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "..",
+         "position": 23,
+         "lhs": {
+          "value": 0,
+          "type": "number",
+          "position": 21
+         },
+         "rhs": {
+          "value": 2,
+          "type": "number",
+          "position": 24
+         }
+        }
+       ]
+      },
+      "position": 19
+     }
+    ]
+   }
+  }
+ },
+ "index[2]": {
+  "expr": "$.$#$pos[$pos<3]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "value": "",
+     "type": "variable",
+     "position": 3,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 14,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 13
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 15
+        }
+       },
+       "position": 9
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "index[3]": {
+  "expr": "$.$#$pos[$pos<3] = $.$[[0..2]]",
+  "ast": {
+   "type": "binary",
+   "value": "=",
+   "position": 18,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "",
+      "type": "variable",
+      "position": 1
+     },
+     {
+      "value": "",
+      "type": "variable",
+      "position": 3,
+      "index": "pos",
+      "tuple": true,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "type": "binary",
+         "value": "<",
+         "position": 14,
+         "lhs": {
+          "value": "pos",
+          "type": "variable",
+          "position": 13
+         },
+         "rhs": {
+          "value": 3,
+          "type": "number",
+          "position": 15
+         }
+        },
+        "position": 9
+       }
+      ]
+     }
+    ]
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "",
+      "type": "variable",
+      "position": 20
+     },
+     {
+      "value": "",
+      "type": "variable",
+      "position": 22,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "type": "unary",
+         "value": "[",
+         "position": 24,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "..",
+           "position": 27,
+           "lhs": {
+            "value": 0,
+            "type": "number",
+            "position": 25
+           },
+           "rhs": {
+            "value": 2,
+            "type": "number",
+            "position": 28
+           }
+          }
+         ]
+        },
+        "position": 23
+       }
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "index[4]": {
+  "expr": "$#$pos[$pos<3]^($)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 12,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 11
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       "position": 7
+      }
+     ]
+    },
+    {
+     "type": "sort",
+     "position": 15,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 17
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "index[5]": {
+  "expr": "$#$pos[$pos<3]^(>$)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 12,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 11
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       "position": 7
+      }
+     ]
+    },
+    {
+     "type": "sort",
+     "position": 15,
+     "terms": [
+      {
+       "descending": true,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 18
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "index[6]": {
+  "expr": "$^($)#$pos[$pos<3] ",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "sort",
+     "position": 2,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 4
+       }
+      }
+     ],
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 16,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 15
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 17
+        }
+       },
+       "position": 11
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "index[7]": {
+  "expr": "$#$pos[$pos<3][1]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 12,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 11
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       "position": 7
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "value": 1,
+        "type": "number",
+        "position": 16
+       },
+       "position": 15
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "index[8]": {
+  "expr": "$#$pos[$pos<3][1][]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 12,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 11
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       "position": 7
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "value": 1,
+        "type": "number",
+        "position": 16
+       },
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "keepArray": true
+  }
+ },
+ "index[9]": {
+  "expr": "$#$pos[$pos<3]^($)[-1]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 12,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 11
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       "position": 7
+      }
+     ]
+    },
+    {
+     "type": "sort",
+     "position": 15,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 17
+       }
+      }
+     ],
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": -1,
+        "type": "number",
+        "position": 21
+       },
+       "position": 19
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "index[10]": {
+  "expr": "$#$pos[][$pos<3]^($)[-1]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 14,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 13
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 15
+        }
+       },
+       "position": 9
+      }
+     ]
+    },
+    {
+     "type": "sort",
+     "position": 17,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 19
+       }
+      }
+     ],
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": -1,
+        "type": "number",
+        "position": 23
+       },
+       "position": 21
+      }
+     ]
+    }
+   ],
+   "keepArray": true
+  }
+ },
+ "index[11]": {
+  "expr": "$#$pos[$pos<3]^($)[-1][]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "index": "pos",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "<",
+        "position": 12,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 11
+        },
+        "rhs": {
+         "value": 3,
+         "type": "number",
+         "position": 13
+        }
+       },
+       "position": 7
+      }
+     ]
+    },
+    {
+     "type": "sort",
+     "position": 15,
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "value": "",
+        "type": "variable",
+        "position": 17
+       }
+      }
+     ],
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": -1,
+        "type": "number",
+        "position": 21
+       },
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "keepArray": true
+  }
+ },
+ "index[12]": {
+  "expr": "$[[1..4]]#$pos[$pos>=2]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "unary",
+        "value": "[",
+        "position": 3,
+        "expressions": [
+         {
+          "type": "binary",
+          "value": "..",
+          "position": 6,
+          "lhs": {
+           "value": 1,
+           "type": "number",
+           "position": 4
+          },
+          "rhs": {
+           "value": 4,
+           "type": "number",
+           "position": 7
+          }
+         }
+        ]
+       },
+       "position": 2
+      },
+      {
+       "type": "index",
+       "value": "pos",
+       "position": 10
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": ">=",
+        "position": 21,
+        "lhs": {
+         "value": "pos",
+         "type": "variable",
+         "position": 19
+        },
+        "rhs": {
+         "value": 2,
+         "type": "number",
+         "position": 22
+        }
+       },
+       "position": 15
+      }
+     ],
+     "tuple": true
+    }
+   ]
+  }
+ },
+ "index[13]": {
+  "expr": "Account.Order#$o.Product[ProductID=858383].{ 'Product': `Product Name`, 'Order Index': $o }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "index": "o",
+     "tuple": true
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 24,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 35,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "ProductID",
+           "type": "name",
+           "position": 34
+          }
+         ]
+        },
+        "rhs": {
+         "value": 858383,
+         "type": "number",
+         "position": 41
+        }
+       },
+       "position": 25
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 44,
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 54
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 70
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Order Index",
+        "type": "string",
+        "position": 85
+       },
+       {
+        "value": "o",
+        "type": "variable",
+        "position": 89
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "index[14]": {
+  "expr": "Account.Order#$i.Missing",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "index": "i",
+     "tuple": true
+    },
+    {
+     "value": "Missing",
+     "type": "name",
+     "position": 24
+    }
+   ]
+  }
+ },
+ "index[15]": {
+  "expr": "Account.Order#$i.Product{ $string(ProductID): $i }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "index": "i",
+     "tuple": true
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 24
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 34,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "ProductID",
+           "type": "name",
+           "position": 43
+          }
+         ]
+        }
+       ],
+       "procedure": {
+        "value": "string",
+        "type": "variable",
+        "position": 33
+       }
+      },
+      {
+       "value": "i",
+       "type": "variable",
+       "position": 48
+      }
+     ]
+    ],
+    "position": 25
+   }
+  }
+ },
+ "library-joins[0]": {
+  "expr": "library.loans@$l.books@$b[$l.isbn=$b.isbn].{\n  'title': $b.title,\n  'customer': $l.customer\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "b",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 44,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 54
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "b",
+          "type": "variable",
+          "position": 58
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 64
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 78
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 82
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 91
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[1]": {
+  "expr": "library.loans@$l.books[$l.isbn=isbn].{\n  'title': title,\n  'customer': $l.customer\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 31,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 25
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 30
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 35
+          }
+         ]
+        }
+       },
+       "position": 23
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 38,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 48
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "title",
+          "type": "name",
+          "position": 55
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 69
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 73
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 82
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[2]": {
+  "expr": "library.books#$pos.$[$substring(title,0,3) = 'The'].$pos",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 13,
+     "index": "pos",
+     "tuple": true
+    },
+    {
+     "value": "",
+     "type": "variable",
+     "position": 20,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 44,
+        "lhs": {
+         "type": "function",
+         "value": "(",
+         "position": 32,
+         "arguments": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "title",
+             "type": "name",
+             "position": 37
+            }
+           ]
+          },
+          {
+           "value": 0,
+           "type": "number",
+           "position": 39
+          },
+          {
+           "value": 3,
+           "type": "number",
+           "position": 41
+          }
+         ],
+         "procedure": {
+          "value": "substring",
+          "type": "variable",
+          "position": 31
+         }
+        },
+        "rhs": {
+         "value": "The",
+         "type": "string",
+         "position": 50
+        }
+       },
+       "position": 21
+      }
+     ]
+    },
+    {
+     "value": "pos",
+     "type": "variable",
+     "position": 56
+    }
+   ]
+  }
+ },
+ "library-joins[3]": {
+  "expr": "library.loans@$l.books@$b[$l.isbn=$b.isbn].customers[$l.customer=id].{\n  'title': $b.title,\n  'customer': $l.customer,\n  'name': name\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "b",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 52,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 65,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 55
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 64
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "id",
+           "type": "name",
+           "position": 67
+          }
+         ]
+        }
+       },
+       "position": 53
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 70,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 80
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "b",
+          "type": "variable",
+          "position": 84
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 90
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 104
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 108
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 117
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "name",
+        "type": "string",
+        "position": 127
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "name",
+          "type": "name",
+          "position": 133
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[4]": {
+  "expr": "library.loans@$l.books@$b[$l.isbn=$b.isbn].customers@$c[$l.customer=$c.id].{\n  'title': $b.title,\n  'customer': $l.customer,\n  'name': $c.name\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "b",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 52,
+     "focus": "c",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 68,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 58
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 67
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 70
+          },
+          {
+           "value": "id",
+           "type": "name",
+           "position": 73
+          }
+         ]
+        }
+       },
+       "position": 56
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 76,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 86
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "b",
+          "type": "variable",
+          "position": 90
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 96
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 110
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 114
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 123
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "name",
+        "type": "string",
+        "position": 133
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "c",
+          "type": "variable",
+          "position": 137
+         },
+         {
+          "value": "name",
+          "type": "name",
+          "position": 142
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[5]": {
+  "expr": "library.loans@$l#$il.books@$b#$ib[$l.isbn=$b.isbn].customers@$c#$ic[$l.customer=$c.id].{\n  'title': $b.title,\n  'customer': $l.customer,\n  'name': $c.name,\n  'loan-index': $il,\n  'book-index': $ib,\n  'customer-index': $ic\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true,
+     "index": "il"
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 26,
+     "focus": "b",
+     "tuple": true,
+     "index": "ib",
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 42,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 44
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 49
+          }
+         ]
+        }
+       },
+       "position": 34
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 60,
+     "focus": "c",
+     "tuple": true,
+     "index": "ic",
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 80,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 70
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 79
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 82
+          },
+          {
+           "value": "id",
+           "type": "name",
+           "position": 85
+          }
+         ]
+        }
+       },
+       "position": 68
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 88,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 98
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "b",
+          "type": "variable",
+          "position": 102
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 108
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 122
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 126
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 135
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "name",
+        "type": "string",
+        "position": 145
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "c",
+          "type": "variable",
+          "position": 149
+         },
+         {
+          "value": "name",
+          "type": "name",
+          "position": 154
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "loan-index",
+        "type": "string",
+        "position": 170
+       },
+       {
+        "value": "il",
+        "type": "variable",
+        "position": 175
+       }
+      ],
+      [
+       {
+        "value": "book-index",
+        "type": "string",
+        "position": 191
+       },
+       {
+        "value": "ib",
+        "type": "variable",
+        "position": 196
+       }
+      ],
+      [
+       {
+        "value": "customer-index",
+        "type": "string",
+        "position": 216
+       },
+       {
+        "value": "ic",
+        "type": "variable",
+        "position": 221
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[6]": {
+  "expr": "library.loans@$l#$il.customers#$ic[$il=$ic].{\n  'customer': name,\n  'return': $l.return\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true,
+     "index": "il"
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 30,
+     "index": "ic",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 39,
+        "lhs": {
+         "value": "il",
+         "type": "variable",
+         "position": 38
+        },
+        "rhs": {
+         "value": "ic",
+         "type": "variable",
+         "position": 42
+        }
+       },
+       "position": 35
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 45,
+     "lhs": [
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 58
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "name",
+          "type": "name",
+          "position": 64
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "return",
+        "type": "string",
+        "position": 76
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 80
+         },
+         {
+          "value": "return",
+          "type": "name",
+          "position": 87
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[7]": {
+  "expr": "library.loans@$l#$il.books@$b#$ib[$l.isbn=$b.isbn]#$ib2.customers@$c#$ic[$l.customer=$c.id].{\n  'title': $b.title,\n  'customer': $l.customer,\n  'name': $c.name,\n  'loan-index': $il,\n  'book-index': $ib,\n  'customer-index': $ic,\n  'ib2': $ib2\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true,
+     "index": "il"
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 26,
+     "focus": "b",
+     "tuple": true,
+     "index": "ib",
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 42,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 44
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 49
+          }
+         ]
+        }
+       },
+       "position": 34
+      },
+      {
+       "type": "index",
+       "value": "ib2",
+       "position": 51
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 65,
+     "focus": "c",
+     "tuple": true,
+     "index": "ic",
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 85,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 75
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 84
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "c",
+           "type": "variable",
+           "position": 87
+          },
+          {
+           "value": "id",
+           "type": "name",
+           "position": 90
+          }
+         ]
+        }
+       },
+       "position": 73
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 93,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 103
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "b",
+          "type": "variable",
+          "position": 107
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 113
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 127
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 131
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 140
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "name",
+        "type": "string",
+        "position": 150
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "c",
+          "type": "variable",
+          "position": 154
+         },
+         {
+          "value": "name",
+          "type": "name",
+          "position": 159
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "loan-index",
+        "type": "string",
+        "position": 175
+       },
+       {
+        "value": "il",
+        "type": "variable",
+        "position": 180
+       }
+      ],
+      [
+       {
+        "value": "book-index",
+        "type": "string",
+        "position": 196
+       },
+       {
+        "value": "ib",
+        "type": "variable",
+        "position": 201
+       }
+      ],
+      [
+       {
+        "value": "customer-index",
+        "type": "string",
+        "position": 221
+       },
+       {
+        "value": "ic",
+        "type": "variable",
+        "position": 226
+       }
+      ],
+      [
+       {
+        "value": "ib2",
+        "type": "string",
+        "position": 235
+       },
+       {
+        "value": "ib2",
+        "type": "variable",
+        "position": 241
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[8]": {
+  "expr": "library.loans@$l.books@$b[$l.isbn=$b.isbn][1].{\n  'title': $b.title,\n  'customer': $l.customer\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "b",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "value": 1,
+        "type": "number",
+        "position": 44
+       },
+       "position": 43
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 47,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 57
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "b",
+          "type": "variable",
+          "position": 61
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 67
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 81
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 85
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 94
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[9]": {
+  "expr": "library.loans@$l.books@$b[$l.isbn=$b.isbn][5].{\n  'title': $b.title,\n  'customer': $l.customer\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "b",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "value": 5,
+        "type": "number",
+        "position": 44
+       },
+       "position": 43
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 47,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 57
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "b",
+          "type": "variable",
+          "position": 61
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 67
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 81
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 85
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 94
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "library-joins[10]": {
+  "expr": "library.loans@$l.books@$b[$l.isbn=$b.isbn][1][].{\n  'title': $b.title,\n  'customer': $l.customer\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "l",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "keepArray": true,
+     "focus": "b",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "l",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "value": 1,
+        "type": "number",
+        "position": 44
+       },
+       "position": 43
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 49,
+     "lhs": [
+      [
+       {
+        "value": "title",
+        "type": "string",
+        "position": 59
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "b",
+          "type": "variable",
+          "position": 63
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 69
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 83
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "l",
+          "type": "variable",
+          "position": 87
+         },
+         {
+          "value": "customer",
+          "type": "name",
+          "position": 96
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ],
+   "keepSingletonArray": true
+  }
+ },
+ "library-joins[11]": {
+  "expr": "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers[$L.customer=id]{\n  name: $B.title[]\n}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "L",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "B",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "B",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 52,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 65,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 55
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 64
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "id",
+           "type": "name",
+           "position": 67
+          }
+         ]
+        }
+       },
+       "position": 53
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "name",
+         "type": "name",
+         "position": 76
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "B",
+         "type": "variable",
+         "position": 80
+        },
+        {
+         "value": "title",
+         "type": "name",
+         "position": 86,
+         "keepArray": true
+        }
+       ],
+       "keepSingletonArray": true
+      }
+     ]
+    ],
+    "position": 69
+   }
+  }
+ },
+ "library-joins[12]": {
+  "expr": "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers[$L.customer='not found']{\n  name: $B.title[]\n}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "L",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "B",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "B",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 52,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 65,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 55
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 64
+          }
+         ]
+        },
+        "rhs": {
+         "value": "not found",
+         "type": "string",
+         "position": 76
+        }
+       },
+       "position": 53
+      }
+     ]
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "name",
+         "type": "name",
+         "position": 85
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "B",
+         "type": "variable",
+         "position": 89
+        },
+        {
+         "value": "title",
+         "type": "name",
+         "position": 95,
+         "keepArray": true
+        }
+       ],
+       "keepSingletonArray": true
+      }
+     ]
+    ],
+    "position": 78
+   }
+  }
+ }
+}

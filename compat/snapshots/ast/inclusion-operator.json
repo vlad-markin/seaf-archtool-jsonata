@@ -1,0 +1,287 @@
+{
+ "case000": {
+  "expr": "1 in [1,2]",
+  "ast": {
+   "type": "binary",
+   "value": "in",
+   "position": 4,
+   "lhs": {
+    "value": 1,
+    "type": "number",
+    "position": 1
+   },
+   "rhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 6,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 7
+     },
+     {
+      "value": 2,
+      "type": "number",
+      "position": 9
+     }
+    ]
+   }
+  }
+ },
+ "case001": {
+  "expr": "3 in [1,2]",
+  "ast": {
+   "type": "binary",
+   "value": "in",
+   "position": 4,
+   "lhs": {
+    "value": 3,
+    "type": "number",
+    "position": 1
+   },
+   "rhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 6,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 7
+     },
+     {
+      "value": 2,
+      "type": "number",
+      "position": 9
+     }
+    ]
+   }
+  }
+ },
+ "case002": {
+  "expr": "\"hello\" in [1,2]",
+  "ast": {
+   "type": "binary",
+   "value": "in",
+   "position": 10,
+   "lhs": {
+    "value": "hello",
+    "type": "string",
+    "position": 7
+   },
+   "rhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 12,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 13
+     },
+     {
+      "value": 2,
+      "type": "number",
+      "position": 15
+     }
+    ]
+   }
+  }
+ },
+ "case003": {
+  "expr": "\"world\" in [\"hello\", \"world\"]",
+  "ast": {
+   "type": "binary",
+   "value": "in",
+   "position": 10,
+   "lhs": {
+    "value": "world",
+    "type": "string",
+    "position": 7
+   },
+   "rhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 12,
+    "expressions": [
+     {
+      "value": "hello",
+      "type": "string",
+      "position": 19
+     },
+     {
+      "value": "world",
+      "type": "string",
+      "position": 28
+     }
+    ]
+   }
+  }
+ },
+ "case004": {
+  "expr": "in in [\"hello\", \"world\"]",
+  "ast": {
+   "type": "binary",
+   "value": "in",
+   "position": 5,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "in",
+      "type": "name",
+      "position": 2
+     }
+    ]
+   },
+   "rhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 7,
+    "expressions": [
+     {
+      "value": "hello",
+      "type": "string",
+      "position": 14
+     },
+     {
+      "value": "world",
+      "type": "string",
+      "position": 23
+     }
+    ]
+   }
+  }
+ },
+ "case005": {
+  "expr": "\"world\" in in",
+  "ast": {
+   "type": "binary",
+   "value": "in",
+   "position": 10,
+   "lhs": {
+    "value": "world",
+    "type": "string",
+    "position": 7
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "in",
+      "type": "name",
+      "position": 13
+     }
+    ]
+   }
+  }
+ },
+ "case006": {
+  "expr": "\"hello\" in \"hello\"",
+  "ast": {
+   "type": "binary",
+   "value": "in",
+   "position": 10,
+   "lhs": {
+    "value": "hello",
+    "type": "string",
+    "position": 7
+   },
+   "rhs": {
+    "value": "hello",
+    "type": "string",
+    "position": 18
+   }
+  }
+ },
+ "case007": {
+  "expr": "library.books[\"Aho\" in authors].title",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 13,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "in",
+        "position": 22,
+        "lhs": {
+         "value": "Aho",
+         "type": "string",
+         "position": 19
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "authors",
+           "type": "name",
+           "position": 30
+          }
+         ]
+        }
+       },
+       "position": 14
+      }
+     ]
+    },
+    {
+     "value": "title",
+     "type": "name",
+     "position": 37
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "content.integration.$lowercase(name)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "content",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "integration",
+     "type": "name",
+     "position": 19
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 31,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "name",
+         "type": "name",
+         "position": 35
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "lowercase",
+      "type": "variable",
+      "position": 30
+     }
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,4495 @@
+{
+ "errors[0]": {
+  "expr": "{'hello': 'world'}.% ",
+  "error": {
+   "code": "S0217",
+   "position": 1,
+   "token": "unary"
+  }
+ },
+ "errors[1]": {
+  "expr": "%",
+  "error": {
+   "code": "S0217",
+   "token": "parent"
+  }
+ },
+ "errors[2]": {
+  "expr": "%()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 2,
+   "arguments": [],
+   "procedure": {
+    "type": "parent",
+    "slot": {
+     "label": "!0",
+     "level": 1,
+     "index": 0
+    }
+   }
+  }
+ },
+ "errors[3]": {
+  "expr": "%(1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 2,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 3
+    }
+   ],
+   "procedure": {
+    "type": "parent",
+    "slot": {
+     "label": "!0",
+     "level": 1,
+     "index": 0
+    }
+   }
+  }
+ },
+ "errors[4]": {
+  "expr": "%%",
+  "error": {
+   "code": "S0207",
+   "position": 2,
+   "token": "(end)"
+  }
+ },
+ "errors[5]": {
+  "expr": "(%)",
+  "error": {
+   "code": "S0217",
+   "position": 1,
+   "token": "block"
+  }
+ },
+ "errors[6]": {
+  "expr": "(%%)",
+  "error": {
+   "code": "S0211",
+   "position": 4,
+   "token": ")"
+  }
+ },
+ "errors[7]": {
+  "expr": "library.loans.%%",
+  "error": {
+   "code": "S0207",
+   "position": 16,
+   "token": "(end)"
+  }
+ },
+ "errors[8]": {
+  "expr": "$.%",
+  "error": {
+   "code": "S0217",
+   "position": 1,
+   "token": "variable"
+  }
+ },
+ "errors[9]": {
+  "expr": "$$.%",
+  "error": {
+   "code": "S0217",
+   "position": 2,
+   "token": "variable"
+  }
+ },
+ "errors[10]": {
+  "expr": "library.loans.%.%.%",
+  "error": {
+   "code": "S0217",
+   "token": "path"
+  }
+ },
+ "errors[11]": {
+  "expr": "library.%%%",
+  "error": {
+   "code": "S0217",
+   "position": 10,
+   "token": "binary"
+  }
+ },
+ "errors[12]": {
+  "expr": "library.(%%%)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      }
+     ],
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "%",
+       "position": 11,
+       "lhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        }
+       },
+       "rhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       },
+       "seekingParent": [
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        },
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "errors[13]": {
+  "expr": "library.(%% %)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      }
+     ],
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "%",
+       "position": 11,
+       "lhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        }
+       },
+       "rhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       },
+       "seekingParent": [
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        },
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "errors[14]": {
+  "expr": "library.(% %%)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      }
+     ],
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "%",
+       "position": 12,
+       "lhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        }
+       },
+       "rhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       },
+       "seekingParent": [
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        },
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "errors[15]": {
+  "expr": "library.(% % %)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      }
+     ],
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "%",
+       "position": 12,
+       "lhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        }
+       },
+       "rhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       },
+       "seekingParent": [
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        },
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "parent[0]": {
+  "expr": "Account.Order.Product.{\n  \"order\": %.OrderID,\n  \"Product\": `Product Name`,\n  \"Weight\": Description.Weight\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "order",
+        "type": "string",
+        "position": 33
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 44
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 57
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 73
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Weight",
+        "type": "string",
+        "position": 85
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Description",
+          "type": "name",
+          "position": 98
+         },
+         {
+          "value": "Weight",
+          "type": "name",
+          "position": 105
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[1]": {
+  "expr": "Account.(Order.Product).{\n  \"order\": %.OrderID,\n  \"Product\": `Product Name`,\n  \"Weight\": Description.Weight\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 14
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 22,
+         "ancestor": {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         "tuple": true
+        }
+       ],
+       "tuple": true
+      }
+     ],
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 25,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "order",
+        "type": "string",
+        "position": 35
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 46
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 59
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 75
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Weight",
+        "type": "string",
+        "position": 87
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Description",
+          "type": "name",
+          "position": 100
+         },
+         {
+          "value": "Weight",
+          "type": "name",
+          "position": 107
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[2]": {
+  "expr": "Account.Order.Product.[`Product Name`, %.OrderID]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 23,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 37
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "type": "parent",
+         "slot": {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        },
+        {
+         "value": "OrderID",
+         "type": "name",
+         "position": 48
+        }
+       ],
+       "seekingParent": [
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "parent[3]": {
+  "expr": "Account.Order.Product.{ `Product Name`: [Quantity, %.OrderID] }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 38
+         }
+        ]
+       },
+       {
+        "type": "unary",
+        "value": "[",
+        "position": 41,
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ],
+        "expressions": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Quantity",
+            "type": "name",
+            "position": 49
+           }
+          ]
+         },
+         {
+          "type": "path",
+          "steps": [
+           {
+            "type": "parent",
+            "slot": {
+             "label": "!0",
+             "level": 0,
+             "index": 0
+            }
+           },
+           {
+            "value": "OrderID",
+            "type": "name",
+            "position": 60
+           }
+          ],
+          "seekingParent": [
+           {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[4]": {
+  "expr": "Account.Order.Product.{ `Product Name`: [Quantity, (%.OrderID)] }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 38
+         }
+        ]
+       },
+       {
+        "type": "unary",
+        "value": "[",
+        "position": 41,
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ],
+        "expressions": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Quantity",
+            "type": "name",
+            "position": 49
+           }
+          ]
+         },
+         {
+          "type": "block",
+          "position": 52,
+          "seekingParent": [
+           {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          ],
+          "expressions": [
+           {
+            "type": "path",
+            "steps": [
+             {
+              "type": "parent",
+              "slot": {
+               "label": "!0",
+               "level": 0,
+               "index": 0
+              }
+             },
+             {
+              "value": "OrderID",
+              "type": "name",
+              "position": 61
+             }
+            ],
+            "seekingParent": [
+             {
+              "label": "!0",
+              "level": 0,
+              "index": 0
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[5]": {
+  "expr": "Account.Order.Product[%.OrderID='order104'].SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 32,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          },
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 31
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         ]
+        },
+        "rhs": {
+         "value": "order104",
+         "type": "string",
+         "position": 42
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ]
+       },
+       "position": 22
+      }
+     ],
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 47
+    }
+   ]
+  }
+ },
+ "parent[6]": {
+  "expr": "Account.Order.Product[%.%.`Account Name`='Firefly'].SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "ancestor": {
+      "label": "!1",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 41,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          },
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!1",
+            "level": 0,
+            "index": 1
+           }
+          },
+          {
+           "value": "Account Name",
+           "type": "name",
+           "position": 40
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          },
+          {
+           "label": "!1",
+           "level": 0,
+           "index": 1
+          }
+         ]
+        },
+        "rhs": {
+         "value": "Firefly",
+         "type": "string",
+         "position": 50
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!1",
+          "level": 0,
+          "index": 1
+         }
+        ]
+       },
+       "position": 22
+      }
+     ],
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!1",
+       "level": 0,
+       "index": 1
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 55
+    }
+   ]
+  }
+ },
+ "parent[7]": {
+  "expr": "Account.Order.Product.Price[%.%.OrderID='order103']",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!1",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 27,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 40,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          },
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!1",
+            "level": 0,
+            "index": 1
+           }
+          },
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 39
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          },
+          {
+           "label": "!1",
+           "level": 0,
+           "index": 1
+          }
+         ]
+        },
+        "rhs": {
+         "value": "order103",
+         "type": "string",
+         "position": 50
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!1",
+          "level": 0,
+          "index": 1
+         }
+        ]
+       },
+       "position": 28
+      }
+     ],
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!1",
+       "level": 0,
+       "index": 1
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "parent[8]": {
+  "expr": "Account.Order.Product.Price.%[%.OrderID='order103'].SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!1",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 27,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "parent",
+     "slot": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "seekingParent": [
+      {
+       "label": "!1",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 40,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!1",
+            "level": 0,
+            "index": 1
+           }
+          },
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 39
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!1",
+           "level": 0,
+           "index": 1
+          },
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         ]
+        },
+        "rhs": {
+         "value": "order103",
+         "type": "string",
+         "position": 50
+        },
+        "seekingParent": [
+         {
+          "label": "!1",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ]
+       },
+       "position": 30
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 55
+    }
+   ]
+  }
+ },
+ "parent[9]": {
+  "expr": "Account.Order.Product[%.OrderID='order104'][%.%.`Account Name`='Firefly'].SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "ancestor": {
+      "label": "!2",
+      "level": 0,
+      "index": 2
+     },
+     "tuple": true
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 32,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          },
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 31
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          },
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          },
+          {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          }
+         ]
+        },
+        "rhs": {
+         "value": "order104",
+         "type": "string",
+         "position": 42
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       },
+       "position": 22
+      },
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 63,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 1
+           }
+          },
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!2",
+            "level": 0,
+            "index": 2
+           }
+          },
+          {
+           "value": "Account Name",
+           "type": "name",
+           "position": 62
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          },
+          {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          }
+         ]
+        },
+        "rhs": {
+         "value": "Firefly",
+         "type": "string",
+         "position": 72
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       },
+       "position": 44
+      }
+     ],
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!2",
+       "level": 0,
+       "index": 2
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 77
+    }
+   ]
+  }
+ },
+ "parent[10]": {
+  "expr": "(Account.Order.Product)[%.OrderID='order104'].SKU",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "block",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 8
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 14
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 22,
+         "ancestor": {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         "tuple": true
+        }
+       ],
+       "tuple": true
+      }
+     ],
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          },
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 33
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         ]
+        },
+        "rhs": {
+         "value": "order104",
+         "type": "string",
+         "position": 44
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ]
+       },
+       "position": 24
+      }
+     ],
+     "tuple": true,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ]
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 49
+    }
+   ]
+  }
+ },
+ "parent[11]": {
+  "expr": "Account.Order.Product.{ %.OrderID: Price * Quantity }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 33
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ]
+       },
+       {
+        "type": "binary",
+        "value": "*",
+        "position": 42,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 40
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Quantity",
+           "type": "name",
+           "position": 51
+          }
+         ]
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[12]": {
+  "expr": "Account.Order.().%",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 15,
+     "expressions": []
+    },
+    {
+     "type": "parent",
+     "slot": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     }
+    }
+   ]
+  }
+ },
+ "parent[13]": {
+  "expr": "Account.Order.Product.{\n  'Product': `Product Name`,\n  'Order': %.OrderID,\n  'Account': %.%.`Account Name`\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "ancestor": {
+      "label": "!2",
+      "level": 0,
+      "index": 2
+     },
+     "tuple": true
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!2",
+       "level": 0,
+       "index": 2
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 35
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 51
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Order",
+        "type": "string",
+        "position": 62
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 73
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Account",
+        "type": "string",
+        "position": 86
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          }
+         },
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          }
+         },
+         {
+          "value": "Account Name",
+          "type": "name",
+          "position": 106
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[14]": {
+  "expr": "Account.Order.(Product).{\n  'Product': `Product Name`,\n  'Order': %.OrderID,\n  'Account': %.%.`Account Name`\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13,
+     "ancestor": {
+      "label": "!2",
+      "level": 0,
+      "index": 2
+     },
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 15,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 22,
+         "ancestor": {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         "tuple": true
+        }
+       ],
+       "tuple": true
+      }
+     ],
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 25,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!2",
+       "level": 0,
+       "index": 2
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 37
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 53
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Order",
+        "type": "string",
+        "position": 64
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 75
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Account",
+        "type": "string",
+        "position": 88
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          }
+         },
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          }
+         },
+         {
+          "value": "Account Name",
+          "type": "name",
+          "position": 108
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[15]": {
+  "expr": "Account.(Order.(Product)).{\n  'Product': `Product Name`,\n  'Order': %.OrderID,\n  'Account': %.%.`Account Name`\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 14,
+         "ancestor": {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         },
+         "tuple": true
+        },
+        {
+         "type": "block",
+         "position": 16,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "Product",
+             "type": "name",
+             "position": 23,
+             "ancestor": {
+              "label": "!0",
+              "level": 0,
+              "index": 1
+             },
+             "tuple": true
+            }
+           ],
+           "tuple": true
+          }
+         ],
+         "tuple": true
+        }
+       ],
+       "tuple": true
+      }
+     ],
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 27,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!2",
+       "level": 0,
+       "index": 2
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 39
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 55
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Order",
+        "type": "string",
+        "position": 66
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 77
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Account",
+        "type": "string",
+        "position": 90
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          }
+         },
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          }
+         },
+         {
+          "value": "Account Name",
+          "type": "name",
+          "position": 110
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[16]": {
+  "expr": "Account.(Order).(Product).{\n  'Product': `Product Name`,\n  'Order': %.OrderID,\n  'Account': %.%.`Account Name`\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 14,
+         "ancestor": {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         },
+         "tuple": true
+        }
+       ],
+       "tuple": true
+      }
+     ],
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 17,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 24,
+         "ancestor": {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         "tuple": true
+        }
+       ],
+       "tuple": true
+      }
+     ],
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 27,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!2",
+       "level": 0,
+       "index": 2
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 39
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 55
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Order",
+        "type": "string",
+        "position": 66
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 77
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Account",
+        "type": "string",
+        "position": 90
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          }
+         },
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          }
+         },
+         {
+          "value": "Account Name",
+          "type": "name",
+          "position": 110
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[17]": {
+  "expr": "(Account.Order).(Product).{\n  'Product': `Product Name`,\n  'Order': %.OrderID,\n  'Account': %.%.`Account Name`\n}\n",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "block",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 8
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 14,
+         "ancestor": {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         },
+         "tuple": true
+        }
+       ],
+       "tuple": true
+      }
+     ],
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 17,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 24,
+         "ancestor": {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         "tuple": true
+        }
+       ],
+       "tuple": true
+      }
+     ],
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 27,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!2",
+       "level": 0,
+       "index": 2
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 39
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 55
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Order",
+        "type": "string",
+        "position": 66
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 77
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Account",
+        "type": "string",
+        "position": 90
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          }
+         },
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          }
+         },
+         {
+          "value": "Account Name",
+          "type": "name",
+          "position": 110
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[18]": {
+  "expr": "Account.Order.Product.SKU^(%.Price)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 25,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "sort",
+     "position": 26,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 34
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "parent[19]": {
+  "expr": "Account.Order.Product.SKU^(%.Price, >%.%.OrderID)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!2",
+      "level": 0,
+      "index": 2
+     },
+     "tuple": true
+    },
+    {
+     "value": "SKU",
+     "type": "name",
+     "position": 25,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "type": "sort",
+     "position": 26,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!2",
+       "level": 0,
+       "index": 2
+      }
+     ],
+     "terms": [
+      {
+       "descending": false,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         },
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 34
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      },
+      {
+       "descending": true,
+       "expression": {
+        "type": "path",
+        "steps": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          }
+         },
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          }
+         },
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 48
+         }
+        ],
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "parent[20]": {
+  "expr": "Account.Order.Product.Description.{ 'Colour': Colour, 'Total': %.Price * %.Quantity }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "value": "Description",
+     "type": "name",
+     "position": 33,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 35,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "Colour",
+        "type": "string",
+        "position": 44
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Colour",
+          "type": "name",
+          "position": 52
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Total",
+        "type": "string",
+        "position": 61
+       },
+       {
+        "type": "binary",
+        "value": "*",
+        "position": 72,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          },
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 70
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          },
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 1
+           }
+          },
+          {
+           "value": "Quantity",
+           "type": "name",
+           "position": 83
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          }
+         ]
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[21]": {
+  "expr": "Account.Order.Product.Description.{ 'Item': Colour & ' ' & %.`Product Name`, 'Discounted': (%.%.OrderID = 'order103') ? %.Price / 2 : %.Price }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!2",
+      "level": 0,
+      "index": 2
+     },
+     "tuple": true
+    },
+    {
+     "value": "Description",
+     "type": "name",
+     "position": 33,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 4
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 35,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      },
+      {
+       "label": "!2",
+       "level": 0,
+       "index": 2
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 3
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 4
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "Item",
+        "type": "string",
+        "position": 42
+       },
+       {
+        "type": "binary",
+        "value": "&",
+        "position": 58,
+        "lhs": {
+         "type": "binary",
+         "value": "&",
+         "position": 52,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Colour",
+            "type": "name",
+            "position": 50
+           }
+          ]
+         },
+         "rhs": {
+          "value": " ",
+          "type": "string",
+          "position": 56
+         }
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           }
+          },
+          {
+           "value": "Product Name",
+           "type": "name",
+           "position": 75
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          },
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          },
+          {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          },
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 3
+          },
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 4
+          }
+         ]
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 3
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 4
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Discounted",
+        "type": "string",
+        "position": 89
+       },
+       {
+        "type": "condition",
+        "position": 119,
+        "condition": {
+         "type": "block",
+         "position": 92,
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 1
+          },
+          {
+           "label": "!2",
+           "level": 0,
+           "index": 2
+          },
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 3
+          },
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 4
+          }
+         ],
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "=",
+           "position": 105,
+           "lhs": {
+            "type": "path",
+            "steps": [
+             {
+              "type": "parent",
+              "slot": {
+               "label": "!0",
+               "level": 0,
+               "index": 1
+              }
+             },
+             {
+              "type": "parent",
+              "slot": {
+               "label": "!2",
+               "level": 0,
+               "index": 2
+              }
+             },
+             {
+              "value": "OrderID",
+              "type": "name",
+              "position": 103
+             }
+            ],
+            "seekingParent": [
+             {
+              "label": "!0",
+              "level": 0,
+              "index": 1
+             },
+             {
+              "label": "!2",
+              "level": 0,
+              "index": 2
+             },
+             {
+              "label": "!0",
+              "level": 0,
+              "index": 3
+             },
+             {
+              "label": "!0",
+              "level": 0,
+              "index": 4
+             }
+            ]
+           },
+           "rhs": {
+            "value": "order103",
+            "type": "string",
+            "position": 116
+           },
+           "seekingParent": [
+            {
+             "label": "!0",
+             "level": 0,
+             "index": 1
+            },
+            {
+             "label": "!2",
+             "level": 0,
+             "index": 2
+            },
+            {
+             "label": "!0",
+             "level": 0,
+             "index": 3
+            },
+            {
+             "label": "!0",
+             "level": 0,
+             "index": 4
+            }
+           ]
+          }
+         ]
+        },
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         },
+         {
+          "label": "!2",
+          "level": 0,
+          "index": 2
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 3
+         },
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 4
+         }
+        ],
+        "then": {
+         "type": "binary",
+         "value": "/",
+         "position": 129,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "type": "parent",
+            "slot": {
+             "label": "!0",
+             "level": 0,
+             "index": 3
+            }
+           },
+           {
+            "value": "Price",
+            "type": "name",
+            "position": 127
+           }
+          ],
+          "seekingParent": [
+           {
+            "label": "!0",
+            "level": 0,
+            "index": 3
+           }
+          ]
+         },
+         "rhs": {
+          "value": 2,
+          "type": "number",
+          "position": 131
+         },
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 3
+          }
+         ]
+        },
+        "else": {
+         "type": "path",
+         "steps": [
+          {
+           "type": "parent",
+           "slot": {
+            "label": "!0",
+            "level": 0,
+            "index": 4
+           }
+          },
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 141
+          }
+         ],
+         "seekingParent": [
+          {
+           "label": "!0",
+           "level": 0,
+           "index": 4
+          }
+         ]
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[22]": {
+  "expr": "Account.Order.Product.( $parent := %; %.OrderID )",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 23,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 1
+      }
+     ],
+     "expressions": [
+      {
+       "type": "bind",
+       "value": ":=",
+       "position": 34,
+       "lhs": {
+        "value": "parent",
+        "type": "variable",
+        "position": 31
+       },
+       "rhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        }
+       },
+       "seekingParent": [
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        },
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "type": "parent",
+         "slot": {
+          "label": "!0",
+          "level": 0,
+          "index": 1
+         }
+        },
+        {
+         "value": "OrderID",
+         "type": "name",
+         "position": 47
+        }
+       ],
+       "seekingParent": [
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "parent[23]": {
+  "expr": "Account.Order.Product.( $parent := %; $parent.OrderID )",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "block",
+     "position": 23,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "expressions": [
+      {
+       "type": "bind",
+       "value": ":=",
+       "position": 34,
+       "lhs": {
+        "value": "parent",
+        "type": "variable",
+        "position": 31
+       },
+       "rhs": {
+        "type": "parent",
+        "slot": {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        }
+       },
+       "seekingParent": [
+        {
+         "label": "!0",
+         "level": 0,
+         "index": 0
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "parent",
+         "type": "variable",
+         "position": 45
+        },
+        {
+         "value": "OrderID",
+         "type": "name",
+         "position": 53
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "parent[24]": {
+  "expr": "library.loans@$L.books@$B[$L.isbn=$B.isbn].{ 'book': $B.title, 'parent': $keys(%) }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "L",
+     "tuple": true,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     }
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "B",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "B",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 44,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "book",
+        "type": "string",
+        "position": 51
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "B",
+          "type": "variable",
+          "position": 55
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 61
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "parent",
+        "type": "string",
+        "position": 71
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 79,
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ],
+        "arguments": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         }
+        ],
+        "procedure": {
+         "value": "keys",
+         "type": "variable",
+         "position": 78
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[25]": {
+  "expr": "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers[id=$L.customer].{ 'book': $B.title, 'customer': name, 'parent': $keys(%) }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "L",
+     "tuple": true
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "B",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "B",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 52,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 56,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "id",
+           "type": "name",
+           "position": 55
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 58
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 67
+          }
+         ]
+        }
+       },
+       "position": 53
+      }
+     ],
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 70,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "book",
+        "type": "string",
+        "position": 77
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "B",
+          "type": "variable",
+          "position": 81
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 87
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 99
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "name",
+          "type": "name",
+          "position": 105
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "parent",
+        "type": "string",
+        "position": 115
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 123,
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         }
+        ],
+        "arguments": [
+         {
+          "type": "parent",
+          "slot": {
+           "label": "!0",
+           "level": 0,
+           "index": 0
+          }
+         }
+        ],
+        "procedure": {
+         "value": "keys",
+         "type": "variable",
+         "position": 122
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[26]": {
+  "expr": "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers[id=$L.customer].{ 'book': $B.title, 'customer': name, 'parent': $keys(%.%) }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "L",
+     "tuple": true,
+     "ancestor": {
+      "label": "!1",
+      "level": 0,
+      "index": 1
+     }
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "B",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "B",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 52,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 56,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "id",
+           "type": "name",
+           "position": 55
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 58
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 67
+          }
+         ]
+        }
+       },
+       "position": 53
+      }
+     ],
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     },
+     "tuple": true
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 70,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!1",
+       "level": 0,
+       "index": 1
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "book",
+        "type": "string",
+        "position": 77
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "B",
+          "type": "variable",
+          "position": 81
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 87
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 99
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "name",
+          "type": "name",
+          "position": 105
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "parent",
+        "type": "string",
+        "position": 115
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 123,
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!1",
+          "level": 0,
+          "index": 1
+         }
+        ],
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "type": "parent",
+            "slot": {
+             "label": "!0",
+             "level": 0,
+             "index": 0
+            }
+           },
+           {
+            "type": "parent",
+            "slot": {
+             "label": "!1",
+             "level": 0,
+             "index": 1
+            }
+           }
+          ],
+          "seekingParent": [
+           {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           },
+           {
+            "label": "!1",
+            "level": 0,
+            "index": 1
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "keys",
+         "type": "variable",
+         "position": 122
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "parent[27]": {
+  "expr": "library.loans@$L.books@$B[$L.isbn=$B.isbn].customers@$C[$C.id=$L.customer].{ 'book': $B.title, 'customer': $C.name, 'grandparent': $keys(%.%) }",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "library",
+     "type": "name",
+     "position": 7,
+     "ancestor": {
+      "label": "!1",
+      "level": 0,
+      "index": 1
+     },
+     "tuple": true
+    },
+    {
+     "value": "loans",
+     "type": "name",
+     "position": 13,
+     "focus": "L",
+     "tuple": true,
+     "ancestor": {
+      "label": "!0",
+      "level": 0,
+      "index": 0
+     }
+    },
+    {
+     "value": "books",
+     "type": "name",
+     "position": 22,
+     "focus": "B",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 28
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 33
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "B",
+           "type": "variable",
+           "position": 36
+          },
+          {
+           "value": "isbn",
+           "type": "name",
+           "position": 41
+          }
+         ]
+        }
+       },
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": "customers",
+     "type": "name",
+     "position": 52,
+     "focus": "C",
+     "tuple": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 62,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "C",
+           "type": "variable",
+           "position": 58
+          },
+          {
+           "value": "id",
+           "type": "name",
+           "position": 61
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "L",
+           "type": "variable",
+           "position": 64
+          },
+          {
+           "value": "customer",
+           "type": "name",
+           "position": 73
+          }
+         ]
+        }
+       },
+       "position": 56
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 76,
+     "seekingParent": [
+      {
+       "label": "!0",
+       "level": 0,
+       "index": 0
+      },
+      {
+       "label": "!1",
+       "level": 0,
+       "index": 1
+      }
+     ],
+     "lhs": [
+      [
+       {
+        "value": "book",
+        "type": "string",
+        "position": 83
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "B",
+          "type": "variable",
+          "position": 87
+         },
+         {
+          "value": "title",
+          "type": "name",
+          "position": 93
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "customer",
+        "type": "string",
+        "position": 105
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "C",
+          "type": "variable",
+          "position": 109
+         },
+         {
+          "value": "name",
+          "type": "name",
+          "position": 114
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "grandparent",
+        "type": "string",
+        "position": 129
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 137,
+        "seekingParent": [
+         {
+          "label": "!0",
+          "level": 0,
+          "index": 0
+         },
+         {
+          "label": "!1",
+          "level": 0,
+          "index": 1
+         }
+        ],
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "type": "parent",
+            "slot": {
+             "label": "!0",
+             "level": 0,
+             "index": 0
+            }
+           },
+           {
+            "type": "parent",
+            "slot": {
+             "label": "!1",
+             "level": 0,
+             "index": 1
+            }
+           }
+          ],
+          "seekingParent": [
+           {
+            "label": "!0",
+            "level": 0,
+            "index": 0
+           },
+           {
+            "label": "!1",
+            "level": 0,
+            "index": 1
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "keys",
+         "type": "variable",
+         "position": 136
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,413 @@
+{
+ "case000": {
+  "expr": "()",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": []
+  }
+ },
+ "case001": {
+  "expr": "(1; 2; 3)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 5
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 8
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "(1; 2; 3;)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 5
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 8
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "($a:=1; $b:=2; $c:=($a:=4; $a+$b); $a+$c)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 5,
+     "lhs": {
+      "value": "a",
+      "type": "variable",
+      "position": 3
+     },
+     "rhs": {
+      "value": 1,
+      "type": "number",
+      "position": 6
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 12,
+     "lhs": {
+      "value": "b",
+      "type": "variable",
+      "position": 10
+     },
+     "rhs": {
+      "value": 2,
+      "type": "number",
+      "position": 13
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 19,
+     "lhs": {
+      "value": "c",
+      "type": "variable",
+      "position": 17
+     },
+     "rhs": {
+      "type": "block",
+      "position": 20,
+      "expressions": [
+       {
+        "type": "bind",
+        "value": ":=",
+        "position": 24,
+        "lhs": {
+         "value": "a",
+         "type": "variable",
+         "position": 22
+        },
+        "rhs": {
+         "value": 4,
+         "type": "number",
+         "position": 25
+        }
+       },
+       {
+        "type": "binary",
+        "value": "+",
+        "position": 30,
+        "lhs": {
+         "value": "a",
+         "type": "variable",
+         "position": 29
+        },
+        "rhs": {
+         "value": "b",
+         "type": "variable",
+         "position": 32
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "binary",
+     "value": "+",
+     "position": 38,
+     "lhs": {
+      "value": "a",
+      "type": "variable",
+      "position": 37
+     },
+     "rhs": {
+      "value": "c",
+      "type": "variable",
+      "position": 40
+     }
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "Account.Order.Product.($var1 := Price ; $var2:=Quantity; $var1 * $var2)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "block",
+     "position": 23,
+     "expressions": [
+      {
+       "type": "bind",
+       "value": ":=",
+       "position": 31,
+       "lhs": {
+        "value": "var1",
+        "type": "variable",
+        "position": 28
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 37
+         }
+        ]
+       }
+      },
+      {
+       "type": "bind",
+       "value": ":=",
+       "position": 47,
+       "lhs": {
+        "value": "var2",
+        "type": "variable",
+        "position": 45
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Quantity",
+          "type": "name",
+          "position": 55
+         }
+        ]
+       }
+      },
+      {
+       "type": "binary",
+       "value": "*",
+       "position": 64,
+       "lhs": {
+        "value": "var1",
+        "type": "variable",
+        "position": 62
+       },
+       "rhs": {
+        "value": "var2",
+        "type": "variable",
+        "position": 70
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "(  $func := function($arg) {$arg.Account.Order[0].OrderID};  $func($))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "func",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "arg",
+        "type": "variable",
+        "position": 25
+       }
+      ],
+      "position": 21,
+      "body": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "arg",
+         "type": "variable",
+         "position": 32
+        },
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 40
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 46,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "value": 0,
+            "type": "number",
+            "position": 48
+           },
+           "position": 47
+          }
+         ]
+        },
+        {
+         "value": "OrderID",
+         "type": "name",
+         "position": 57
+        }
+       ]
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 67,
+     "arguments": [
+      {
+       "value": "",
+       "type": "variable",
+       "position": 68
+      }
+     ],
+     "procedure": {
+      "value": "func",
+      "type": "variable",
+      "position": 66
+     }
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "(  $func := function($arg) {$arg.Account.Order[0]};  $func($).OrderID)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "func",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "arg",
+        "type": "variable",
+        "position": 25
+       }
+      ],
+      "position": 21,
+      "body": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "arg",
+         "type": "variable",
+         "position": 32
+        },
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 40
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 46,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "value": 0,
+            "type": "number",
+            "position": 48
+           },
+           "position": 47
+          }
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 59,
+       "arguments": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 60
+        }
+       ],
+       "procedure": {
+        "value": "func",
+        "type": "variable",
+        "position": 58
+       }
+      },
+      {
+       "value": "OrderID",
+       "type": "name",
+       "position": 69
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

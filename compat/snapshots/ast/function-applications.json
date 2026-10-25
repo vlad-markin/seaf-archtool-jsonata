@@ -1,0 +1,2126 @@
+{
+ "case000": {
+  "expr": "Account.Order[0].OrderID ~> $uppercase()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 27,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 13,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 15
+        },
+        "position": 14
+       }
+      ]
+     },
+     {
+      "value": "OrderID",
+      "type": "name",
+      "position": 24
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 39,
+    "arguments": [],
+    "procedure": {
+     "value": "uppercase",
+     "type": "variable",
+     "position": 38
+    }
+   }
+  }
+ },
+ "case001": {
+  "expr": "Account.Order[0].OrderID ~> $uppercase() ~> $lowercase()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 43,
+   "lhs": {
+    "type": "apply",
+    "value": "~>",
+    "position": 27,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 7
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 13,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 15
+         },
+         "position": 14
+        }
+       ]
+      },
+      {
+       "value": "OrderID",
+       "type": "name",
+       "position": 24
+      }
+     ]
+    },
+    "rhs": {
+     "type": "function",
+     "value": "(",
+     "position": 39,
+     "arguments": [],
+     "procedure": {
+      "value": "uppercase",
+      "type": "variable",
+      "position": 38
+     }
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 55,
+    "arguments": [],
+    "procedure": {
+     "value": "lowercase",
+     "type": "variable",
+     "position": 54
+    }
+   }
+  }
+ },
+ "case002": {
+  "expr": "Account.Order.OrderID ~> $join()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 24,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 13
+     },
+     {
+      "value": "OrderID",
+      "type": "name",
+      "position": 21
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 31,
+    "arguments": [],
+    "procedure": {
+     "value": "join",
+     "type": "variable",
+     "position": 30
+    }
+   }
+  }
+ },
+ "case003": {
+  "expr": "Account.Order.OrderID ~> $join(\", \")",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 24,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 13
+     },
+     {
+      "value": "OrderID",
+      "type": "name",
+      "position": 21
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 31,
+    "arguments": [
+     {
+      "value": ", ",
+      "type": "string",
+      "position": 35
+     }
+    ],
+    "procedure": {
+     "value": "join",
+     "type": "variable",
+     "position": 30
+    }
+   }
+  }
+ },
+ "case004": {
+  "expr": "Account.Order.Product.(Price * Quantity) ~> $sum()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 43,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 13
+     },
+     {
+      "value": "Product",
+      "type": "name",
+      "position": 21
+     },
+     {
+      "type": "block",
+      "position": 23,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "*",
+        "position": 30,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 28
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Quantity",
+           "type": "name",
+           "position": 39
+          }
+         ]
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 49,
+    "arguments": [],
+    "procedure": {
+     "value": "sum",
+     "type": "variable",
+     "position": 48
+    }
+   }
+  }
+ },
+ "case005": {
+  "expr": "( $uppertrim := $trim ~> $uppercase;  $uppertrim(\"   Hello    World   \") )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 15,
+     "lhs": {
+      "value": "uppertrim",
+      "type": "variable",
+      "position": 12
+     },
+     "rhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 24,
+      "lhs": {
+       "value": "trim",
+       "type": "variable",
+       "position": 21
+      },
+      "rhs": {
+       "value": "uppercase",
+       "type": "variable",
+       "position": 35
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 49,
+     "arguments": [
+      {
+       "value": "   Hello    World   ",
+       "type": "string",
+       "position": 71
+      }
+     ],
+     "procedure": {
+      "value": "uppertrim",
+      "type": "variable",
+      "position": 48
+     }
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "\"john@example.com\" ~> $substringAfter(\"@\") ~> $substringBefore(\".\") ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 45,
+   "lhs": {
+    "type": "apply",
+    "value": "~>",
+    "position": 21,
+    "lhs": {
+     "value": "john@example.com",
+     "type": "string",
+     "position": 18
+    },
+    "rhs": {
+     "type": "function",
+     "value": "(",
+     "position": 38,
+     "arguments": [
+      {
+       "value": "@",
+       "type": "string",
+       "position": 41
+      }
+     ],
+     "procedure": {
+      "value": "substringAfter",
+      "type": "variable",
+      "position": 37
+     }
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 63,
+    "arguments": [
+     {
+      "value": ".",
+      "type": "string",
+      "position": 66
+     }
+    ],
+    "procedure": {
+     "value": "substringBefore",
+     "type": "variable",
+     "position": 62
+    }
+   }
+  }
+ },
+ "case007": {
+  "expr": "\"\" ~> $substringAfter(\"@\") ~> $substringBefore(\".\") ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 29,
+   "lhs": {
+    "type": "apply",
+    "value": "~>",
+    "position": 5,
+    "lhs": {
+     "value": "",
+     "type": "string",
+     "position": 2
+    },
+    "rhs": {
+     "type": "function",
+     "value": "(",
+     "position": 22,
+     "arguments": [
+      {
+       "value": "@",
+       "type": "string",
+       "position": 25
+      }
+     ],
+     "procedure": {
+      "value": "substringAfter",
+      "type": "variable",
+      "position": 21
+     }
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 47,
+    "arguments": [
+     {
+      "value": ".",
+      "type": "string",
+      "position": 50
+     }
+    ],
+    "procedure": {
+     "value": "substringBefore",
+     "type": "variable",
+     "position": 46
+    }
+   }
+  }
+ },
+ "case008": {
+  "expr": "foo ~> $substringAfter(\"@\") ~> $substringBefore(\".\") ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 30,
+   "lhs": {
+    "type": "apply",
+    "value": "~>",
+    "position": 6,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 3
+      }
+     ]
+    },
+    "rhs": {
+     "type": "function",
+     "value": "(",
+     "position": 23,
+     "arguments": [
+      {
+       "value": "@",
+       "type": "string",
+       "position": 26
+      }
+     ],
+     "procedure": {
+      "value": "substringAfter",
+      "type": "variable",
+      "position": 22
+     }
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 48,
+    "arguments": [
+     {
+      "value": ".",
+      "type": "string",
+      "position": 51
+     }
+    ],
+    "procedure": {
+     "value": "substringBefore",
+     "type": "variable",
+     "position": 47
+    }
+   }
+  }
+ },
+ "case009": {
+  "expr": "( $domain := $substringAfter(?,\"@\") ~> $substringBefore(?,\".\"); $domain(\"john@example.com\") )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 12,
+     "lhs": {
+      "value": "domain",
+      "type": "variable",
+      "position": 9
+     },
+     "rhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 38,
+      "lhs": {
+       "type": "partial",
+       "value": "(",
+       "position": 29,
+       "arguments": [
+        {
+         "value": "?",
+         "type": "operator",
+         "position": 30
+        },
+        {
+         "value": "@",
+         "type": "string",
+         "position": 34
+        }
+       ],
+       "procedure": {
+        "value": "substringAfter",
+        "type": "variable",
+        "position": 28
+       }
+      },
+      "rhs": {
+       "type": "partial",
+       "value": "(",
+       "position": 56,
+       "arguments": [
+        {
+         "value": "?",
+         "type": "operator",
+         "position": 57
+        },
+        {
+         "value": ".",
+         "type": "string",
+         "position": 61
+        }
+       ],
+       "procedure": {
+        "value": "substringBefore",
+        "type": "variable",
+        "position": 55
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 72,
+     "arguments": [
+      {
+       "value": "john@example.com",
+       "type": "string",
+       "position": 90
+      }
+     ],
+     "procedure": {
+      "value": "domain",
+      "type": "variable",
+      "position": 71
+     }
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "( $square := function($x){$x*$x}; [1..5] ~> $map($square) ) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 12,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 9
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 24
+       }
+      ],
+      "position": 22,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 29,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 28
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 31
+       }
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 43,
+     "lhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 35,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 38,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 36
+        },
+        "rhs": {
+         "value": 5,
+         "type": "number",
+         "position": 39
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 49,
+      "arguments": [
+       {
+        "value": "square",
+        "type": "variable",
+        "position": 56
+       }
+      ],
+      "procedure": {
+       "value": "map",
+       "type": "variable",
+       "position": 48
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "( $square := function($x){$x*$x}; [1..5] ~> $map($square) ~> $sum() ) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 12,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 9
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 24
+       }
+      ],
+      "position": 22,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 29,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 28
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 31
+       }
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 60,
+     "lhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 43,
+      "lhs": {
+       "type": "unary",
+       "value": "[",
+       "position": 35,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "..",
+         "position": 38,
+         "lhs": {
+          "value": 1,
+          "type": "number",
+          "position": 36
+         },
+         "rhs": {
+          "value": 5,
+          "type": "number",
+          "position": 39
+         }
+        }
+       ]
+      },
+      "rhs": {
+       "type": "function",
+       "value": "(",
+       "position": 49,
+       "arguments": [
+        {
+         "value": "square",
+         "type": "variable",
+         "position": 56
+        }
+       ],
+       "procedure": {
+        "value": "map",
+        "type": "variable",
+        "position": 48
+       }
+      }
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 66,
+      "arguments": [],
+      "procedure": {
+       "value": "sum",
+       "type": "variable",
+       "position": 65
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case012": {
+  "expr": "($betweenBackets := $substringAfter(?, \"(\") ~> $substringBefore(?, \")\");$betweenBackets(\"test(foo)bar\")) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 19,
+     "lhs": {
+      "value": "betweenBackets",
+      "type": "variable",
+      "position": 16
+     },
+     "rhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 46,
+      "lhs": {
+       "type": "partial",
+       "value": "(",
+       "position": 36,
+       "arguments": [
+        {
+         "value": "?",
+         "type": "operator",
+         "position": 37
+        },
+        {
+         "value": "(",
+         "type": "string",
+         "position": 42
+        }
+       ],
+       "procedure": {
+        "value": "substringAfter",
+        "type": "variable",
+        "position": 35
+       }
+      },
+      "rhs": {
+       "type": "partial",
+       "value": "(",
+       "position": 64,
+       "arguments": [
+        {
+         "value": "?",
+         "type": "operator",
+         "position": 65
+        },
+        {
+         "value": ")",
+         "type": "string",
+         "position": 70
+        }
+       ],
+       "procedure": {
+        "value": "substringBefore",
+        "type": "variable",
+        "position": 63
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 88,
+     "arguments": [
+      {
+       "value": "test(foo)bar",
+       "type": "string",
+       "position": 102
+      }
+     ],
+     "procedure": {
+      "value": "betweenBackets",
+      "type": "variable",
+      "position": 87
+     }
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "($square := function($x){$x*$x};$chain := λ($f, $g){λ($x){$g($f($x))}};$instructions := [$sum, $square];$sumsq := $instructions ~> $reduce($chain);[1..5] ~> $sumsq()) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 23
+       }
+      ],
+      "position": 21,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 28,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 27
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 30
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 41,
+     "lhs": {
+      "value": "chain",
+      "type": "variable",
+      "position": 38
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "f",
+        "type": "variable",
+        "position": 46
+       },
+       {
+        "value": "g",
+        "type": "variable",
+        "position": 50
+       }
+      ],
+      "position": 44,
+      "body": {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 56
+        }
+       ],
+       "position": 54,
+       "body": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 61,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 61,
+         "arguments": [
+          {
+           "type": "function",
+           "value": "(",
+           "position": 64,
+           "arguments": [
+            {
+             "value": "x",
+             "type": "variable",
+             "position": 66
+            }
+           ],
+           "procedure": {
+            "value": "f",
+            "type": "variable",
+            "position": 63
+           }
+          }
+         ],
+         "procedure": {
+          "value": "g",
+          "type": "variable",
+          "position": 60
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 87,
+     "lhs": {
+      "value": "instructions",
+      "type": "variable",
+      "position": 84
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 89,
+      "expressions": [
+       {
+        "value": "sum",
+        "type": "variable",
+        "position": 93
+       },
+       {
+        "value": "square",
+        "type": "variable",
+        "position": 102
+       }
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 113,
+     "lhs": {
+      "value": "sumsq",
+      "type": "variable",
+      "position": 110
+     },
+     "rhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 130,
+      "lhs": {
+       "value": "instructions",
+       "type": "variable",
+       "position": 127
+      },
+      "rhs": {
+       "type": "function",
+       "value": "(",
+       "position": 139,
+       "arguments": [
+        {
+         "value": "chain",
+         "type": "variable",
+         "position": 145
+        }
+       ],
+       "procedure": {
+        "value": "reduce",
+        "type": "variable",
+        "position": 138
+       }
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 156,
+     "lhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 148,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 151,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 149
+        },
+        "rhs": {
+         "value": 5,
+         "type": "number",
+         "position": 152
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 164,
+      "arguments": [],
+      "procedure": {
+       "value": "sumsq",
+       "type": "variable",
+       "position": 163
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case014": {
+  "expr": "($square := function($x){$x*$x};$chain := λ($f, $g){λ($x){ $x ~> $f ~> $g }};$instructions := [$sum, $square, $string];$sumsq := $instructions ~> $reduce($chain);[1..5] ~> $sumsq()) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 23
+       }
+      ],
+      "position": 21,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 28,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 27
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 30
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 41,
+     "lhs": {
+      "value": "chain",
+      "type": "variable",
+      "position": 38
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "f",
+        "type": "variable",
+        "position": 46
+       },
+       {
+        "value": "g",
+        "type": "variable",
+        "position": 50
+       }
+      ],
+      "position": 44,
+      "body": {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 56
+        }
+       ],
+       "position": 54,
+       "body": {
+        "type": "apply",
+        "value": "~>",
+        "position": 70,
+        "lhs": {
+         "type": "apply",
+         "value": "~>",
+         "position": 64,
+         "lhs": {
+          "value": "x",
+          "type": "variable",
+          "position": 61
+         },
+         "rhs": {
+          "value": "f",
+          "type": "variable",
+          "position": 67
+         }
+        },
+        "rhs": {
+         "value": "g",
+         "type": "variable",
+         "position": 73
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 93,
+     "lhs": {
+      "value": "instructions",
+      "type": "variable",
+      "position": 90
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 95,
+      "expressions": [
+       {
+        "value": "sum",
+        "type": "variable",
+        "position": 99
+       },
+       {
+        "value": "square",
+        "type": "variable",
+        "position": 108
+       },
+       {
+        "value": "string",
+        "type": "variable",
+        "position": 117
+       }
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 128,
+     "lhs": {
+      "value": "sumsq",
+      "type": "variable",
+      "position": 125
+     },
+     "rhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 145,
+      "lhs": {
+       "value": "instructions",
+       "type": "variable",
+       "position": 142
+      },
+      "rhs": {
+       "type": "function",
+       "value": "(",
+       "position": 154,
+       "arguments": [
+        {
+         "value": "chain",
+         "type": "variable",
+         "position": 160
+        }
+       ],
+       "procedure": {
+        "value": "reduce",
+        "type": "variable",
+        "position": 153
+       }
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 171,
+     "lhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 163,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 166,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 164
+        },
+        "rhs": {
+         "value": 5,
+         "type": "number",
+         "position": 167
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 179,
+      "arguments": [],
+      "procedure": {
+       "value": "sumsq",
+       "type": "variable",
+       "position": 178
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case015": {
+  "expr": "($square := function($x){$x*$x};$instructions := $sum ~> $square;[1..5] ~> $instructions())  ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 23
+       }
+      ],
+      "position": 21,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 28,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 27
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 30
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 48,
+     "lhs": {
+      "value": "instructions",
+      "type": "variable",
+      "position": 45
+     },
+     "rhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 56,
+      "lhs": {
+       "value": "sum",
+       "type": "variable",
+       "position": 53
+      },
+      "rhs": {
+       "value": "square",
+       "type": "variable",
+       "position": 64
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 74,
+     "lhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 66,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 69,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 67
+        },
+        "rhs": {
+         "value": 5,
+         "type": "number",
+         "position": 70
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 89,
+      "arguments": [],
+      "procedure": {
+       "value": "instructions",
+       "type": "variable",
+       "position": 88
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case016": {
+  "expr": "($square := function($x){$x*$x};$sum_of_squares := $map(?, $square) ~> $sum;[1..5] ~> $sum_of_squares())  ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 23
+       }
+      ],
+      "position": 21,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 28,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 27
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 30
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 50,
+     "lhs": {
+      "value": "sum_of_squares",
+      "type": "variable",
+      "position": 47
+     },
+     "rhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 70,
+      "lhs": {
+       "type": "partial",
+       "value": "(",
+       "position": 56,
+       "arguments": [
+        {
+         "value": "?",
+         "type": "operator",
+         "position": 57
+        },
+        {
+         "value": "square",
+         "type": "variable",
+         "position": 66
+        }
+       ],
+       "procedure": {
+        "value": "map",
+        "type": "variable",
+        "position": 55
+       }
+      },
+      "rhs": {
+       "value": "sum",
+       "type": "variable",
+       "position": 75
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 85,
+     "lhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 77,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 80,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 78
+        },
+        "rhs": {
+         "value": 5,
+         "type": "number",
+         "position": 81
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 102,
+      "arguments": [],
+      "procedure": {
+       "value": "sum_of_squares",
+       "type": "variable",
+       "position": 101
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "($times := λ($x, $y) { $x * $y };$product := $reduce(?, $times);$square := function($x){$x*$x};$product_of_squares := $map(?, $square) ~> $product;[1..5] ~> $product_of_squares())",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "times",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 15
+       },
+       {
+        "value": "y",
+        "type": "variable",
+        "position": 19
+       }
+      ],
+      "position": 13,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 27,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 25
+       },
+       "rhs": {
+        "value": "y",
+        "type": "variable",
+        "position": 30
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 44,
+     "lhs": {
+      "value": "product",
+      "type": "variable",
+      "position": 41
+     },
+     "rhs": {
+      "type": "partial",
+      "value": "(",
+      "position": 53,
+      "arguments": [
+       {
+        "value": "?",
+        "type": "operator",
+        "position": 54
+       },
+       {
+        "value": "times",
+        "type": "variable",
+        "position": 62
+       }
+      ],
+      "procedure": {
+       "value": "reduce",
+       "type": "variable",
+       "position": 52
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 74,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 71
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 86
+       }
+      ],
+      "position": 84,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 91,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 90
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 93
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 117,
+     "lhs": {
+      "value": "product_of_squares",
+      "type": "variable",
+      "position": 114
+     },
+     "rhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 137,
+      "lhs": {
+       "type": "partial",
+       "value": "(",
+       "position": 123,
+       "arguments": [
+        {
+         "value": "?",
+         "type": "operator",
+         "position": 124
+        },
+        {
+         "value": "square",
+         "type": "variable",
+         "position": 133
+        }
+       ],
+       "procedure": {
+        "value": "map",
+        "type": "variable",
+        "position": 122
+       }
+      },
+      "rhs": {
+       "value": "product",
+       "type": "variable",
+       "position": 146
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 156,
+     "lhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 148,
+      "expressions": [
+       {
+        "type": "binary",
+        "value": "..",
+        "position": 151,
+        "lhs": {
+         "value": 1,
+         "type": "number",
+         "position": 149
+        },
+        "rhs": {
+         "value": 5,
+         "type": "number",
+         "position": 152
+        }
+       }
+      ]
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 177,
+      "arguments": [],
+      "procedure": {
+       "value": "product_of_squares",
+       "type": "variable",
+       "position": 176
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case018": {
+  "expr": "($square := function($x){$x*$x};[1..5] ~> $map($square) ~> $reduce(λ($x, $y) { $x * $y });)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "square",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 23
+       }
+      ],
+      "position": 21,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 28,
+       "lhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 27
+       },
+       "rhs": {
+        "value": "x",
+        "type": "variable",
+        "position": 30
+       }
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 58,
+     "lhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 41,
+      "lhs": {
+       "type": "unary",
+       "value": "[",
+       "position": 33,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "..",
+         "position": 36,
+         "lhs": {
+          "value": 1,
+          "type": "number",
+          "position": 34
+         },
+         "rhs": {
+          "value": 5,
+          "type": "number",
+          "position": 37
+         }
+        }
+       ]
+      },
+      "rhs": {
+       "type": "function",
+       "value": "(",
+       "position": 47,
+       "arguments": [
+        {
+         "value": "square",
+         "type": "variable",
+         "position": 54
+        }
+       ],
+       "procedure": {
+        "value": "map",
+        "type": "variable",
+        "position": 46
+       }
+      }
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 67,
+      "arguments": [
+       {
+        "type": "lambda",
+        "arguments": [
+         {
+          "value": "x",
+          "type": "variable",
+          "position": 71
+         },
+         {
+          "value": "y",
+          "type": "variable",
+          "position": 75
+         }
+        ],
+        "position": 69,
+        "body": {
+         "type": "binary",
+         "value": "*",
+         "position": 83,
+         "lhs": {
+          "value": "x",
+          "type": "variable",
+          "position": 81
+         },
+         "rhs": {
+          "value": "y",
+          "type": "variable",
+          "position": 86
+         }
+        }
+       }
+      ],
+      "procedure": {
+       "value": "reduce",
+       "type": "variable",
+       "position": 66
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case019": {
+  "expr": "($prices := Account.Order.Product.Price;$quantities := Account.Order.Product.Quantity;$product := λ($arr) { $arr[0] * $arr[1] };$zip($prices, $quantities) ~> $map($product) ~> $sum())",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 11,
+     "lhs": {
+      "value": "prices",
+      "type": "variable",
+      "position": 8
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Account",
+        "type": "name",
+        "position": 19
+       },
+       {
+        "value": "Order",
+        "type": "name",
+        "position": 25
+       },
+       {
+        "value": "Product",
+        "type": "name",
+        "position": 33
+       },
+       {
+        "value": "Price",
+        "type": "name",
+        "position": 39
+       }
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 54,
+     "lhs": {
+      "value": "quantities",
+      "type": "variable",
+      "position": 51
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Account",
+        "type": "name",
+        "position": 62
+       },
+       {
+        "value": "Order",
+        "type": "name",
+        "position": 68
+       },
+       {
+        "value": "Product",
+        "type": "name",
+        "position": 76
+       },
+       {
+        "value": "Quantity",
+        "type": "name",
+        "position": 85
+       }
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 97,
+     "lhs": {
+      "value": "product",
+      "type": "variable",
+      "position": 94
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "arr",
+        "type": "variable",
+        "position": 104
+       }
+      ],
+      "position": 100,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 117,
+       "lhs": {
+        "value": "arr",
+        "type": "variable",
+        "position": 112,
+        "predicate": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 0,
+           "type": "number",
+           "position": 114
+          },
+          "position": 113
+         }
+        ]
+       },
+       "rhs": {
+        "value": "arr",
+        "type": "variable",
+        "position": 122,
+        "predicate": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 1,
+           "type": "number",
+           "position": 124
+          },
+          "position": 123
+         }
+        ]
+       }
+      }
+     }
+    },
+    {
+     "type": "apply",
+     "value": "~>",
+     "position": 175,
+     "lhs": {
+      "type": "apply",
+      "value": "~>",
+      "position": 157,
+      "lhs": {
+       "type": "function",
+       "value": "(",
+       "position": 133,
+       "arguments": [
+        {
+         "value": "prices",
+         "type": "variable",
+         "position": 140
+        },
+        {
+         "value": "quantities",
+         "type": "variable",
+         "position": 153
+        }
+       ],
+       "procedure": {
+        "value": "zip",
+        "type": "variable",
+        "position": 132
+       }
+      },
+      "rhs": {
+       "type": "function",
+       "value": "(",
+       "position": 163,
+       "arguments": [
+        {
+         "value": "product",
+         "type": "variable",
+         "position": 171
+        }
+       ],
+       "procedure": {
+        "value": "map",
+        "type": "variable",
+        "position": 162
+       }
+      }
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 181,
+      "arguments": [],
+      "procedure": {
+       "value": "sum",
+       "type": "variable",
+       "position": 180
+      }
+     }
+    }
+   ]
+  }
+ },
+ "case020": {
+  "expr": "42 ~> \"hello\"",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 5,
+   "lhs": {
+    "value": 42,
+    "type": "number",
+    "position": 2
+   },
+   "rhs": {
+    "value": "hello",
+    "type": "string",
+    "position": 13
+   }
+  }
+ },
+ "case021": {
+  "expr": "Account.Order.Product[$.\"Product Name\" ~> /hat/i].ProductID",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "apply",
+        "value": "~>",
+        "position": 41,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "",
+           "type": "variable",
+           "position": 23
+          },
+          {
+           "value": "Product Name",
+           "type": "name",
+           "position": 38
+          }
+         ]
+        },
+        "rhs": {
+         "value": {
+          "@regex": "hat",
+          "flags": "gi"
+         },
+         "type": "regex",
+         "position": 48
+        }
+       },
+       "position": 22
+      }
+     ]
+    },
+    {
+     "value": "ProductID",
+     "type": "name",
+     "position": 59
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,793 @@
+{
+ "case000": {
+  "expr": "Account.Order[0].Product[0].Price > 35 ? Account.Order[0].Product[0].Price : $error('Too Expensive')",
+  "ast": {
+   "type": "condition",
+   "position": 40,
+   "condition": {
+    "type": "binary",
+    "value": ">",
+    "position": 35,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 7
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 13,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 15
+         },
+         "position": 14
+        }
+       ]
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 24,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 26
+         },
+         "position": 25
+        }
+       ]
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 33
+      }
+     ]
+    },
+    "rhs": {
+     "value": 35,
+     "type": "number",
+     "position": 38
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 48
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 54,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 56
+        },
+        "position": 55
+       }
+      ]
+     },
+     {
+      "value": "Product",
+      "type": "name",
+      "position": 65,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 67
+        },
+        "position": 66
+       }
+      ]
+     },
+     {
+      "value": "Price",
+      "type": "name",
+      "position": 74
+     }
+    ]
+   },
+   "else": {
+    "type": "function",
+    "value": "(",
+    "position": 84,
+    "arguments": [
+     {
+      "value": "Too Expensive",
+      "type": "string",
+      "position": 99
+     }
+    ],
+    "procedure": {
+     "value": "error",
+     "type": "variable",
+     "position": 83
+    }
+   }
+  }
+ },
+ "case001": {
+  "expr": "Account.Order[0].Product[0].Price > 34 ? Account.Order[0].Product[0].Price : $error('Too Expensive')",
+  "ast": {
+   "type": "condition",
+   "position": 40,
+   "condition": {
+    "type": "binary",
+    "value": ">",
+    "position": 35,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 7
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 13,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 15
+         },
+         "position": 14
+        }
+       ]
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 24,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 26
+         },
+         "position": 25
+        }
+       ]
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 33
+      }
+     ]
+    },
+    "rhs": {
+     "value": 34,
+     "type": "number",
+     "position": 38
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 48
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 54,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 56
+        },
+        "position": 55
+       }
+      ]
+     },
+     {
+      "value": "Product",
+      "type": "name",
+      "position": 65,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 67
+        },
+        "position": 66
+       }
+      ]
+     },
+     {
+      "value": "Price",
+      "type": "name",
+      "position": 74
+     }
+    ]
+   },
+   "else": {
+    "type": "function",
+    "value": "(",
+    "position": 84,
+    "arguments": [
+     {
+      "value": "Too Expensive",
+      "type": "string",
+      "position": 99
+     }
+    ],
+    "procedure": {
+     "value": "error",
+     "type": "variable",
+     "position": 83
+    }
+   }
+  }
+ },
+ "case002": {
+  "expr": "Account.Order[0].Product[0].Price > 35 ? $error('Too Expensive') : Account.Order[0].Product[0].Price",
+  "ast": {
+   "type": "condition",
+   "position": 40,
+   "condition": {
+    "type": "binary",
+    "value": ">",
+    "position": 35,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 7
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 13,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 15
+         },
+         "position": 14
+        }
+       ]
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 24,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 26
+         },
+         "position": 25
+        }
+       ]
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 33
+      }
+     ]
+    },
+    "rhs": {
+     "value": 35,
+     "type": "number",
+     "position": 38
+    }
+   },
+   "then": {
+    "type": "function",
+    "value": "(",
+    "position": 48,
+    "arguments": [
+     {
+      "value": "Too Expensive",
+      "type": "string",
+      "position": 63
+     }
+    ],
+    "procedure": {
+     "value": "error",
+     "type": "variable",
+     "position": 47
+    }
+   },
+   "else": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 74
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 80,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 82
+        },
+        "position": 81
+       }
+      ]
+     },
+     {
+      "value": "Product",
+      "type": "name",
+      "position": 91,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 93
+        },
+        "position": 92
+       }
+      ]
+     },
+     {
+      "value": "Price",
+      "type": "name",
+      "position": 100
+     }
+    ]
+   }
+  }
+ },
+ "case003": {
+  "expr": "Account.Order[0].Product[0].Price > 34 ? $error('Too Expensive') : Account.Order[0].Product[0].Price",
+  "ast": {
+   "type": "condition",
+   "position": 40,
+   "condition": {
+    "type": "binary",
+    "value": ">",
+    "position": 35,
+    "lhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 7
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 13,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 15
+         },
+         "position": 14
+        }
+       ]
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 24,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 26
+         },
+         "position": 25
+        }
+       ]
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 33
+      }
+     ]
+    },
+    "rhs": {
+     "value": 34,
+     "type": "number",
+     "position": 38
+    }
+   },
+   "then": {
+    "type": "function",
+    "value": "(",
+    "position": 48,
+    "arguments": [
+     {
+      "value": "Too Expensive",
+      "type": "string",
+      "position": 63
+     }
+    ],
+    "procedure": {
+     "value": "error",
+     "type": "variable",
+     "position": 47
+    }
+   },
+   "else": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 74
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 80,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 82
+        },
+        "position": 81
+       }
+      ]
+     },
+     {
+      "value": "Product",
+      "type": "name",
+      "position": 91,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 93
+        },
+        "position": 92
+       }
+      ]
+     },
+     {
+      "value": "Price",
+      "type": "name",
+      "position": 100
+     }
+    ]
+   }
+  }
+ },
+ "case004": {
+  "expr": "$count(Account.Order[0].Product) < 2 ? $error('Not enough products in orders')",
+  "ast": {
+   "type": "condition",
+   "position": 38,
+   "condition": {
+    "type": "binary",
+    "value": "<",
+    "position": 34,
+    "lhs": {
+     "type": "function",
+     "value": "(",
+     "position": 7,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 14
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 20,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "value": 0,
+            "type": "number",
+            "position": 22
+           },
+           "position": 21
+          }
+         ]
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 31
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "count",
+      "type": "variable",
+      "position": 6
+     }
+    },
+    "rhs": {
+     "value": 2,
+     "type": "number",
+     "position": 36
+    }
+   },
+   "then": {
+    "type": "function",
+    "value": "(",
+    "position": 46,
+    "arguments": [
+     {
+      "value": "Not enough products in orders",
+      "type": "string",
+      "position": 77
+     }
+    ],
+    "procedure": {
+     "value": "error",
+     "type": "variable",
+     "position": 45
+    }
+   }
+  }
+ },
+ "case005": {
+  "expr": "$count(Account.Order[0].Product) < 3 ? $error('Not enough products in orders')",
+  "ast": {
+   "type": "condition",
+   "position": 38,
+   "condition": {
+    "type": "binary",
+    "value": "<",
+    "position": 34,
+    "lhs": {
+     "type": "function",
+     "value": "(",
+     "position": 7,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 14
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 20,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "value": 0,
+            "type": "number",
+            "position": 22
+           },
+           "position": 21
+          }
+         ]
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 31
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "count",
+      "type": "variable",
+      "position": 6
+     }
+    },
+    "rhs": {
+     "value": 3,
+     "type": "number",
+     "position": 36
+    }
+   },
+   "then": {
+    "type": "function",
+    "value": "(",
+    "position": 46,
+    "arguments": [
+     {
+      "value": "Not enough products in orders",
+      "type": "string",
+      "position": 77
+     }
+    ],
+    "procedure": {
+     "value": "error",
+     "type": "variable",
+     "position": 45
+    }
+   }
+  }
+ },
+ "case006": {
+  "expr": "($msg:='My Message'; $error($msg); true)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "msg",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "value": "My Message",
+      "type": "string",
+      "position": 19
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 28,
+     "arguments": [
+      {
+       "value": "msg",
+       "type": "variable",
+       "position": 32
+      }
+     ],
+     "procedure": {
+      "value": "error",
+      "type": "variable",
+      "position": 27
+     }
+    },
+    {
+     "value": true,
+     "type": "value",
+     "position": 39
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "$error(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "error",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case008": {
+  "expr": "$error(5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 5,
+     "type": "number",
+     "position": 8
+    }
+   ],
+   "procedure": {
+    "value": "error",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case009": {
+  "expr": "$error()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [],
+   "procedure": {
+    "value": "error",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case010": {
+  "expr": "$error(foo)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 10
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "error",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ }
+}

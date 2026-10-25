@@ -1,0 +1,457 @@
+{
+ "case000": {
+  "expr": "\"s\" - 1",
+  "ast": {
+   "type": "binary",
+   "value": "-",
+   "position": 5,
+   "lhs": {
+    "value": "s",
+    "type": "string",
+    "position": 3
+   },
+   "rhs": {
+    "value": 1,
+    "type": "number",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "1 + null",
+  "ast": {
+   "type": "binary",
+   "value": "+",
+   "position": 3,
+   "lhs": {
+    "value": 1,
+    "type": "number",
+    "position": 1
+   },
+   "rhs": {
+    "value": null,
+    "type": "value",
+    "position": 8
+   }
+  }
+ },
+ "case002": {
+  "expr": "\"no closing quote",
+  "error": {
+   "code": "S0101",
+   "position": 17
+  }
+ },
+ "case003": {
+  "expr": "`no closing backtick",
+  "error": {
+   "code": "S0105",
+   "position": 20
+  }
+ },
+ "case004": {
+  "expr": "- \"s\"",
+  "ast": {
+   "type": "unary",
+   "value": "-",
+   "position": 1,
+   "expression": {
+    "value": "s",
+    "type": "string",
+    "position": 5
+   }
+  }
+ },
+ "case005": {
+  "expr": "unknown(function)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "function",
+       "type": "name",
+       "position": 16
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "unknown",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   }
+  }
+ },
+ "case006": {
+  "expr": "sum(Account.Order.OrderID)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 4,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 11
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 17
+      },
+      {
+       "value": "OrderID",
+       "type": "name",
+       "position": 25
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "sum",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   }
+  }
+ },
+ "case007": {
+  "expr": "[1,2)",
+  "error": {
+   "code": "S0202",
+   "position": 5,
+   "token": ")"
+  }
+ },
+ "case008": {
+  "expr": "[1:2]",
+  "error": {
+   "code": "S0202",
+   "position": 3,
+   "token": ":"
+  }
+ },
+ "case009": {
+  "expr": "$replace(\"foo\", \"o, \"rr\")",
+  "error": {
+   "code": "S0202",
+   "position": 24,
+   "token": "rr\""
+  }
+ },
+ "case010": {
+  "expr": "[1!2]",
+  "error": {
+   "code": "S0204",
+   "position": 3,
+   "token": "!"
+  }
+ },
+ "case011": {
+  "expr": "@ bar",
+  "error": {
+   "code": "S0211",
+   "position": 1,
+   "token": "@"
+  }
+ },
+ "case012": {
+  "expr": "2(blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 2,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 6
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": 2,
+    "type": "number",
+    "position": 1
+   }
+  }
+ },
+ "case013": {
+  "expr": "2()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 2,
+   "arguments": [],
+   "procedure": {
+    "value": 2,
+    "type": "number",
+    "position": 1
+   }
+  }
+ },
+ "case014": {
+  "expr": "3(?)",
+  "ast": {
+   "type": "partial",
+   "value": "(",
+   "position": 2,
+   "arguments": [
+    {
+     "value": "?",
+     "type": "operator",
+     "position": 3
+    }
+   ],
+   "procedure": {
+    "value": 3,
+    "type": "number",
+    "position": 1
+   }
+  }
+ },
+ "case015": {
+  "expr": "1=",
+  "error": {
+   "code": "S0207",
+   "position": 2,
+   "token": "(end)"
+  }
+ },
+ "case016": {
+  "expr": "function(x){$x}(3)",
+  "error": {
+   "code": "S0208",
+   "position": 10,
+   "token": "x"
+  }
+ },
+ "case017": {
+  "expr": "x:=1",
+  "error": {
+   "code": "S0212",
+   "position": 1,
+   "token": "x"
+  }
+ },
+ "case018": {
+  "expr": "2:=1",
+  "error": {
+   "code": "S0212",
+   "position": 1,
+   "token": 2
+  }
+ },
+ "case019": {
+  "expr": "$foo()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [],
+   "procedure": {
+    "value": "foo",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case020": {
+  "expr": "55=>5",
+  "error": {
+   "code": "S0211",
+   "position": 4,
+   "token": ">"
+  }
+ },
+ "case021": {
+  "expr": "Ssum(:)",
+  "error": {
+   "code": "S0211",
+   "position": 6,
+   "token": ":"
+  }
+ },
+ "case022": {
+  "expr": "[1,2,3]{\"num\": $}[true]",
+  "error": {
+   "code": "S0209",
+   "position": 18
+  }
+ },
+ "case023": {
+  "expr": "[1,2,3]{\"num\": $}{\"num\": $}",
+  "error": {
+   "code": "S0210",
+   "position": 18
+  }
+ },
+ "case024": {
+  "expr": "Account.Order[0].Product;",
+  "error": {
+   "code": "S0201",
+   "position": 25,
+   "token": ";"
+  }
+ },
+ "case025": {
+  "expr": "( $A := function(){$min(2, 3)}; $A() )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "A",
+      "type": "variable",
+      "position": 4
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [],
+      "position": 17,
+      "body": {
+       "type": "lambda",
+       "thunk": true,
+       "arguments": [],
+       "position": 24,
+       "body": {
+        "type": "function",
+        "value": "(",
+        "position": 24,
+        "arguments": [
+         {
+          "value": 2,
+          "type": "number",
+          "position": 25
+         },
+         {
+          "value": 3,
+          "type": "number",
+          "position": 28
+         }
+        ],
+        "procedure": {
+         "value": "min",
+         "type": "variable",
+         "position": 23
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 35,
+     "arguments": [],
+     "procedure": {
+      "value": "A",
+      "type": "variable",
+      "position": 34
+     }
+    }
+   ]
+  }
+ },
+ "case026": {
+  "expr": "( $B := function(){''}; $A := function(){2 + $B()}; $A() )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "B",
+      "type": "variable",
+      "position": 4
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [],
+      "position": 17,
+      "body": {
+       "value": "",
+       "type": "string",
+       "position": 21
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 29,
+     "lhs": {
+      "value": "A",
+      "type": "variable",
+      "position": 26
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [],
+      "position": 39,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 44,
+       "lhs": {
+        "value": 2,
+        "type": "number",
+        "position": 42
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 48,
+        "arguments": [],
+        "procedure": {
+         "value": "B",
+         "type": "variable",
+         "position": 47
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 55,
+     "arguments": [],
+     "procedure": {
+      "value": "A",
+      "type": "variable",
+      "position": 54
+     }
+    }
+   ]
+  }
+ }
+}

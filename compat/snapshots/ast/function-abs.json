@@ -1,0 +1,87 @@
+{
+ "case000": {
+  "expr": "$abs(3.7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": 3.7,
+     "type": "number",
+     "position": 8
+    }
+   ],
+   "procedure": {
+    "value": "abs",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case001": {
+  "expr": "$abs(-3.7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": -3.7,
+     "type": "number",
+     "position": 9
+    }
+   ],
+   "procedure": {
+    "value": "abs",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case002": {
+  "expr": "$abs(0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": 0,
+     "type": "number",
+     "position": 6
+    }
+   ],
+   "procedure": {
+    "value": "abs",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case003": {
+  "expr": "$abs(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "abs",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ }
+}

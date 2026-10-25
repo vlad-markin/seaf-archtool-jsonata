@@ -1,0 +1,1033 @@
+{
+ "array-sequences[0]": {
+  "expr": "$.[value,epochSeconds][]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 3,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "value",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "epochSeconds",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      }
+     ],
+     "keepArray": true,
+     "consarray": true
+    }
+   ],
+   "keepSingletonArray": true
+  }
+ },
+ "array-sequences[1]": {
+  "expr": "$.[value,epochSeconds][]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 3,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "value",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "epochSeconds",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      }
+     ],
+     "keepArray": true,
+     "consarray": true
+    }
+   ],
+   "keepSingletonArray": true
+  }
+ },
+ "array-sequences[2]": {
+  "expr": "$.[value,epochSeconds]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 3,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "value",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "epochSeconds",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "array-sequences[3]": {
+  "expr": "singleArray",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "singleArray",
+     "type": "name",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "array-sequences[4]": {
+  "expr": "singleArray[]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "singleArray",
+     "type": "name",
+     "position": 11,
+     "keepArray": true
+    }
+   ],
+   "keepSingletonArray": true,
+   "keepArray": true
+  }
+ },
+ "case000": {
+  "expr": "[]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": []
+  }
+ },
+ "case001": {
+  "expr": "[1]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "[1, 2]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 5
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "[1, 2,3]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 5
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 7
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "[1, 2, [3, 4]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "value": 3,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 12
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "[1, \"two\", [\"three\", 4]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": "two",
+     "type": "string",
+     "position": 9
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 12,
+     "expressions": [
+      {
+       "value": "three",
+       "type": "string",
+       "position": 19
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 22
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "[1, $two, [\"three\", $four]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": "two",
+     "type": "variable",
+     "position": 8
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 11,
+     "expressions": [
+      {
+       "value": "three",
+       "type": "string",
+       "position": 18
+      },
+      {
+       "value": "four",
+       "type": "variable",
+       "position": 25
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "[\"foo.bar\", foo.bar, [\"foo.baz\", foo.blah.baz]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": "foo.bar",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "bar",
+       "type": "name",
+       "position": 19
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 22,
+     "expressions": [
+      {
+       "value": "foo.baz",
+       "type": "string",
+       "position": 31
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "foo",
+         "type": "name",
+         "position": 36
+        },
+        {
+         "value": "blah",
+         "type": "name",
+         "position": 41
+        },
+        {
+         "value": "baz",
+         "type": "name",
+         "position": 45
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "[1, 2, 3][0]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 5
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 8
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 11
+     },
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "[1, 2, [3, 4]][-1]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "value": 3,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": -1,
+      "type": "number",
+      "position": 17
+     },
+     "position": 15
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "[1, 2, [3, 4]][-1][-1]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "value": 3,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": -1,
+      "type": "number",
+      "position": 17
+     },
+     "position": 15
+    },
+    {
+     "type": "filter",
+     "expr": {
+      "value": -1,
+      "type": "number",
+      "position": 21
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "foo.blah.baz.[fud, fud]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 12
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "fud",
+         "type": "name",
+         "position": 17
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "fud",
+         "type": "name",
+         "position": 22
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case012": {
+  "expr": "foo.blah.baz.[[fud, fud]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 12
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 15,
+       "expressions": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "fud",
+           "type": "name",
+           "position": 18
+          }
+         ]
+        },
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "fud",
+           "type": "name",
+           "position": 23
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "foo.blah.[baz].fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "baz",
+         "type": "name",
+         "position": 13
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 18
+    }
+   ]
+  }
+ },
+ "case014": {
+  "expr": "foo.blah.[baz, buz].fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "baz",
+         "type": "name",
+         "position": 13
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "buz",
+         "type": "name",
+         "position": 18
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 23
+    }
+   ]
+  }
+ },
+ "case015": {
+  "expr": "[Address, Other.\"Alternative.Address\"].City",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Address",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Other",
+         "type": "name",
+         "position": 15
+        },
+        {
+         "value": "Alternative.Address",
+         "type": "name",
+         "position": 37
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "City",
+     "type": "name",
+     "position": 43
+    }
+   ]
+  }
+ },
+ "case016": {
+  "expr": "[Address, Other.`Alternative.Address`].City",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Address",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Other",
+         "type": "name",
+         "position": 15
+        },
+        {
+         "value": "Alternative.Address",
+         "type": "name",
+         "position": 37
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "City",
+     "type": "name",
+     "position": 43
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "[0,1,2,3,4,5,6,7,8,9][$ % 2 = 0]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": 0,
+     "type": "number",
+     "position": 2
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 4
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 6
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 8
+    },
+    {
+     "value": 4,
+     "type": "number",
+     "position": 10
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": 6,
+     "type": "number",
+     "position": 14
+    },
+    {
+     "value": 7,
+     "type": "number",
+     "position": 16
+    },
+    {
+     "value": 8,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": 9,
+     "type": "number",
+     "position": 20
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "binary",
+      "value": "=",
+      "position": 29,
+      "lhs": {
+       "type": "binary",
+       "value": "%",
+       "position": 25,
+       "lhs": {
+        "value": "",
+        "type": "variable",
+        "position": 23
+       },
+       "rhs": {
+        "value": 2,
+        "type": "number",
+        "position": 27
+       }
+      },
+      "rhs": {
+       "value": 0,
+       "type": "number",
+       "position": 31
+      }
+     },
+     "position": 22
+    }
+   ]
+  }
+ },
+ "case018": {
+  "expr": "[1, 2, 3].$",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 2
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 5
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 8
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "",
+     "type": "variable",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case019": {
+  "expr": "[1, 2, 3].$",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 2
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 5
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 8
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "",
+     "type": "variable",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case020": {
+  "expr": "[1, 2, 3].$",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 2
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 5
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 8
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "",
+     "type": "variable",
+     "position": 11
+    }
+   ]
+  }
+ }
+}

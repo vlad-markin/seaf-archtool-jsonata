@@ -1,0 +1,253 @@
+{
+ "case000": {
+  "expr": "$append([1,2], [3,4])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 10
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 12
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 16,
+     "expressions": [
+      {
+       "value": 3,
+       "type": "number",
+       "position": 17
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "append",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "$append(1, [3,4])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 9
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 12,
+     "expressions": [
+      {
+       "value": 3,
+       "type": "number",
+       "position": 13
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "append",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case002": {
+  "expr": "$append(1,2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 9
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "append",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case003": {
+  "expr": "$append(1,notexist)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 9
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "notexist",
+       "type": "name",
+       "position": 18
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "append",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case004": {
+  "expr": "$append(notexist, [2,3,4])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "notexist",
+       "type": "name",
+       "position": 16
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 19,
+     "expressions": [
+      {
+       "value": 2,
+       "type": "number",
+       "position": 20
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 22
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 24
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "append",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case005": {
+  "expr": "($append($data.a, [2]); $data.a)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 9,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "data",
+         "type": "variable",
+         "position": 14
+        },
+        {
+         "value": "a",
+         "type": "name",
+         "position": 16
+        }
+       ]
+      },
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 19,
+       "expressions": [
+        {
+         "value": 2,
+         "type": "number",
+         "position": 20
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "append",
+      "type": "variable",
+      "position": 8
+     }
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "data",
+       "type": "variable",
+       "position": 29
+      },
+      {
+       "value": "a",
+       "type": "name",
+       "position": 31
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

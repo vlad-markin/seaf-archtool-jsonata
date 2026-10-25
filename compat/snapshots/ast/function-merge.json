@@ -1,0 +1,265 @@
+{
+ "case000": {
+  "expr": "$merge(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "merge",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case001": {
+  "expr": "$merge({\"a\":1})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 8,
+     "lhs": [
+      [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 11
+       },
+       {
+        "value": 1,
+        "type": "number",
+        "position": 13
+       }
+      ]
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "merge",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case002": {
+  "expr": "$merge([{\"a\":1}, {\"b\":2}])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 9,
+       "lhs": [
+        [
+         {
+          "value": "a",
+          "type": "string",
+          "position": 12
+         },
+         {
+          "value": 1,
+          "type": "number",
+          "position": 14
+         }
+        ]
+       ]
+      },
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 18,
+       "lhs": [
+        [
+         {
+          "value": "b",
+          "type": "string",
+          "position": 21
+         },
+         {
+          "value": 2,
+          "type": "number",
+          "position": 23
+         }
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "merge",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case003": {
+  "expr": "$merge([{\"a\": 1}, {\"b\": 2, \"c\": 3}])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 9,
+       "lhs": [
+        [
+         {
+          "value": "a",
+          "type": "string",
+          "position": 12
+         },
+         {
+          "value": 1,
+          "type": "number",
+          "position": 15
+         }
+        ]
+       ]
+      },
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 19,
+       "lhs": [
+        [
+         {
+          "value": "b",
+          "type": "string",
+          "position": 22
+         },
+         {
+          "value": 2,
+          "type": "number",
+          "position": 25
+         }
+        ],
+        [
+         {
+          "value": "c",
+          "type": "string",
+          "position": 30
+         },
+         {
+          "value": 3,
+          "type": "number",
+          "position": 33
+         }
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "merge",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case004": {
+  "expr": "$merge([{\"a\": 1}, {\"b\": 2, \"a\": 3}])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 8,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 9,
+       "lhs": [
+        [
+         {
+          "value": "a",
+          "type": "string",
+          "position": 12
+         },
+         {
+          "value": 1,
+          "type": "number",
+          "position": 15
+         }
+        ]
+       ]
+      },
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 19,
+       "lhs": [
+        [
+         {
+          "value": "b",
+          "type": "string",
+          "position": 22
+         },
+         {
+          "value": 2,
+          "type": "number",
+          "position": 25
+         }
+        ],
+        [
+         {
+          "value": "a",
+          "type": "string",
+          "position": 30
+         },
+         {
+          "value": 3,
+          "type": "number",
+          "position": 33
+         }
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "merge",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ }
+}

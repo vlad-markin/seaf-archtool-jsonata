@@ -1,0 +1,186 @@
+{
+ "case000": {
+  "expr": "foo.\"blah\"",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "foo.\"blah\".baz.'fud'",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 10
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 14
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 20
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "\"foo\".\"blah\".\"baz\".\"fud\"",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 12
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 18
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 24
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "foo.\"blah.baz\"",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah.baz",
+     "type": "name",
+     "position": 14
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "foo.`blah`",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "foo.`blah`.baz.'fud'",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 10
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 14
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 20
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "`foo`.`blah`.`baz`.`fud`",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 12
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 18
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 24
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "foo.`blah.baz`",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah.baz",
+     "type": "name",
+     "position": 14
+    }
+   ]
+  }
+ }
+}

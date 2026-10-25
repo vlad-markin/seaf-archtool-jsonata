@@ -1,0 +1,649 @@
+{
+ "case001": {
+  "expr": "($var:= undefined; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "undefined",
+        "type": "name",
+        "position": 17
+       }
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 25,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 29
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 24
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "($var:= null; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "value": null,
+      "type": "value",
+      "position": 12
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 20,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 24
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 19
+     }
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "($var:= 123; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "value": 123,
+      "type": "number",
+      "position": 11
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 19,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 23
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 18
+     }
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "($var:= '123'; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "value": "123",
+      "type": "string",
+      "position": 13
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 21,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 25
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 20
+     }
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "($var:= true; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "value": true,
+      "type": "value",
+      "position": 12
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 20,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 24
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 19
+     }
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "($var:= 'true'; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "value": "true",
+      "type": "string",
+      "position": 14
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 22,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 26
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 21
+     }
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "($var:= []; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 9,
+      "expressions": []
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 18,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 22
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 17
+     }
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "($var:= ['a']; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 9,
+      "expressions": [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 12
+       }
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 21,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 25
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 20
+     }
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "($var:= ['a','b']; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 9,
+      "expressions": [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 12
+       },
+       {
+        "value": "b",
+        "type": "string",
+        "position": 16
+       }
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 25,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 29
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 24
+     }
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "($var:= function(){true}; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [],
+      "position": 17,
+      "body": {
+       "value": true,
+       "type": "value",
+       "position": 23
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 32,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 36
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 31
+     }
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "($var:= (λ($v, $i, $a) {$v.price = $max($a.price)}); $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "block",
+      "position": 9,
+      "expressions": [
+       {
+        "type": "lambda",
+        "arguments": [
+         {
+          "value": "v",
+          "type": "variable",
+          "position": 13
+         },
+         {
+          "value": "i",
+          "type": "variable",
+          "position": 17
+         },
+         {
+          "value": "a",
+          "type": "variable",
+          "position": 21
+         }
+        ],
+        "position": 11,
+        "body": {
+         "type": "binary",
+         "value": "=",
+         "position": 34,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "v",
+            "type": "variable",
+            "position": 26
+           },
+           {
+            "value": "price",
+            "type": "name",
+            "position": 32
+           }
+          ]
+         },
+         "rhs": {
+          "type": "function",
+          "value": "(",
+          "position": 40,
+          "arguments": [
+           {
+            "type": "path",
+            "steps": [
+             {
+              "value": "a",
+              "type": "variable",
+              "position": 42
+             },
+             {
+              "value": "price",
+              "type": "name",
+              "position": 48
+             }
+            ]
+           }
+          ],
+          "procedure": {
+           "value": "max",
+           "type": "variable",
+           "position": 39
+          }
+         }
+        }
+       }
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 59,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 63
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 58
+     }
+    }
+   ]
+  }
+ },
+ "case012": {
+  "expr": "($var:= {}; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 9,
+      "lhs": []
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 18,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 22
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 17
+     }
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "($var:= {\"foo\":\"bar\"}; $type($var))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 7,
+     "lhs": {
+      "value": "var",
+      "type": "variable",
+      "position": 5
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 9,
+      "lhs": [
+       [
+        {
+         "value": "foo",
+         "type": "string",
+         "position": 14
+        },
+        {
+         "value": "bar",
+         "type": "string",
+         "position": 20
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 29,
+     "arguments": [
+      {
+       "value": "var",
+       "type": "variable",
+       "position": 33
+      }
+     ],
+     "procedure": {
+      "value": "type",
+      "type": "variable",
+      "position": 28
+     }
+    }
+   ]
+  }
+ }
+}

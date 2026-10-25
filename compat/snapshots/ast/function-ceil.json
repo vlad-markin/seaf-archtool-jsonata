@@ -1,0 +1,87 @@
+{
+ "case000": {
+  "expr": "$ceil(3.7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": 3.7,
+     "type": "number",
+     "position": 9
+    }
+   ],
+   "procedure": {
+    "value": "ceil",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "$ceil(-3.7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": -3.7,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "ceil",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$ceil(0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": 0,
+     "type": "number",
+     "position": 7
+    }
+   ],
+   "procedure": {
+    "value": "ceil",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case003": {
+  "expr": "$ceil(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "ceil",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ }
+}

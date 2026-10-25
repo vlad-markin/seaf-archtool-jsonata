@@ -1,0 +1,87 @@
+{
+ "case000": {
+  "expr": "$floor(3.7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 3.7,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "floor",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case001": {
+  "expr": "$floor(-3.7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": -3.7,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "floor",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case002": {
+  "expr": "$floor(0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 0,
+     "type": "number",
+     "position": 8
+    }
+   ],
+   "procedure": {
+    "value": "floor",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case003": {
+  "expr": "$floor(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "floor",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ }
+}

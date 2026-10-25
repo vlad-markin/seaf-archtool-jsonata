@@ -1,0 +1,369 @@
+{
+ "case000": {
+  "expr": "/* header comment */\n1 + 1\n",
+  "ast": {
+   "type": "binary",
+   "value": "+",
+   "position": 24,
+   "lhs": {
+    "value": 1,
+    "type": "number",
+    "position": 22
+   },
+   "rhs": {
+    "value": 1,
+    "type": "number",
+    "position": 26
+   }
+  }
+ },
+ "case001": {
+  "expr": "$substring('Hello, world', 0 /* start at index 0 */, 5/*length*/)\n",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Hello, world",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 54
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case002": {
+  "expr": "$substring('Hello, world', 0 /* start at index 0 */, 5/*length*/)\n/* trailing comment - no closing tag should trigger an error\n",
+  "error": {
+   "code": "S0106",
+   "position": 66
+  }
+ },
+ "case003": {
+  "expr": "/* An expression to return the square root of a number without using the $sqrt function */\n/* Pointless, but demonstrates capability */\n\n(\n  /**\n   * Implements the square root function\n   * Uses the Newton-Raphson method\n   */\n  $my_sqrt := function($n) {(\n\n    $good_enough := function($guess) {\n      $abs($guess * $guess - $n) < 0.000000000001\n    };\n    $improve_guess := function($guess) {\n      ($guess + $n / $guess) / 2\n    };\n\n    /* Iterate using a tail-recursive function until convergence */\n    $sqrt_iter := function($guess) {\n      $good_enough($guess) ? $guess : $sqrt_iter($improve_guess($guess))\n    };\n    $n >= 0 ? $sqrt_iter(1) : \"no complex numbers today\"\n  )};\n  $my_sqrt($$)\n)\n",
+  "ast": {
+   "type": "block",
+   "position": 138,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 241,
+     "lhs": {
+      "value": "my_sqrt",
+      "type": "variable",
+      "position": 238
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 253
+       }
+      ],
+      "position": 251,
+      "body": {
+       "type": "block",
+       "position": 257,
+       "expressions": [
+        {
+         "type": "bind",
+         "value": ":=",
+         "position": 278,
+         "lhs": {
+          "value": "good_enough",
+          "type": "variable",
+          "position": 275
+         },
+         "rhs": {
+          "type": "lambda",
+          "arguments": [
+           {
+            "value": "guess",
+            "type": "variable",
+            "position": 294
+           }
+          ],
+          "position": 288,
+          "body": {
+           "type": "binary",
+           "value": "<",
+           "position": 332,
+           "lhs": {
+            "type": "function",
+            "value": "(",
+            "position": 309,
+            "arguments": [
+             {
+              "type": "binary",
+              "value": "-",
+              "position": 326,
+              "lhs": {
+               "type": "binary",
+               "value": "*",
+               "position": 317,
+               "lhs": {
+                "value": "guess",
+                "type": "variable",
+                "position": 315
+               },
+               "rhs": {
+                "value": "guess",
+                "type": "variable",
+                "position": 324
+               }
+              },
+              "rhs": {
+               "value": "n",
+               "type": "variable",
+               "position": 329
+              }
+             }
+            ],
+            "procedure": {
+             "value": "abs",
+             "type": "variable",
+             "position": 308
+            }
+           },
+           "rhs": {
+            "value": 1e-12,
+            "type": "number",
+            "position": 347
+           }
+          }
+         }
+        },
+        {
+         "type": "bind",
+         "value": ":=",
+         "position": 376,
+         "lhs": {
+          "value": "improve_guess",
+          "type": "variable",
+          "position": 373
+         },
+         "rhs": {
+          "type": "lambda",
+          "arguments": [
+           {
+            "value": "guess",
+            "type": "variable",
+            "position": 392
+           }
+          ],
+          "position": 386,
+          "body": {
+           "type": "binary",
+           "value": "/",
+           "position": 426,
+           "lhs": {
+            "type": "block",
+            "position": 403,
+            "expressions": [
+             {
+              "type": "binary",
+              "value": "+",
+              "position": 411,
+              "lhs": {
+               "value": "guess",
+               "type": "variable",
+               "position": 409
+              },
+              "rhs": {
+               "type": "binary",
+               "value": "/",
+               "position": 416,
+               "lhs": {
+                "value": "n",
+                "type": "variable",
+                "position": 414
+               },
+               "rhs": {
+                "value": "guess",
+                "type": "variable",
+                "position": 423
+               }
+              }
+             }
+            ]
+           },
+           "rhs": {
+            "value": 2,
+            "type": "number",
+            "position": 428
+           }
+          }
+         }
+        },
+        {
+         "type": "bind",
+         "value": ":=",
+         "position": 522,
+         "lhs": {
+          "value": "sqrt_iter",
+          "type": "variable",
+          "position": 519
+         },
+         "rhs": {
+          "type": "lambda",
+          "arguments": [
+           {
+            "value": "guess",
+            "type": "variable",
+            "position": 538
+           }
+          ],
+          "position": 532,
+          "body": {
+           "type": "condition",
+           "position": 570,
+           "condition": {
+            "type": "function",
+            "value": "(",
+            "position": 561,
+            "arguments": [
+             {
+              "value": "guess",
+              "type": "variable",
+              "position": 567
+             }
+            ],
+            "procedure": {
+             "value": "good_enough",
+             "type": "variable",
+             "position": 560
+            }
+           },
+           "then": {
+            "value": "guess",
+            "type": "variable",
+            "position": 577
+           },
+           "else": {
+            "type": "lambda",
+            "thunk": true,
+            "arguments": [],
+            "position": 591,
+            "body": {
+             "type": "function",
+             "value": "(",
+             "position": 591,
+             "arguments": [
+              {
+               "type": "function",
+               "value": "(",
+               "position": 606,
+               "arguments": [
+                {
+                 "value": "guess",
+                 "type": "variable",
+                 "position": 612
+                }
+               ],
+               "procedure": {
+                "value": "improve_guess",
+                "type": "variable",
+                "position": 605
+               }
+              }
+             ],
+             "procedure": {
+              "value": "sqrt_iter",
+              "type": "variable",
+              "position": 590
+             }
+            }
+           }
+          }
+         }
+        },
+        {
+         "type": "condition",
+         "position": 635,
+         "condition": {
+          "type": "binary",
+          "value": ">=",
+          "position": 631,
+          "lhs": {
+           "value": "n",
+           "type": "variable",
+           "position": 628
+          },
+          "rhs": {
+           "value": 0,
+           "type": "number",
+           "position": 633
+          }
+         },
+         "then": {
+          "type": "lambda",
+          "thunk": true,
+          "arguments": [],
+          "position": 647,
+          "body": {
+           "type": "function",
+           "value": "(",
+           "position": 647,
+           "arguments": [
+            {
+             "value": 1,
+             "type": "number",
+             "position": 648
+            }
+           ],
+           "procedure": {
+            "value": "sqrt_iter",
+            "type": "variable",
+            "position": 646
+           }
+          }
+         },
+         "else": {
+          "value": "no complex numbers today",
+          "type": "string",
+          "position": 678
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 696,
+     "arguments": [
+      {
+       "value": "$",
+       "type": "variable",
+       "position": 698
+      }
+     ],
+     "procedure": {
+      "value": "my_sqrt",
+      "type": "variable",
+      "position": 695
+     }
+    }
+   ]
+  }
+ }
+}

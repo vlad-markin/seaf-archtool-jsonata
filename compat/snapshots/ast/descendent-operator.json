@@ -1,0 +1,451 @@
+{
+ "case000": {
+  "expr": "foo.**.blah",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 6
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "foo.**.baz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 6
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "foo.**.fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 6
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "\"foo\".**.fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 8
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 12
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "foo.**.\"fud\"",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 6
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 12
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "\"foo\".**.\"fud\"",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 8
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 14
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "foo.*.**.fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 5
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 8
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 12
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "foo.**.*.fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 6
+    },
+    {
+     "value": "*",
+     "type": "wildcard",
+     "position": 8
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 12
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "Account.Order.**.Colour",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 16
+    },
+    {
+     "value": "Colour",
+     "type": "name",
+     "position": 23
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "foo.**.fud[0]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 6
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 10,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 12
+       },
+       "position": 11
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "(foo.**.fud)[0]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "**",
+       "type": "descendant",
+       "position": 7
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 14
+     },
+     "position": 13
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "(**.fud)[0]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "**",
+       "type": "descendant",
+       "position": 3
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 7
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 10
+     },
+     "position": 9
+    }
+   ]
+  }
+ },
+ "case012": {
+  "expr": "**.Price",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 2
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 8
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "**.Price[0]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 2
+    },
+    {
+     "value": "Price",
+     "type": "name",
+     "position": 8,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 10
+       },
+       "position": 9
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case014": {
+  "expr": "(**.Price)[0]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "**",
+       "type": "descendant",
+       "position": 3
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 9
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 12
+     },
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case015": {
+  "expr": "Account.Order.blah.**",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 18
+    },
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 21
+    }
+   ]
+  }
+ },
+ "case016": {
+  "expr": "**",
+  "ast": {
+   "value": "**",
+   "type": "descendant",
+   "position": 2
+  }
+ }
+}

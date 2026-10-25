@@ -1,0 +1,676 @@
+{
+ "case000": {
+  "expr": "$exists(\"Hello World\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "$exists(\"\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "",
+     "type": "string",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case002": {
+  "expr": "$exists(true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": true,
+     "type": "value",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case003": {
+  "expr": "$exists(false)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": false,
+     "type": "value",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case004": {
+  "expr": "$exists(0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 0,
+     "type": "number",
+     "position": 9
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case005": {
+  "expr": "$exists(-0.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": -0.5,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case006": {
+  "expr": "$exists(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case007": {
+  "expr": "$exists([])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case008": {
+  "expr": "$exists([0])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "value": 0,
+       "type": "number",
+       "position": 10
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case009": {
+  "expr": "$exists([1,2,3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 10
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 12
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case010": {
+  "expr": "$exists([[]])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 10,
+       "expressions": []
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case011": {
+  "expr": "$exists([[null]])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 10,
+       "expressions": [
+        {
+         "value": null,
+         "type": "value",
+         "position": 14
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case012": {
+  "expr": "$exists([[[true]]])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 10,
+       "expressions": [
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 11,
+         "expressions": [
+          {
+           "value": true,
+           "type": "value",
+           "position": 15
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case013": {
+  "expr": "$exists({})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": []
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case014": {
+  "expr": "$exists({\"hello\":\"world\"})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 16
+       },
+       {
+        "value": "world",
+        "type": "string",
+        "position": 24
+       }
+      ]
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case015": {
+  "expr": "$exists(Account)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case016": {
+  "expr": "$exists(Account.Order.Product.Price)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 29
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 35
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case017": {
+  "expr": "$exists($exists)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "exists",
+     "type": "variable",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case018": {
+  "expr": "$exists(function(){true})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "lambda",
+     "arguments": [],
+     "position": 17,
+     "body": {
+      "value": true,
+      "type": "value",
+      "position": 23
+     }
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case019": {
+  "expr": "$exists(blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case020": {
+  "expr": "$exists(Account.blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 20
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case021": {
+  "expr": "$exists(Account.Order[2])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 21,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 2,
+          "type": "number",
+          "position": 23
+         },
+         "position": 22
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case022": {
+  "expr": "$exists(Account.Order[0].blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 21,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 23
+         },
+         "position": 22
+        }
+       ]
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 29
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case023": {
+  "expr": "$exists(2,3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 2,
+     "type": "number",
+     "position": 9
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case024": {
+  "expr": "$exists()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [],
+   "procedure": {
+    "value": "exists",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ }
+}

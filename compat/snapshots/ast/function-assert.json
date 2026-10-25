@@ -1,0 +1,496 @@
+{
+ "case000": {
+  "expr": "$assert(Account.Order[0].Product[0].Price < 34, 'Too Expensive')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "<",
+     "position": 43,
+     "lhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Account",
+        "type": "name",
+        "position": 15
+       },
+       {
+        "value": "Order",
+        "type": "name",
+        "position": 21,
+        "stages": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 0,
+           "type": "number",
+           "position": 23
+          },
+          "position": 22
+         }
+        ]
+       },
+       {
+        "value": "Product",
+        "type": "name",
+        "position": 32,
+        "stages": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 0,
+           "type": "number",
+           "position": 34
+          },
+          "position": 33
+         }
+        ]
+       },
+       {
+        "value": "Price",
+        "type": "name",
+        "position": 41
+       }
+      ]
+     },
+     "rhs": {
+      "value": 34,
+      "type": "number",
+      "position": 46
+     }
+    },
+    {
+     "value": "Too Expensive",
+     "type": "string",
+     "position": 63
+    }
+   ],
+   "procedure": {
+    "value": "assert",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "$assert(Account.Order[0].Product[0].Price < 35, 'Too Expensive')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "<",
+     "position": 43,
+     "lhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Account",
+        "type": "name",
+        "position": 15
+       },
+       {
+        "value": "Order",
+        "type": "name",
+        "position": 21,
+        "stages": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 0,
+           "type": "number",
+           "position": 23
+          },
+          "position": 22
+         }
+        ]
+       },
+       {
+        "value": "Product",
+        "type": "name",
+        "position": 32,
+        "stages": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 0,
+           "type": "number",
+           "position": 34
+          },
+          "position": 33
+         }
+        ]
+       },
+       {
+        "value": "Price",
+        "type": "name",
+        "position": 41
+       }
+      ]
+     },
+     "rhs": {
+      "value": 35,
+      "type": "number",
+      "position": 46
+     }
+    },
+    {
+     "value": "Too Expensive",
+     "type": "string",
+     "position": 63
+    }
+   ],
+   "procedure": {
+    "value": "assert",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case002": {
+  "expr": "($assert(Account.Order[0].Product[0].Price < 35, 'Too Expensive'); Account.Order[0].Product[0].Price)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 9,
+     "arguments": [
+      {
+       "type": "binary",
+       "value": "<",
+       "position": 44,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Account",
+          "type": "name",
+          "position": 16
+         },
+         {
+          "value": "Order",
+          "type": "name",
+          "position": 22,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "value": 0,
+             "type": "number",
+             "position": 24
+            },
+            "position": 23
+           }
+          ]
+         },
+         {
+          "value": "Product",
+          "type": "name",
+          "position": 33,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "value": 0,
+             "type": "number",
+             "position": 35
+            },
+            "position": 34
+           }
+          ]
+         },
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 42
+         }
+        ]
+       },
+       "rhs": {
+        "value": 35,
+        "type": "number",
+        "position": 47
+       }
+      },
+      {
+       "value": "Too Expensive",
+       "type": "string",
+       "position": 64
+      }
+     ],
+     "procedure": {
+      "value": "assert",
+      "type": "variable",
+      "position": 8
+     }
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 74
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 80,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 82
+         },
+         "position": 81
+        }
+       ]
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 91,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 93
+         },
+         "position": 92
+        }
+       ]
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 100
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "($assert(Account.Order[0].Product[0].Price < 34, 'Too Expensive'); Account.Order[0].Product[0].Price)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 9,
+     "arguments": [
+      {
+       "type": "binary",
+       "value": "<",
+       "position": 44,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Account",
+          "type": "name",
+          "position": 16
+         },
+         {
+          "value": "Order",
+          "type": "name",
+          "position": 22,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "value": 0,
+             "type": "number",
+             "position": 24
+            },
+            "position": 23
+           }
+          ]
+         },
+         {
+          "value": "Product",
+          "type": "name",
+          "position": 33,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "value": 0,
+             "type": "number",
+             "position": 35
+            },
+            "position": 34
+           }
+          ]
+         },
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 42
+         }
+        ]
+       },
+       "rhs": {
+        "value": 34,
+        "type": "number",
+        "position": 47
+       }
+      },
+      {
+       "value": "Too Expensive",
+       "type": "string",
+       "position": 64
+      }
+     ],
+     "procedure": {
+      "value": "assert",
+      "type": "variable",
+      "position": 8
+     }
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 74
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 80,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 82
+         },
+         "position": 81
+        }
+       ]
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 91,
+       "stages": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 93
+         },
+         "position": 92
+        }
+       ]
+      },
+      {
+       "value": "Price",
+       "type": "name",
+       "position": 100
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "$assert(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "assert",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case005": {
+  "expr": "$assert(5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 5,
+     "type": "number",
+     "position": 9
+    }
+   ],
+   "procedure": {
+    "value": "assert",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case006": {
+  "expr": "$assert(false)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": false,
+     "type": "value",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "assert",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case007": {
+  "expr": "$assert(true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": true,
+     "type": "value",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "assert",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ }
+}

@@ -1,0 +1,70 @@
+{
+ "case000": {
+  "expr": "$base64encode(\"hello:world\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "hello:world",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "base64encode",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "case001": {
+  "expr": "$base64encode()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [],
+   "procedure": {
+    "value": "base64encode",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "case002": {
+  "expr": "$base64decode(\"aGVsbG86d29ybGQ=\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "aGVsbG86d29ybGQ=",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "base64decode",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "case003": {
+  "expr": "$base64decode()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [],
+   "procedure": {
+    "value": "base64decode",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ }
+}

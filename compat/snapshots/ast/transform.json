@@ -1,0 +1,3271 @@
+{
+ "case000": {
+  "expr": "{'Order': Account.Order.{  'ID': OrderID,  'Product': Product.{    'SKU': ProductID,    'Details': {      'Weight': Description.Weight,      'Dimensions': Description.(Width & ' x ' & Height & ' x ' & Depth)    }  },  'Total Price': $sum(Product.(Price * Quantity))}}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "Order",
+      "type": "string",
+      "position": 8
+     },
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Account",
+        "type": "name",
+        "position": 17
+       },
+       {
+        "value": "Order",
+        "type": "name",
+        "position": 23
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 25,
+        "lhs": [
+         [
+          {
+           "value": "ID",
+           "type": "string",
+           "position": 31
+          },
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "OrderID",
+             "type": "name",
+             "position": 40
+            }
+           ]
+          }
+         ],
+         [
+          {
+           "value": "Product",
+           "type": "string",
+           "position": 52
+          },
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "Product",
+             "type": "name",
+             "position": 61
+            },
+            {
+             "type": "unary",
+             "value": "{",
+             "position": 63,
+             "lhs": [
+              [
+               {
+                "value": "SKU",
+                "type": "string",
+                "position": 72
+               },
+               {
+                "type": "path",
+                "steps": [
+                 {
+                  "value": "ProductID",
+                  "type": "name",
+                  "position": 83
+                 }
+                ]
+               }
+              ],
+              [
+               {
+                "value": "Details",
+                "type": "string",
+                "position": 97
+               },
+               {
+                "type": "unary",
+                "value": "{",
+                "position": 100,
+                "lhs": [
+                 [
+                  {
+                   "value": "Weight",
+                   "type": "string",
+                   "position": 114
+                  },
+                  {
+                   "type": "path",
+                   "steps": [
+                    {
+                     "value": "Description",
+                     "type": "name",
+                     "position": 127
+                    },
+                    {
+                     "value": "Weight",
+                     "type": "name",
+                     "position": 134
+                    }
+                   ]
+                  }
+                 ],
+                 [
+                  {
+                   "value": "Dimensions",
+                   "type": "string",
+                   "position": 153
+                  },
+                  {
+                   "type": "path",
+                   "steps": [
+                    {
+                     "value": "Description",
+                     "type": "name",
+                     "position": 166
+                    },
+                    {
+                     "type": "block",
+                     "position": 168,
+                     "expressions": [
+                      {
+                       "type": "binary",
+                       "value": "&",
+                       "position": 200,
+                       "lhs": {
+                        "type": "binary",
+                        "value": "&",
+                        "position": 192,
+                        "lhs": {
+                         "type": "binary",
+                         "value": "&",
+                         "position": 183,
+                         "lhs": {
+                          "type": "binary",
+                          "value": "&",
+                          "position": 175,
+                          "lhs": {
+                           "type": "path",
+                           "steps": [
+                            {
+                             "value": "Width",
+                             "type": "name",
+                             "position": 173
+                            }
+                           ]
+                          },
+                          "rhs": {
+                           "value": " x ",
+                           "type": "string",
+                           "position": 181
+                          }
+                         },
+                         "rhs": {
+                          "type": "path",
+                          "steps": [
+                           {
+                            "value": "Height",
+                            "type": "name",
+                            "position": 190
+                           }
+                          ]
+                         }
+                        },
+                        "rhs": {
+                         "value": " x ",
+                         "type": "string",
+                         "position": 198
+                        }
+                       },
+                       "rhs": {
+                        "type": "path",
+                        "steps": [
+                         {
+                          "value": "Depth",
+                          "type": "name",
+                          "position": 206
+                         }
+                        ]
+                       }
+                      }
+                     ]
+                    }
+                   ]
+                  }
+                 ]
+                ]
+               }
+              ]
+             ]
+            }
+           ]
+          }
+         ],
+         [
+          {
+           "value": "Total Price",
+           "type": "string",
+           "position": 231
+          },
+          {
+           "type": "function",
+           "value": "(",
+           "position": 238,
+           "arguments": [
+            {
+             "type": "path",
+             "steps": [
+              {
+               "value": "Product",
+               "type": "name",
+               "position": 245
+              },
+              {
+               "type": "block",
+               "position": 247,
+               "expressions": [
+                {
+                 "type": "binary",
+                 "value": "*",
+                 "position": 254,
+                 "lhs": {
+                  "type": "path",
+                  "steps": [
+                   {
+                    "value": "Price",
+                    "type": "name",
+                    "position": 252
+                   }
+                  ]
+                 },
+                 "rhs": {
+                  "type": "path",
+                  "steps": [
+                   {
+                    "value": "Quantity",
+                    "type": "name",
+                    "position": 263
+                   }
+                  ]
+                 }
+                }
+               ]
+              }
+             ]
+            }
+           ],
+           "procedure": {
+            "value": "sum",
+            "type": "variable",
+            "position": 237
+           }
+          }
+         ]
+        ]
+       }
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "case001": {
+  "expr": "\n        (\n          $tempReadings := $count(state.tempReadings) = 5 ?\n              [state.tempReadings[[1..4]], event.t] :\n              [state.tempReadings, event.t];\n        \n          {\n            \"tempReadings\": $tempReadings,\n            \"sumTemperatures\": $sum($tempReadings),\n            \"avgTemperature\": $average($tempReadings) ~> $round(2),\n            \"maxTemperature\": $max($tempReadings),\n            \"minTemperature\": $min($tempReadings)\n          }\n        )",
+  "ast": {
+   "type": "block",
+   "position": 10,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 37,
+     "lhs": {
+      "value": "tempReadings",
+      "type": "variable",
+      "position": 34
+     },
+     "rhs": {
+      "type": "condition",
+      "position": 70,
+      "condition": {
+       "type": "binary",
+       "value": "=",
+       "position": 66,
+       "lhs": {
+        "type": "function",
+        "value": "(",
+        "position": 45,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "state",
+            "type": "name",
+            "position": 50
+           },
+           {
+            "value": "tempReadings",
+            "type": "name",
+            "position": 63
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "count",
+         "type": "variable",
+         "position": 44
+        }
+       },
+       "rhs": {
+        "value": 5,
+        "type": "number",
+        "position": 68
+       }
+      },
+      "then": {
+       "type": "unary",
+       "value": "[",
+       "position": 86,
+       "expressions": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "state",
+           "type": "name",
+           "position": 91
+          },
+          {
+           "value": "tempReadings",
+           "type": "name",
+           "position": 104,
+           "stages": [
+            {
+             "type": "filter",
+             "expr": {
+              "type": "unary",
+              "value": "[",
+              "position": 106,
+              "expressions": [
+               {
+                "type": "binary",
+                "value": "..",
+                "position": 109,
+                "lhs": {
+                 "value": 1,
+                 "type": "number",
+                 "position": 107
+                },
+                "rhs": {
+                 "value": 4,
+                 "type": "number",
+                 "position": 110
+                }
+               }
+              ]
+             },
+             "position": 105
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "event",
+           "type": "name",
+           "position": 119
+          },
+          {
+           "value": "t",
+           "type": "name",
+           "position": 121
+          }
+         ]
+        }
+       ]
+      },
+      "else": {
+       "type": "unary",
+       "value": "[",
+       "position": 140,
+       "expressions": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "state",
+           "type": "name",
+           "position": 145
+          },
+          {
+           "value": "tempReadings",
+           "type": "name",
+           "position": 158
+          }
+         ]
+        },
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "event",
+           "type": "name",
+           "position": 165
+          },
+          {
+           "value": "t",
+           "type": "name",
+           "position": 167
+          }
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 190,
+     "lhs": [
+      [
+       {
+        "value": "tempReadings",
+        "type": "string",
+        "position": 217
+       },
+       {
+        "value": "tempReadings",
+        "type": "variable",
+        "position": 232
+       }
+      ],
+      [
+       {
+        "value": "sumTemperatures",
+        "type": "string",
+        "position": 263
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 270,
+        "arguments": [
+         {
+          "value": "tempReadings",
+          "type": "variable",
+          "position": 283
+         }
+        ],
+        "procedure": {
+         "value": "sum",
+         "type": "variable",
+         "position": 269
+        }
+       }
+      ],
+      [
+       {
+        "value": "avgTemperature",
+        "type": "string",
+        "position": 314
+       },
+       {
+        "type": "apply",
+        "value": "~>",
+        "position": 342,
+        "lhs": {
+         "type": "function",
+         "value": "(",
+         "position": 325,
+         "arguments": [
+          {
+           "value": "tempReadings",
+           "type": "variable",
+           "position": 338
+          }
+         ],
+         "procedure": {
+          "value": "average",
+          "type": "variable",
+          "position": 324
+         }
+        },
+        "rhs": {
+         "type": "function",
+         "value": "(",
+         "position": 350,
+         "arguments": [
+          {
+           "value": 2,
+           "type": "number",
+           "position": 351
+          }
+         ],
+         "procedure": {
+          "value": "round",
+          "type": "variable",
+          "position": 349
+         }
+        }
+       }
+      ],
+      [
+       {
+        "value": "maxTemperature",
+        "type": "string",
+        "position": 382
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 389,
+        "arguments": [
+         {
+          "value": "tempReadings",
+          "type": "variable",
+          "position": 402
+         }
+        ],
+        "procedure": {
+         "value": "max",
+         "type": "variable",
+         "position": 388
+        }
+       }
+      ],
+      [
+       {
+        "value": "minTemperature",
+        "type": "string",
+        "position": 433
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 440,
+        "arguments": [
+         {
+          "value": "tempReadings",
+          "type": "variable",
+          "position": 453
+         }
+        ],
+        "procedure": {
+         "value": "min",
+         "type": "variable",
+         "position": 439
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case003": {
+  "expr": "foo",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "baz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "Foo",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Foo",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "food",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "food",
+     "type": "name",
+     "position": 4
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "maz.rar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "maz",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "rar",
+     "type": "name",
+     "position": 7
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "jee.par.waa",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "jee",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "par",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "waa",
+     "type": "name",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "foo",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "foo.bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 7
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case012": {
+  "expr": "bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case014": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case015": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case016": {
+  "expr": "bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case018": {
+  "expr": "bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case019": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case020": {
+  "expr": "bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case021": {
+  "expr": "bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case022": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case023": {
+  "expr": "bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case024": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case025": {
+  "expr": "bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ },
+ "case026": {
+  "expr": "$",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1
+  }
+ },
+ "case027": {
+  "expr": "$lowercase(Salutation)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salutation",
+       "type": "name",
+       "position": 21
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case028": {
+  "expr": "$lowercase(敷)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "敷",
+       "type": "name",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case029": {
+  "expr": "$lowercase(Español)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Español",
+       "type": "name",
+       "position": 18
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case030": {
+  "expr": "$lowercase($.\"NI.Number\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "",
+       "type": "variable",
+       "position": 12
+      },
+      {
+       "value": "NI.Number",
+       "type": "name",
+       "position": 24
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case031": {
+  "expr": "$lowercase(\"COMPENSATION IS : \" & Employment.\"Executive.Compensation\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 33,
+     "lhs": {
+      "value": "COMPENSATION IS : ",
+      "type": "string",
+      "position": 31
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Employment",
+        "type": "name",
+        "position": 44
+       },
+       {
+        "value": "Executive.Compensation",
+        "type": "name",
+        "position": 69
+       }
+      ]
+     }
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case032": {
+  "expr": "\"Hello\"",
+  "ast": {
+   "value": "Hello",
+   "type": "string",
+   "position": 7
+  }
+ },
+ "case033": {
+  "expr": "$uppercase(Salutation)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salutation",
+       "type": "name",
+       "position": 21
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case034": {
+  "expr": "$uppercase(\"Hello World\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case035": {
+  "expr": "$uppercase(\"鯵噂ソ竹\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "鯵噂ソ竹",
+     "type": "string",
+     "position": 17
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case036": {
+  "expr": "Employment.Name & \" is happy\"",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 17,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Employment",
+      "type": "name",
+      "position": 10
+     },
+     {
+      "value": "Name",
+      "type": "name",
+      "position": 15
+     }
+    ]
+   },
+   "rhs": {
+    "value": " is happy",
+    "type": "string",
+    "position": 29
+   }
+  }
+ },
+ "case037": {
+  "expr": "Employment.Name & \" is pleased to employ \" & Salutation & \" \" & Surname",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 63,
+   "lhs": {
+    "type": "binary",
+    "value": "&",
+    "position": 57,
+    "lhs": {
+     "type": "binary",
+     "value": "&",
+     "position": 44,
+     "lhs": {
+      "type": "binary",
+      "value": "&",
+      "position": 17,
+      "lhs": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Employment",
+         "type": "name",
+         "position": 10
+        },
+        {
+         "value": "Name",
+         "type": "name",
+         "position": 15
+        }
+       ]
+      },
+      "rhs": {
+       "value": " is pleased to employ ",
+       "type": "string",
+       "position": 42
+      }
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Salutation",
+        "type": "name",
+        "position": 55
+       }
+      ]
+     }
+    },
+    "rhs": {
+     "value": " ",
+     "type": "string",
+     "position": 61
+    }
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Surname",
+      "type": "name",
+      "position": 71
+     }
+    ]
+   }
+  }
+ },
+ "case038": {
+  "expr": "$uppercase(\"Hello \" & Salutation & \" \" & Surname)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 40,
+     "lhs": {
+      "type": "binary",
+      "value": "&",
+      "position": 34,
+      "lhs": {
+       "type": "binary",
+       "value": "&",
+       "position": 21,
+       "lhs": {
+        "value": "Hello ",
+        "type": "string",
+        "position": 19
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Salutation",
+          "type": "name",
+          "position": 32
+         }
+        ]
+       }
+      },
+      "rhs": {
+       "value": " ",
+       "type": "string",
+       "position": 38
+      }
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Surname",
+        "type": "name",
+        "position": 48
+       }
+      ]
+     }
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case039": {
+  "expr": "$uppercase(Salutation & \" \" & Surname & \" - has \" & Cars & \" registered cars\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 58,
+     "lhs": {
+      "type": "binary",
+      "value": "&",
+      "position": 51,
+      "lhs": {
+       "type": "binary",
+       "value": "&",
+       "position": 39,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 29,
+        "lhs": {
+         "type": "binary",
+         "value": "&",
+         "position": 23,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Salutation",
+            "type": "name",
+            "position": 21
+           }
+          ]
+         },
+         "rhs": {
+          "value": " ",
+          "type": "string",
+          "position": 27
+         }
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Surname",
+           "type": "name",
+           "position": 37
+          }
+         ]
+        }
+       },
+       "rhs": {
+        "value": " - has ",
+        "type": "string",
+        "position": 49
+       }
+      },
+      "rhs": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Cars",
+         "type": "name",
+         "position": 56
+        }
+       ]
+      }
+     },
+     "rhs": {
+      "value": " registered cars",
+      "type": "string",
+      "position": 77
+     }
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case040": {
+  "expr": "$uppercase(Employment.ContractType)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "ContractType",
+       "type": "name",
+       "position": 34
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case041": {
+  "expr": "$substringBefore(\"Hola\", \"l\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "Hola",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "l",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case042": {
+  "expr": "$substringBefore(\"Hola\", 'l')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "Hola",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "l",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case043": {
+  "expr": "$substringBefore(\"Hola\", \"Q\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "Hola",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "Q",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case044": {
+  "expr": "$substringBefore(\"Hola\", \"\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "Hola",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case045": {
+  "expr": "$substringBefore(\"鯵噂ソ竹\", \"ソ\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "鯵噂ソ竹",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "ソ",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case046": {
+  "expr": "$substringAfter(\"Coca\" & \"Cola\", \"ca\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 24,
+     "lhs": {
+      "value": "Coca",
+      "type": "string",
+      "position": 22
+     },
+     "rhs": {
+      "value": "Cola",
+      "type": "string",
+      "position": 31
+     }
+    },
+    {
+     "value": "ca",
+     "type": "string",
+     "position": 37
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case047": {
+  "expr": "$substringAfter(Salutation & \" \" & MiddleName &\" \" & Surname, MiddleName)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 52,
+     "lhs": {
+      "type": "binary",
+      "value": "&",
+      "position": 47,
+      "lhs": {
+       "type": "binary",
+       "value": "&",
+       "position": 34,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 28,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Salutation",
+           "type": "name",
+           "position": 26
+          }
+         ]
+        },
+        "rhs": {
+         "value": " ",
+         "type": "string",
+         "position": 32
+        }
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "MiddleName",
+          "type": "name",
+          "position": 45
+         }
+        ]
+       }
+      },
+      "rhs": {
+       "value": " ",
+       "type": "string",
+       "position": 50
+      }
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Surname",
+        "type": "name",
+        "position": 60
+       }
+      ]
+     }
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "MiddleName",
+       "type": "name",
+       "position": 72
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case048": {
+  "expr": "$substringAfter(Salutation & \" \" & Employment.Role, Salutation)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 34,
+     "lhs": {
+      "type": "binary",
+      "value": "&",
+      "position": 28,
+      "lhs": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Salutation",
+         "type": "name",
+         "position": 26
+        }
+       ]
+      },
+      "rhs": {
+       "value": " ",
+       "type": "string",
+       "position": 32
+      }
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Employment",
+        "type": "name",
+        "position": 45
+       },
+       {
+        "value": "Role",
+        "type": "name",
+        "position": 50
+       }
+      ]
+     }
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salutation",
+       "type": "name",
+       "position": 62
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case049": {
+  "expr": "$substringAfter(\"Hola\", 'l')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": "Hola",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "l",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case050": {
+  "expr": "$substringAfter(\"Hola\", \"Q\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": "Hola",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "Q",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case051": {
+  "expr": "$lowercase(Employment.Role) & \" (\" & Employment.Role & \")\"",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 54,
+   "lhs": {
+    "type": "binary",
+    "value": "&",
+    "position": 36,
+    "lhs": {
+     "type": "binary",
+     "value": "&",
+     "position": 29,
+     "lhs": {
+      "type": "function",
+      "value": "(",
+      "position": 11,
+      "arguments": [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Employment",
+          "type": "name",
+          "position": 21
+         },
+         {
+          "value": "Role",
+          "type": "name",
+          "position": 26
+         }
+        ]
+       }
+      ],
+      "procedure": {
+       "value": "lowercase",
+       "type": "variable",
+       "position": 10
+      }
+     },
+     "rhs": {
+      "value": " (",
+      "type": "string",
+      "position": 34
+     }
+    },
+    "rhs": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 47
+      },
+      {
+       "value": "Role",
+       "type": "name",
+       "position": 52
+      }
+     ]
+    }
+   },
+   "rhs": {
+    "value": ")",
+    "type": "string",
+    "position": 58
+   }
+  }
+ },
+ "case052": {
+  "expr": "Employment.Years & \" years of employment\"",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 18,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Employment",
+      "type": "name",
+      "position": 10
+     },
+     {
+      "value": "Years",
+      "type": "name",
+      "position": 16
+     }
+    ]
+   },
+   "rhs": {
+    "value": " years of employment",
+    "type": "string",
+    "position": 41
+   }
+  }
+ },
+ "case053": {
+  "expr": "$uppercase(Salutation & \" \" & Surname & \" - has \" & Employment.Years & \" years of employment\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 70,
+     "lhs": {
+      "type": "binary",
+      "value": "&",
+      "position": 51,
+      "lhs": {
+       "type": "binary",
+       "value": "&",
+       "position": 39,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 29,
+        "lhs": {
+         "type": "binary",
+         "value": "&",
+         "position": 23,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Salutation",
+            "type": "name",
+            "position": 21
+           }
+          ]
+         },
+         "rhs": {
+          "value": " ",
+          "type": "string",
+          "position": 27
+         }
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Surname",
+           "type": "name",
+           "position": 37
+          }
+         ]
+        }
+       },
+       "rhs": {
+        "value": " - has ",
+        "type": "string",
+        "position": 49
+       }
+      },
+      "rhs": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Employment",
+         "type": "name",
+         "position": 62
+        },
+        {
+         "value": "Years",
+         "type": "name",
+         "position": 68
+        }
+       ]
+      }
+     },
+     "rhs": {
+      "value": " years of employment",
+      "type": "string",
+      "position": 93
+     }
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case054": {
+  "expr": "$substring(Employment.Role, 7,4)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "Role",
+       "type": "name",
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": 7,
+     "type": "number",
+     "position": 29
+    },
+    {
+     "value": 4,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case055": {
+  "expr": "$substring(Employment.Role, -4,4)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "Role",
+       "type": "name",
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": -4,
+     "type": "number",
+     "position": 30
+    },
+    {
+     "value": 4,
+     "type": "number",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case056": {
+  "expr": "$substring(\"Hello World\",Cars,5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Cars",
+       "type": "name",
+       "position": 29
+      }
+     ]
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case057": {
+  "expr": "$lowercase(\"Missing close brackets\"",
+  "error": {
+   "code": "S0203",
+   "position": 35,
+   "token": "(end)"
+  }
+ },
+ "case058": {
+  "expr": "$unknown(Salutation)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salutation",
+       "type": "name",
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "unknown",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case059": {
+  "expr": "$decrypt(Salutation)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salutation",
+       "type": "name",
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "decrypt",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case060": {
+  "expr": "Employment.authentication(Salutation)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Employment",
+     "type": "name",
+     "position": 10
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 26,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Salutation",
+         "type": "name",
+         "position": 36
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "authentication",
+        "type": "name",
+        "position": 25
+       }
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "case061": {
+  "expr": "$uppercase(Invalid)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Invalid",
+       "type": "name",
+       "position": 18
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case062": {
+  "expr": "$uppercase(Employment.Invalid)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "Invalid",
+       "type": "name",
+       "position": 29
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case063": {
+  "expr": "$lowercase(\"Coca\", \"Cola\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Coca",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": "Cola",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case064": {
+  "expr": "$lowercase(Salary)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salary",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case065": {
+  "expr": "$lowercase(20)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": 20,
+     "type": "number",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case066": {
+  "expr": "$lowercase(20.55)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": 20.55,
+     "type": "number",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case067": {
+  "expr": "$lowercase(Employment)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 21
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case068": {
+  "expr": "$lowercase(Qualifications)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Qualifications",
+       "type": "name",
+       "position": 25
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "lowercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case069": {
+  "expr": "$uppercase(\"Coca\", \"Cola\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Coca",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": "Cola",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case070": {
+  "expr": "$uppercase(Salary)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salary",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case071": {
+  "expr": "$uppercase(28)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": 28,
+     "type": "number",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case072": {
+  "expr": "$uppercase(20.55)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": 20.55,
+     "type": "number",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case073": {
+  "expr": "$uppercase(Cars)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Cars",
+       "type": "name",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case074": {
+  "expr": "$uppercase(Employment)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 21
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case075": {
+  "expr": "$uppercase(Qualifications)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Qualifications",
+       "type": "name",
+       "position": 25
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case076": {
+  "expr": "$substringBefore(\"Coca\" & \"ca\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 25,
+     "lhs": {
+      "value": "Coca",
+      "type": "string",
+      "position": 23
+     },
+     "rhs": {
+      "value": "ca",
+      "type": "string",
+      "position": 30
+     }
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case077": {
+  "expr": "$substringBefore(Salary,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salary",
+       "type": "name",
+       "position": 23
+      }
+     ]
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case078": {
+  "expr": "$substringBefore(22,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": 22,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case079": {
+  "expr": "$substringBefore(22.55,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": 22.55,
+     "type": "number",
+     "position": 22
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case080": {
+  "expr": "$substringBefore(\"22\",2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "22",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case081": {
+  "expr": "$substringBefore(\"22.55\",5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "22.55",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case082": {
+  "expr": "$substringBefore(Employment,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 27
+      }
+     ]
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case083": {
+  "expr": "$substringBefore(Qualifications,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Qualifications",
+       "type": "name",
+       "position": 31
+      }
+     ]
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case084": {
+  "expr": "$substringAfter(\"Coca\" & \"ca\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 24,
+     "lhs": {
+      "value": "Coca",
+      "type": "string",
+      "position": 22
+     },
+     "rhs": {
+      "value": "ca",
+      "type": "string",
+      "position": 29
+     }
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case085": {
+  "expr": "$substringAfter(Salary,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salary",
+       "type": "name",
+       "position": 22
+      }
+     ]
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case086": {
+  "expr": "$substringAfter(22,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": 22,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case087": {
+  "expr": "$substringAfter(22.55,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": 22.55,
+     "type": "number",
+     "position": 21
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case088": {
+  "expr": "$substringAfter(\"22\",2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": "22",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case089": {
+  "expr": "$substringAfter(\"22.55\",5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": "22.55",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case090": {
+  "expr": "$substringAfter(Employment,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 26
+      }
+     ]
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case091": {
+  "expr": "$substringAfter(Qualifications,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Qualifications",
+       "type": "name",
+       "position": 30
+      }
+     ]
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case092": {
+  "expr": "$substring(\"Coca\" & \"ca\", 2, 4, 5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "binary",
+     "value": "&",
+     "position": 19,
+     "lhs": {
+      "value": "Coca",
+      "type": "string",
+      "position": 17
+     },
+     "rhs": {
+      "value": "ca",
+      "type": "string",
+      "position": 24
+     }
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 27
+    },
+    {
+     "value": 4,
+     "type": "number",
+     "position": 30
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case093": {
+  "expr": "$substring(\"Coca\", \"Mr\", 4)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Coca",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": "Mr",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": 4,
+     "type": "number",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case094": {
+  "expr": "$substring(\"Coca\", 3, \"Whoops\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Coca",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": "Whoops",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case095": {
+  "expr": "$substring(Salary,2,4)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Salary",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": 4,
+     "type": "number",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case096": {
+  "expr": "$substring(\"Hello\",\"World\",5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Hello",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "World",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case097": {
+  "expr": "$substring(\"Hello\",5,\"World\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Hello",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": "World",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case098": {
+  "expr": "$substring(\"Hello World\",5.5,5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": 5.5,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case099": {
+  "expr": "$substring(Employment,\"xx\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Employment",
+       "type": "name",
+       "position": 21
+      }
+     ]
+    },
+    {
+     "value": "xx",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case100": {
+  "expr": "$substring(Qualifications,6,5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Qualifications",
+       "type": "name",
+       "position": 25
+      }
+     ]
+    },
+    {
+     "value": 6,
+     "type": "number",
+     "position": 27
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case101": {
+  "expr": "detail.contents",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "detail",
+     "type": "name",
+     "position": 6
+    },
+    {
+     "value": "contents",
+     "type": "name",
+     "position": 15
+    }
+   ]
+  }
+ },
+ "case102": {
+  "expr": "detail.meta",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "detail",
+     "type": "name",
+     "position": 6
+    },
+    {
+     "value": "meta",
+     "type": "name",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case103": {
+  "expr": "detail.meta",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "detail",
+     "type": "name",
+     "position": 6
+    },
+    {
+     "value": "meta",
+     "type": "name",
+     "position": 11
+    }
+   ]
+  }
+ }
+}

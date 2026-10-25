@@ -1,0 +1,146 @@
+{
+ "case000": {
+  "expr": "$spread(\"Hello World\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "spread",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "$spread((Account.Order.Product.Description))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "block",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 16
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 22
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 30
+        },
+        {
+         "value": "Description",
+         "type": "name",
+         "position": 42
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "spread",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case002": {
+  "expr": "$spread(blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "spread",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case003": {
+  "expr": "$string($spread(function($x){$x*$x}))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 16,
+     "arguments": [
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 27
+        }
+       ],
+       "position": 25,
+       "body": {
+        "type": "binary",
+        "value": "*",
+        "position": 32,
+        "lhs": {
+         "value": "x",
+         "type": "variable",
+         "position": 31
+        },
+        "rhs": {
+         "value": "x",
+         "type": "variable",
+         "position": 34
+        }
+       }
+      }
+     ],
+     "procedure": {
+      "value": "spread",
+      "type": "variable",
+      "position": 15
+     }
+    }
+   ],
+   "procedure": {
+    "value": "string",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ }
+}

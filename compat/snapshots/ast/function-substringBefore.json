@@ -1,0 +1,132 @@
+{
+ "case000": {
+  "expr": "$substringBefore(\"Hello World\", \" \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 30
+    },
+    {
+     "value": " ",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case001": {
+  "expr": "$substringBefore(\"Hello World\", \"l\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 30
+    },
+    {
+     "value": "l",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case002": {
+  "expr": "$substringBefore(\"Hello World\", \"f\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 30
+    },
+    {
+     "value": "f",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case003": {
+  "expr": "$substringBefore(\"Hello World\", \"He\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 30
+    },
+    {
+     "value": "He",
+     "type": "string",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ },
+ "case004": {
+  "expr": "$substringBefore(blah, \"He\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 17,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 21
+      }
+     ]
+    },
+    {
+     "value": "He",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "substringBefore",
+    "type": "variable",
+    "position": 16
+   }
+  }
+ }
+}

@@ -1,0 +1,1758 @@
+{
+ "case001": {
+  "expr": "$toMillis(\"1970-01-01T00:00:00.001Z\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "1970-01-01T00:00:00.001Z",
+     "type": "string",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case002": {
+  "expr": "$toMillis(\"2018-02-01T09:42:13.123+0000\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-02-01T09:42:13.123+0000",
+     "type": "string",
+     "position": 40
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case003": {
+  "expr": "$toMillis(\"2017-10-30\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2017-10-30",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case004": {
+  "expr": "$toMillis(\"2017-10-30T15:28:34Z\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2017-10-30T15:28:34Z",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case005": {
+  "expr": "$toMillis(\"2018\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018",
+     "type": "string",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case006": {
+  "expr": "$toMillis(foo)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case007": {
+  "expr": "$toMillis(\"foo\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case008": {
+  "expr": "$toMillis(\"01-02-2018\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "01-02-2018",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case009": {
+  "expr": "$toMillis(\"2018-02-03 11:15:33\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-02-03 11:15:33",
+     "type": "string",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case010": {
+  "expr": "$toMillis(\"201802\", \"[Y0001][M01]\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "201802",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "[Y0001][M01]",
+     "type": "string",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case011": {
+  "expr": "$toMillis(\"201802\", \"[Y,*-4][M01]\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "201802",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "[Y,*-4][M01]",
+     "type": "string",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case012": {
+  "expr": "$toMillis(\"20180205\", \"[Y0001][M01][D01]\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "20180205",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "[Y0001][M01][D01]",
+     "type": "string",
+     "position": 41
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "case013": {
+  "expr": "$toMillis('2024-01-01T12:38:49Z') = $toMillis('20240101123849', '[Y0000][M00][D00][H00][m00][s00]')",
+  "ast": {
+   "type": "binary",
+   "value": "=",
+   "position": 35,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "2024-01-01T12:38:49Z",
+      "type": "string",
+      "position": 32
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 46,
+    "arguments": [
+     {
+      "value": "20240101123849",
+      "type": "string",
+      "position": 62
+     },
+     {
+      "value": "[Y0000][M00][D00][H00][m00][s00]",
+      "type": "string",
+      "position": 98
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 45
+    }
+   }
+  }
+ },
+ "parseDateTime[0]": {
+  "expr": "$toMillis(undefined, 'pic')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "undefined",
+       "type": "name",
+       "position": 19
+      }
+     ]
+    },
+    {
+     "value": "pic",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[1]": {
+  "expr": "$toMillis('Hello', 'Hello')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "Hello",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": "Hello",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[2]": {
+  "expr": "$toMillis('2018', '[Y1]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018",
+     "type": "string",
+     "position": 16
+    },
+    {
+     "value": "[Y1]",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[3]": {
+  "expr": "$toMillis('2018-03-27', '[Y1]-[M01]-[D01]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-03-27",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "[Y1]-[M01]-[D01]",
+     "type": "string",
+     "position": 42
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[4]": {
+  "expr": "$toMillis('2018-03-27T14:03:00.123Z', '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01].[f001]Z')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-03-27T14:03:00.123Z",
+     "type": "string",
+     "position": 36
+    },
+    {
+     "value": "[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01].[f001]Z",
+     "type": "string",
+     "position": 85
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[5]": {
+  "expr": "$toMillis('27th 3 1976', '[D1o] [M#1] [Y0001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "27th 3 1976",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "[D1o] [M#1] [Y0001]",
+     "type": "string",
+     "position": 46
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[6]": {
+  "expr": "$toMillis('21st 12 1881', '[D1o] [M01] [Y0001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "21st 12 1881",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": "[D1o] [M01] [Y0001]",
+     "type": "string",
+     "position": 47
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[7]": {
+  "expr": "$toMillis('2nd 12 2012', '[D1o] [M01] [Y0001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2nd 12 2012",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "[D1o] [M01] [Y0001]",
+     "type": "string",
+     "position": 46
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[8]": {
+  "expr": "$toMillis('MCMLXXXIV', '[YI]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "MCMLXXXIV",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": "[YI]",
+     "type": "string",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[9]": {
+  "expr": "$toMillis('27 03 MMXVIII', '[D1] [M01] [YI]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "27 03 MMXVIII",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": "[D1] [M01] [YI]",
+     "type": "string",
+     "position": 44
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[10]": {
+  "expr": "$toMillis('27 iii MMXVIII', '[D1] [Mi] [YI]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "27 iii MMXVIII",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": "[D1] [Mi] [YI]",
+     "type": "string",
+     "position": 44
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[11]": {
+  "expr": "$toMillis('w C mmxviii', '[Da] [MA] [Yi]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "w C mmxviii",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "[Da] [MA] [Yi]",
+     "type": "string",
+     "position": 41
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[12]": {
+  "expr": "$toMillis('ae C mmxviii', '[Da] [MA] [Yi]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "ae C mmxviii",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": "[Da] [MA] [Yi]",
+     "type": "string",
+     "position": 42
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[13]": {
+  "expr": "$toMillis('27th April 2008', '[D1o] [MNn] [Y0001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "27th April 2008",
+     "type": "string",
+     "position": 27
+    },
+    {
+     "value": "[D1o] [MNn] [Y0001]",
+     "type": "string",
+     "position": 50
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[14]": {
+  "expr": "$toMillis('21 August 2017', '[D1] [MNn] [Y0001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "21 August 2017",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": "[D1] [MNn] [Y0001]",
+     "type": "string",
+     "position": 48
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[15]": {
+  "expr": "$toMillis('2 Feb 2012', '[D1] [MNn,3-3] [Y0001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2 Feb 2012",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "[D1] [MNn,3-3] [Y0001]",
+     "type": "string",
+     "position": 48
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[16]": {
+  "expr": "$toMillis('one thousand, nine hundred and eighty-four', '[Yw]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "one thousand, nine hundred and eighty-four",
+     "type": "string",
+     "position": 54
+    },
+    {
+     "value": "[Yw]",
+     "type": "string",
+     "position": 62
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[17]": {
+  "expr": "$toMillis('nineteen hundred and eighty-four', '[Yw]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "nineteen hundred and eighty-four",
+     "type": "string",
+     "position": 44
+    },
+    {
+     "value": "[Yw]",
+     "type": "string",
+     "position": 52
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[18]": {
+  "expr": "$toMillis('twenty-seven April 2008', '[Dw] [MNn] [Y0001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "twenty-seven April 2008",
+     "type": "string",
+     "position": 35
+    },
+    {
+     "value": "[Dw] [MNn] [Y0001]",
+     "type": "string",
+     "position": 57
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[19]": {
+  "expr": "$toMillis('twenty-seventh April 2008', '[Dw] [MNn] [Y0001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "twenty-seventh April 2008",
+     "type": "string",
+     "position": 37
+    },
+    {
+     "value": "[Dw] [MNn] [Y0001]",
+     "type": "string",
+     "position": 59
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[20]": {
+  "expr": "$toMillis('twenty-first August two thousand and seventeen', '[Dw] [MNn] [Yw]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "twenty-first August two thousand and seventeen",
+     "type": "string",
+     "position": 58
+    },
+    {
+     "value": "[Dw] [MNn] [Yw]",
+     "type": "string",
+     "position": 77
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[21]": {
+  "expr": "$toMillis('TWENTY-SECOND August two thousand and seventeen', '[DW] [MNn] [Yw]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "TWENTY-SECOND August two thousand and seventeen",
+     "type": "string",
+     "position": 59
+    },
+    {
+     "value": "[DW] [MNn] [Yw]",
+     "type": "string",
+     "position": 78
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[22]": {
+  "expr": "$toMillis('Twentieth of August, two thousand and seventeen', '[DW] of [MNn], [Yw]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "Twentieth of August, two thousand and seventeen",
+     "type": "string",
+     "position": 59
+    },
+    {
+     "value": "[DW] of [MNn], [Yw]",
+     "type": "string",
+     "position": 82
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[23]": {
+  "expr": "$toMillis('4/4/2018 12:06 am', '[D1]/[M1]/[Y0001] [h]:[m] [P]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "4/4/2018 12:06 am",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "[D1]/[M1]/[Y0001] [h]:[m] [P]",
+     "type": "string",
+     "position": 62
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[24]": {
+  "expr": "$toMillis('4/4/2018 06:30 am', '[D1]/[M1]/[Y0001] [h]:[m] [P]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "4/4/2018 06:30 am",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "[D1]/[M1]/[Y0001] [h]:[m] [P]",
+     "type": "string",
+     "position": 62
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[25]": {
+  "expr": "$toMillis('4/4/2018 12:06 pm', '[D1]/[M1]/[Y0001] [h]:[m] [P]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "4/4/2018 12:06 pm",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "[D1]/[M1]/[Y0001] [h]:[m] [P]",
+     "type": "string",
+     "position": 62
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[26]": {
+  "expr": "$toMillis('4/4/2018 11:30 pm', '[D1]/[M1]/[Y0001] [h]:[m] [P]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "4/4/2018 11:30 pm",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "[D1]/[M1]/[Y0001] [h]:[m] [P]",
+     "type": "string",
+     "position": 62
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[27]": {
+  "expr": "$toMillis('2018-094', '[Y0001]-[d001]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-094",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "[Y0001]-[d001]",
+     "type": "string",
+     "position": 38
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[28]": {
+  "expr": "$toMillis('13:45', '[H]:[m]') ~> $fromMillis() ~> $substringBefore('T') = $substringBefore($now(), 'T')",
+  "ast": {
+   "type": "binary",
+   "value": "=",
+   "position": 73,
+   "lhs": {
+    "type": "apply",
+    "value": "~>",
+    "position": 49,
+    "lhs": {
+     "type": "apply",
+     "value": "~>",
+     "position": 32,
+     "lhs": {
+      "type": "function",
+      "value": "(",
+      "position": 10,
+      "arguments": [
+       {
+        "value": "13:45",
+        "type": "string",
+        "position": 17
+       },
+       {
+        "value": "[H]:[m]",
+        "type": "string",
+        "position": 28
+       }
+      ],
+      "procedure": {
+       "value": "toMillis",
+       "type": "variable",
+       "position": 9
+      }
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 45,
+      "arguments": [],
+      "procedure": {
+       "value": "fromMillis",
+       "type": "variable",
+       "position": 44
+      }
+     }
+    },
+    "rhs": {
+     "type": "function",
+     "value": "(",
+     "position": 67,
+     "arguments": [
+      {
+       "value": "T",
+       "type": "string",
+       "position": 70
+      }
+     ],
+     "procedure": {
+      "value": "substringBefore",
+      "type": "variable",
+      "position": 66
+     }
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 91,
+    "arguments": [
+     {
+      "type": "function",
+      "value": "(",
+      "position": 96,
+      "arguments": [],
+      "procedure": {
+       "value": "now",
+       "type": "variable",
+       "position": 95
+      }
+     },
+     {
+      "value": "T",
+      "type": "string",
+      "position": 102
+     }
+    ],
+    "procedure": {
+     "value": "substringBefore",
+     "type": "variable",
+     "position": 90
+    }
+   }
+  }
+ },
+ "parseDateTime[29]": {
+  "expr": "$toMillis('13:45', '[H]:[m]') ~> $fromMillis() ~> $substringAfter('T')",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 49,
+   "lhs": {
+    "type": "apply",
+    "value": "~>",
+    "position": 32,
+    "lhs": {
+     "type": "function",
+     "value": "(",
+     "position": 10,
+     "arguments": [
+      {
+       "value": "13:45",
+       "type": "string",
+       "position": 17
+      },
+      {
+       "value": "[H]:[m]",
+       "type": "string",
+       "position": 28
+      }
+     ],
+     "procedure": {
+      "value": "toMillis",
+      "type": "variable",
+      "position": 9
+     }
+    },
+    "rhs": {
+     "type": "function",
+     "value": "(",
+     "position": 45,
+     "arguments": [],
+     "procedure": {
+      "value": "fromMillis",
+      "type": "variable",
+      "position": 44
+     }
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 66,
+    "arguments": [
+     {
+      "value": "T",
+      "type": "string",
+      "position": 69
+     }
+    ],
+    "procedure": {
+     "value": "substringAfter",
+     "type": "variable",
+     "position": 65
+    }
+   }
+  }
+ },
+ "parseDateTime[30]": {
+  "expr": "$toMillis('Wednesday, 14th November 2018', '[FNn], [D1o] [MNn] [Y]') ~> $fromMillis()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 71,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "Wednesday, 14th November 2018",
+      "type": "string",
+      "position": 41
+     },
+     {
+      "value": "[FNn], [D1o] [MNn] [Y]",
+      "type": "string",
+      "position": 67
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 84,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 83
+    }
+   }
+  }
+ },
+ "parseDateTime[31]": {
+  "expr": "$toMillis('Mon, Twelfth November 2018', '[FNn,*-3], [DWwo] [MNn] [Y]') ~> $fromMillis()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 73,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "Mon, Twelfth November 2018",
+      "type": "string",
+      "position": 38
+     },
+     {
+      "value": "[FNn,*-3], [DWwo] [MNn] [Y]",
+      "type": "string",
+      "position": 69
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 86,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 85
+    }
+   }
+  }
+ },
+ "parseDateTime[32]": {
+  "expr": "$toMillis('2018--180', '[Y]--[d]') ~> $fromMillis()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 37,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "2018--180",
+      "type": "string",
+      "position": 21
+     },
+     {
+      "value": "[Y]--[d]",
+      "type": "string",
+      "position": 33
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 50,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 49
+    }
+   }
+  }
+ },
+ "parseDateTime[33]": {
+  "expr": "$toMillis('three hundred and sixty-fifth day of 2018', '[dwo] day of [Y]') ~> $fromMillis()",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 77,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "three hundred and sixty-fifth day of 2018",
+      "type": "string",
+      "position": 53
+     },
+     {
+      "value": "[dwo] day of [Y]",
+      "type": "string",
+      "position": 73
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 90,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 89
+    }
+   }
+  }
+ },
+ "parseDateTime[34]": {
+  "expr": "$toMillis('irrelevent string', '[Y]-[M]-[D]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "irrelevent string",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "[Y]-[M]-[D]",
+     "type": "string",
+     "position": 44
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[35]": {
+  "expr": "$toMillis('2018-05-22', '[Y]-[M]-[q]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-05-22",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "[Y]-[M]-[q]",
+     "type": "string",
+     "position": 37
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[36]": {
+  "expr": "$toMillis('2018-05-22', '[YN]-[M]-[D]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-05-22",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "[YN]-[M]-[D]",
+     "type": "string",
+     "position": 38
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[37]": {
+  "expr": "$toMillis('2018-22', '[Y]-[D]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-22",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": "[Y]-[D]",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[38]": {
+  "expr": "$toMillis('5-22 23:59', '[M]-[D] [m]:[s]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "5-22 23:59",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "[M]-[D] [m]:[s]",
+     "type": "string",
+     "position": 41
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[39]": {
+  "expr": "$toMillis('2018-3-2-5', '[X]-[x]-[w]-[F1]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-3-2-5",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "[X]-[x]-[w]-[F1]",
+     "type": "string",
+     "position": 42
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[40]": {
+  "expr": "$toMillis('2018-32-5', '[X]-[W]-[F1]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "2018-32-5",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": "[X]-[W]-[F1]",
+     "type": "string",
+     "position": 37
+    }
+   ],
+   "procedure": {
+    "value": "toMillis",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "parseDateTime[41]": {
+  "expr": "$toMillis('2020-09-09 08:00:00 +02:00', '[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [Z]') ~> $fromMillis() ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 87,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "2020-09-09 08:00:00 +02:00",
+      "type": "string",
+      "position": 38
+     },
+     {
+      "value": "[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [Z]",
+      "type": "string",
+      "position": 83
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 100,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 99
+    }
+   }
+  }
+ },
+ "parseDateTime[42]": {
+  "expr": "$toMillis('2020-09-09 08:00:00 GMT-05:00', '[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [z]') ~> $fromMillis() ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 90,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "2020-09-09 08:00:00 GMT-05:00",
+      "type": "string",
+      "position": 41
+     },
+     {
+      "value": "[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [z]",
+      "type": "string",
+      "position": 86
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 103,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 102
+    }
+   }
+  }
+ },
+ "parseDateTime[43]": {
+  "expr": "$toMillis('2020-09-09 12:00:00 +05:30', '[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [Z]') ~> $fromMillis() ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 87,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "2020-09-09 12:00:00 +05:30",
+      "type": "string",
+      "position": 38
+     },
+     {
+      "value": "[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [Z]",
+      "type": "string",
+      "position": 83
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 100,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 99
+    }
+   }
+  }
+ },
+ "parseDateTime[44]": {
+  "expr": "$toMillis('2020-09-09 12:00:00 GMT-5', '[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [z01]') ~> $fromMillis() ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 88,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "2020-09-09 12:00:00 GMT-5",
+      "type": "string",
+      "position": 37
+     },
+     {
+      "value": "[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [z01]",
+      "type": "string",
+      "position": 84
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 101,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 100
+    }
+   }
+  }
+ },
+ "parseDateTime[45]": {
+  "expr": "$toMillis('2020-09-09 12:00:00 +0530', '[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [Z0001]') ~> $fromMillis() ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 90,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "2020-09-09 12:00:00 +0530",
+      "type": "string",
+      "position": 37
+     },
+     {
+      "value": "[Y0001]-[M01]-[D01] [H01]:[m01]:[s01] [Z0001]",
+      "type": "string",
+      "position": 86
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 103,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 102
+    }
+   }
+  }
+ },
+ "parseDateTime[46]": {
+  "expr": "$toMillis('2026-04-08T19:05:04.01987', '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01].[f1]') ~> $fromMillis() ",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 87,
+   "lhs": {
+    "type": "function",
+    "value": "(",
+    "position": 10,
+    "arguments": [
+     {
+      "value": "2026-04-08T19:05:04.01987",
+      "type": "string",
+      "position": 37
+     },
+     {
+      "value": "[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01].[f1]",
+      "type": "string",
+      "position": 83
+     }
+    ],
+    "procedure": {
+     "value": "toMillis",
+     "type": "variable",
+     "position": 9
+    }
+   },
+   "rhs": {
+    "type": "function",
+    "value": "(",
+    "position": 100,
+    "arguments": [],
+    "procedure": {
+     "value": "fromMillis",
+     "type": "variable",
+     "position": 99
+    }
+   }
+  }
+ }
+}

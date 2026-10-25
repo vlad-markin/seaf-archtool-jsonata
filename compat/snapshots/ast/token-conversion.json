@@ -1,0 +1,53 @@
+{
+ "case000": {
+  "expr": "$.'7a'",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "value": "7a",
+     "type": "name",
+     "position": 6
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "$.'7'",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "value": "7",
+     "type": "name",
+     "position": 5
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "$.7a",
+  "error": {
+   "code": "S0201",
+   "position": 4,
+   "token": "a"
+  }
+ },
+ "case003": {
+  "expr": "$.7",
+  "error": {
+   "code": "S0213",
+   "position": 3
+  }
+ }
+}

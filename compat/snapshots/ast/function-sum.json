@@ -1,0 +1,330 @@
+{
+ "case000": {
+  "expr": "$sum(Account.Order.Product.(Price * Quantity))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 12
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 18
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 26
+      },
+      {
+       "type": "block",
+       "position": 28,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "*",
+         "position": 35,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Price",
+            "type": "name",
+            "position": 33
+           }
+          ]
+         },
+         "rhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Quantity",
+            "type": "name",
+            "position": 44
+           }
+          ]
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sum",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case001": {
+  "expr": "Account.Order.$sum(Product.(Price * Quantity))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 19,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 26
+        },
+        {
+         "type": "block",
+         "position": 28,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "*",
+           "position": 35,
+           "lhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Price",
+              "type": "name",
+              "position": 33
+             }
+            ]
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Quantity",
+              "type": "name",
+              "position": 44
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "sum",
+      "type": "variable",
+      "position": 18
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "Account.Order.(OrderID & \": \" & $sum(Product.(Price*Quantity)))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "block",
+     "position": 15,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 31,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 24,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 22
+          }
+         ]
+        },
+        "rhs": {
+         "value": ": ",
+         "type": "string",
+         "position": 29
+        }
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 37,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Product",
+            "type": "name",
+            "position": 44
+           },
+           {
+            "type": "block",
+            "position": 46,
+            "expressions": [
+             {
+              "type": "binary",
+              "value": "*",
+              "position": 52,
+              "lhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Price",
+                 "type": "name",
+                 "position": 51
+                }
+               ]
+              },
+              "rhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Quantity",
+                 "type": "name",
+                 "position": 60
+                }
+               ]
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "sum",
+         "type": "variable",
+         "position": 36
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "$sum()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [],
+   "procedure": {
+    "value": "sum",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case004": {
+  "expr": "$sum(1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 6
+    }
+   ],
+   "procedure": {
+    "value": "sum",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case005": {
+  "expr": "$sum(Account.Order)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 12
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 18
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sum",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case006": {
+  "expr": "$sum(undefined)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "undefined",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sum",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ }
+}

@@ -1,0 +1,918 @@
+{
+ "case000": {
+  "expr": "nest0.nest1[0]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 13
+       },
+       "position": 12
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "foo.blah[0].baz.fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 10
+       },
+       "position": 9
+      }
+     ]
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 15
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "foo.blah[1].baz.fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 1,
+        "type": "number",
+        "position": 10
+       },
+       "position": 9
+      }
+     ]
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 15
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "foo.blah[-1].bazz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": -1,
+        "type": "number",
+        "position": 11
+       },
+       "position": 9
+      }
+     ]
+    },
+    {
+     "value": "bazz",
+     "type": "name",
+     "position": 17
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "(foo.blah)[1].baz.fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "block",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "foo",
+         "type": "name",
+         "position": 4
+        },
+        {
+         "value": "blah",
+         "type": "name",
+         "position": 9
+        }
+       ]
+      }
+     ],
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 1,
+        "type": "number",
+        "position": 12
+       },
+       "position": 11
+      }
+     ]
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 17
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 21
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "foo.blah.baz.fud[0]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 12
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 16,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 18
+       },
+       "position": 17
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "foo.blah.baz.fud[-1]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 12
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 16,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": -1,
+        "type": "number",
+        "position": 19
+       },
+       "position": 17
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "(foo.blah.baz.fud)[0]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 20
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "(foo.blah.baz.fud)[1]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 1,
+      "type": "number",
+      "position": 20
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "(foo.blah.baz.fud)[5 * 0.2]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "binary",
+      "value": "*",
+      "position": 22,
+      "lhs": {
+       "value": 5,
+       "type": "number",
+       "position": 20
+      },
+      "rhs": {
+       "value": 0.2,
+       "type": "number",
+       "position": 26
+      }
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "(foo.blah.baz.fud)[-1]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": -1,
+      "type": "number",
+      "position": 21
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "(foo.blah.baz.fud)[-2]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": -2,
+      "type": "number",
+      "position": 21
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case012": {
+  "expr": "(foo.blah.baz.fud)[2-4]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "binary",
+      "value": "-",
+      "position": 21,
+      "lhs": {
+       "value": 2,
+       "type": "number",
+       "position": 20
+      },
+      "rhs": {
+       "value": 4,
+       "type": "number",
+       "position": 22
+      }
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "(foo.blah.baz.fud)[-(4-2)]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "unary",
+      "value": "-",
+      "position": 20,
+      "expression": {
+       "type": "block",
+       "position": 21,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "-",
+         "position": 23,
+         "lhs": {
+          "value": 4,
+          "type": "number",
+          "position": 22
+         },
+         "rhs": {
+          "value": 2,
+          "type": "number",
+          "position": 24
+         }
+        }
+       ]
+      }
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case014": {
+  "expr": "(foo.blah.baz.fud)[$$.foo.bar / 30]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "fud",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "binary",
+      "value": "/",
+      "position": 31,
+      "lhs": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "$",
+         "type": "variable",
+         "position": 21
+        },
+        {
+         "value": "foo",
+         "type": "name",
+         "position": 25
+        },
+        {
+         "value": "bar",
+         "type": "name",
+         "position": 29
+        }
+       ]
+      },
+      "rhs": {
+       "value": 30,
+       "type": "number",
+       "position": 34
+      }
+     },
+     "position": 19
+    }
+   ]
+  }
+ },
+ "case015": {
+  "expr": "foo.blah[0].baz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 10
+       },
+       "position": 9
+      }
+     ]
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 15
+    }
+   ]
+  }
+ },
+ "case016": {
+  "expr": "foo.blah.baz[0]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 12,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 14
+       },
+       "position": 13
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "(foo.blah.baz)[0]",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 4
+      },
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "baz",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 16
+     },
+     "position": 15
+    }
+   ]
+  }
+ },
+ "case018": {
+  "expr": "$[0]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 3
+     },
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case019": {
+  "expr": "$[1]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 1,
+      "type": "number",
+      "position": 3
+     },
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case020": {
+  "expr": "$[-1]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": -1,
+      "type": "number",
+      "position": 4
+     },
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case021": {
+  "expr": "$[1][0]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 1,
+      "type": "number",
+      "position": 3
+     },
+     "position": 2
+    },
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 6
+     },
+     "position": 5
+    }
+   ]
+  }
+ },
+ "case022": {
+  "expr": "$[1.1][0.9]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 1.1,
+      "type": "number",
+      "position": 5
+     },
+     "position": 2
+    },
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0.9,
+      "type": "number",
+      "position": 10
+     },
+     "position": 7
+    }
+   ]
+  }
+ }
+}

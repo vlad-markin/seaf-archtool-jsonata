@@ -1,0 +1,425 @@
+{
+ "case000": {
+  "expr": "(\n    $generateMatcher := function($ch) {\n      $match := function($str, $offset) {(\n        $before := $substringBefore($str, $ch);\n        $start := $length($before) + ($exists($offset) ? $offset : 0);\n        $end := $start + $length($ch);\n        $before != $str and $length($ch) > 0 ? {\n          'match': $ch,\n          'start': $start,\n          'end': $end,\n          'groups': [],\n          'next': function() {$match($substringAfter($str, $ch), $end)}\n        }\n      )}\n    };\n\n    $match(\"abracadabra\", $generateMatcher('a'))\n)",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 25,
+     "lhs": {
+      "value": "generateMatcher",
+      "type": "variable",
+      "position": 22
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "ch",
+        "type": "variable",
+        "position": 38
+       }
+      ],
+      "position": 35,
+      "body": {
+       "type": "bind",
+       "value": ":=",
+       "position": 57,
+       "lhs": {
+        "value": "match",
+        "type": "variable",
+        "position": 54
+       },
+       "rhs": {
+        "type": "lambda",
+        "arguments": [
+         {
+          "value": "str",
+          "type": "variable",
+          "position": 71
+         },
+         {
+          "value": "offset",
+          "type": "variable",
+          "position": 80
+         }
+        ],
+        "position": 67,
+        "body": {
+         "type": "block",
+         "position": 84,
+         "expressions": [
+          {
+           "type": "bind",
+           "value": ":=",
+           "position": 103,
+           "lhs": {
+            "value": "before",
+            "type": "variable",
+            "position": 100
+           },
+           "rhs": {
+            "type": "function",
+            "value": "(",
+            "position": 121,
+            "arguments": [
+             {
+              "value": "str",
+              "type": "variable",
+              "position": 125
+             },
+             {
+              "value": "ch",
+              "type": "variable",
+              "position": 130
+             }
+            ],
+            "procedure": {
+             "value": "substringBefore",
+             "type": "variable",
+             "position": 120
+            }
+           }
+          },
+          {
+           "type": "bind",
+           "value": ":=",
+           "position": 150,
+           "lhs": {
+            "value": "start",
+            "type": "variable",
+            "position": 147
+           },
+           "rhs": {
+            "type": "binary",
+            "value": "+",
+            "position": 169,
+            "lhs": {
+             "type": "function",
+             "value": "(",
+             "position": 159,
+             "arguments": [
+              {
+               "value": "before",
+               "type": "variable",
+               "position": 166
+              }
+             ],
+             "procedure": {
+              "value": "length",
+              "type": "variable",
+              "position": 158
+             }
+            },
+            "rhs": {
+             "type": "block",
+             "position": 171,
+             "expressions": [
+              {
+               "type": "condition",
+               "position": 189,
+               "condition": {
+                "type": "function",
+                "value": "(",
+                "position": 179,
+                "arguments": [
+                 {
+                  "value": "offset",
+                  "type": "variable",
+                  "position": 186
+                 }
+                ],
+                "procedure": {
+                 "value": "exists",
+                 "type": "variable",
+                 "position": 178
+                }
+               },
+               "then": {
+                "value": "offset",
+                "type": "variable",
+                "position": 197
+               },
+               "else": {
+                "value": 0,
+                "type": "number",
+                "position": 201
+               }
+              }
+             ]
+            }
+           }
+          },
+          {
+           "type": "bind",
+           "value": ":=",
+           "position": 219,
+           "lhs": {
+            "value": "end",
+            "type": "variable",
+            "position": 216
+           },
+           "rhs": {
+            "type": "binary",
+            "value": "+",
+            "position": 228,
+            "lhs": {
+             "value": "start",
+             "type": "variable",
+             "position": 226
+            },
+            "rhs": {
+             "type": "function",
+             "value": "(",
+             "position": 237,
+             "arguments": [
+              {
+               "value": "ch",
+               "type": "variable",
+               "position": 240
+              }
+             ],
+             "procedure": {
+              "value": "length",
+              "type": "variable",
+              "position": 236
+             }
+            }
+           }
+          },
+          {
+           "type": "condition",
+           "position": 289,
+           "condition": {
+            "type": "binary",
+            "value": "and",
+            "position": 270,
+            "lhs": {
+             "type": "binary",
+             "value": "!=",
+             "position": 261,
+             "lhs": {
+              "value": "before",
+              "type": "variable",
+              "position": 258
+             },
+             "rhs": {
+              "value": "str",
+              "type": "variable",
+              "position": 266
+             }
+            },
+            "rhs": {
+             "type": "binary",
+             "value": ">",
+             "position": 285,
+             "lhs": {
+              "type": "function",
+              "value": "(",
+              "position": 279,
+              "arguments": [
+               {
+                "value": "ch",
+                "type": "variable",
+                "position": 282
+               }
+              ],
+              "procedure": {
+               "value": "length",
+               "type": "variable",
+               "position": 278
+              }
+             },
+             "rhs": {
+              "value": 0,
+              "type": "number",
+              "position": 287
+             }
+            }
+           },
+           "then": {
+            "type": "unary",
+            "value": "{",
+            "position": 291,
+            "lhs": [
+             [
+              {
+               "value": "match",
+               "type": "string",
+               "position": 309
+              },
+              {
+               "value": "ch",
+               "type": "variable",
+               "position": 314
+              }
+             ],
+             [
+              {
+               "value": "start",
+               "type": "string",
+               "position": 333
+              },
+              {
+               "value": "start",
+               "type": "variable",
+               "position": 341
+              }
+             ],
+             [
+              {
+               "value": "end",
+               "type": "string",
+               "position": 358
+              },
+              {
+               "value": "end",
+               "type": "variable",
+               "position": 364
+              }
+             ],
+             [
+              {
+               "value": "groups",
+               "type": "string",
+               "position": 384
+              },
+              {
+               "type": "unary",
+               "value": "[",
+               "position": 387,
+               "expressions": []
+              }
+             ],
+             [
+              {
+               "value": "next",
+               "type": "string",
+               "position": 406
+              },
+              {
+               "type": "lambda",
+               "arguments": [],
+               "position": 417,
+               "body": {
+                "type": "lambda",
+                "thunk": true,
+                "arguments": [],
+                "position": 427,
+                "body": {
+                 "type": "function",
+                 "value": "(",
+                 "position": 427,
+                 "arguments": [
+                  {
+                   "type": "function",
+                   "value": "(",
+                   "position": 443,
+                   "arguments": [
+                    {
+                     "value": "str",
+                     "type": "variable",
+                     "position": 447
+                    },
+                    {
+                     "value": "ch",
+                     "type": "variable",
+                     "position": 452
+                    }
+                   ],
+                   "procedure": {
+                    "value": "substringAfter",
+                    "type": "variable",
+                    "position": 442
+                   }
+                  },
+                  {
+                   "value": "end",
+                   "type": "variable",
+                   "position": 459
+                  }
+                 ],
+                 "procedure": {
+                  "value": "match",
+                  "type": "variable",
+                  "position": 426
+                 }
+                }
+               }
+              }
+             ]
+            ]
+           }
+          }
+         ]
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 500,
+     "arguments": [
+      {
+       "value": "abracadabra",
+       "type": "string",
+       "position": 513
+      },
+      {
+       "type": "function",
+       "value": "(",
+       "position": 532,
+       "arguments": [
+        {
+         "value": "a",
+         "type": "string",
+         "position": 535
+        }
+       ],
+       "procedure": {
+        "value": "generateMatcher",
+        "type": "variable",
+        "position": 531
+       }
+      }
+     ],
+     "procedure": {
+      "value": "match",
+      "type": "variable",
+      "position": 499
+     }
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "$split('some text', $uppercase)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "some text",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "uppercase",
+     "type": "variable",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ }
+}

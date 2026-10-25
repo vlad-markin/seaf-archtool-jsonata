@@ -1,0 +1,510 @@
+{
+ "case000": {
+  "expr": "\"foo\" & \"bar\"",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 7,
+   "lhs": {
+    "value": "foo",
+    "type": "string",
+    "position": 5
+   },
+   "rhs": {
+    "value": "bar",
+    "type": "string",
+    "position": 13
+   }
+  }
+ },
+ "case001": {
+  "expr": "\"foo\"&\"bar\"",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 6,
+   "lhs": {
+    "value": "foo",
+    "type": "string",
+    "position": 5
+   },
+   "rhs": {
+    "value": "bar",
+    "type": "string",
+    "position": 11
+   }
+  }
+ },
+ "case002": {
+  "expr": "foo.blah[0].baz.fud &foo.blah[1].baz.fud",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 21,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     },
+     {
+      "value": "baz",
+      "type": "name",
+      "position": 15
+     },
+     {
+      "value": "fud",
+      "type": "name",
+      "position": 19
+     }
+    ]
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 24
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 29,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 1,
+         "type": "number",
+         "position": 31
+        },
+        "position": 30
+       }
+      ]
+     },
+     {
+      "value": "baz",
+      "type": "name",
+      "position": 36
+     },
+     {
+      "value": "fud",
+      "type": "name",
+      "position": 40
+     }
+    ]
+   }
+  }
+ },
+ "case003": {
+  "expr": "foo.(blah[0].baz.fud & blah[1].baz.fud)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "type": "block",
+     "position": 5,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 22,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "blah",
+          "type": "name",
+          "position": 9,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "value": 0,
+             "type": "number",
+             "position": 11
+            },
+            "position": 10
+           }
+          ]
+         },
+         {
+          "value": "baz",
+          "type": "name",
+          "position": 16
+         },
+         {
+          "value": "fud",
+          "type": "name",
+          "position": 20
+         }
+        ]
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "blah",
+          "type": "name",
+          "position": 27,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "value": 1,
+             "type": "number",
+             "position": 29
+            },
+            "position": 28
+           }
+          ]
+         },
+         {
+          "value": "baz",
+          "type": "name",
+          "position": 34
+         },
+         {
+          "value": "fud",
+          "type": "name",
+          "position": 38
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "foo.(blah[0].baz.fud & none)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "type": "block",
+     "position": 5,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 22,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "blah",
+          "type": "name",
+          "position": 9,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "value": 0,
+             "type": "number",
+             "position": 11
+            },
+            "position": 10
+           }
+          ]
+         },
+         {
+          "value": "baz",
+          "type": "name",
+          "position": 16
+         },
+         {
+          "value": "fud",
+          "type": "name",
+          "position": 20
+         }
+        ]
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "none",
+          "type": "name",
+          "position": 27
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "foo.(none.here & blah[1].baz.fud)",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "type": "block",
+     "position": 5,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 16,
+       "lhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "none",
+          "type": "name",
+          "position": 9
+         },
+         {
+          "value": "here",
+          "type": "name",
+          "position": 14
+         }
+        ]
+       },
+       "rhs": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "blah",
+          "type": "name",
+          "position": 21,
+          "stages": [
+           {
+            "type": "filter",
+            "expr": {
+             "value": 1,
+             "type": "number",
+             "position": 23
+            },
+            "position": 22
+           }
+          ]
+         },
+         {
+          "value": "baz",
+          "type": "name",
+          "position": 28
+         },
+         {
+          "value": "fud",
+          "type": "name",
+          "position": 32
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "[1,2]&[3,4]",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 6,
+   "lhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     {
+      "value": 2,
+      "type": "number",
+      "position": 4
+     }
+    ]
+   },
+   "rhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 7,
+    "expressions": [
+     {
+      "value": 3,
+      "type": "number",
+      "position": 8
+     },
+     {
+      "value": 4,
+      "type": "number",
+      "position": 10
+     }
+    ]
+   }
+  }
+ },
+ "case007": {
+  "expr": "[1,2]&3",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 6,
+   "lhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     {
+      "value": 2,
+      "type": "number",
+      "position": 4
+     }
+    ]
+   },
+   "rhs": {
+    "value": 3,
+    "type": "number",
+    "position": 7
+   }
+  }
+ },
+ "case008": {
+  "expr": "1&2",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 2,
+   "lhs": {
+    "value": 1,
+    "type": "number",
+    "position": 1
+   },
+   "rhs": {
+    "value": 2,
+    "type": "number",
+    "position": 3
+   }
+  }
+ },
+ "case009": {
+  "expr": "1&[2]",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 2,
+   "lhs": {
+    "value": 1,
+    "type": "number",
+    "position": 1
+   },
+   "rhs": {
+    "type": "unary",
+    "value": "[",
+    "position": 3,
+    "expressions": [
+     {
+      "value": 2,
+      "type": "number",
+      "position": 4
+     }
+    ]
+   }
+  }
+ },
+ "case010": {
+  "expr": "\"hello\"&5",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 8,
+   "lhs": {
+    "value": "hello",
+    "type": "string",
+    "position": 7
+   },
+   "rhs": {
+    "value": 5,
+    "type": "number",
+    "position": 9
+   }
+  }
+ },
+ "case011": {
+  "expr": "\"Prices: \" & Account.Order.Product.Price",
+  "ast": {
+   "type": "binary",
+   "value": "&",
+   "position": 12,
+   "lhs": {
+    "value": "Prices: ",
+    "type": "string",
+    "position": 10
+   },
+   "rhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 20
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 26
+     },
+     {
+      "value": "Product",
+      "type": "name",
+      "position": 34
+     },
+     {
+      "value": "Price",
+      "type": "name",
+      "position": 40
+     }
+    ]
+   }
+  }
+ }
+}

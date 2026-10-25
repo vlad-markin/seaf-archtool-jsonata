@@ -1,0 +1,347 @@
+{
+ "case000": {
+  "expr": "$length(\"\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "",
+     "type": "string",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "$length(\"hello\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case002": {
+  "expr": "$length(missing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "missing",
+       "type": "name",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case003": {
+  "expr": "$length(\"\\u03BB-calculus\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "λ-calculus",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case004": {
+  "expr": "$length(\"\\uD834\\uDD1E\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "𝄞",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case005": {
+  "expr": "$length(\"𝄞\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "𝄞",
+     "type": "string",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case006": {
+  "expr": "$length(\"超明體繁\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "超明體繁",
+     "type": "string",
+     "position": 14
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case007": {
+  "expr": "$length(\"\\t\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "\t",
+     "type": "string",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case008": {
+  "expr": "$length(\"\\n\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "\n",
+     "type": "string",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case009": {
+  "expr": "$length(1234)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": 1234,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case010": {
+  "expr": "$length(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case011": {
+  "expr": "$length(true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": true,
+     "type": "value",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case012": {
+  "expr": "$length([\"str\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": [
+      {
+       "value": "str",
+       "type": "string",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case013": {
+  "expr": "$length()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case014": {
+  "expr": "$length()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case015": {
+  "expr": "$length(\"Hello\", \"World\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "Hello",
+     "type": "string",
+     "position": 15
+    },
+    {
+     "value": "World",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case016": {
+  "expr": "$length(\"𝄞💩\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "𝄞💩",
+     "type": "string",
+     "position": 14
+    }
+   ],
+   "procedure": {
+    "value": "length",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ }
+}

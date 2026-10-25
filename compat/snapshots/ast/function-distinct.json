@@ -1,0 +1,256 @@
+{
+ "distinct[0]": {
+  "expr": "$distinct([1,2,3,4])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 11,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 12
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 14
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 16
+      },
+      {
+       "value": 4,
+       "type": "number",
+       "position": 18
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "distinct",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "distinct[1]": {
+  "expr": "$distinct([1])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 11,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 12
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "distinct",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "distinct[2]": {
+  "expr": "$distinct(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "distinct",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "distinct[3]": {
+  "expr": "$distinct(null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": null,
+     "type": "value",
+     "position": 14
+    }
+   ],
+   "procedure": {
+    "value": "distinct",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "distinct[4]": {
+  "expr": "$distinct('hello')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 17
+    }
+   ],
+   "procedure": {
+    "value": "distinct",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "distinct[5]": {
+  "expr": "$distinct(Account.Order.Product.SKU)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 17
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 23
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 31
+      },
+      {
+       "value": "SKU",
+       "type": "name",
+       "position": 35
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "distinct",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "distinct[6]": {
+  "expr": "$distinct(Account.Order.Product.`Product Name`)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 17
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 23
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 31
+      },
+      {
+       "value": "Product Name",
+       "type": "name",
+       "position": 46
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "distinct",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ },
+ "distinct[7]": {
+  "expr": "$distinct(Account.Order.Product.Description)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 10,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 17
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 23
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 31
+      },
+      {
+       "value": "Description",
+       "type": "name",
+       "position": 43
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "distinct",
+    "type": "variable",
+    "position": 9
+   }
+  }
+ }
+}

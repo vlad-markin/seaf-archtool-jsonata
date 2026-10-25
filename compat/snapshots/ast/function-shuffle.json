@@ -1,0 +1,152 @@
+{
+ "case000": {
+  "expr": "$count($shuffle([1..10]))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 16,
+     "arguments": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 17,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "..",
+         "position": 20,
+         "lhs": {
+          "value": 1,
+          "type": "number",
+          "position": 18
+         },
+         "rhs": {
+          "value": 10,
+          "type": "number",
+          "position": 22
+         }
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "shuffle",
+      "type": "variable",
+      "position": 15
+     }
+    }
+   ],
+   "procedure": {
+    "value": "count",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case001": {
+  "expr": "$sort($shuffle([1..10]))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "function",
+     "value": "(",
+     "position": 15,
+     "arguments": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 16,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "..",
+         "position": 19,
+         "lhs": {
+          "value": 1,
+          "type": "number",
+          "position": 17
+         },
+         "rhs": {
+          "value": 10,
+          "type": "number",
+          "position": 21
+         }
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "shuffle",
+      "type": "variable",
+      "position": 14
+     }
+    }
+   ],
+   "procedure": {
+    "value": "sort",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$shuffle(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 16
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "shuffle",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case003": {
+  "expr": "$shuffle([1])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "shuffle",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ }
+}

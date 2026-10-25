@@ -1,0 +1,67 @@
+{
+ "case000": {
+  "expr": "$decodeUrl(\"https://mozilla.org/?x=%D1%88%D0%B5%D0%BB%D0%BB%D1%8B\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "https://mozilla.org/?x=%D1%88%D0%B5%D0%BB%D0%BB%D1%8B",
+     "type": "string",
+     "position": 66
+    }
+   ],
+   "procedure": {
+    "value": "decodeUrl",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case001": {
+  "expr": "$decodeUrl(blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "decodeUrl",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case002": {
+  "expr": "$decodeUrl('%E0%A4%A')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "%E0%A4%A",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "decodeUrl",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ }
+}

@@ -1,0 +1,706 @@
+{
+ "case000": {
+  "expr": "true ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 7,
+   "condition": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "then": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 10
+   }
+  }
+ },
+ "case001": {
+  "expr": "false ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 8,
+   "condition": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "then": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 11
+   }
+  }
+ },
+ "case002": {
+  "expr": "1 ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 4,
+   "condition": {
+    "value": 1,
+    "type": "number",
+    "position": 1
+   },
+   "then": {
+    "value": 1,
+    "type": "number",
+    "position": 1
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 7
+   }
+  }
+ },
+ "case003": {
+  "expr": "0 ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 4,
+   "condition": {
+    "value": 0,
+    "type": "number",
+    "position": 1
+   },
+   "then": {
+    "value": 0,
+    "type": "number",
+    "position": 1
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 7
+   }
+  }
+ },
+ "case004": {
+  "expr": "\"hello\" ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 10,
+   "condition": {
+    "value": "hello",
+    "type": "string",
+    "position": 7
+   },
+   "then": {
+    "value": "hello",
+    "type": "string",
+    "position": 7
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 13
+   }
+  }
+ },
+ "case005": {
+  "expr": "\"\" ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 5,
+   "condition": {
+    "value": "",
+    "type": "string",
+    "position": 2
+   },
+   "then": {
+    "value": "",
+    "type": "string",
+    "position": 2
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 8
+   }
+  }
+ },
+ "case006": {
+  "expr": "[1] ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 6,
+   "condition": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     }
+    ]
+   },
+   "then": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 9
+   }
+  }
+ },
+ "case007": {
+  "expr": "[0] ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 6,
+   "condition": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": 0,
+      "type": "number",
+      "position": 2
+     }
+    ]
+   },
+   "then": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": 0,
+      "type": "number",
+      "position": 2
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 9
+   }
+  }
+ },
+ "case008": {
+  "expr": "[] ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 5,
+   "condition": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": []
+   },
+   "then": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": []
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 8
+   }
+  }
+ },
+ "case009": {
+  "expr": "{ \"a\": 1 } ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 13,
+   "condition": {
+    "type": "unary",
+    "value": "{",
+    "position": 1,
+    "lhs": [
+     [
+      {
+       "value": "a",
+       "type": "string",
+       "position": 5
+      },
+      {
+       "value": 1,
+       "type": "number",
+       "position": 8
+      }
+     ]
+    ]
+   },
+   "then": {
+    "type": "unary",
+    "value": "{",
+    "position": 1,
+    "lhs": [
+     [
+      {
+       "value": "a",
+       "type": "string",
+       "position": 5
+      },
+      {
+       "value": 1,
+       "type": "number",
+       "position": 8
+      }
+     ]
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 16
+   }
+  }
+ },
+ "case010": {
+  "expr": "{} ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 5,
+   "condition": {
+    "type": "unary",
+    "value": "{",
+    "position": 1,
+    "lhs": []
+   },
+   "then": {
+    "type": "unary",
+    "value": "{",
+    "position": 1,
+    "lhs": []
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 8
+   }
+  }
+ },
+ "case011": {
+  "expr": "function(){true} ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 19,
+   "condition": {
+    "type": "lambda",
+    "arguments": [],
+    "position": 9,
+    "body": {
+     "value": true,
+     "type": "value",
+     "position": 15
+    }
+   },
+   "then": {
+    "type": "lambda",
+    "arguments": [],
+    "position": 9,
+    "body": {
+     "value": true,
+     "type": "value",
+     "position": 15
+    }
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 22
+   }
+  }
+ },
+ "case012": {
+  "expr": "Account.blah ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 15,
+   "condition": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 12
+     }
+    ]
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 12
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 18
+   }
+  }
+ },
+ "case013": {
+  "expr": "Account.blah ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 15,
+   "condition": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 12
+     }
+    ]
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 12
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 18
+   }
+  }
+ },
+ "case014": {
+  "expr": "foo.blah[0] ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 14,
+   "condition": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     }
+    ]
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 17
+   }
+  }
+ },
+ "case015": {
+  "expr": "foo.blah[5] ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 14,
+   "condition": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 5,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     }
+    ]
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 5,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 17
+   }
+  }
+ },
+ "case016": {
+  "expr": "[1,2,3][-1] ?: 42",
+  "ast": {
+   "type": "condition",
+   "position": 14,
+   "condition": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     {
+      "value": 2,
+      "type": "number",
+      "position": 4
+     },
+     {
+      "value": 3,
+      "type": "number",
+      "position": 6
+     }
+    ],
+    "predicate": [
+     {
+      "type": "filter",
+      "expr": {
+       "value": -1,
+       "type": "number",
+       "position": 10
+      },
+      "position": 8
+     }
+    ]
+   },
+   "then": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": 1,
+      "type": "number",
+      "position": 2
+     },
+     {
+      "value": 2,
+      "type": "number",
+      "position": 4
+     },
+     {
+      "value": 3,
+      "type": "number",
+      "position": 6
+     }
+    ],
+    "predicate": [
+     {
+      "type": "filter",
+      "expr": {
+       "value": -1,
+       "type": "number",
+       "position": 10
+      },
+      "position": 8
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 17
+   }
+  }
+ },
+ "case017": {
+  "expr": "[true][-1] ?: \"no\"",
+  "ast": {
+   "type": "condition",
+   "position": 13,
+   "condition": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": true,
+      "type": "value",
+      "position": 5
+     }
+    ],
+    "predicate": [
+     {
+      "type": "filter",
+      "expr": {
+       "value": -1,
+       "type": "number",
+       "position": 9
+      },
+      "position": 7
+     }
+    ]
+   },
+   "then": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": [
+     {
+      "value": true,
+      "type": "value",
+      "position": 5
+     }
+    ],
+    "predicate": [
+     {
+      "type": "filter",
+      "expr": {
+       "value": -1,
+       "type": "number",
+       "position": 9
+      },
+      "position": 7
+     }
+    ]
+   },
+   "else": {
+    "value": "no",
+    "type": "string",
+    "position": 18
+   }
+  }
+ },
+ "case018": {
+  "expr": "-5 ?: 99",
+  "ast": {
+   "type": "condition",
+   "position": 5,
+   "condition": {
+    "value": -5,
+    "type": "number",
+    "position": 2
+   },
+   "then": {
+    "value": -5,
+    "type": "number",
+    "position": 2
+   },
+   "else": {
+    "value": 99,
+    "type": "number",
+    "position": 8
+   }
+  }
+ }
+}

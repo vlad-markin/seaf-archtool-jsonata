@@ -1,0 +1,1532 @@
+{
+ "parseInteger[0]": {
+  "expr": "$parseInteger(undefined, '0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "undefined",
+       "type": "name",
+       "position": 23
+      }
+     ]
+    },
+    {
+     "value": "0",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[1]": {
+  "expr": "$parseInteger('123', '000')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "123",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": "000",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[2]": {
+  "expr": "$parseInteger('0123', '0000')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "0123",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "0000",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[3]": {
+  "expr": "$parseInteger('1234', '0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "1234",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "0",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[4]": {
+  "expr": "$parseInteger('1234', '###0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "1234",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "###0",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[5]": {
+  "expr": "$parseInteger('12', '###0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "12",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "###0",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[6]": {
+  "expr": "$parseInteger('123rd', '000;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "123rd",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": "000;o",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[7]": {
+  "expr": "$parseInteger('1st', '0;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "1st",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": "0;o",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[8]": {
+  "expr": "$parseInteger('28th', '#0;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "28th",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "#0;o",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[9]": {
+  "expr": "$parseInteger('1234th', '###0;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "1234th",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "###0;o",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[10]": {
+  "expr": "$parseInteger('12th', '###0;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "12th",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "###0;o",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[11]": {
+  "expr": "$parseInteger('١٢٣٤٠', '###١')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "١٢٣٤٠",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": "###١",
+     "type": "string",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[12]": {
+  "expr": "$parseInteger('１２３４０', '###０')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "１２３４０",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": "###０",
+     "type": "string",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[13]": {
+  "expr": "$parseInteger('12', '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "12",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[14]": {
+  "expr": "$parseInteger('1,200', '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "1,200",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[15]": {
+  "expr": "$parseInteger('12,345,678', '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "12,345,678",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[16]": {
+  "expr": "$parseInteger('1,234,567,890', '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "1,234,567,890",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 38
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[17]": {
+  "expr": "$parseInteger('1,234,567,890', '#,###,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "1,234,567,890",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "#,###,##0",
+     "type": "string",
+     "position": 42
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[18]": {
+  "expr": "$parseInteger('1234:567,890', '#:###,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "1234:567,890",
+     "type": "string",
+     "position": 28
+    },
+    {
+     "value": "#:###,##0",
+     "type": "string",
+     "position": 41
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[19]": {
+  "expr": "$parseInteger('12345,67,890', '##,##,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "12345,67,890",
+     "type": "string",
+     "position": 28
+    },
+    {
+     "value": "##,##,##0",
+     "type": "string",
+     "position": 41
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[20]": {
+  "expr": "$parseInteger('', 'I')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "",
+     "type": "string",
+     "position": 16
+    },
+    {
+     "value": "I",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[21]": {
+  "expr": "$parseInteger('MCMLXXXIV', 'I')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "MCMLXXXIV",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": "I",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[22]": {
+  "expr": "$parseInteger('xcix', 'i')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "xcix",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "i",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[23]": {
+  "expr": "$parseInteger('twelve', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "twelve",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[24]": {
+  "expr": "$parseInteger('twenty', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "twenty",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[25]": {
+  "expr": "$parseInteger('thirty-four', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "thirty-four",
+     "type": "string",
+     "position": 27
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[26]": {
+  "expr": "$parseInteger('NINETY-NINE', 'W')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "NINETY-NINE",
+     "type": "string",
+     "position": 27
+    },
+    {
+     "value": "W",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[27]": {
+  "expr": "$parseInteger('one hundred', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "one hundred",
+     "type": "string",
+     "position": 27
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[28]": {
+  "expr": "$parseInteger('FIVE HUNDRED AND FIFTY-FIVE', 'W')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "FIVE HUNDRED AND FIFTY-FIVE",
+     "type": "string",
+     "position": 43
+    },
+    {
+     "value": "W",
+     "type": "string",
+     "position": 48
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[29]": {
+  "expr": "$parseInteger('Five Hundred and Fifty-Five', 'Ww')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "Five Hundred and Fifty-Five",
+     "type": "string",
+     "position": 43
+    },
+    {
+     "value": "Ww",
+     "type": "string",
+     "position": 49
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[30]": {
+  "expr": "$parseInteger('nine hundred and nineteen', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "nine hundred and nineteen",
+     "type": "string",
+     "position": 41
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 46
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[31]": {
+  "expr": "$parseInteger('seven hundred and thirty', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "seven hundred and thirty",
+     "type": "string",
+     "position": 40
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 45
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[32]": {
+  "expr": "$parseInteger('one thousand', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "one thousand",
+     "type": "string",
+     "position": 28
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[33]": {
+  "expr": "$parseInteger('three thousand, seven hundred and thirty', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "three thousand, seven hundred and thirty",
+     "type": "string",
+     "position": 56
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 61
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[34]": {
+  "expr": "$parseInteger('three hundred and twenty-seven thousand, seven hundred and thirty', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "three hundred and twenty-seven thousand, seven hundred and thirty",
+     "type": "string",
+     "position": 81
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 86
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[35]": {
+  "expr": "$parseInteger('four million, three hundred and twenty-seven thousand, seven hundred and thirty', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "four million, three hundred and twenty-seven thousand, seven hundred and thirty",
+     "type": "string",
+     "position": 95
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 100
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[36]": {
+  "expr": "$parseInteger('one trillion and one', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "one trillion and one",
+     "type": "string",
+     "position": 36
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 41
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[37]": {
+  "expr": "$parseInteger('one trillion, two hundred and thirty-four billion, five hundred and sixty-seven million, eight hundred and ninety thousand, one hundred and twenty-three', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "one trillion, two hundred and thirty-four billion, five hundred and sixty-seven million, eight hundred and ninety thousand, one hundred and twenty-three",
+     "type": "string",
+     "position": 168
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 173
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[38]": {
+  "expr": "$parseInteger('one thousand trillion', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "one thousand trillion",
+     "type": "string",
+     "position": 37
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 42
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[39]": {
+  "expr": "$parseInteger('ten billion trillion trillion trillion', 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "ten billion trillion trillion trillion",
+     "type": "string",
+     "position": 54
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 59
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[40]": {
+  "expr": "$parseInteger('twelfth', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "twelfth",
+     "type": "string",
+     "position": 23
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[41]": {
+  "expr": "$parseInteger('twentieth', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "twentieth",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[42]": {
+  "expr": "$parseInteger('thirty-fourth', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "thirty-fourth",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[43]": {
+  "expr": "$parseInteger('NINETY-NINTH', 'W;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "NINETY-NINTH",
+     "type": "string",
+     "position": 28
+    },
+    {
+     "value": "W;o",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[44]": {
+  "expr": "$parseInteger('one hundredth', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "one hundredth",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[45]": {
+  "expr": "$parseInteger('FIVE HUNDRED AND FIFTY-FIFTH', 'W;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "FIVE HUNDRED AND FIFTY-FIFTH",
+     "type": "string",
+     "position": 44
+    },
+    {
+     "value": "W;o",
+     "type": "string",
+     "position": 51
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[46]": {
+  "expr": "$parseInteger('nine hundred and nineteenth', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "nine hundred and nineteenth",
+     "type": "string",
+     "position": 43
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 50
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[47]": {
+  "expr": "$parseInteger('seven hundred and thirtieth', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "seven hundred and thirtieth",
+     "type": "string",
+     "position": 43
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 50
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[48]": {
+  "expr": "$parseInteger('Seven Hundred and Thirty-Third', 'Ww;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "Seven Hundred and Thirty-Third",
+     "type": "string",
+     "position": 46
+    },
+    {
+     "value": "Ww;o",
+     "type": "string",
+     "position": 54
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[49]": {
+  "expr": "$parseInteger('one thousandth', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "one thousandth",
+     "type": "string",
+     "position": 30
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 37
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[50]": {
+  "expr": "$parseInteger('three thousand, seven hundred and thirty-first', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "three thousand, seven hundred and thirty-first",
+     "type": "string",
+     "position": 62
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 69
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[51]": {
+  "expr": "$parseInteger('three hundred and twenty-seven thousand, seven hundred and thirteenth', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "three hundred and twenty-seven thousand, seven hundred and thirteenth",
+     "type": "string",
+     "position": 85
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 92
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[52]": {
+  "expr": "$parseInteger('four million, three hundred and twenty-seven thousand, seven hundred and thirty-second', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "four million, three hundred and twenty-seven thousand, seven hundred and thirty-second",
+     "type": "string",
+     "position": 102
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 109
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[53]": {
+  "expr": "$parseInteger('one trillion and first', 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "one trillion and first",
+     "type": "string",
+     "position": 38
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 45
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[54]": {
+  "expr": "$parseInteger('A', 'A')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "A",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": "A",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[55]": {
+  "expr": "$parseInteger('l', 'a')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "l",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": "a",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[56]": {
+  "expr": "$parseInteger('z', 'a')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "z",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": "a",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[57]": {
+  "expr": "$parseInteger('aa', 'a')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "aa",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "a",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[58]": {
+  "expr": "$parseInteger('KN', 'A')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "KN",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "A",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[59]": {
+  "expr": "$parseInteger('FZPH', 'A')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "FZPH",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "A",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ },
+ "parseInteger[60]": {
+  "expr": "$parseInteger('50', '#')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 14,
+   "arguments": [
+    {
+     "value": "50",
+     "type": "string",
+     "position": 18
+    },
+    {
+     "value": "#",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "parseInteger",
+    "type": "variable",
+    "position": 13
+   }
+  }
+ }
+}

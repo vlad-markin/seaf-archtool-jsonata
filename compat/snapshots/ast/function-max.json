@@ -1,0 +1,1160 @@
+{
+ "case000": {
+  "expr": "$max(Account.Order.Product.(Price * Quantity))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 12
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 18
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 26
+      },
+      {
+       "type": "block",
+       "position": 28,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "*",
+         "position": 35,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Price",
+            "type": "name",
+            "position": 33
+           }
+          ]
+         },
+         "rhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Quantity",
+            "type": "name",
+            "position": 44
+           }
+          ]
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case001": {
+  "expr": "Account.Order.$max(Product.(Price * Quantity))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 19,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 26
+        },
+        {
+         "type": "block",
+         "position": 28,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "*",
+           "position": 35,
+           "lhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Price",
+              "type": "name",
+              "position": 33
+             }
+            ]
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Quantity",
+              "type": "name",
+              "position": 44
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "max",
+      "type": "variable",
+      "position": 18
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "Account.Order.(OrderID & \": \" & $count(Product.(Price*Quantity)))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "block",
+     "position": 15,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 31,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 24,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 22
+          }
+         ]
+        },
+        "rhs": {
+         "value": ": ",
+         "type": "string",
+         "position": 29
+        }
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 39,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Product",
+            "type": "name",
+            "position": 46
+           },
+           {
+            "type": "block",
+            "position": 48,
+            "expressions": [
+             {
+              "type": "binary",
+              "value": "*",
+              "position": 54,
+              "lhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Price",
+                 "type": "name",
+                 "position": 53
+                }
+               ]
+              },
+              "rhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Quantity",
+                 "type": "name",
+                 "position": 62
+                }
+               ]
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "count",
+         "type": "variable",
+         "position": 38
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "$max([])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case004": {
+  "expr": "$max([1,2,3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case005": {
+  "expr": "$max([\"1\",\"2\",\"3\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": "1",
+       "type": "string",
+       "position": 9
+      },
+      {
+       "value": "2",
+       "type": "string",
+       "position": 13
+      },
+      {
+       "value": "3",
+       "type": "string",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case006": {
+  "expr": "$max([\"1\",\"2\",3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": "1",
+       "type": "string",
+       "position": 9
+      },
+      {
+       "value": "2",
+       "type": "string",
+       "position": 13
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case007": {
+  "expr": "$max(1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 6
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case008": {
+  "expr": "$max([-1,-5])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": -1,
+       "type": "number",
+       "position": 8
+      },
+      {
+       "value": -5,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case009": {
+  "expr": "$max([],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case010": {
+  "expr": "$max([1,2,3],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case011": {
+  "expr": "$max([],[],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 12,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case012": {
+  "expr": "$max([1,2],[],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 12,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 15,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case013": {
+  "expr": "$max(undefined)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "undefined",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "max",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case014": {
+  "expr": "$min(Account.Order.Product.(Price * Quantity))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 12
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 18
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 26
+      },
+      {
+       "type": "block",
+       "position": 28,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "*",
+         "position": 35,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Price",
+            "type": "name",
+            "position": 33
+           }
+          ]
+         },
+         "rhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Quantity",
+            "type": "name",
+            "position": 44
+           }
+          ]
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case015": {
+  "expr": "Account.Order.$min(Product.(Price * Quantity))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 19,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 26
+        },
+        {
+         "type": "block",
+         "position": 28,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "*",
+           "position": 35,
+           "lhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Price",
+              "type": "name",
+              "position": 33
+             }
+            ]
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Quantity",
+              "type": "name",
+              "position": 44
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "min",
+      "type": "variable",
+      "position": 18
+     }
+    }
+   ]
+  }
+ },
+ "case016": {
+  "expr": "Account.Order.(OrderID & \": \" & $min(Product.(Price*Quantity)))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "block",
+     "position": 15,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 31,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 24,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 22
+          }
+         ]
+        },
+        "rhs": {
+         "value": ": ",
+         "type": "string",
+         "position": 29
+        }
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 37,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Product",
+            "type": "name",
+            "position": 44
+           },
+           {
+            "type": "block",
+            "position": 46,
+            "expressions": [
+             {
+              "type": "binary",
+              "value": "*",
+              "position": 52,
+              "lhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Price",
+                 "type": "name",
+                 "position": 51
+                }
+               ]
+              },
+              "rhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Quantity",
+                 "type": "name",
+                 "position": 60
+                }
+               ]
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "min",
+         "type": "variable",
+         "position": 36
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "$min([])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case018": {
+  "expr": "$min([1,2,3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case019": {
+  "expr": "$min([\"1\",\"2\",\"3\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": "1",
+       "type": "string",
+       "position": 9
+      },
+      {
+       "value": "2",
+       "type": "string",
+       "position": 13
+      },
+      {
+       "value": "3",
+       "type": "string",
+       "position": 17
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case020": {
+  "expr": "$min([\"1\",\"2\",3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": "1",
+       "type": "string",
+       "position": 9
+      },
+      {
+       "value": "2",
+       "type": "string",
+       "position": 13
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case021": {
+  "expr": "$min(1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 6
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case022": {
+  "expr": "$min([],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case023": {
+  "expr": "$min([1,2,3],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case024": {
+  "expr": "$min([],[],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 9,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 12,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case025": {
+  "expr": "$min([1,2],[],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 12,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 15,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case026": {
+  "expr": "$min(undefined)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "undefined",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "min",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ }
+}

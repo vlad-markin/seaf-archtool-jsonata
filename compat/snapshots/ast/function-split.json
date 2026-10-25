@@ -1,0 +1,551 @@
+{
+ "case000": {
+  "expr": "$split(\"Hello World\", \" \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": " ",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case001": {
+  "expr": "$split(\"Hello\", \" \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "Hello",
+     "type": "string",
+     "position": 14
+    },
+    {
+     "value": " ",
+     "type": "string",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case002": {
+  "expr": "$split(\"Hello  World\", \" \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "Hello  World",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": " ",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case003": {
+  "expr": "$split(\"Hello\", \"\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "Hello",
+     "type": "string",
+     "position": 14
+    },
+    {
+     "value": "",
+     "type": "string",
+     "position": 18
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case004": {
+  "expr": "$sum($split(\"12345\", \"\").$number($))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 12,
+       "arguments": [
+        {
+         "value": "12345",
+         "type": "string",
+         "position": 19
+        },
+        {
+         "value": "",
+         "type": "string",
+         "position": 23
+        }
+       ],
+       "procedure": {
+        "value": "split",
+        "type": "variable",
+        "position": 11
+       }
+      },
+      {
+       "type": "function",
+       "value": "(",
+       "position": 33,
+       "arguments": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 34
+        }
+       ],
+       "procedure": {
+        "value": "number",
+        "type": "variable",
+        "position": 32
+       }
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sum",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case005": {
+  "expr": "$split(\"a, b, c, d\", \", \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case006": {
+  "expr": "$split(\"a, b, c, d\", \", \", 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case007": {
+  "expr": "$split(\"a, b, c, d\", \", \", 2.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": 2.5,
+     "type": "number",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case008": {
+  "expr": "$split(\"a, b, c, d\", \", \", 10)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": 10,
+     "type": "number",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case009": {
+  "expr": "$split(\"a, b, c, d\", \", \", 0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case010": {
+  "expr": "$split(nothing, \" \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    },
+    {
+     "value": " ",
+     "type": "string",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case011": {
+  "expr": "$split(\"a, b, c, d\", \", \", -3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": -3,
+     "type": "number",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case012": {
+  "expr": "$split(\"a, b, c, d\", \", \", null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": null,
+     "type": "value",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case013": {
+  "expr": "$split(\"a, b, c, d\", \", \", -5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case014": {
+  "expr": "$split(\"a, b, c, d\", \", \", \"2\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": ", ",
+     "type": "string",
+     "position": 25
+    },
+    {
+     "value": "2",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case015": {
+  "expr": "$split(\"a, b, c, d\", true)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "a, b, c, d",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": true,
+     "type": "value",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case016": {
+  "expr": "$split(12345, 3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 12345,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case017": {
+  "expr": "$split(12345)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 12345,
+     "type": "number",
+     "position": 12
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case018": {
+  "expr": "$split('12💩345💩6', '💩')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": "12💩345💩6",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": "💩",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "split",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ }
+}

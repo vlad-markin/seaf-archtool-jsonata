@@ -1,0 +1,156 @@
+{
+ "case000": {
+  "expr": "foo.bar",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "bar",
+     "type": "name",
+     "position": 7
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "foo.blah",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "foo.blah.bazz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "value": "bazz",
+     "type": "name",
+     "position": 13
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "foo.blah.baz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 12
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "foo.blah.baz.fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "foo",
+     "type": "name",
+     "position": 3
+    },
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 8
+    },
+    {
+     "value": "baz",
+     "type": "name",
+     "position": 12
+    },
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 16
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "Other.Misc",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Other",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "Misc",
+     "type": "name",
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "bazz",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "bazz",
+     "type": "name",
+     "position": 4
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "fud",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "fud",
+     "type": "name",
+     "position": 3
+    }
+   ]
+  }
+ }
+}

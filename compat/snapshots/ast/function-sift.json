@@ -1,0 +1,317 @@
+{
+ "case000": {
+  "expr": "$sift(λ($v){$v.**.Postcode})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 10
+      }
+     ],
+     "position": 8,
+     "body": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "v",
+        "type": "variable",
+        "position": 14
+       },
+       {
+        "value": "**",
+        "type": "descendant",
+        "position": 17
+       },
+       {
+        "value": "Postcode",
+        "type": "name",
+        "position": 26
+       }
+      ]
+     }
+    }
+   ],
+   "procedure": {
+    "value": "sift",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "**[*].$sift(λ($v){$v.Postcode})",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "**",
+     "type": "descendant",
+     "position": 2,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": "*",
+        "type": "wildcard",
+        "position": 4
+       },
+       "position": 3
+      }
+     ]
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 12,
+     "arguments": [
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "v",
+         "type": "variable",
+         "position": 16
+        }
+       ],
+       "position": 14,
+       "body": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "v",
+          "type": "variable",
+          "position": 20
+         },
+         {
+          "value": "Postcode",
+          "type": "name",
+          "position": 29
+         }
+        ]
+       }
+      }
+     ],
+     "procedure": {
+      "value": "sift",
+      "type": "variable",
+      "position": 11
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "$sift(λ($v, $k){$k ~> /^A/})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 10
+      },
+      {
+       "value": "k",
+       "type": "variable",
+       "position": 14
+      }
+     ],
+     "position": 8,
+     "body": {
+      "type": "apply",
+      "value": "~>",
+      "position": 21,
+      "lhs": {
+       "value": "k",
+       "type": "variable",
+       "position": 18
+      },
+      "rhs": {
+       "value": {
+        "@regex": "^A",
+        "flags": "g"
+       },
+       "type": "regex",
+       "position": 26
+      }
+     }
+    }
+   ],
+   "procedure": {
+    "value": "sift",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case003": {
+  "expr": "$sift({'a': 1, 'b': 0}, $boolean)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 7,
+     "lhs": [
+      [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 10
+       },
+       {
+        "value": 1,
+        "type": "number",
+        "position": 13
+       }
+      ],
+      [
+       {
+        "value": "b",
+        "type": "string",
+        "position": 18
+       },
+       {
+        "value": 0,
+        "type": "number",
+        "position": 21
+       }
+      ]
+     ]
+    },
+    {
+     "value": "boolean",
+     "type": "variable",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "sift",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case004": {
+  "expr": "$sift({'a': 'hello', 'b': 'world', 'hello': 'again'}, λ($v,$k,$o){$lookup($o, $v)})",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 7,
+     "lhs": [
+      [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 10
+       },
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 19
+       }
+      ],
+      [
+       {
+        "value": "b",
+        "type": "string",
+        "position": 24
+       },
+       {
+        "value": "world",
+        "type": "string",
+        "position": 33
+       }
+      ],
+      [
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 42
+       },
+       {
+        "value": "again",
+        "type": "string",
+        "position": 51
+       }
+      ]
+     ]
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 58
+      },
+      {
+       "value": "k",
+       "type": "variable",
+       "position": 61
+      },
+      {
+       "value": "o",
+       "type": "variable",
+       "position": 64
+      }
+     ],
+     "position": 56,
+     "body": {
+      "type": "lambda",
+      "thunk": true,
+      "arguments": [],
+      "position": 74,
+      "body": {
+       "type": "function",
+       "value": "(",
+       "position": 74,
+       "arguments": [
+        {
+         "value": "o",
+         "type": "variable",
+         "position": 76
+        },
+        {
+         "value": "v",
+         "type": "variable",
+         "position": 80
+        }
+       ],
+       "procedure": {
+        "value": "lookup",
+        "type": "variable",
+        "position": 73
+       }
+      }
+     }
+    }
+   ],
+   "procedure": {
+    "value": "sift",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ }
+}

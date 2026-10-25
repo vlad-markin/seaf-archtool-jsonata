@@ -1,0 +1,4 @@
+jsonata-js v2.2.2
+commit 6c7e95fdbf4405a1e741852a7cd8cd985b4305bb
+source https://github.com/jsonata-js/jsonata
+vendored: test/test-suite -> test-suite/, src/ -> src/, test/implementation-tests.js, test/run-test-suite.js, LICENSE (MIT), package.json

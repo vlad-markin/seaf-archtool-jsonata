@@ -1,0 +1,1220 @@
+{
+ "case000": {
+  "expr": "            (              $f := function($n){()};              $f(1)            ) ",
+  "ast": {
+   "type": "block",
+   "position": 13,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 32,
+     "lhs": {
+      "value": "f",
+      "type": "variable",
+      "position": 29
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 44
+       }
+      ],
+      "position": 42,
+      "body": {
+       "type": "block",
+       "position": 47,
+       "expressions": []
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 67,
+     "arguments": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 68
+      }
+     ],
+     "procedure": {
+      "value": "f",
+      "type": "variable",
+      "position": 66
+     }
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "(  $factorial := function($n){$n = 0 ? 1 : $n * $factorial($n - 1)};  $factorial(99))             ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 16,
+     "lhs": {
+      "value": "factorial",
+      "type": "variable",
+      "position": 13
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 28
+       }
+      ],
+      "position": 26,
+      "body": {
+       "type": "condition",
+       "position": 38,
+       "condition": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "value": "n",
+         "type": "variable",
+         "position": 32
+        },
+        "rhs": {
+         "value": 0,
+         "type": "number",
+         "position": 36
+        }
+       },
+       "then": {
+        "value": 1,
+        "type": "number",
+        "position": 40
+       },
+       "else": {
+        "type": "binary",
+        "value": "*",
+        "position": 47,
+        "lhs": {
+         "value": "n",
+         "type": "variable",
+         "position": 45
+        },
+        "rhs": {
+         "type": "function",
+         "value": "(",
+         "position": 59,
+         "arguments": [
+          {
+           "type": "binary",
+           "value": "-",
+           "position": 63,
+           "lhs": {
+            "value": "n",
+            "type": "variable",
+            "position": 61
+           },
+           "rhs": {
+            "value": 1,
+            "type": "number",
+            "position": 65
+           }
+          }
+         ],
+         "procedure": {
+          "value": "factorial",
+          "type": "variable",
+          "position": 58
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 81,
+     "arguments": [
+      {
+       "value": 99,
+       "type": "number",
+       "position": 83
+      }
+     ],
+     "procedure": {
+      "value": "factorial",
+      "type": "variable",
+      "position": 80
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "(  $factorial := function($n){$n = 0 ? 1 : $n * $factorial($n - 1)};  $factorial(100))             ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 16,
+     "lhs": {
+      "value": "factorial",
+      "type": "variable",
+      "position": 13
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 28
+       }
+      ],
+      "position": 26,
+      "body": {
+       "type": "condition",
+       "position": 38,
+       "condition": {
+        "type": "binary",
+        "value": "=",
+        "position": 34,
+        "lhs": {
+         "value": "n",
+         "type": "variable",
+         "position": 32
+        },
+        "rhs": {
+         "value": 0,
+         "type": "number",
+         "position": 36
+        }
+       },
+       "then": {
+        "value": 1,
+        "type": "number",
+        "position": 40
+       },
+       "else": {
+        "type": "binary",
+        "value": "*",
+        "position": 47,
+        "lhs": {
+         "value": "n",
+         "type": "variable",
+         "position": 45
+        },
+        "rhs": {
+         "type": "function",
+         "value": "(",
+         "position": 59,
+         "arguments": [
+          {
+           "type": "binary",
+           "value": "-",
+           "position": 63,
+           "lhs": {
+            "value": "n",
+            "type": "variable",
+            "position": 61
+           },
+           "rhs": {
+            "value": 1,
+            "type": "number",
+            "position": 65
+           }
+          }
+         ],
+         "procedure": {
+          "value": "factorial",
+          "type": "variable",
+          "position": 58
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 81,
+     "arguments": [
+      {
+       "value": 100,
+       "type": "number",
+       "position": 84
+      }
+     ],
+     "procedure": {
+      "value": "factorial",
+      "type": "variable",
+      "position": 80
+     }
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "(  $factorial := function($n){(    $iter := function($n, $acc) {      $n = 0 ? $acc : $iter($n - 1, $n * $acc)    };    $iter($n, 1)  )};  $factorial(5)) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 16,
+     "lhs": {
+      "value": "factorial",
+      "type": "variable",
+      "position": 13
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 28
+       }
+      ],
+      "position": 26,
+      "body": {
+       "type": "block",
+       "position": 31,
+       "expressions": [
+        {
+         "type": "bind",
+         "value": ":=",
+         "position": 43,
+         "lhs": {
+          "value": "iter",
+          "type": "variable",
+          "position": 40
+         },
+         "rhs": {
+          "type": "lambda",
+          "arguments": [
+           {
+            "value": "n",
+            "type": "variable",
+            "position": 55
+           },
+           {
+            "value": "acc",
+            "type": "variable",
+            "position": 61
+           }
+          ],
+          "position": 53,
+          "body": {
+           "type": "condition",
+           "position": 78,
+           "condition": {
+            "type": "binary",
+            "value": "=",
+            "position": 74,
+            "lhs": {
+             "value": "n",
+             "type": "variable",
+             "position": 72
+            },
+            "rhs": {
+             "value": 0,
+             "type": "number",
+             "position": 76
+            }
+           },
+           "then": {
+            "value": "acc",
+            "type": "variable",
+            "position": 83
+           },
+           "else": {
+            "type": "lambda",
+            "thunk": true,
+            "arguments": [],
+            "position": 92,
+            "body": {
+             "type": "function",
+             "value": "(",
+             "position": 92,
+             "arguments": [
+              {
+               "type": "binary",
+               "value": "-",
+               "position": 96,
+               "lhs": {
+                "value": "n",
+                "type": "variable",
+                "position": 94
+               },
+               "rhs": {
+                "value": 1,
+                "type": "number",
+                "position": 98
+               }
+              },
+              {
+               "type": "binary",
+               "value": "*",
+               "position": 104,
+               "lhs": {
+                "value": "n",
+                "type": "variable",
+                "position": 102
+               },
+               "rhs": {
+                "value": "acc",
+                "type": "variable",
+                "position": 109
+               }
+              }
+             ],
+             "procedure": {
+              "value": "iter",
+              "type": "variable",
+              "position": 91
+             }
+            }
+           }
+          }
+         }
+        },
+        {
+         "type": "lambda",
+         "thunk": true,
+         "arguments": [],
+         "position": 126,
+         "body": {
+          "type": "function",
+          "value": "(",
+          "position": 126,
+          "arguments": [
+           {
+            "value": "n",
+            "type": "variable",
+            "position": 128
+           },
+           {
+            "value": 1,
+            "type": "number",
+            "position": 131
+           }
+          ],
+          "procedure": {
+           "value": "iter",
+           "type": "variable",
+           "position": 125
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 150,
+     "arguments": [
+      {
+       "value": 5,
+       "type": "number",
+       "position": 151
+      }
+     ],
+     "procedure": {
+      "value": "factorial",
+      "type": "variable",
+      "position": 149
+     }
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "(  $factorial := function($n){(    $iter := function($n, $acc) {      $n = 0 ? $acc : $iter($n - 1, $n * $acc)    };    $iter($n, 1)  )};  $factorial(150)) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 16,
+     "lhs": {
+      "value": "factorial",
+      "type": "variable",
+      "position": 13
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 28
+       }
+      ],
+      "position": 26,
+      "body": {
+       "type": "block",
+       "position": 31,
+       "expressions": [
+        {
+         "type": "bind",
+         "value": ":=",
+         "position": 43,
+         "lhs": {
+          "value": "iter",
+          "type": "variable",
+          "position": 40
+         },
+         "rhs": {
+          "type": "lambda",
+          "arguments": [
+           {
+            "value": "n",
+            "type": "variable",
+            "position": 55
+           },
+           {
+            "value": "acc",
+            "type": "variable",
+            "position": 61
+           }
+          ],
+          "position": 53,
+          "body": {
+           "type": "condition",
+           "position": 78,
+           "condition": {
+            "type": "binary",
+            "value": "=",
+            "position": 74,
+            "lhs": {
+             "value": "n",
+             "type": "variable",
+             "position": 72
+            },
+            "rhs": {
+             "value": 0,
+             "type": "number",
+             "position": 76
+            }
+           },
+           "then": {
+            "value": "acc",
+            "type": "variable",
+            "position": 83
+           },
+           "else": {
+            "type": "lambda",
+            "thunk": true,
+            "arguments": [],
+            "position": 92,
+            "body": {
+             "type": "function",
+             "value": "(",
+             "position": 92,
+             "arguments": [
+              {
+               "type": "binary",
+               "value": "-",
+               "position": 96,
+               "lhs": {
+                "value": "n",
+                "type": "variable",
+                "position": 94
+               },
+               "rhs": {
+                "value": 1,
+                "type": "number",
+                "position": 98
+               }
+              },
+              {
+               "type": "binary",
+               "value": "*",
+               "position": 104,
+               "lhs": {
+                "value": "n",
+                "type": "variable",
+                "position": 102
+               },
+               "rhs": {
+                "value": "acc",
+                "type": "variable",
+                "position": 109
+               }
+              }
+             ],
+             "procedure": {
+              "value": "iter",
+              "type": "variable",
+              "position": 91
+             }
+            }
+           }
+          }
+         }
+        },
+        {
+         "type": "lambda",
+         "thunk": true,
+         "arguments": [],
+         "position": 126,
+         "body": {
+          "type": "function",
+          "value": "(",
+          "position": 126,
+          "arguments": [
+           {
+            "value": "n",
+            "type": "variable",
+            "position": 128
+           },
+           {
+            "value": 1,
+            "type": "number",
+            "position": 131
+           }
+          ],
+          "procedure": {
+           "value": "iter",
+           "type": "variable",
+           "position": 125
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 150,
+     "arguments": [
+      {
+       "value": 150,
+       "type": "number",
+       "position": 153
+      }
+     ],
+     "procedure": {
+      "value": "factorial",
+      "type": "variable",
+      "position": 149
+     }
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "(  $inf := function($n){$n+$inf($n-1)};  $inf(5))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "inf",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 22
+       }
+      ],
+      "position": 20,
+      "body": {
+       "type": "binary",
+       "value": "+",
+       "position": 27,
+       "lhs": {
+        "value": "n",
+        "type": "variable",
+        "position": 26
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 32,
+        "arguments": [
+         {
+          "type": "binary",
+          "value": "-",
+          "position": 35,
+          "lhs": {
+           "value": "n",
+           "type": "variable",
+           "position": 34
+          },
+          "rhs": {
+           "value": 1,
+           "type": "number",
+           "position": 36
+          }
+         }
+        ],
+        "procedure": {
+         "value": "inf",
+         "type": "variable",
+         "position": 31
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 46,
+     "arguments": [
+      {
+       "value": 5,
+       "type": "number",
+       "position": 47
+      }
+     ],
+     "procedure": {
+      "value": "inf",
+      "type": "variable",
+      "position": 45
+     }
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "(  $inf := function(){$inf()};  $inf())",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "inf",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [],
+      "position": 20,
+      "body": {
+       "type": "lambda",
+       "thunk": true,
+       "arguments": [],
+       "position": 27,
+       "body": {
+        "type": "function",
+        "value": "(",
+        "position": 27,
+        "arguments": [],
+        "procedure": {
+         "value": "inf",
+         "type": "variable",
+         "position": 26
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 37,
+     "arguments": [],
+     "procedure": {
+      "value": "inf",
+      "type": "variable",
+      "position": 36
+     }
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "        (          $even := function($n) { $n = 0 ? true : $odd($n-1) };           $odd := function($n) { $n = 0 ? false : $even($n-1) };           $odd(6555)         )",
+  "ast": {
+   "type": "block",
+   "position": 9,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 27,
+     "lhs": {
+      "value": "even",
+      "type": "variable",
+      "position": 24
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 39
+       }
+      ],
+      "position": 37,
+      "body": {
+       "type": "condition",
+       "position": 51,
+       "condition": {
+        "type": "binary",
+        "value": "=",
+        "position": 47,
+        "lhs": {
+         "value": "n",
+         "type": "variable",
+         "position": 45
+        },
+        "rhs": {
+         "value": 0,
+         "type": "number",
+         "position": 49
+        }
+       },
+       "then": {
+        "value": true,
+        "type": "value",
+        "position": 56
+       },
+       "else": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 64,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 64,
+         "arguments": [
+          {
+           "type": "binary",
+           "value": "-",
+           "position": 67,
+           "lhs": {
+            "value": "n",
+            "type": "variable",
+            "position": 66
+           },
+           "rhs": {
+            "value": 1,
+            "type": "number",
+            "position": 68
+           }
+          }
+         ],
+         "procedure": {
+          "value": "odd",
+          "type": "variable",
+          "position": 63
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 90,
+     "lhs": {
+      "value": "odd",
+      "type": "variable",
+      "position": 87
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 102
+       }
+      ],
+      "position": 100,
+      "body": {
+       "type": "condition",
+       "position": 114,
+       "condition": {
+        "type": "binary",
+        "value": "=",
+        "position": 110,
+        "lhs": {
+         "value": "n",
+         "type": "variable",
+         "position": 108
+        },
+        "rhs": {
+         "value": 0,
+         "type": "number",
+         "position": 112
+        }
+       },
+       "then": {
+        "value": false,
+        "type": "value",
+        "position": 120
+       },
+       "else": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 129,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 129,
+         "arguments": [
+          {
+           "type": "binary",
+           "value": "-",
+           "position": 132,
+           "lhs": {
+            "value": "n",
+            "type": "variable",
+            "position": 131
+           },
+           "rhs": {
+            "value": 1,
+            "type": "number",
+            "position": 133
+           }
+          }
+         ],
+         "procedure": {
+          "value": "even",
+          "type": "variable",
+          "position": 128
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 153,
+     "arguments": [
+      {
+       "value": 6555,
+       "type": "number",
+       "position": 157
+      }
+     ],
+     "procedure": {
+      "value": "odd",
+      "type": "variable",
+      "position": 152
+     }
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "($f := function($s, $x)<an:s> { $x > 0 ? $f([$s, $s], $x-1) : $s};  $f('a', 2)  )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 6,
+     "lhs": {
+      "value": "f",
+      "type": "variable",
+      "position": 3
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "s",
+        "type": "variable",
+        "position": 18
+       },
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 22
+       }
+      ],
+      "signature": {
+       "definition": "<an:s>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 16,
+      "body": {
+       "type": "condition",
+       "position": 40,
+       "condition": {
+        "type": "binary",
+        "value": ">",
+        "position": 36,
+        "lhs": {
+         "value": "x",
+         "type": "variable",
+         "position": 34
+        },
+        "rhs": {
+         "value": 0,
+         "type": "number",
+         "position": 38
+        }
+       },
+       "then": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 44,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 44,
+         "arguments": [
+          {
+           "type": "unary",
+           "value": "[",
+           "position": 45,
+           "expressions": [
+            {
+             "value": "s",
+             "type": "variable",
+             "position": 47
+            },
+            {
+             "value": "s",
+             "type": "variable",
+             "position": 51
+            }
+           ]
+          },
+          {
+           "type": "binary",
+           "value": "-",
+           "position": 57,
+           "lhs": {
+            "value": "x",
+            "type": "variable",
+            "position": 56
+           },
+           "rhs": {
+            "value": 1,
+            "type": "number",
+            "position": 58
+           }
+          }
+         ],
+         "procedure": {
+          "value": "f",
+          "type": "variable",
+          "position": 43
+         }
+        }
+       },
+       "else": {
+        "value": "s",
+        "type": "variable",
+        "position": 64
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 71,
+     "arguments": [
+      {
+       "value": "a",
+       "type": "string",
+       "position": 74
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 77
+      }
+     ],
+     "procedure": {
+      "value": "f",
+      "type": "variable",
+      "position": 70
+     }
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "($f := function($s, $x)<sn:s> { $x > 0 ? $f([$s, $s], $x-1) : $s};  $f('a', 2)  )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 6,
+     "lhs": {
+      "value": "f",
+      "type": "variable",
+      "position": 3
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "s",
+        "type": "variable",
+        "position": 18
+       },
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 22
+       }
+      ],
+      "signature": {
+       "definition": "<sn:s>",
+       "validate": {
+        "@function": "validate"
+       }
+      },
+      "position": 16,
+      "body": {
+       "type": "condition",
+       "position": 40,
+       "condition": {
+        "type": "binary",
+        "value": ">",
+        "position": 36,
+        "lhs": {
+         "value": "x",
+         "type": "variable",
+         "position": 34
+        },
+        "rhs": {
+         "value": 0,
+         "type": "number",
+         "position": 38
+        }
+       },
+       "then": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 44,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 44,
+         "arguments": [
+          {
+           "type": "unary",
+           "value": "[",
+           "position": 45,
+           "expressions": [
+            {
+             "value": "s",
+             "type": "variable",
+             "position": 47
+            },
+            {
+             "value": "s",
+             "type": "variable",
+             "position": 51
+            }
+           ]
+          },
+          {
+           "type": "binary",
+           "value": "-",
+           "position": 57,
+           "lhs": {
+            "value": "x",
+            "type": "variable",
+            "position": 56
+           },
+           "rhs": {
+            "value": 1,
+            "type": "number",
+            "position": 58
+           }
+          }
+         ],
+         "procedure": {
+          "value": "f",
+          "type": "variable",
+          "position": 43
+         }
+        }
+       },
+       "else": {
+        "value": "s",
+        "type": "variable",
+        "position": 64
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 71,
+     "arguments": [
+      {
+       "value": "a",
+       "type": "string",
+       "position": 74
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 77
+      }
+     ],
+     "procedure": {
+      "value": "f",
+      "type": "variable",
+      "position": 70
+     }
+    }
+   ]
+  }
+ }
+}

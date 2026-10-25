@@ -1,0 +1,132 @@
+{
+ "case000": {
+  "expr": "$substringAfter(\"Hello World\", \" \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": " ",
+     "type": "string",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case001": {
+  "expr": "$substringAfter(\"Hello World\", \"l\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "l",
+     "type": "string",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case002": {
+  "expr": "$substringAfter(\"Hello World\", \"f\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "f",
+     "type": "string",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case003": {
+  "expr": "$substringAfter(\"Hello World\", \"ld\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 29
+    },
+    {
+     "value": "ld",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ },
+ "case004": {
+  "expr": "$substringAfter(blah, \"ld\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 16,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 20
+      }
+     ]
+    },
+    {
+     "value": "ld",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substringAfter",
+    "type": "variable",
+    "position": 15
+   }
+  }
+ }
+}

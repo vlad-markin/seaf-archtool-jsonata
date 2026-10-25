@@ -1,0 +1,961 @@
+{
+ "case000": {
+  "expr": "$ ~> |Account.Order.Product|{\"Total\":Price*Quantity},[\"Description\", \"SKU\"]|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 4,
+   "lhs": {
+    "value": "",
+    "type": "variable",
+    "position": 1
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 6,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 29,
+     "lhs": [
+      [
+       {
+        "value": "Total",
+        "type": "string",
+        "position": 36
+       },
+       {
+        "type": "binary",
+        "value": "*",
+        "position": 43,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 42
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Quantity",
+           "type": "name",
+           "position": 51
+          }
+         ]
+        }
+       }
+      ]
+     ]
+    },
+    "delete": {
+     "type": "unary",
+     "value": "[",
+     "position": 54,
+     "expressions": [
+      {
+       "value": "Description",
+       "type": "string",
+       "position": 67
+      },
+      {
+       "value": "SKU",
+       "type": "string",
+       "position": 74
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case001": {
+  "expr": "Account.Order ~> |Product|{\"Total\":Price*Quantity},[\"Description\", \"SKU\"]|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 16,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     },
+     {
+      "value": "Order",
+      "type": "name",
+      "position": 13
+     }
+    ]
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 18,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 25
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 27,
+     "lhs": [
+      [
+       {
+        "value": "Total",
+        "type": "string",
+        "position": 34
+       },
+       {
+        "type": "binary",
+        "value": "*",
+        "position": 41,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 40
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Quantity",
+           "type": "name",
+           "position": 49
+          }
+         ]
+        }
+       }
+      ]
+     ]
+    },
+    "delete": {
+     "type": "unary",
+     "value": "[",
+     "position": 52,
+     "expressions": [
+      {
+       "value": "Description",
+       "type": "string",
+       "position": 65
+      },
+      {
+       "value": "SKU",
+       "type": "string",
+       "position": 72
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case002": {
+  "expr": "$ ~> |Account.Order.Product|{\"Total\":Price*Quantity, \"Price\": Price * 1.2}|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 4,
+   "lhs": {
+    "value": "",
+    "type": "variable",
+    "position": 1
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 6,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 29,
+     "lhs": [
+      [
+       {
+        "value": "Total",
+        "type": "string",
+        "position": 36
+       },
+       {
+        "type": "binary",
+        "value": "*",
+        "position": 43,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 42
+          }
+         ]
+        },
+        "rhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Quantity",
+           "type": "name",
+           "position": 51
+          }
+         ]
+        }
+       }
+      ],
+      [
+       {
+        "value": "Price",
+        "type": "string",
+        "position": 60
+       },
+       {
+        "type": "binary",
+        "value": "*",
+        "position": 69,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 67
+          }
+         ]
+        },
+        "rhs": {
+         "value": 1.2,
+         "type": "number",
+         "position": 73
+        }
+       }
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "case003": {
+  "expr": "$ ~> |Account.Order.Product|{},\"Description\"|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 4,
+   "lhs": {
+    "value": "",
+    "type": "variable",
+    "position": 1
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 6,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 29,
+     "lhs": []
+    },
+    "delete": {
+     "value": "Description",
+     "type": "string",
+     "position": 44
+    }
+   }
+  }
+ },
+ "case004": {
+  "expr": "$ ~> |Account.Order.Product|nomatch,\"Description\"|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 4,
+   "lhs": {
+    "value": "",
+    "type": "variable",
+    "position": 1
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 6,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 13
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 19
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 27
+      }
+     ]
+    },
+    "update": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nomatch",
+       "type": "name",
+       "position": 35
+      }
+     ]
+    },
+    "delete": {
+     "value": "Description",
+     "type": "string",
+     "position": 49
+    }
+   }
+  }
+ },
+ "case005": {
+  "expr": "$ ~> |(Account.Order.Product)[0]|{\"Description\":\"blah\"}|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 4,
+   "lhs": {
+    "value": "",
+    "type": "variable",
+    "position": 1
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 6,
+    "pattern": {
+     "type": "block",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Account",
+         "type": "name",
+         "position": 14
+        },
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 20
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 28
+        }
+       ]
+      }
+     ],
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 31
+       },
+       "position": 30
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 34,
+     "lhs": [
+      [
+       {
+        "value": "Description",
+        "type": "string",
+        "position": 47
+       },
+       {
+        "value": "blah",
+        "type": "string",
+        "position": 54
+       }
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "case006": {
+  "expr": "$ ~> |foo.bar|{\"Description\":\"blah\"}|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 4,
+   "lhs": {
+    "value": "",
+    "type": "variable",
+    "position": 1
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 6,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 9
+      },
+      {
+       "value": "bar",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 15,
+     "lhs": [
+      [
+       {
+        "value": "Description",
+        "type": "string",
+        "position": 28
+       },
+       {
+        "value": "blah",
+        "type": "string",
+        "position": 35
+       }
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "case007": {
+  "expr": "Account ~> |Order|{\"Product\":\"blah\"},nomatch|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 10,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 12,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 19,
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 28
+       },
+       {
+        "value": "blah",
+        "type": "string",
+        "position": 35
+       }
+      ]
+     ]
+    },
+    "delete": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nomatch",
+       "type": "name",
+       "position": 44
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case008": {
+  "expr": "foo ~> |foo.bar|{\"Description\":\"blah\"}|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 6,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 8,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "foo",
+       "type": "name",
+       "position": 11
+      },
+      {
+       "value": "bar",
+       "type": "name",
+       "position": 15
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 17,
+     "lhs": [
+      [
+       {
+        "value": "Description",
+        "type": "string",
+        "position": 30
+       },
+       {
+        "value": "blah",
+        "type": "string",
+        "position": 37
+       }
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "case009": {
+  "expr": "Account ~> |Order|5|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 10,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 12,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    },
+    "update": {
+     "value": 5,
+     "type": "number",
+     "position": 19
+    }
+   }
+  }
+ },
+ "case010": {
+  "expr": "Account ~> |Order|{},5|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 10,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 12,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 19,
+     "lhs": []
+    },
+    "delete": {
+     "value": 5,
+     "type": "number",
+     "position": 22
+    }
+   }
+  }
+ },
+ "case011": {
+  "expr": "Account ~> |Order|{\"Product\":\"blah\"},nomatch|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 10,
+   "lhs": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "Account",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 12,
+    "pattern": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 17
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 19,
+     "lhs": [
+      [
+       {
+        "value": "Product",
+        "type": "string",
+        "position": 28
+       },
+       {
+        "value": "blah",
+        "type": "string",
+        "position": 35
+       }
+      ]
+     ]
+    },
+    "delete": {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nomatch",
+       "type": "name",
+       "position": 44
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case012": {
+  "expr": "{} ~> |$|['one', 'two', 'three']|",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 5,
+   "lhs": {
+    "type": "unary",
+    "value": "{",
+    "position": 1,
+    "lhs": []
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 7,
+    "pattern": {
+     "value": "",
+     "type": "variable",
+     "position": 8
+    },
+    "update": {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": "one",
+       "type": "string",
+       "position": 15
+      },
+      {
+       "value": "two",
+       "type": "string",
+       "position": 22
+      },
+      {
+       "value": "three",
+       "type": "string",
+       "position": 31
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case013": {
+  "expr": "$ ~> | ** ['hi'] | {'hello': hi}, ['hi'] |",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 4,
+   "lhs": {
+    "value": "",
+    "type": "variable",
+    "position": 1
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 6,
+    "pattern": {
+     "value": "**",
+     "type": "descendant",
+     "position": 9,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": "hi",
+        "type": "string",
+        "position": 15
+       },
+       "position": 11
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 20,
+     "lhs": [
+      [
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 27
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "hi",
+          "type": "name",
+          "position": 31
+         }
+        ]
+       }
+      ]
+     ]
+    },
+    "delete": {
+     "type": "unary",
+     "value": "[",
+     "position": 35,
+     "expressions": [
+      {
+       "value": "hi",
+       "type": "string",
+       "position": 39
+      }
+     ]
+    }
+   }
+  }
+ },
+ "case014": {
+  "expr": "$ ~> | ** [hi] | {'hello': hi}, ['hi'] |",
+  "ast": {
+   "type": "apply",
+   "value": "~>",
+   "position": 4,
+   "lhs": {
+    "value": "",
+    "type": "variable",
+    "position": 1
+   },
+   "rhs": {
+    "type": "transform",
+    "position": 6,
+    "pattern": {
+     "value": "**",
+     "type": "descendant",
+     "position": 9,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "path",
+        "steps": [
+         {
+          "value": "hi",
+          "type": "name",
+          "position": 13
+         }
+        ]
+       },
+       "position": 11
+      }
+     ]
+    },
+    "update": {
+     "type": "unary",
+     "value": "{",
+     "position": 18,
+     "lhs": [
+      [
+       {
+        "value": "hello",
+        "type": "string",
+        "position": 25
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "hi",
+          "type": "name",
+          "position": 29
+         }
+        ]
+       }
+      ]
+     ]
+    },
+    "delete": {
+     "type": "unary",
+     "value": "[",
+     "position": 33,
+     "expressions": [
+      {
+       "value": "hi",
+       "type": "string",
+       "position": 37
+      }
+     ]
+    }
+   }
+  }
+ }
+}

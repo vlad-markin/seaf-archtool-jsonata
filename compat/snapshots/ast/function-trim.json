@@ -1,0 +1,56 @@
+{
+ "case000": {
+  "expr": "$trim(\"Hello World\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "trim",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "$trim(\"   Hello  \n  \t World  \t \")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "   Hello  \n  \t World  \t ",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "trim",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$trim()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [],
+   "procedure": {
+    "value": "trim",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ }
+}

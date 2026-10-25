@@ -1,0 +1,316 @@
+{
+ "case000": {
+  "expr": "Account.(  $AccName := function() { $.\"Account Name\" };  Order[OrderID = \"order104\"].Product{    \"Account\": $AccName(),    \"SKU-\" & $string(ProductID): $.\"Product Name\"  } )",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "bind",
+       "value": ":=",
+       "position": 22,
+       "lhs": {
+        "value": "AccName",
+        "type": "variable",
+        "position": 19
+       },
+       "rhs": {
+        "type": "lambda",
+        "arguments": [],
+        "position": 32,
+        "body": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "",
+           "type": "variable",
+           "position": 37
+          },
+          {
+           "value": "Account Name",
+           "type": "name",
+           "position": 52
+          }
+         ]
+        }
+       }
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 62,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "type": "binary",
+            "value": "=",
+            "position": 72,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "OrderID",
+               "type": "name",
+               "position": 70
+              }
+             ]
+            },
+            "rhs": {
+             "value": "order104",
+             "type": "string",
+             "position": 83
+            }
+           },
+           "position": 63
+          }
+         ]
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 92
+        }
+       ],
+       "group": {
+        "lhs": [
+         [
+          {
+           "value": "Account",
+           "type": "string",
+           "position": 106
+          },
+          {
+           "type": "function",
+           "value": "(",
+           "position": 117,
+           "arguments": [],
+           "procedure": {
+            "value": "AccName",
+            "type": "variable",
+            "position": 116
+           }
+          }
+         ],
+         [
+          {
+           "type": "binary",
+           "value": "&",
+           "position": 131,
+           "lhs": {
+            "value": "SKU-",
+            "type": "string",
+            "position": 129
+           },
+           "rhs": {
+            "type": "function",
+            "value": "(",
+            "position": 140,
+            "arguments": [
+             {
+              "type": "path",
+              "steps": [
+               {
+                "value": "ProductID",
+                "type": "name",
+                "position": 149
+               }
+              ]
+             }
+            ],
+            "procedure": {
+             "value": "string",
+             "type": "variable",
+             "position": 139
+            }
+           }
+          },
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "",
+             "type": "variable",
+             "position": 153
+            },
+            {
+             "value": "Product Name",
+             "type": "name",
+             "position": 168
+            }
+           ]
+          }
+         ]
+        ],
+        "position": 93
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "Account.(  $AccName := function() { `Account Name` };  Order[OrderID = \"order104\"].Product{    \"Account\": $AccName(),    \"SKU-\" & $string(ProductID): `Product Name`  } )",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "type": "block",
+     "position": 9,
+     "expressions": [
+      {
+       "type": "bind",
+       "value": ":=",
+       "position": 22,
+       "lhs": {
+        "value": "AccName",
+        "type": "variable",
+        "position": 19
+       },
+       "rhs": {
+        "type": "lambda",
+        "arguments": [],
+        "position": 32,
+        "body": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Account Name",
+           "type": "name",
+           "position": 50
+          }
+         ]
+        }
+       }
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Order",
+         "type": "name",
+         "position": 60,
+         "stages": [
+          {
+           "type": "filter",
+           "expr": {
+            "type": "binary",
+            "value": "=",
+            "position": 70,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "OrderID",
+               "type": "name",
+               "position": 68
+              }
+             ]
+            },
+            "rhs": {
+             "value": "order104",
+             "type": "string",
+             "position": 81
+            }
+           },
+           "position": 61
+          }
+         ]
+        },
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 90
+        }
+       ],
+       "group": {
+        "lhs": [
+         [
+          {
+           "value": "Account",
+           "type": "string",
+           "position": 104
+          },
+          {
+           "type": "function",
+           "value": "(",
+           "position": 115,
+           "arguments": [],
+           "procedure": {
+            "value": "AccName",
+            "type": "variable",
+            "position": 114
+           }
+          }
+         ],
+         [
+          {
+           "type": "binary",
+           "value": "&",
+           "position": 129,
+           "lhs": {
+            "value": "SKU-",
+            "type": "string",
+            "position": 127
+           },
+           "rhs": {
+            "type": "function",
+            "value": "(",
+            "position": 138,
+            "arguments": [
+             {
+              "type": "path",
+              "steps": [
+               {
+                "value": "ProductID",
+                "type": "name",
+                "position": 147
+               }
+              ]
+             }
+            ],
+            "procedure": {
+             "value": "string",
+             "type": "variable",
+             "position": 137
+            }
+           }
+          },
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "Product Name",
+             "type": "name",
+             "position": 164
+            }
+           ]
+          }
+         ]
+        ],
+        "position": 91
+       }
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,377 @@
+{
+ "case000": {
+  "expr": "$replace(\"Hello World\", \"World\", \"Everyone\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "World",
+     "type": "string",
+     "position": 31
+    },
+    {
+     "value": "Everyone",
+     "type": "string",
+     "position": 43
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case001": {
+  "expr": "$replace(\"the cat sat on the mat\", \"at\", \"it\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "the cat sat on the mat",
+     "type": "string",
+     "position": 33
+    },
+    {
+     "value": "at",
+     "type": "string",
+     "position": 39
+    },
+    {
+     "value": "it",
+     "type": "string",
+     "position": 45
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case002": {
+  "expr": "$replace(\"the cat sat on the mat\", \"at\", \"it\", 0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "the cat sat on the mat",
+     "type": "string",
+     "position": 33
+    },
+    {
+     "value": "at",
+     "type": "string",
+     "position": 39
+    },
+    {
+     "value": "it",
+     "type": "string",
+     "position": 45
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 48
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case003": {
+  "expr": "$replace(\"the cat sat on the mat\", \"at\", \"it\", 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "the cat sat on the mat",
+     "type": "string",
+     "position": 33
+    },
+    {
+     "value": "at",
+     "type": "string",
+     "position": 39
+    },
+    {
+     "value": "it",
+     "type": "string",
+     "position": 45
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 48
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case004": {
+  "expr": "$replace(nothing, \"at\", \"it\", 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 16
+      }
+     ]
+    },
+    {
+     "value": "at",
+     "type": "string",
+     "position": 22
+    },
+    {
+     "value": "it",
+     "type": "string",
+     "position": 28
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case005": {
+  "expr": "$replace(\"hello\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case006": {
+  "expr": "$replace(\"hello\", \"l\", \"1\", null)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 16
+    },
+    {
+     "value": "l",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": "1",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": null,
+     "type": "value",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case007": {
+  "expr": "$replace(\"hello\", \"l\", \"1\", -2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 16
+    },
+    {
+     "value": "l",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "value": "1",
+     "type": "string",
+     "position": 26
+    },
+    {
+     "value": -2,
+     "type": "number",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case008": {
+  "expr": "$replace(\"hello\", 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 16
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case009": {
+  "expr": "$replace(\"hello\", \"\", \"bye\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 16
+    },
+    {
+     "value": "",
+     "type": "string",
+     "position": 20
+    },
+    {
+     "value": "bye",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case010": {
+  "expr": "$replace(\"hello\", 2, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": "hello",
+     "type": "string",
+     "position": 16
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case011": {
+  "expr": "$replace(123, 2, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": 123,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 15
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 18
+    }
+   ],
+   "procedure": {
+    "value": "replace",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ }
+}

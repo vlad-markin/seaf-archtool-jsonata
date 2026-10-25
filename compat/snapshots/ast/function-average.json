@@ -1,0 +1,565 @@
+{
+ "case000": {
+  "expr": "$average(Account.Order.Product.(Price * Quantity))",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 16
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 22
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 30
+      },
+      {
+       "type": "block",
+       "position": 32,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "*",
+         "position": 39,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Price",
+            "type": "name",
+            "position": 37
+           }
+          ]
+         },
+         "rhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Quantity",
+            "type": "name",
+            "position": 48
+           }
+          ]
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case001": {
+  "expr": "Account.Order.$average(Product.(Price * Quantity))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 23,
+     "arguments": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 30
+        },
+        {
+         "type": "block",
+         "position": 32,
+         "expressions": [
+          {
+           "type": "binary",
+           "value": "*",
+           "position": 39,
+           "lhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Price",
+              "type": "name",
+              "position": 37
+             }
+            ]
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Quantity",
+              "type": "name",
+              "position": 48
+             }
+            ]
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "average",
+      "type": "variable",
+      "position": 22
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "Account.Order.(OrderID & \": \" & $average(Product.(Price*Quantity)))",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "block",
+     "position": 15,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 31,
+       "lhs": {
+        "type": "binary",
+        "value": "&",
+        "position": 24,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "OrderID",
+           "type": "name",
+           "position": 22
+          }
+         ]
+        },
+        "rhs": {
+         "value": ": ",
+         "type": "string",
+         "position": 29
+        }
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 41,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Product",
+            "type": "name",
+            "position": 48
+           },
+           {
+            "type": "block",
+            "position": 50,
+            "expressions": [
+             {
+              "type": "binary",
+              "value": "*",
+              "position": 56,
+              "lhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Price",
+                 "type": "name",
+                 "position": 55
+                }
+               ]
+              },
+              "rhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Quantity",
+                 "type": "name",
+                 "position": 64
+                }
+               ]
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "average",
+         "type": "variable",
+         "position": 40
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "$average([])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case004": {
+  "expr": "$average([1,2,3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 11
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 13
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case005": {
+  "expr": "$average([\"1\",\"2\",\"3\"])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": "1",
+       "type": "string",
+       "position": 13
+      },
+      {
+       "value": "2",
+       "type": "string",
+       "position": 17
+      },
+      {
+       "value": "3",
+       "type": "string",
+       "position": 21
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case006": {
+  "expr": "$average([\"1\",\"2\",3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": "1",
+       "type": "string",
+       "position": 13
+      },
+      {
+       "value": "2",
+       "type": "string",
+       "position": 17
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case007": {
+  "expr": "$average(1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case008": {
+  "expr": "$average([],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 13,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case009": {
+  "expr": "$average([1,2,3],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 11
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 13
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 15
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 18,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case010": {
+  "expr": "$average([],[],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 13,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 16,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case011": {
+  "expr": "$average([1,2],[],[])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 11
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 13
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 16,
+     "expressions": []
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 19,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case012": {
+  "expr": "$average(undefined)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "undefined",
+       "type": "name",
+       "position": 18
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "average",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ }
+}

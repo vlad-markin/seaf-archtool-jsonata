@@ -1,0 +1,149 @@
+{
+ "case000": {
+  "expr": "$reverse([1..5])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "..",
+       "position": 13,
+       "lhs": {
+        "value": 1,
+        "type": "number",
+        "position": 11
+       },
+       "rhs": {
+        "value": 5,
+        "type": "number",
+        "position": 14
+       }
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "reverse",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case001": {
+  "expr": "[[$], [$reverse($)], [$]]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 2,
+     "expressions": [
+      {
+       "value": "",
+       "type": "variable",
+       "position": 3
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 16,
+       "arguments": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 17
+        }
+       ],
+       "procedure": {
+        "value": "reverse",
+        "type": "variable",
+        "position": 15
+       }
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 22,
+     "expressions": [
+      {
+       "value": "",
+       "type": "variable",
+       "position": 23
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "$reverse(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 16
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "reverse",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ },
+ "case003": {
+  "expr": "$reverse([1])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 9,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 10,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "reverse",
+    "type": "variable",
+    "position": 8
+   }
+  }
+ }
+}

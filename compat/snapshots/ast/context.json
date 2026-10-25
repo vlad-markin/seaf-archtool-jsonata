@@ -1,0 +1,172 @@
+{
+ "case000": {
+  "expr": "$number()",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [],
+   "procedure": {
+    "value": "number",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "[1..5].$string()",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "..",
+       "position": 4,
+       "lhs": {
+        "value": 1,
+        "type": "number",
+        "position": 2
+       },
+       "rhs": {
+        "value": 5,
+        "type": "number",
+        "position": 5
+       }
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 15,
+     "arguments": [],
+     "procedure": {
+      "value": "string",
+      "type": "variable",
+      "position": 14
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "[1..5].(\"Item \" & $string())",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "..",
+       "position": 4,
+       "lhs": {
+        "value": 1,
+        "type": "number",
+        "position": 2
+       },
+       "rhs": {
+        "value": 5,
+        "type": "number",
+        "position": 5
+       }
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "type": "block",
+     "position": 8,
+     "expressions": [
+      {
+       "type": "binary",
+       "value": "&",
+       "position": 17,
+       "lhs": {
+        "value": "Item ",
+        "type": "string",
+        "position": 15
+       },
+       "rhs": {
+        "type": "function",
+        "value": "(",
+        "position": 26,
+        "arguments": [],
+        "procedure": {
+         "value": "string",
+         "type": "variable",
+         "position": 25
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "Account.Order.Product.\"Product Name\".$uppercase().$substringBefore(\" \")",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "value": "Product Name",
+     "type": "name",
+     "position": 36
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 48,
+     "arguments": [],
+     "procedure": {
+      "value": "uppercase",
+      "type": "variable",
+      "position": 47
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 67,
+     "arguments": [
+      {
+       "value": " ",
+       "type": "string",
+       "position": 70
+      }
+     ],
+     "procedure": {
+      "value": "substringBefore",
+      "type": "variable",
+      "position": 66
+     }
+    }
+   ]
+  }
+ }
+}

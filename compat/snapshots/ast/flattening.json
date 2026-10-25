@@ -1,0 +1,2566 @@
+{
+ "array-inputs[0]": {
+  "expr": "phone",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "phone",
+     "type": "name",
+     "position": 5
+    }
+   ]
+  }
+ },
+ "array-inputs[1]": {
+  "expr": "phone[0]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "phone",
+     "type": "name",
+     "position": 5,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 7
+       },
+       "position": 6
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "array-inputs[2]": {
+  "expr": "phone[0][]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "phone",
+     "type": "name",
+     "position": 5,
+     "keepArray": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 7
+       },
+       "position": 6
+      }
+     ]
+    }
+   ],
+   "keepSingletonArray": true,
+   "keepArray": true
+  }
+ },
+ "array-inputs[3]": {
+  "expr": "phone[0].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "phone",
+     "type": "name",
+     "position": 5,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 7
+       },
+       "position": 6
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 15
+    }
+   ]
+  }
+ },
+ "array-inputs[4]": {
+  "expr": "(phone)[0].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "block",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "phone",
+         "type": "name",
+         "position": 6
+        }
+       ]
+      }
+     ],
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 9
+       },
+       "position": 8
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 17
+    }
+   ]
+  }
+ },
+ "array-inputs[5]": {
+  "expr": "$.phone[0].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "value": "phone",
+     "type": "name",
+     "position": 7,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 9
+       },
+       "position": 8
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 17
+    }
+   ]
+  }
+ },
+ "array-inputs[6]": {
+  "expr": "{'Hello':'World'}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "Hello",
+      "type": "string",
+      "position": 8
+     },
+     {
+      "value": "World",
+      "type": "string",
+      "position": 16
+     }
+    ]
+   ]
+  }
+ },
+ "array-inputs[7]": {
+  "expr": "$.{'Hello':'World'}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 3,
+     "lhs": [
+      [
+       {
+        "value": "Hello",
+        "type": "string",
+        "position": 10
+       },
+       {
+        "value": "World",
+        "type": "string",
+        "position": 18
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case000": {
+  "expr": "Account.Order.[Product.Price]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 15,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 22
+        },
+        {
+         "value": "Price",
+         "type": "name",
+         "position": 28
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "$.nest0",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 7
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "nest0",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "$[0]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 3
+     },
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "$[1]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 1,
+      "type": "number",
+      "position": 3
+     },
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "$[-1]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": -1,
+      "type": "number",
+      "position": 4
+     },
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "$[0].nest0",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 3
+       },
+       "position": 2
+      }
+     ]
+    },
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "$[1].nest0",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 1,
+        "type": "number",
+        "position": 3
+       },
+       "position": 2
+      }
+     ]
+    },
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 10
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "$[0].nest0[0]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 3
+       },
+       "position": 2
+      }
+     ]
+    },
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 10,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 12
+       },
+       "position": 11
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "nest0.[nest1.[nest2.[nest3]]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest1",
+         "type": "name",
+         "position": 12
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 14,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "nest2",
+             "type": "name",
+             "position": 19
+            },
+            {
+             "type": "unary",
+             "value": "[",
+             "position": 21,
+             "expressions": [
+              {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "nest3",
+                 "type": "name",
+                 "position": 26
+                }
+               ]
+              }
+             ],
+             "consarray": true
+            }
+           ]
+          }
+         ],
+         "consarray": true
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "nest0.nest1.[nest2.[nest3]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 13,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest2",
+         "type": "name",
+         "position": 18
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 20,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "nest3",
+             "type": "name",
+             "position": 25
+            }
+           ]
+          }
+         ],
+         "consarray": true
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case011": {
+  "expr": "nest0.[nest1.nest2.[nest3]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest1",
+         "type": "name",
+         "position": 12
+        },
+        {
+         "value": "nest2",
+         "type": "name",
+         "position": 18
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 20,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "nest3",
+             "type": "name",
+             "position": 25
+            }
+           ]
+          }
+         ],
+         "consarray": true
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case012": {
+  "expr": "nest0.[nest1.[nest2.nest3]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest1",
+         "type": "name",
+         "position": 12
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 14,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "nest2",
+             "type": "name",
+             "position": 19
+            },
+            {
+             "value": "nest3",
+             "type": "name",
+             "position": 25
+            }
+           ]
+          }
+         ],
+         "consarray": true
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "nest0.[nest1.nest2.nest3]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest1",
+         "type": "name",
+         "position": 12
+        },
+        {
+         "value": "nest2",
+         "type": "name",
+         "position": 18
+        },
+        {
+         "value": "nest3",
+         "type": "name",
+         "position": 24
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case014": {
+  "expr": "nest0.nest1.[nest2.nest3]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 13,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest2",
+         "type": "name",
+         "position": 18
+        },
+        {
+         "value": "nest3",
+         "type": "name",
+         "position": 24
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case015": {
+  "expr": "nest0.nest1.nest2.[nest3]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "value": "nest2",
+     "type": "name",
+     "position": 17
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 19,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest3",
+         "type": "name",
+         "position": 24
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case016": {
+  "expr": "nest0.nest1.nest2.nest3",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "value": "nest2",
+     "type": "name",
+     "position": 17
+    },
+    {
+     "value": "nest3",
+     "type": "name",
+     "position": 23
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "nest0.[nest1.[nest2.[nest3]]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest1",
+         "type": "name",
+         "position": 12
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 14,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "nest2",
+             "type": "name",
+             "position": 19
+            },
+            {
+             "type": "unary",
+             "value": "[",
+             "position": 21,
+             "expressions": [
+              {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "nest3",
+                 "type": "name",
+                 "position": 26
+                }
+               ]
+              }
+             ],
+             "consarray": true
+            }
+           ]
+          }
+         ],
+         "consarray": true
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case018": {
+  "expr": "nest0.nest1.[nest2.[nest3]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 13,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest2",
+         "type": "name",
+         "position": 18
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 20,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "nest3",
+             "type": "name",
+             "position": 25
+            }
+           ]
+          }
+         ],
+         "consarray": true
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case019": {
+  "expr": "nest0.[nest1.nest2.[nest3]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest1",
+         "type": "name",
+         "position": 12
+        },
+        {
+         "value": "nest2",
+         "type": "name",
+         "position": 18
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 20,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "nest3",
+             "type": "name",
+             "position": 25
+            }
+           ]
+          }
+         ],
+         "consarray": true
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case020": {
+  "expr": "nest0.[nest1.[nest2.nest3]]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest1",
+         "type": "name",
+         "position": 12
+        },
+        {
+         "type": "unary",
+         "value": "[",
+         "position": 14,
+         "expressions": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "nest2",
+             "type": "name",
+             "position": 19
+            },
+            {
+             "value": "nest3",
+             "type": "name",
+             "position": 25
+            }
+           ]
+          }
+         ],
+         "consarray": true
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case021": {
+  "expr": "nest0.[nest1.nest2.nest3]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 7,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest1",
+         "type": "name",
+         "position": 12
+        },
+        {
+         "value": "nest2",
+         "type": "name",
+         "position": 18
+        },
+        {
+         "value": "nest3",
+         "type": "name",
+         "position": 24
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case022": {
+  "expr": "nest0.nest1.[nest2.nest3]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 13,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest2",
+         "type": "name",
+         "position": 18
+        },
+        {
+         "value": "nest3",
+         "type": "name",
+         "position": 24
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case023": {
+  "expr": "nest0.nest1.nest2.[nest3]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "value": "nest2",
+     "type": "name",
+     "position": 17
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 19,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "nest3",
+         "type": "name",
+         "position": 24
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "case024": {
+  "expr": "nest0.nest1.nest2.nest3",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "nest0",
+     "type": "name",
+     "position": 5
+    },
+    {
+     "value": "nest1",
+     "type": "name",
+     "position": 11
+    },
+    {
+     "value": "nest2",
+     "type": "name",
+     "position": 17
+    },
+    {
+     "value": "nest3",
+     "type": "name",
+     "position": 23
+    }
+   ]
+  }
+ },
+ "case025": {
+  "expr": "{\"a\": 1 }.a",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 1,
+     "lhs": [
+      [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 4
+       },
+       {
+        "value": 1,
+        "type": "number",
+        "position": 7
+       }
+      ]
+     ]
+    },
+    {
+     "value": "a",
+     "type": "name",
+     "position": 11
+    }
+   ]
+  }
+ },
+ "case026": {
+  "expr": "a",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "a",
+     "type": "name",
+     "position": 1
+    }
+   ]
+  }
+ },
+ "case027": {
+  "expr": "{\"a\": [1] }.a",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 1,
+     "lhs": [
+      [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 4
+       },
+       {
+        "type": "unary",
+        "value": "[",
+        "position": 7,
+        "expressions": [
+         {
+          "value": 1,
+          "type": "number",
+          "position": 8
+         }
+        ]
+       }
+      ]
+     ]
+    },
+    {
+     "value": "a",
+     "type": "name",
+     "position": 13
+    }
+   ]
+  }
+ },
+ "case028": {
+  "expr": "a",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "a",
+     "type": "name",
+     "position": 1
+    }
+   ]
+  }
+ },
+ "case029": {
+  "expr": "{\"a\": [[1]] }.a",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 1,
+     "lhs": [
+      [
+       {
+        "value": "a",
+        "type": "string",
+        "position": 4
+       },
+       {
+        "type": "unary",
+        "value": "[",
+        "position": 7,
+        "expressions": [
+         {
+          "type": "unary",
+          "value": "[",
+          "position": 8,
+          "expressions": [
+           {
+            "value": 1,
+            "type": "number",
+            "position": 9
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     ]
+    },
+    {
+     "value": "a",
+     "type": "name",
+     "position": 15
+    }
+   ]
+  }
+ },
+ "case030": {
+  "expr": "a",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "a",
+     "type": "name",
+     "position": 1
+    }
+   ]
+  }
+ },
+ "case031": {
+  "expr": "[{\"a\":[1,2]}, {\"a\":[3]}].a",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 2,
+       "lhs": [
+        [
+         {
+          "value": "a",
+          "type": "string",
+          "position": 5
+         },
+         {
+          "type": "unary",
+          "value": "[",
+          "position": 7,
+          "expressions": [
+           {
+            "value": 1,
+            "type": "number",
+            "position": 8
+           },
+           {
+            "value": 2,
+            "type": "number",
+            "position": 10
+           }
+          ]
+         }
+        ]
+       ]
+      },
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 15,
+       "lhs": [
+        [
+         {
+          "value": "a",
+          "type": "string",
+          "position": 18
+         },
+         {
+          "type": "unary",
+          "value": "[",
+          "position": 20,
+          "expressions": [
+           {
+            "value": 3,
+            "type": "number",
+            "position": 21
+           }
+          ]
+         }
+        ]
+       ]
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "a",
+     "type": "name",
+     "position": 26
+    }
+   ]
+  }
+ },
+ "case032": {
+  "expr": "a",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "a",
+     "type": "name",
+     "position": 1
+    }
+   ]
+  }
+ },
+ "case033": {
+  "expr": "[{\"a\":[{\"b\":[1]}, {\"b\":[2]}]}, {\"a\":[{\"b\":[3]}, {\"b\":[4]}]}].a[0].b",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 1,
+     "expressions": [
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 2,
+       "lhs": [
+        [
+         {
+          "value": "a",
+          "type": "string",
+          "position": 5
+         },
+         {
+          "type": "unary",
+          "value": "[",
+          "position": 7,
+          "expressions": [
+           {
+            "type": "unary",
+            "value": "{",
+            "position": 8,
+            "lhs": [
+             [
+              {
+               "value": "b",
+               "type": "string",
+               "position": 11
+              },
+              {
+               "type": "unary",
+               "value": "[",
+               "position": 13,
+               "expressions": [
+                {
+                 "value": 1,
+                 "type": "number",
+                 "position": 14
+                }
+               ]
+              }
+             ]
+            ]
+           },
+           {
+            "type": "unary",
+            "value": "{",
+            "position": 19,
+            "lhs": [
+             [
+              {
+               "value": "b",
+               "type": "string",
+               "position": 22
+              },
+              {
+               "type": "unary",
+               "value": "[",
+               "position": 24,
+               "expressions": [
+                {
+                 "value": 2,
+                 "type": "number",
+                 "position": 25
+                }
+               ]
+              }
+             ]
+            ]
+           }
+          ]
+         }
+        ]
+       ]
+      },
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 32,
+       "lhs": [
+        [
+         {
+          "value": "a",
+          "type": "string",
+          "position": 35
+         },
+         {
+          "type": "unary",
+          "value": "[",
+          "position": 37,
+          "expressions": [
+           {
+            "type": "unary",
+            "value": "{",
+            "position": 38,
+            "lhs": [
+             [
+              {
+               "value": "b",
+               "type": "string",
+               "position": 41
+              },
+              {
+               "type": "unary",
+               "value": "[",
+               "position": 43,
+               "expressions": [
+                {
+                 "value": 3,
+                 "type": "number",
+                 "position": 44
+                }
+               ]
+              }
+             ]
+            ]
+           },
+           {
+            "type": "unary",
+            "value": "{",
+            "position": 49,
+            "lhs": [
+             [
+              {
+               "value": "b",
+               "type": "string",
+               "position": 52
+              },
+              {
+               "type": "unary",
+               "value": "[",
+               "position": 54,
+               "expressions": [
+                {
+                 "value": 4,
+                 "type": "number",
+                 "position": 55
+                }
+               ]
+              }
+             ]
+            ]
+           }
+          ]
+         }
+        ]
+       ]
+      }
+     ],
+     "consarray": true
+    },
+    {
+     "value": "a",
+     "type": "name",
+     "position": 62,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 64
+       },
+       "position": 63
+      }
+     ]
+    },
+    {
+     "value": "b",
+     "type": "name",
+     "position": 67
+    }
+   ]
+  }
+ },
+ "case034": {
+  "expr": "a[0].b",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "a",
+     "type": "name",
+     "position": 1,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 3
+       },
+       "position": 2
+      }
+     ]
+    },
+    {
+     "value": "b",
+     "type": "name",
+     "position": 6
+    }
+   ]
+  }
+ },
+ "case034a": {
+  "expr": "$.a[0].b",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "value": "a",
+     "type": "name",
+     "position": 3,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 5
+       },
+       "position": 4
+      }
+     ]
+    },
+    {
+     "value": "b",
+     "type": "name",
+     "position": 8
+    }
+   ]
+  }
+ },
+ "case035": {
+  "expr": "a.b[0]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "a",
+     "type": "name",
+     "position": 1
+    },
+    {
+     "value": "b",
+     "type": "name",
+     "position": 3,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "value": 0,
+        "type": "number",
+        "position": 5
+       },
+       "position": 4
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case036": {
+  "expr": "Phone[type=\"mobile\"].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Phone",
+     "type": "name",
+     "position": 5,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 11,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "type",
+           "type": "name",
+           "position": 10
+          }
+         ]
+        },
+        "rhs": {
+         "value": "mobile",
+         "type": "string",
+         "position": 19
+        }
+       },
+       "position": 6
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 27
+    }
+   ]
+  }
+ },
+ "case037": {
+  "expr": "Phone[type=\"mobile\"][].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Phone",
+     "type": "name",
+     "position": 5,
+     "keepArray": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 11,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "type",
+           "type": "name",
+           "position": 10
+          }
+         ]
+        },
+        "rhs": {
+         "value": "mobile",
+         "type": "string",
+         "position": 19
+        }
+       },
+       "position": 6
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 29
+    }
+   ],
+   "keepSingletonArray": true,
+   "keepArray": true
+  }
+ },
+ "case038": {
+  "expr": "Phone[][type=\"mobile\"].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Phone",
+     "type": "name",
+     "position": 5,
+     "keepArray": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 13,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "type",
+           "type": "name",
+           "position": 12
+          }
+         ]
+        },
+        "rhs": {
+         "value": "mobile",
+         "type": "string",
+         "position": 21
+        }
+       },
+       "position": 8
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 29
+    }
+   ],
+   "keepSingletonArray": true,
+   "keepArray": true
+  }
+ },
+ "case039": {
+  "expr": "Phone[type=\"office\"][].number",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Phone",
+     "type": "name",
+     "position": 5,
+     "keepArray": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 11,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "type",
+           "type": "name",
+           "position": 10
+          }
+         ]
+        },
+        "rhs": {
+         "value": "office",
+         "type": "string",
+         "position": 19
+        }
+       },
+       "position": 6
+      }
+     ]
+    },
+    {
+     "value": "number",
+     "type": "name",
+     "position": 29
+    }
+   ],
+   "keepSingletonArray": true,
+   "keepArray": true
+  }
+ },
+ "case040": {
+  "expr": "Phone{type: number}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Phone",
+     "type": "name",
+     "position": 5
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "type",
+         "type": "name",
+         "position": 10
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "number",
+         "type": "name",
+         "position": 18
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 6
+   }
+  }
+ },
+ "case041": {
+  "expr": "Phone{type: number[]}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Phone",
+     "type": "name",
+     "position": 5
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "type",
+         "type": "name",
+         "position": 10
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "number",
+         "type": "name",
+         "position": 18,
+         "keepArray": true
+        }
+       ],
+       "keepSingletonArray": true,
+       "keepArray": true
+      }
+     ]
+    ],
+    "position": 6
+   }
+  }
+ },
+ "case042": {
+  "expr": "$[type='command'][]",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "keepArray": true,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "binary",
+      "value": "=",
+      "position": 7,
+      "lhs": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "type",
+         "type": "name",
+         "position": 6
+        }
+       ]
+      },
+      "rhs": {
+       "value": "command",
+       "type": "string",
+       "position": 16
+      }
+     },
+     "position": 2
+    }
+   ]
+  }
+ },
+ "case043": {
+  "expr": "$[][type='command']",
+  "ast": {
+   "value": "",
+   "type": "variable",
+   "position": 1,
+   "keepArray": true,
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "type": "binary",
+      "value": "=",
+      "position": 9,
+      "lhs": {
+       "type": "path",
+       "steps": [
+        {
+         "value": "type",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      "rhs": {
+       "value": "command",
+       "type": "string",
+       "position": 18
+      }
+     },
+     "position": 4
+    }
+   ]
+  }
+ },
+ "case044": {
+  "expr": "$filter($, function($e) { $e != 0 })[]",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 9
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "e",
+       "type": "variable",
+       "position": 22
+      }
+     ],
+     "position": 20,
+     "body": {
+      "type": "binary",
+      "value": "!=",
+      "position": 31,
+      "lhs": {
+       "value": "e",
+       "type": "variable",
+       "position": 28
+      },
+      "rhs": {
+       "value": 0,
+       "type": "number",
+       "position": 33
+      }
+     }
+    }
+   ],
+   "procedure": {
+    "value": "filter",
+    "type": "variable",
+    "position": 7
+   },
+   "keepArray": true
+  }
+ },
+ "case045": {
+  "expr": "$.tags[title='example'][]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "value": "tags",
+     "type": "name",
+     "position": 6,
+     "keepArray": true,
+     "stages": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 13,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "title",
+           "type": "name",
+           "position": 12
+          }
+         ]
+        },
+        "rhs": {
+         "value": "example",
+         "type": "string",
+         "position": 22
+        }
+       },
+       "position": 7
+      }
+     ]
+    }
+   ],
+   "keepSingletonArray": true
+  }
+ },
+ "large[0]": {
+  "expr": "( $data := { 'number': [1..2e5].$string() }; $values := $data.number; $count($values) )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 12,
+      "lhs": [
+       [
+        {
+         "value": "number",
+         "type": "string",
+         "position": 21
+        },
+        {
+         "type": "path",
+         "steps": [
+          {
+           "type": "unary",
+           "value": "[",
+           "position": 24,
+           "expressions": [
+            {
+             "type": "binary",
+             "value": "..",
+             "position": 27,
+             "lhs": {
+              "value": 1,
+              "type": "number",
+              "position": 25
+             },
+             "rhs": {
+              "value": 200000,
+              "type": "number",
+              "position": 30
+             }
+            }
+           ],
+           "consarray": true
+          },
+          {
+           "type": "function",
+           "value": "(",
+           "position": 40,
+           "arguments": [],
+           "procedure": {
+            "value": "string",
+            "type": "variable",
+            "position": 39
+           }
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 55,
+     "lhs": {
+      "value": "values",
+      "type": "variable",
+      "position": 52
+     },
+     "rhs": {
+      "type": "path",
+      "steps": [
+       {
+        "value": "data",
+        "type": "variable",
+        "position": 61
+       },
+       {
+        "value": "number",
+        "type": "name",
+        "position": 68
+       }
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 77,
+     "arguments": [
+      {
+       "value": "values",
+       "type": "variable",
+       "position": 84
+      }
+     ],
+     "procedure": {
+      "value": "count",
+      "type": "variable",
+      "position": 76
+     }
+    }
+   ]
+  }
+ },
+ "large[1]": {
+  "expr": "( $data := { 'number': [1..2e5].$string() }; $values := $lookup($data, 'number'); $count($values) )",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "data",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "{",
+      "position": 12,
+      "lhs": [
+       [
+        {
+         "value": "number",
+         "type": "string",
+         "position": 21
+        },
+        {
+         "type": "path",
+         "steps": [
+          {
+           "type": "unary",
+           "value": "[",
+           "position": 24,
+           "expressions": [
+            {
+             "type": "binary",
+             "value": "..",
+             "position": 27,
+             "lhs": {
+              "value": 1,
+              "type": "number",
+              "position": 25
+             },
+             "rhs": {
+              "value": 200000,
+              "type": "number",
+              "position": 30
+             }
+            }
+           ],
+           "consarray": true
+          },
+          {
+           "type": "function",
+           "value": "(",
+           "position": 40,
+           "arguments": [],
+           "procedure": {
+            "value": "string",
+            "type": "variable",
+            "position": 39
+           }
+          }
+         ]
+        }
+       ]
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 55,
+     "lhs": {
+      "value": "values",
+      "type": "variable",
+      "position": 52
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 64,
+      "arguments": [
+       {
+        "value": "data",
+        "type": "variable",
+        "position": 69
+       },
+       {
+        "value": "number",
+        "type": "string",
+        "position": 79
+       }
+      ],
+      "procedure": {
+       "value": "lookup",
+       "type": "variable",
+       "position": 63
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 89,
+     "arguments": [
+      {
+       "value": "values",
+       "type": "variable",
+       "position": 96
+      }
+     ],
+     "procedure": {
+      "value": "count",
+      "type": "variable",
+      "position": 88
+     }
+    }
+   ]
+  }
+ },
+ "sequence-of-arrays[0]": {
+  "expr": "$.[value,epochSeconds]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 3,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "value",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "epochSeconds",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "sequence-of-arrays[1]": {
+  "expr": "$.[value,epochSeconds]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 3,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "value",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "epochSeconds",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      }
+     ],
+     "consarray": true
+    }
+   ]
+  }
+ },
+ "sequence-of-arrays[2]": {
+  "expr": "$.[value,epochSeconds][]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 3,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "value",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "epochSeconds",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      }
+     ],
+     "keepArray": true,
+     "consarray": true
+    }
+   ],
+   "keepSingletonArray": true
+  }
+ },
+ "sequence-of-arrays[3]": {
+  "expr": "$.[value,epochSeconds][]",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 3,
+     "expressions": [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "value",
+         "type": "name",
+         "position": 8
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "epochSeconds",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      }
+     ],
+     "keepArray": true,
+     "consarray": true
+    }
+   ],
+   "keepSingletonArray": true
+  }
+ }
+}

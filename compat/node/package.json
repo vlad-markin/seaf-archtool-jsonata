@@ -1,0 +1,9 @@
+{
+  "name": "seaf-archtool-jsonata-compat",
+  "private": true,
+  "type": "module",
+  "description": "Reference side of the compatibility harness: jsonata-js 2.2.2 (the version used by seaf-archtool-core).",
+  "dependencies": {
+    "jsonata": "2.2.2"
+  }
+}

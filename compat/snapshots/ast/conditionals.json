@@ -1,0 +1,587 @@
+{
+ "case000": {
+  "expr": "[\"Red\"[$$=\"Bus\"], \"White\"[$$=\"Police Car\"]][0]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": "Red",
+     "type": "string",
+     "position": 6,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 10,
+        "lhs": {
+         "value": "$",
+         "type": "variable",
+         "position": 9
+        },
+        "rhs": {
+         "value": "Bus",
+         "type": "string",
+         "position": 15
+        }
+       },
+       "position": 7
+      }
+     ]
+    },
+    {
+     "value": "White",
+     "type": "string",
+     "position": 25,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 29,
+        "lhs": {
+         "value": "$",
+         "type": "variable",
+         "position": 28
+        },
+        "rhs": {
+         "value": "Police Car",
+         "type": "string",
+         "position": 41
+        }
+       },
+       "position": 26
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 45
+     },
+     "position": 44
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "[\"Red\"[$$=\"Bus\"], \"White\"[$$=\"Police Car\"]][0]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": "Red",
+     "type": "string",
+     "position": 6,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 10,
+        "lhs": {
+         "value": "$",
+         "type": "variable",
+         "position": 9
+        },
+        "rhs": {
+         "value": "Bus",
+         "type": "string",
+         "position": 15
+        }
+       },
+       "position": 7
+      }
+     ]
+    },
+    {
+     "value": "White",
+     "type": "string",
+     "position": 25,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 29,
+        "lhs": {
+         "value": "$",
+         "type": "variable",
+         "position": 28
+        },
+        "rhs": {
+         "value": "Police Car",
+         "type": "string",
+         "position": 41
+        }
+       },
+       "position": 26
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 45
+     },
+     "position": 44
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "[\"Red\"[$$=\"Bus\"], \"White\"[$$=\"Police Car\"]][0]",
+  "ast": {
+   "type": "unary",
+   "value": "[",
+   "position": 1,
+   "expressions": [
+    {
+     "value": "Red",
+     "type": "string",
+     "position": 6,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 10,
+        "lhs": {
+         "value": "$",
+         "type": "variable",
+         "position": 9
+        },
+        "rhs": {
+         "value": "Bus",
+         "type": "string",
+         "position": 15
+        }
+       },
+       "position": 7
+      }
+     ]
+    },
+    {
+     "value": "White",
+     "type": "string",
+     "position": 25,
+     "predicate": [
+      {
+       "type": "filter",
+       "expr": {
+        "type": "binary",
+        "value": "=",
+        "position": 29,
+        "lhs": {
+         "value": "$",
+         "type": "variable",
+         "position": 28
+        },
+        "rhs": {
+         "value": "Police Car",
+         "type": "string",
+         "position": 41
+        }
+       },
+       "position": 26
+      }
+     ]
+    }
+   ],
+   "predicate": [
+    {
+     "type": "filter",
+     "expr": {
+      "value": 0,
+      "type": "number",
+      "position": 45
+     },
+     "position": 44
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "$lookup({\"Bus\": \"Red\", \"Police Car\": \"White\"}, $$)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "Bus",
+        "type": "string",
+        "position": 14
+       },
+       {
+        "value": "Red",
+        "type": "string",
+        "position": 21
+       }
+      ],
+      [
+       {
+        "value": "Police Car",
+        "type": "string",
+        "position": 35
+       },
+       {
+        "value": "White",
+        "type": "string",
+        "position": 44
+       }
+      ]
+     ]
+    },
+    {
+     "value": "$",
+     "type": "variable",
+     "position": 49
+    }
+   ],
+   "procedure": {
+    "value": "lookup",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case004": {
+  "expr": "$lookup({\"Bus\": \"Red\", \"Police Car\": \"White\"}, $$)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "Bus",
+        "type": "string",
+        "position": 14
+       },
+       {
+        "value": "Red",
+        "type": "string",
+        "position": 21
+       }
+      ],
+      [
+       {
+        "value": "Police Car",
+        "type": "string",
+        "position": 35
+       },
+       {
+        "value": "White",
+        "type": "string",
+        "position": 44
+       }
+      ]
+     ]
+    },
+    {
+     "value": "$",
+     "type": "variable",
+     "position": 49
+    }
+   ],
+   "procedure": {
+    "value": "lookup",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case005": {
+  "expr": "$lookup({\"Bus\": \"Red\", \"Police Car\": \"White\"}, $$)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 9,
+     "lhs": [
+      [
+       {
+        "value": "Bus",
+        "type": "string",
+        "position": 14
+       },
+       {
+        "value": "Red",
+        "type": "string",
+        "position": 21
+       }
+      ],
+      [
+       {
+        "value": "Police Car",
+        "type": "string",
+        "position": 35
+       },
+       {
+        "value": "White",
+        "type": "string",
+        "position": 44
+       }
+      ]
+     ]
+    },
+    {
+     "value": "$",
+     "type": "variable",
+     "position": 49
+    }
+   ],
+   "procedure": {
+    "value": "lookup",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case006": {
+  "expr": "Account.Order.Product.(Price < 30 ? \"Cheap\")",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "block",
+     "position": 23,
+     "expressions": [
+      {
+       "type": "condition",
+       "position": 35,
+       "condition": {
+        "type": "binary",
+        "value": "<",
+        "position": 30,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 28
+          }
+         ]
+        },
+        "rhs": {
+         "value": 30,
+         "type": "number",
+         "position": 33
+        }
+       },
+       "then": {
+        "value": "Cheap",
+        "type": "string",
+        "position": 43
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case007": {
+  "expr": "Account.Order.Product.(Price < 30 ? \"Cheap\" : \"Expensive\")",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "block",
+     "position": 23,
+     "expressions": [
+      {
+       "type": "condition",
+       "position": 35,
+       "condition": {
+        "type": "binary",
+        "value": "<",
+        "position": 30,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 28
+          }
+         ]
+        },
+        "rhs": {
+         "value": 30,
+         "type": "number",
+         "position": 33
+        }
+       },
+       "then": {
+        "value": "Cheap",
+        "type": "string",
+        "position": 43
+       },
+       "else": {
+        "value": "Expensive",
+        "type": "string",
+        "position": 57
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "Account.Order.Product.(Price < 30 ? \"Cheap\" : Price < 100 ? \"Expensive\" : \"Rip off\")",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "block",
+     "position": 23,
+     "expressions": [
+      {
+       "type": "condition",
+       "position": 35,
+       "condition": {
+        "type": "binary",
+        "value": "<",
+        "position": 30,
+        "lhs": {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 28
+          }
+         ]
+        },
+        "rhs": {
+         "value": 30,
+         "type": "number",
+         "position": 33
+        }
+       },
+       "then": {
+        "value": "Cheap",
+        "type": "string",
+        "position": 43
+       },
+       "else": {
+        "type": "condition",
+        "position": 59,
+        "condition": {
+         "type": "binary",
+         "value": "<",
+         "position": 53,
+         "lhs": {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Price",
+            "type": "name",
+            "position": 51
+           }
+          ]
+         },
+         "rhs": {
+          "value": 100,
+          "type": "number",
+          "position": 57
+         }
+        },
+        "then": {
+         "value": "Expensive",
+         "type": "string",
+         "position": 71
+        },
+        "else": {
+         "value": "Rip off",
+         "type": "string",
+         "position": 83
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

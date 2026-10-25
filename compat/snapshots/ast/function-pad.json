@@ -1,0 +1,367 @@
+{
+ "case000": {
+  "expr": "$pad(\"foo\", 5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case001": {
+  "expr": "$pad(\"foo\", -5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 14
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case002": {
+  "expr": "$pad(\"foo\", -5, \"#\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 14
+    },
+    {
+     "value": "#",
+     "type": "string",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case003": {
+  "expr": "$pad(\"foo\", 5, \"\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 13
+    },
+    {
+     "value": "",
+     "type": "string",
+     "position": 17
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case004": {
+  "expr": "$pad(\"foo\", 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 13
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case005": {
+  "expr": "$pad(\"foo\", 8, \"-+\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "value": 8,
+     "type": "number",
+     "position": 13
+    },
+    {
+     "value": "-+",
+     "type": "string",
+     "position": 19
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case006": {
+  "expr": "$pad(nothing, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 12
+      }
+     ]
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case007": {
+  "expr": "$pad('a𝄞💩', 7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "a𝄞💩",
+     "type": "string",
+     "position": 12
+    },
+    {
+     "value": 7,
+     "type": "number",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case008": {
+  "expr": "$pad('𝄞💩', -7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "𝄞💩",
+     "type": "string",
+     "position": 11
+    },
+    {
+     "value": -7,
+     "type": "number",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case009": {
+  "expr": "$pad('a𝄞💩', 7, '💩')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "a𝄞💩",
+     "type": "string",
+     "position": 12
+    },
+    {
+     "value": 7,
+     "type": "number",
+     "position": 15
+    },
+    {
+     "value": "💩",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case010": {
+  "expr": "$pad('a𝄞💩', 6, '💩')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "a𝄞💩",
+     "type": "string",
+     "position": 12
+    },
+    {
+     "value": 6,
+     "type": "number",
+     "position": 15
+    },
+    {
+     "value": "💩",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case011": {
+  "expr": "$pad('foo', 5.7, ' ')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "value": 5.7,
+     "type": "number",
+     "position": 15
+    },
+    {
+     "value": " ",
+     "type": "string",
+     "position": 20
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case012": {
+  "expr": "$pad('foo', -5.7, ' ')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": "foo",
+     "type": "string",
+     "position": 10
+    },
+    {
+     "value": -5.7,
+     "type": "number",
+     "position": 16
+    },
+    {
+     "value": " ",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "pad",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ }
+}

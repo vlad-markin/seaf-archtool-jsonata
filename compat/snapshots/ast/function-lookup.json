@@ -1,0 +1,142 @@
+{
+ "case000": {
+  "expr": "$lookup(Account, \"Account Name\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      }
+     ]
+    },
+    {
+     "value": "Account Name",
+     "type": "string",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "lookup",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case001": {
+  "expr": "$lookup(Account.Order.Product, \"Product Name\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 29
+      }
+     ]
+    },
+    {
+     "value": "Product Name",
+     "type": "string",
+     "position": 45
+    }
+   ],
+   "procedure": {
+    "value": "lookup",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case002": {
+  "expr": "$lookup(Account.Order.Product.ProductID, \"Product Name\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 29
+      },
+      {
+       "value": "ProductID",
+       "type": "name",
+       "position": 39
+      }
+     ]
+    },
+    {
+     "value": "Product Name",
+     "type": "string",
+     "position": 55
+    }
+   ],
+   "procedure": {
+    "value": "lookup",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case003": {
+  "expr": "$lookup($$, \"gust\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "value": "$",
+     "type": "variable",
+     "position": 10
+    },
+    {
+     "value": "gust",
+     "type": "string",
+     "position": 18
+    }
+   ],
+   "procedure": {
+    "value": "lookup",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ }
+}

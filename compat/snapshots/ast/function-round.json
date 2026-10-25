@@ -1,0 +1,402 @@
+{
+ "case000": {
+  "expr": "$round(4)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 4,
+     "type": "number",
+     "position": 8
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case001": {
+  "expr": "$round(2.3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 2.3,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case002": {
+  "expr": "$round(2.7)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 2.7,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case003": {
+  "expr": "$round(2.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 2.5,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case004": {
+  "expr": "$round(3.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 3.5,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case005": {
+  "expr": "$round(-0.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": -0.5,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case006": {
+  "expr": "$round(-0.3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": -0.3,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case007": {
+  "expr": "$round(0.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 0.5,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case008": {
+  "expr": "$round(-7.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": -7.5,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case009": {
+  "expr": "$round(-8.5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": -8.5,
+     "type": "number",
+     "position": 11
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case010": {
+  "expr": "$round(4.49, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 4.49,
+     "type": "number",
+     "position": 11
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 14
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case011": {
+  "expr": "$round(4.525, 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 4.525,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case012": {
+  "expr": "$round(4.515, 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 4.515,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case013": {
+  "expr": "$round(12345, -2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 12345,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": -2,
+     "type": "number",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case014": {
+  "expr": "$round(12450, -2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 12450,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": -2,
+     "type": "number",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case015": {
+  "expr": "$round(12350, -2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 12350,
+     "type": "number",
+     "position": 12
+    },
+    {
+     "value": -2,
+     "type": "number",
+     "position": 16
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case016": {
+  "expr": "$round(6.022e-23, 24)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "value": 6.022e-23,
+     "type": "number",
+     "position": 16
+    },
+    {
+     "value": 24,
+     "type": "number",
+     "position": 20
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ },
+ "case017": {
+  "expr": "$round(unknown)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 7,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "unknown",
+       "type": "name",
+       "position": 14
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "round",
+    "type": "variable",
+    "position": 6
+   }
+  }
+ }
+}

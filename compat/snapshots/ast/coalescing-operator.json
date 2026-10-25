@@ -1,0 +1,754 @@
+{
+ "case000": {
+  "expr": "bar ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 6,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "bar",
+        "type": "name",
+        "position": 3
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "bar",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 9
+   }
+  }
+ },
+ "case001": {
+  "expr": "foo.bar ?? 98",
+  "ast": {
+   "type": "condition",
+   "position": 10,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "foo",
+        "type": "name",
+        "position": 3
+       },
+       {
+        "value": "bar",
+        "type": "name",
+        "position": 7
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "bar",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   },
+   "else": {
+    "value": 98,
+    "type": "number",
+    "position": 13
+   }
+  }
+ },
+ "case002": {
+  "expr": "foo.blah[0].baz.fud ?? 98",
+  "ast": {
+   "type": "condition",
+   "position": 22,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "foo",
+        "type": "name",
+        "position": 3
+       },
+       {
+        "value": "blah",
+        "type": "name",
+        "position": 8,
+        "stages": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 0,
+           "type": "number",
+           "position": 10
+          },
+          "position": 9
+         }
+        ]
+       },
+       {
+        "value": "baz",
+        "type": "name",
+        "position": 15
+       },
+       {
+        "value": "fud",
+        "type": "name",
+        "position": 19
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     },
+     {
+      "value": "baz",
+      "type": "name",
+      "position": 15
+     },
+     {
+      "value": "fud",
+      "type": "name",
+      "position": 19
+     }
+    ]
+   },
+   "else": {
+    "value": 98,
+    "type": "number",
+    "position": 25
+   }
+  }
+ },
+ "case003": {
+  "expr": "baz ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 6,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "baz",
+        "type": "name",
+        "position": 3
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "baz",
+      "type": "name",
+      "position": 3
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 9
+   }
+  }
+ },
+ "case004": {
+  "expr": "foo.baz ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 10,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "foo",
+        "type": "name",
+        "position": 3
+       },
+       {
+        "value": "baz",
+        "type": "name",
+        "position": 7
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "baz",
+      "type": "name",
+      "position": 7
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 13
+   }
+  }
+ },
+ "case005": {
+  "expr": "foo.blah[9].baz.fud ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 22,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "foo",
+        "type": "name",
+        "position": 3
+       },
+       {
+        "value": "blah",
+        "type": "name",
+        "position": 8,
+        "stages": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 9,
+           "type": "number",
+           "position": 10
+          },
+          "position": 9
+         }
+        ]
+       },
+       {
+        "value": "baz",
+        "type": "name",
+        "position": 15
+       },
+       {
+        "value": "fud",
+        "type": "name",
+        "position": 19
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 9,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     },
+     {
+      "value": "baz",
+      "type": "name",
+      "position": 15
+     },
+     {
+      "value": "fud",
+      "type": "name",
+      "position": 19
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 25
+   }
+  }
+ },
+ "case006": {
+  "expr": "null ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 7,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "value": null,
+      "type": "value",
+      "position": 4
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "value": null,
+    "type": "value",
+    "position": 4
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 10
+   }
+  }
+ },
+ "case007": {
+  "expr": "false ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 8,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "value": false,
+      "type": "value",
+      "position": 5
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "value": false,
+    "type": "value",
+    "position": 5
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 11
+   }
+  }
+ },
+ "case008": {
+  "expr": "true ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 7,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "value": true,
+      "type": "value",
+      "position": 4
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "value": true,
+    "type": "value",
+    "position": 4
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 10
+   }
+  }
+ },
+ "case009": {
+  "expr": "0 ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 4,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "value": 0,
+      "type": "number",
+      "position": 1
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "value": 0,
+    "type": "number",
+    "position": 1
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 7
+   }
+  }
+ },
+ "case010": {
+  "expr": "[] ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 5,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "unary",
+      "value": "[",
+      "position": 1,
+      "expressions": []
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "unary",
+    "value": "[",
+    "position": 1,
+    "expressions": []
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 8
+   }
+  }
+ },
+ "case011": {
+  "expr": "{} ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 5,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "unary",
+      "value": "{",
+      "position": 1,
+      "lhs": []
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "unary",
+    "value": "{",
+    "position": 1,
+    "lhs": []
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 8
+   }
+  }
+ },
+ "case012": {
+  "expr": "\"\" ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 5,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "value": "",
+      "type": "string",
+      "position": 2
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "value": "",
+    "type": "string",
+    "position": 2
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 8
+   }
+  }
+ },
+ "case013": {
+  "expr": "foo.blah[0] ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 14,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "foo",
+        "type": "name",
+        "position": 3
+       },
+       {
+        "value": "blah",
+        "type": "name",
+        "position": 8,
+        "stages": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 0,
+           "type": "number",
+           "position": 10
+          },
+          "position": 9
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 0,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 17
+   }
+  }
+ },
+ "case014": {
+  "expr": "foo.blah[5] ?? 42",
+  "ast": {
+   "type": "condition",
+   "position": 14,
+   "condition": {
+    "type": "function",
+    "value": "(",
+    "arguments": [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "foo",
+        "type": "name",
+        "position": 3
+       },
+       {
+        "value": "blah",
+        "type": "name",
+        "position": 8,
+        "stages": [
+         {
+          "type": "filter",
+          "expr": {
+           "value": 5,
+           "type": "number",
+           "position": 10
+          },
+          "position": 9
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "procedure": {
+     "type": "variable",
+     "value": "exists"
+    }
+   },
+   "then": {
+    "type": "path",
+    "steps": [
+     {
+      "value": "foo",
+      "type": "name",
+      "position": 3
+     },
+     {
+      "value": "blah",
+      "type": "name",
+      "position": 8,
+      "stages": [
+       {
+        "type": "filter",
+        "expr": {
+         "value": 5,
+         "type": "number",
+         "position": 10
+        },
+        "position": 9
+       }
+      ]
+     }
+    ]
+   },
+   "else": {
+    "value": 42,
+    "type": "number",
+    "position": 17
+   }
+  }
+ }
+}

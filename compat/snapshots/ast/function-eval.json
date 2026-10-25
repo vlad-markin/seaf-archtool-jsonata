@@ -1,0 +1,387 @@
+{
+ "case000": {
+  "expr": "$eval('[1,2,3]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "[1,2,3]",
+     "type": "string",
+     "position": 15
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "$eval(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$eval('[1,$string(2),3]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "[1,$string(2),3]",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case003": {
+  "expr": "$eval('Account.Order.Product.Quantity ~> $sum()')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "Account.Order.Product.Quantity ~> $sum()",
+     "type": "string",
+     "position": 48
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case004": {
+  "expr": "Account.Order.Product.{'Name': `Product Name`, 'Total': $eval('Price * Quantity')}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "lhs": [
+      [
+       {
+        "value": "Name",
+        "type": "string",
+        "position": 29
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 45
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Total",
+        "type": "string",
+        "position": 54
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 62,
+        "arguments": [
+         {
+          "value": "Price * Quantity",
+          "type": "string",
+          "position": 80
+         }
+        ],
+        "procedure": {
+         "value": "eval",
+         "type": "variable",
+         "position": 61
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "Account.Order.Product.{'Name': `Product Name`, 'Volume': $eval('Width*Height*Depth', Description)}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "lhs": [
+      [
+       {
+        "value": "Name",
+        "type": "string",
+        "position": 29
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 45
+         }
+        ]
+       }
+      ],
+      [
+       {
+        "value": "Volume",
+        "type": "string",
+        "position": 55
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 63,
+        "arguments": [
+         {
+          "value": "Width*Height*Depth",
+          "type": "string",
+          "position": 83
+         },
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Description",
+            "type": "name",
+            "position": 96
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "eval",
+         "type": "variable",
+         "position": 62
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case006": {
+  "expr": "$eval('[1,string(2),3]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "[1,string(2),3]",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case007": {
+  "expr": "$eval('[1,#string(2),3]')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "[1,#string(2),3]",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case008[0]": {
+  "expr": "$eval(\"{ 'test': 1 }\", [])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "{ 'test': 1 }",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 24,
+     "expressions": []
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case008[1]": {
+  "expr": "$eval(\"{ 'test': 1 }\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "{ 'test': 1 }",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case008[2]": {
+  "expr": "$eval(\"{ 'test': 1 }\", [1,2,3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "{ 'test': 1 }",
+     "type": "string",
+     "position": 21
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 24,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 25
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 27
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 29
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case008[3]": {
+  "expr": "$eval(\"{ 'test': 1 }\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": "{ 'test': 1 }",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "eval",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ }
+}

@@ -1,0 +1,87 @@
+{
+ "case000": {
+  "expr": "$sqrt(4)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": 4,
+     "type": "number",
+     "position": 7
+    }
+   ],
+   "procedure": {
+    "value": "sqrt",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case001": {
+  "expr": "$sqrt(2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": 2,
+     "type": "number",
+     "position": 7
+    }
+   ],
+   "procedure": {
+    "value": "sqrt",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case002": {
+  "expr": "$sqrt(nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "sqrt",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ },
+ "case003": {
+  "expr": "$sqrt(-2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "value": -2,
+     "type": "number",
+     "position": 8
+    }
+   ],
+   "procedure": {
+    "value": "sqrt",
+    "type": "variable",
+    "position": 5
+   }
+  }
+ }
+}

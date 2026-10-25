@@ -1,0 +1,1290 @@
+{
+ "case000": {
+  "expr": "(  $seq := [1,2,3,4,5];  $reduce($seq, function($x, $y){$x+$y})) ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "seq",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 12,
+      "expressions": [
+       {
+        "value": 1,
+        "type": "number",
+        "position": 13
+       },
+       {
+        "value": 2,
+        "type": "number",
+        "position": 15
+       },
+       {
+        "value": 3,
+        "type": "number",
+        "position": 17
+       },
+       {
+        "value": 4,
+        "type": "number",
+        "position": 19
+       },
+       {
+        "value": 5,
+        "type": "number",
+        "position": 21
+       }
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 33,
+     "arguments": [
+      {
+       "value": "seq",
+       "type": "variable",
+       "position": 37
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 50
+        },
+        {
+         "value": "y",
+         "type": "variable",
+         "position": 54
+        }
+       ],
+       "position": 48,
+       "body": {
+        "type": "binary",
+        "value": "+",
+        "position": 59,
+        "lhs": {
+         "value": "x",
+         "type": "variable",
+         "position": 58
+        },
+        "rhs": {
+         "value": "y",
+         "type": "variable",
+         "position": 61
+        }
+       }
+      }
+     ],
+     "procedure": {
+      "value": "reduce",
+      "type": "variable",
+      "position": 32
+     }
+    }
+   ]
+  }
+ },
+ "case001": {
+  "expr": "(  $concat := function($s){function($a, $b){$string($a) & $s & $string($b)}};  $comma_join := $concat(' ... ');  $reduce([1,2,3,4,5], $comma_join))      ",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 13,
+     "lhs": {
+      "value": "concat",
+      "type": "variable",
+      "position": 10
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "s",
+        "type": "variable",
+        "position": 25
+       }
+      ],
+      "position": 23,
+      "body": {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "a",
+         "type": "variable",
+         "position": 38
+        },
+        {
+         "value": "b",
+         "type": "variable",
+         "position": 42
+        }
+       ],
+       "position": 36,
+       "body": {
+        "type": "binary",
+        "value": "&",
+        "position": 62,
+        "lhs": {
+         "type": "binary",
+         "value": "&",
+         "position": 57,
+         "lhs": {
+          "type": "function",
+          "value": "(",
+          "position": 52,
+          "arguments": [
+           {
+            "value": "a",
+            "type": "variable",
+            "position": 54
+           }
+          ],
+          "procedure": {
+           "value": "string",
+           "type": "variable",
+           "position": 51
+          }
+         },
+         "rhs": {
+          "value": "s",
+          "type": "variable",
+          "position": 60
+         }
+        },
+        "rhs": {
+         "type": "function",
+         "value": "(",
+         "position": 71,
+         "arguments": [
+          {
+           "value": "b",
+           "type": "variable",
+           "position": 73
+          }
+         ],
+         "procedure": {
+          "value": "string",
+          "type": "variable",
+          "position": 70
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 93,
+     "lhs": {
+      "value": "comma_join",
+      "type": "variable",
+      "position": 90
+     },
+     "rhs": {
+      "type": "function",
+      "value": "(",
+      "position": 102,
+      "arguments": [
+       {
+        "value": " ... ",
+        "type": "string",
+        "position": 109
+       }
+      ],
+      "procedure": {
+       "value": "concat",
+       "type": "variable",
+       "position": 101
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 121,
+     "arguments": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 122,
+       "expressions": [
+        {
+         "value": 1,
+         "type": "number",
+         "position": 123
+        },
+        {
+         "value": 2,
+         "type": "number",
+         "position": 125
+        },
+        {
+         "value": 3,
+         "type": "number",
+         "position": 127
+        },
+        {
+         "value": 4,
+         "type": "number",
+         "position": 129
+        },
+        {
+         "value": 5,
+         "type": "number",
+         "position": 131
+        }
+       ]
+      },
+      {
+       "value": "comma_join",
+       "type": "variable",
+       "position": 145
+      }
+     ],
+     "procedure": {
+      "value": "reduce",
+      "type": "variable",
+      "position": 120
+     }
+    }
+   ]
+  }
+ },
+ "case002": {
+  "expr": "(  $seq := [1,2,3,4,5];  $reduce($seq, function($x, $y){$x+$y}, 2))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "seq",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 12,
+      "expressions": [
+       {
+        "value": 1,
+        "type": "number",
+        "position": 13
+       },
+       {
+        "value": 2,
+        "type": "number",
+        "position": 15
+       },
+       {
+        "value": 3,
+        "type": "number",
+        "position": 17
+       },
+       {
+        "value": 4,
+        "type": "number",
+        "position": 19
+       },
+       {
+        "value": 5,
+        "type": "number",
+        "position": 21
+       }
+      ]
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 33,
+     "arguments": [
+      {
+       "value": "seq",
+       "type": "variable",
+       "position": 37
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 50
+        },
+        {
+         "value": "y",
+         "type": "variable",
+         "position": 54
+        }
+       ],
+       "position": 48,
+       "body": {
+        "type": "binary",
+        "value": "+",
+        "position": 59,
+        "lhs": {
+         "value": "x",
+         "type": "variable",
+         "position": 58
+        },
+        "rhs": {
+         "value": "y",
+         "type": "variable",
+         "position": 61
+        }
+       }
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 65
+      }
+     ],
+     "procedure": {
+      "value": "reduce",
+      "type": "variable",
+      "position": 32
+     }
+    }
+   ]
+  }
+ },
+ "case003": {
+  "expr": "(  $seq := 1;  $reduce($seq, function($x, $y){$x+$y}))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "seq",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "value": 1,
+      "type": "number",
+      "position": 12
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 23,
+     "arguments": [
+      {
+       "value": "seq",
+       "type": "variable",
+       "position": 27
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 40
+        },
+        {
+         "value": "y",
+         "type": "variable",
+         "position": 44
+        }
+       ],
+       "position": 38,
+       "body": {
+        "type": "binary",
+        "value": "+",
+        "position": 49,
+        "lhs": {
+         "value": "x",
+         "type": "variable",
+         "position": 48
+        },
+        "rhs": {
+         "value": "y",
+         "type": "variable",
+         "position": 51
+        }
+       }
+      }
+     ],
+     "procedure": {
+      "value": "reduce",
+      "type": "variable",
+      "position": 22
+     }
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "(  $seq := 1;  $reduce($seq, function($x, $y){$x+$y}))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "seq",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "value": 1,
+      "type": "number",
+      "position": 12
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 23,
+     "arguments": [
+      {
+       "value": "seq",
+       "type": "variable",
+       "position": 27
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 40
+        },
+        {
+         "value": "y",
+         "type": "variable",
+         "position": 44
+        }
+       ],
+       "position": 38,
+       "body": {
+        "type": "binary",
+        "value": "+",
+        "position": 49,
+        "lhs": {
+         "value": "x",
+         "type": "variable",
+         "position": 48
+        },
+        "rhs": {
+         "value": "y",
+         "type": "variable",
+         "position": 51
+        }
+       }
+      }
+     ],
+     "procedure": {
+      "value": "reduce",
+      "type": "variable",
+      "position": 22
+     }
+    }
+   ]
+  }
+ },
+ "case005": {
+  "expr": "$reduce(Account.Order.Product.Quantity, $append)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 29
+      },
+      {
+       "value": "Quantity",
+       "type": "name",
+       "position": 38
+      }
+     ]
+    },
+    {
+     "value": "append",
+     "type": "variable",
+     "position": 47
+    }
+   ],
+   "procedure": {
+    "value": "reduce",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case006": {
+  "expr": "$reduce(Account.Order.Product.Quantity, $append)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 8,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "Account",
+       "type": "name",
+       "position": 15
+      },
+      {
+       "value": "Order",
+       "type": "name",
+       "position": 21
+      },
+      {
+       "value": "Product",
+       "type": "name",
+       "position": 29
+      },
+      {
+       "value": "Quantity",
+       "type": "name",
+       "position": 38
+      }
+     ]
+    },
+    {
+     "value": "append",
+     "type": "variable",
+     "position": 47
+    }
+   ],
+   "procedure": {
+    "value": "reduce",
+    "type": "variable",
+    "position": 7
+   }
+  }
+ },
+ "case007": {
+  "expr": "($product := function($a, $b) { $a * $b };$power := function($x, $n) { $n = 0 ? 1 : $reduce([1..$n].($x), $product) };[0..5].$power(2, $))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "consarray": true,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 12,
+     "lhs": {
+      "value": "product",
+      "type": "variable",
+      "position": 9
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "a",
+        "type": "variable",
+        "position": 24
+       },
+       {
+        "value": "b",
+        "type": "variable",
+        "position": 28
+       }
+      ],
+      "position": 22,
+      "body": {
+       "type": "binary",
+       "value": "*",
+       "position": 36,
+       "lhs": {
+        "value": "a",
+        "type": "variable",
+        "position": 34
+       },
+       "rhs": {
+        "value": "b",
+        "type": "variable",
+        "position": 39
+       }
+      }
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 51,
+     "lhs": {
+      "value": "power",
+      "type": "variable",
+      "position": 48
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "x",
+        "type": "variable",
+        "position": 63
+       },
+       {
+        "value": "n",
+        "type": "variable",
+        "position": 67
+       }
+      ],
+      "position": 61,
+      "body": {
+       "type": "condition",
+       "position": 79,
+       "condition": {
+        "type": "binary",
+        "value": "=",
+        "position": 75,
+        "lhs": {
+         "value": "n",
+         "type": "variable",
+         "position": 73
+        },
+        "rhs": {
+         "value": 0,
+         "type": "number",
+         "position": 77
+        }
+       },
+       "then": {
+        "value": 1,
+        "type": "number",
+        "position": 81
+       },
+       "else": {
+        "type": "lambda",
+        "thunk": true,
+        "arguments": [],
+        "position": 92,
+        "body": {
+         "type": "function",
+         "value": "(",
+         "position": 92,
+         "arguments": [
+          {
+           "type": "path",
+           "steps": [
+            {
+             "type": "unary",
+             "value": "[",
+             "position": 93,
+             "expressions": [
+              {
+               "type": "binary",
+               "value": "..",
+               "position": 96,
+               "lhs": {
+                "value": 1,
+                "type": "number",
+                "position": 94
+               },
+               "rhs": {
+                "value": "n",
+                "type": "variable",
+                "position": 98
+               }
+              }
+             ],
+             "consarray": true
+            },
+            {
+             "type": "block",
+             "position": 101,
+             "expressions": [
+              {
+               "value": "x",
+               "type": "variable",
+               "position": 103
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "value": "product",
+           "type": "variable",
+           "position": 114
+          }
+         ],
+         "procedure": {
+          "value": "reduce",
+          "type": "variable",
+          "position": 91
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 119,
+       "expressions": [
+        {
+         "type": "binary",
+         "value": "..",
+         "position": 122,
+         "lhs": {
+          "value": 0,
+          "type": "number",
+          "position": 120
+         },
+         "rhs": {
+          "value": 5,
+          "type": "number",
+          "position": 123
+         }
+        }
+       ],
+       "consarray": true
+      },
+      {
+       "type": "function",
+       "value": "(",
+       "position": 132,
+       "arguments": [
+        {
+         "value": 2,
+         "type": "number",
+         "position": 133
+        },
+        {
+         "value": "",
+         "type": "variable",
+         "position": 136
+        }
+       ],
+       "procedure": {
+        "value": "power",
+        "type": "variable",
+        "position": 131
+       }
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "(  $seq := 1;  $reduce($seq, function($x){$x}))",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 10,
+     "lhs": {
+      "value": "seq",
+      "type": "variable",
+      "position": 7
+     },
+     "rhs": {
+      "value": 1,
+      "type": "number",
+      "position": 12
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 23,
+     "arguments": [
+      {
+       "value": "seq",
+       "type": "variable",
+       "position": 27
+      },
+      {
+       "type": "lambda",
+       "arguments": [
+        {
+         "value": "x",
+         "type": "variable",
+         "position": 40
+        }
+       ],
+       "position": 38,
+       "body": {
+        "value": "x",
+        "type": "variable",
+        "position": 44
+       }
+      }
+     ],
+     "procedure": {
+      "value": "reduce",
+      "type": "variable",
+      "position": 22
+     }
+    }
+   ]
+  }
+ },
+ "case009": {
+  "expr": "(\n $months := [\n        \"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\",\n        \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"\n ];\n $indexof := λ($array, $value) {\n  $reduce($array, λ($acc, $v, $i) {\n   $v=$value ? $i : $acc\n  })\n };\n $indexof($months, 'May')\n)\n",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 13,
+     "lhs": {
+      "value": "months",
+      "type": "variable",
+      "position": 10
+     },
+     "rhs": {
+      "type": "unary",
+      "value": "[",
+      "position": 15,
+      "expressions": [
+       {
+        "value": "Jan",
+        "type": "string",
+        "position": 29
+       },
+       {
+        "value": "Feb",
+        "type": "string",
+        "position": 36
+       },
+       {
+        "value": "Mar",
+        "type": "string",
+        "position": 43
+       },
+       {
+        "value": "Apr",
+        "type": "string",
+        "position": 50
+       },
+       {
+        "value": "May",
+        "type": "string",
+        "position": 57
+       },
+       {
+        "value": "Jun",
+        "type": "string",
+        "position": 64
+       },
+       {
+        "value": "Jul",
+        "type": "string",
+        "position": 79
+       },
+       {
+        "value": "Aug",
+        "type": "string",
+        "position": 86
+       },
+       {
+        "value": "Sep",
+        "type": "string",
+        "position": 93
+       },
+       {
+        "value": "Oct",
+        "type": "string",
+        "position": 100
+       },
+       {
+        "value": "Nov",
+        "type": "string",
+        "position": 107
+       },
+       {
+        "value": "Dec",
+        "type": "string",
+        "position": 114
+       }
+      ]
+     }
+    },
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 131,
+     "lhs": {
+      "value": "indexof",
+      "type": "variable",
+      "position": 128
+     },
+     "rhs": {
+      "type": "lambda",
+      "arguments": [
+       {
+        "value": "array",
+        "type": "variable",
+        "position": 140
+       },
+       {
+        "value": "value",
+        "type": "variable",
+        "position": 148
+       }
+      ],
+      "position": 134,
+      "body": {
+       "type": "lambda",
+       "thunk": true,
+       "arguments": [],
+       "position": 162,
+       "body": {
+        "type": "function",
+        "value": "(",
+        "position": 162,
+        "arguments": [
+         {
+          "value": "array",
+          "type": "variable",
+          "position": 168
+         },
+         {
+          "type": "lambda",
+          "arguments": [
+           {
+            "value": "acc",
+            "type": "variable",
+            "position": 176
+           },
+           {
+            "value": "v",
+            "type": "variable",
+            "position": 180
+           },
+           {
+            "value": "i",
+            "type": "variable",
+            "position": 184
+           }
+          ],
+          "position": 172,
+          "body": {
+           "type": "condition",
+           "position": 202,
+           "condition": {
+            "type": "binary",
+            "value": "=",
+            "position": 194,
+            "lhs": {
+             "value": "v",
+             "type": "variable",
+             "position": 193
+            },
+            "rhs": {
+             "value": "value",
+             "type": "variable",
+             "position": 200
+            }
+           },
+           "then": {
+            "value": "i",
+            "type": "variable",
+            "position": 205
+           },
+           "else": {
+            "value": "acc",
+            "type": "variable",
+            "position": 212
+           }
+          }
+         }
+        ],
+        "procedure": {
+         "value": "reduce",
+         "type": "variable",
+         "position": 161
+        }
+       }
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 232,
+     "arguments": [
+      {
+       "value": "months",
+       "type": "variable",
+       "position": 239
+      },
+      {
+       "value": "May",
+       "type": "string",
+       "position": 246
+      }
+     ],
+     "procedure": {
+      "value": "indexof",
+      "type": "variable",
+      "position": 231
+     }
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "(\n  $mean := $reduce(?, λ($acc, $v, $i, $arr) {(\n    $total := $acc + $v;\n    $length := $count($arr);\n    $i = $length - 1 ? $total / $length : $total\n  )});\n\n  $mean([7,3,8])\n)\n",
+  "ast": {
+   "type": "block",
+   "position": 1,
+   "expressions": [
+    {
+     "type": "bind",
+     "value": ":=",
+     "position": 12,
+     "lhs": {
+      "value": "mean",
+      "type": "variable",
+      "position": 9
+     },
+     "rhs": {
+      "type": "partial",
+      "value": "(",
+      "position": 21,
+      "arguments": [
+       {
+        "value": "?",
+        "type": "operator",
+        "position": 22
+       },
+       {
+        "type": "lambda",
+        "arguments": [
+         {
+          "value": "acc",
+          "type": "variable",
+          "position": 30
+         },
+         {
+          "value": "v",
+          "type": "variable",
+          "position": 34
+         },
+         {
+          "value": "i",
+          "type": "variable",
+          "position": 38
+         },
+         {
+          "value": "arr",
+          "type": "variable",
+          "position": 44
+         }
+        ],
+        "position": 26,
+        "body": {
+         "type": "block",
+         "position": 48,
+         "expressions": [
+          {
+           "type": "bind",
+           "value": ":=",
+           "position": 62,
+           "lhs": {
+            "value": "total",
+            "type": "variable",
+            "position": 59
+           },
+           "rhs": {
+            "type": "binary",
+            "value": "+",
+            "position": 69,
+            "lhs": {
+             "value": "acc",
+             "type": "variable",
+             "position": 67
+            },
+            "rhs": {
+             "value": "v",
+             "type": "variable",
+             "position": 72
+            }
+           }
+          },
+          {
+           "type": "bind",
+           "value": ":=",
+           "position": 88,
+           "lhs": {
+            "value": "length",
+            "type": "variable",
+            "position": 85
+           },
+           "rhs": {
+            "type": "function",
+            "value": "(",
+            "position": 96,
+            "arguments": [
+             {
+              "value": "arr",
+              "type": "variable",
+              "position": 100
+             }
+            ],
+            "procedure": {
+             "value": "count",
+             "type": "variable",
+             "position": 95
+            }
+           }
+          },
+          {
+           "type": "condition",
+           "position": 125,
+           "condition": {
+            "type": "binary",
+            "value": "=",
+            "position": 111,
+            "lhs": {
+             "value": "i",
+             "type": "variable",
+             "position": 109
+            },
+            "rhs": {
+             "type": "binary",
+             "value": "-",
+             "position": 121,
+             "lhs": {
+              "value": "length",
+              "type": "variable",
+              "position": 119
+             },
+             "rhs": {
+              "value": 1,
+              "type": "number",
+              "position": 123
+             }
+            }
+           },
+           "then": {
+            "type": "binary",
+            "value": "/",
+            "position": 134,
+            "lhs": {
+             "value": "total",
+             "type": "variable",
+             "position": 132
+            },
+            "rhs": {
+             "value": "length",
+             "type": "variable",
+             "position": 142
+            }
+           },
+           "else": {
+            "value": "total",
+            "type": "variable",
+            "position": 151
+           }
+          }
+         ]
+        }
+       }
+      ],
+      "procedure": {
+       "value": "reduce",
+       "type": "variable",
+       "position": 20
+      }
+     }
+    },
+    {
+     "type": "function",
+     "value": "(",
+     "position": 168,
+     "arguments": [
+      {
+       "type": "unary",
+       "value": "[",
+       "position": 169,
+       "expressions": [
+        {
+         "value": 7,
+         "type": "number",
+         "position": 170
+        },
+        {
+         "value": 3,
+         "type": "number",
+         "position": 172
+        },
+        {
+         "value": 8,
+         "type": "number",
+         "position": 174
+        }
+       ]
+      }
+     ],
+     "procedure": {
+      "value": "mean",
+      "type": "variable",
+      "position": 167
+     }
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,319 @@
+{
+ "case000": {
+  "expr": "{\"items\": items.{\"foo\": \"bar\",\"count\": $count($$.items[text!=\"\" and text!=\"foo\"].row)}}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "items",
+      "type": "string",
+      "position": 8
+     },
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "items",
+        "type": "name",
+        "position": 15
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 17,
+        "lhs": [
+         [
+          {
+           "value": "foo",
+           "type": "string",
+           "position": 22
+          },
+          {
+           "value": "bar",
+           "type": "string",
+           "position": 29
+          }
+         ],
+         [
+          {
+           "value": "count",
+           "type": "string",
+           "position": 37
+          },
+          {
+           "type": "function",
+           "value": "(",
+           "position": 46,
+           "arguments": [
+            {
+             "type": "path",
+             "steps": [
+              {
+               "value": "$",
+               "type": "variable",
+               "position": 48
+              },
+              {
+               "value": "items",
+               "type": "name",
+               "position": 54,
+               "stages": [
+                {
+                 "type": "filter",
+                 "expr": {
+                  "type": "binary",
+                  "value": "and",
+                  "position": 67,
+                  "lhs": {
+                   "type": "binary",
+                   "value": "!=",
+                   "position": 61,
+                   "lhs": {
+                    "type": "path",
+                    "steps": [
+                     {
+                      "value": "text",
+                      "type": "name",
+                      "position": 59
+                     }
+                    ]
+                   },
+                   "rhs": {
+                    "value": "",
+                    "type": "string",
+                    "position": 63
+                   }
+                  },
+                  "rhs": {
+                   "type": "binary",
+                   "value": "!=",
+                   "position": 74,
+                   "lhs": {
+                    "type": "path",
+                    "steps": [
+                     {
+                      "value": "text",
+                      "type": "name",
+                      "position": 72
+                     }
+                    ]
+                   },
+                   "rhs": {
+                    "value": "foo",
+                    "type": "string",
+                    "position": 79
+                   }
+                  }
+                 },
+                 "position": 55
+                }
+               ]
+              },
+              {
+               "value": "row",
+               "type": "name",
+               "position": 84
+              }
+             ]
+            }
+           ],
+           "procedure": {
+            "value": "count",
+            "type": "variable",
+            "position": 45
+           }
+          }
+         ]
+        ]
+       }
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "case001": {
+  "expr": "{\"items\": items#$i.{\"foo\": \"bar\",\"label\": $$.items[$i].label & \" \" & $$.items[text!=\"\" and text!=\"test\"][$i].text}}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "items",
+      "type": "string",
+      "position": 8
+     },
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "items",
+        "type": "name",
+        "position": 15,
+        "index": "i",
+        "tuple": true
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 20,
+        "lhs": [
+         [
+          {
+           "value": "foo",
+           "type": "string",
+           "position": 25
+          },
+          {
+           "value": "bar",
+           "type": "string",
+           "position": 32
+          }
+         ],
+         [
+          {
+           "value": "label",
+           "type": "string",
+           "position": 40
+          },
+          {
+           "type": "binary",
+           "value": "&",
+           "position": 68,
+           "lhs": {
+            "type": "binary",
+            "value": "&",
+            "position": 62,
+            "lhs": {
+             "type": "path",
+             "steps": [
+              {
+               "value": "$",
+               "type": "variable",
+               "position": 44
+              },
+              {
+               "value": "items",
+               "type": "name",
+               "position": 50,
+               "stages": [
+                {
+                 "type": "filter",
+                 "expr": {
+                  "value": "i",
+                  "type": "variable",
+                  "position": 53
+                 },
+                 "position": 51
+                }
+               ]
+              },
+              {
+               "value": "label",
+               "type": "name",
+               "position": 60
+              }
+             ]
+            },
+            "rhs": {
+             "value": " ",
+             "type": "string",
+             "position": 66
+            }
+           },
+           "rhs": {
+            "type": "path",
+            "steps": [
+             {
+              "value": "$",
+              "type": "variable",
+              "position": 71
+             },
+             {
+              "value": "items",
+              "type": "name",
+              "position": 77,
+              "stages": [
+               {
+                "type": "filter",
+                "expr": {
+                 "type": "binary",
+                 "value": "and",
+                 "position": 90,
+                 "lhs": {
+                  "type": "binary",
+                  "value": "!=",
+                  "position": 84,
+                  "lhs": {
+                   "type": "path",
+                   "steps": [
+                    {
+                     "value": "text",
+                     "type": "name",
+                     "position": 82
+                    }
+                   ]
+                  },
+                  "rhs": {
+                   "value": "",
+                   "type": "string",
+                   "position": 86
+                  }
+                 },
+                 "rhs": {
+                  "type": "binary",
+                  "value": "!=",
+                  "position": 97,
+                  "lhs": {
+                   "type": "path",
+                   "steps": [
+                    {
+                     "value": "text",
+                     "type": "name",
+                     "position": 95
+                    }
+                   ]
+                  },
+                  "rhs": {
+                   "value": "test",
+                   "type": "string",
+                   "position": 103
+                  }
+                 }
+                },
+                "position": 78
+               },
+               {
+                "type": "filter",
+                "expr": {
+                 "value": "i",
+                 "type": "variable",
+                 "position": 107
+                },
+                "position": 105
+               }
+              ]
+             },
+             {
+              "value": "text",
+              "type": "name",
+              "position": 113
+             }
+            ]
+           }
+          }
+         ]
+        ]
+       }
+      ]
+     }
+    ]
+   ]
+  }
+ }
+}

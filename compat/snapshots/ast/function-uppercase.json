@@ -1,0 +1,47 @@
+{
+ "case000": {
+  "expr": "$uppercase(\"Hello World\")",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "Hello World",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case001": {
+  "expr": "$uppercase(blah)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 15
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "uppercase",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ }
+}

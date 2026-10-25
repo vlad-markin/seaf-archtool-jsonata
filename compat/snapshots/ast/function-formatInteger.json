@@ -1,0 +1,1632 @@
+{
+ "formatInteger[0]": {
+  "expr": "$formatInteger(undefined, '0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "undefined",
+       "type": "name",
+       "position": 24
+      }
+     ]
+    },
+    {
+     "value": "0",
+     "type": "string",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[1]": {
+  "expr": "$formatInteger(123, '000')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 123,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "000",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[2]": {
+  "expr": "$formatInteger(123, '0000')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 123,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "0000",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[3]": {
+  "expr": "$formatInteger(-3, '0000')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": -3,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "0000",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[4]": {
+  "expr": "$formatInteger(1234, '0;c')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "0;c",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[5]": {
+  "expr": "$formatInteger(1234, '###0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "###0",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[6]": {
+  "expr": "$formatInteger(12, '###0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "###0",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[7]": {
+  "expr": "$formatInteger(12.6, '###0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12.6,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "###0",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[8]": {
+  "expr": "$formatInteger(123, '000;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 123,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "000;o",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[9]": {
+  "expr": "$formatInteger(1, '0;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 16
+    },
+    {
+     "value": "0;o",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[10]": {
+  "expr": "$formatInteger(28, '#0;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 28,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "#0;o",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[11]": {
+  "expr": "$formatInteger(1234, '###0;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "###0;o",
+     "type": "string",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[12]": {
+  "expr": "$formatInteger(12, '###0;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "###0;o",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[13]": {
+  "expr": "$formatInteger(12340, '###١')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12340,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": "###١",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[14]": {
+  "expr": "$formatInteger(12340, '###０')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12340,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": "###０",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[15]": {
+  "expr": "$formatInteger(12340, '##0０')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12340,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": "##0０",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[16]": {
+  "expr": "$formatInteger(12, '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[17]": {
+  "expr": "$formatInteger(1200, '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1200,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[18]": {
+  "expr": "$formatInteger(120000, '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 120000,
+     "type": "number",
+     "position": 21
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[19]": {
+  "expr": "$formatInteger(12345678, '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12345678,
+     "type": "number",
+     "position": 23
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[20]": {
+  "expr": "$formatInteger(1234567890, '#,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234567890,
+     "type": "number",
+     "position": 25
+    },
+    {
+     "value": "#,##0",
+     "type": "string",
+     "position": 34
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[21]": {
+  "expr": "$formatInteger(1234567890, '#,###,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234567890,
+     "type": "number",
+     "position": 25
+    },
+    {
+     "value": "#,###,##0",
+     "type": "string",
+     "position": 38
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[22]": {
+  "expr": "$formatInteger(1234567890, '#:###,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234567890,
+     "type": "number",
+     "position": 25
+    },
+    {
+     "value": "#:###,##0",
+     "type": "string",
+     "position": 38
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[23]": {
+  "expr": "$formatInteger(1234567890, '##,##,##0')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234567890,
+     "type": "number",
+     "position": 25
+    },
+    {
+     "value": "##,##,##0",
+     "type": "string",
+     "position": 38
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[24]": {
+  "expr": "$formatInteger(0, 'I')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 0,
+     "type": "number",
+     "position": 16
+    },
+    {
+     "value": "I",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[25]": {
+  "expr": "$formatInteger(1984, 'I')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1984,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "I",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[26]": {
+  "expr": "$formatInteger(99, 'i')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 99,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "i",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[27]": {
+  "expr": "$formatInteger(12, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[28]": {
+  "expr": "$formatInteger(20, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 20,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[29]": {
+  "expr": "$formatInteger(34, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 34,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[30]": {
+  "expr": "$formatInteger(99, 'W')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 99,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "W",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[31]": {
+  "expr": "$formatInteger(100, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 100,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[32]": {
+  "expr": "$formatInteger(555, 'W')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 555,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "W",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[33]": {
+  "expr": "$formatInteger(555, 'Ww')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 555,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "Ww",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[34]": {
+  "expr": "$formatInteger(919, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 919,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[35]": {
+  "expr": "$formatInteger(730, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 730,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[36]": {
+  "expr": "$formatInteger(1000, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1000,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[37]": {
+  "expr": "$formatInteger(3730, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 3730,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[38]": {
+  "expr": "$formatInteger(327730, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 327730,
+     "type": "number",
+     "position": 21
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[39]": {
+  "expr": "$formatInteger(4327730, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 4327730,
+     "type": "number",
+     "position": 22
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[40]": {
+  "expr": "$formatInteger(1000000000001, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1000000000001,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[41]": {
+  "expr": "$formatInteger(1234567890123, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234567890123,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[42]": {
+  "expr": "$formatInteger(1000000000000000, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1000000000000000,
+     "type": "number",
+     "position": 31
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[43]": {
+  "expr": "$formatInteger(1e+46, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1e+46,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[44]": {
+  "expr": "$formatInteger(1234567890123456, 'w')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1234567890123456,
+     "type": "number",
+     "position": 31
+    },
+    {
+     "value": "w",
+     "type": "string",
+     "position": 36
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[45]": {
+  "expr": "$formatInteger(12, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[46]": {
+  "expr": "$formatInteger(20, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 20,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[47]": {
+  "expr": "$formatInteger(34, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 34,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[48]": {
+  "expr": "$formatInteger(99, 'W;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 99,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "W;o",
+     "type": "string",
+     "position": 24
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[49]": {
+  "expr": "$formatInteger(100, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 100,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[50]": {
+  "expr": "$formatInteger(555, 'W;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 555,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "W;o",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[51]": {
+  "expr": "$formatInteger(919, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 919,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[52]": {
+  "expr": "$formatInteger(730, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 730,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 25
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[53]": {
+  "expr": "$formatInteger(1000, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1000,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[54]": {
+  "expr": "$formatInteger(3731, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 3731,
+     "type": "number",
+     "position": 19
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[55]": {
+  "expr": "$formatInteger(327713, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 327713,
+     "type": "number",
+     "position": 21
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[56]": {
+  "expr": "$formatInteger(4327732, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 4327732,
+     "type": "number",
+     "position": 22
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 29
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[57]": {
+  "expr": "$formatInteger(1000000000001, 'w;o')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1000000000001,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": "w;o",
+     "type": "string",
+     "position": 35
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[58]": {
+  "expr": "$formatInteger(1, 'A')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 16
+    },
+    {
+     "value": "A",
+     "type": "string",
+     "position": 21
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[59]": {
+  "expr": "$formatInteger(12, 'a')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 12,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "a",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[60]": {
+  "expr": "$formatInteger(26, 'a')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 26,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "a",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[61]": {
+  "expr": "$formatInteger(27, 'a')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 27,
+     "type": "number",
+     "position": 17
+    },
+    {
+     "value": "a",
+     "type": "string",
+     "position": 22
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[62]": {
+  "expr": "$formatInteger(300, 'A')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 300,
+     "type": "number",
+     "position": 18
+    },
+    {
+     "value": "A",
+     "type": "string",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[63]": {
+  "expr": "$formatInteger(123456, 'A')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 123456,
+     "type": "number",
+     "position": 21
+    },
+    {
+     "value": "A",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ },
+ "formatInteger[64]": {
+  "expr": "$formatInteger(123456, 'α')",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 15,
+   "arguments": [
+    {
+     "value": 123456,
+     "type": "number",
+     "position": 21
+    },
+    {
+     "value": "α",
+     "type": "string",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "formatInteger",
+    "type": "variable",
+    "position": 14
+   }
+  }
+ }
+}

@@ -1,0 +1,354 @@
+{
+ "case000": {
+  "expr": "$zip([1,2,3],[4,5,6])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": [
+      {
+       "value": 4,
+       "type": "number",
+       "position": 15
+      },
+      {
+       "value": 5,
+       "type": "number",
+       "position": 17
+      },
+      {
+       "value": 6,
+       "type": "number",
+       "position": 19
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "zip",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case001": {
+  "expr": "$zip([1,2,3],[4,5,6],[7,8,9])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": [
+      {
+       "value": 4,
+       "type": "number",
+       "position": 15
+      },
+      {
+       "value": 5,
+       "type": "number",
+       "position": 17
+      },
+      {
+       "value": 6,
+       "type": "number",
+       "position": 19
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 22,
+     "expressions": [
+      {
+       "value": 7,
+       "type": "number",
+       "position": 23
+      },
+      {
+       "value": 8,
+       "type": "number",
+       "position": 25
+      },
+      {
+       "value": 9,
+       "type": "number",
+       "position": 27
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "zip",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case002": {
+  "expr": "$zip([1,2,3],[4,5],[7,8,9])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 14,
+     "expressions": [
+      {
+       "value": 4,
+       "type": "number",
+       "position": 15
+      },
+      {
+       "value": 5,
+       "type": "number",
+       "position": 17
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 20,
+     "expressions": [
+      {
+       "value": 7,
+       "type": "number",
+       "position": 21
+      },
+      {
+       "value": 8,
+       "type": "number",
+       "position": 23
+      },
+      {
+       "value": 9,
+       "type": "number",
+       "position": 25
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "zip",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case003": {
+  "expr": "$zip([1,2,3])",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "zip",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case004": {
+  "expr": "$zip(1,2,3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "value": 1,
+     "type": "number",
+     "position": 6
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 8
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 10
+    }
+   ],
+   "procedure": {
+    "value": "zip",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ },
+ "case005": {
+  "expr": "$zip([1,2,3], [4,5,6], nothing)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 5,
+   "arguments": [
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 6,
+     "expressions": [
+      {
+       "value": 1,
+       "type": "number",
+       "position": 7
+      },
+      {
+       "value": 2,
+       "type": "number",
+       "position": 9
+      },
+      {
+       "value": 3,
+       "type": "number",
+       "position": 11
+      }
+     ]
+    },
+    {
+     "type": "unary",
+     "value": "[",
+     "position": 15,
+     "expressions": [
+      {
+       "value": 4,
+       "type": "number",
+       "position": 16
+      },
+      {
+       "value": 5,
+       "type": "number",
+       "position": 18
+      },
+      {
+       "value": 6,
+       "type": "number",
+       "position": 20
+      }
+     ]
+    },
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "nothing",
+       "type": "name",
+       "position": 30
+      }
+     ]
+    }
+   ],
+   "procedure": {
+    "value": "zip",
+    "type": "variable",
+    "position": 4
+   }
+  }
+ }
+}

@@ -1,0 +1,2143 @@
+{
+ "case000": {
+  "expr": "{}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": []
+  }
+ },
+ "case001": {
+  "expr": "{\"key\": \"value\"}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "key",
+      "type": "string",
+      "position": 6
+     },
+     {
+      "value": "value",
+      "type": "string",
+      "position": 15
+     }
+    ]
+   ]
+  }
+ },
+ "case002": {
+  "expr": "{\"one\": 1, \"two\": 2}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "one",
+      "type": "string",
+      "position": 6
+     },
+     {
+      "value": 1,
+      "type": "number",
+      "position": 9
+     }
+    ],
+    [
+     {
+      "value": "two",
+      "type": "string",
+      "position": 16
+     },
+     {
+      "value": 2,
+      "type": "number",
+      "position": 19
+     }
+    ]
+   ]
+  }
+ },
+ "case003": {
+  "expr": "{\"one\": 1, \"two\": 2}.two",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 1,
+     "lhs": [
+      [
+       {
+        "value": "one",
+        "type": "string",
+        "position": 6
+       },
+       {
+        "value": 1,
+        "type": "number",
+        "position": 9
+       }
+      ],
+      [
+       {
+        "value": "two",
+        "type": "string",
+        "position": 16
+       },
+       {
+        "value": 2,
+        "type": "number",
+        "position": 19
+       }
+      ]
+     ]
+    },
+    {
+     "value": "two",
+     "type": "name",
+     "position": 24
+    }
+   ]
+  }
+ },
+ "case004": {
+  "expr": "{\"one\": 1, \"two\": {\"three\": 3, \"four\": \"4\"}}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "one",
+      "type": "string",
+      "position": 6
+     },
+     {
+      "value": 1,
+      "type": "number",
+      "position": 9
+     }
+    ],
+    [
+     {
+      "value": "two",
+      "type": "string",
+      "position": 16
+     },
+     {
+      "type": "unary",
+      "value": "{",
+      "position": 19,
+      "lhs": [
+       [
+        {
+         "value": "three",
+         "type": "string",
+         "position": 26
+        },
+        {
+         "value": 3,
+         "type": "number",
+         "position": 29
+        }
+       ],
+       [
+        {
+         "value": "four",
+         "type": "string",
+         "position": 37
+        },
+        {
+         "value": "4",
+         "type": "string",
+         "position": 42
+        }
+       ]
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "case005": {
+  "expr": "{\"one\": 1, \"two\": [3, \"four\"]}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "one",
+      "type": "string",
+      "position": 6
+     },
+     {
+      "value": 1,
+      "type": "number",
+      "position": 9
+     }
+    ],
+    [
+     {
+      "value": "two",
+      "type": "string",
+      "position": 16
+     },
+     {
+      "type": "unary",
+      "value": "[",
+      "position": 19,
+      "expressions": [
+       {
+        "value": 3,
+        "type": "number",
+        "position": 20
+       },
+       {
+        "value": "four",
+        "type": "string",
+        "position": 28
+       }
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "case006": {
+  "expr": "{\"test\": ()}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "test",
+      "type": "string",
+      "position": 7
+     },
+     {
+      "type": "block",
+      "position": 10,
+      "expressions": []
+     }
+    ]
+   ]
+  }
+ },
+ "case007": {
+  "expr": "blah.{}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "blah",
+     "type": "name",
+     "position": 4
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 6,
+     "lhs": []
+    }
+   ]
+  }
+ },
+ "case008": {
+  "expr": "Account.Order{OrderID: Product.\"Product Name\"}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "OrderID",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product",
+         "type": "name",
+         "position": 30
+        },
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 45
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 14
+   }
+  }
+ },
+ "case009": {
+  "expr": "Account.Order.{OrderID: Product.\"Product Name\"}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 15,
+     "lhs": [
+      [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 22
+         }
+        ]
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Product",
+          "type": "name",
+          "position": 31
+         },
+         {
+          "value": "Product Name",
+          "type": "name",
+          "position": 46
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case010": {
+  "expr": "Account.Order.Product{$string(ProductID): Price}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 30,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "ProductID",
+           "type": "name",
+           "position": 39
+          }
+         ]
+        }
+       ],
+       "procedure": {
+        "value": "string",
+        "type": "variable",
+        "position": 29
+       }
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Price",
+         "type": "name",
+         "position": 47
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 22
+   }
+  }
+ },
+ "case011": {
+  "expr": "Account.Order.Product{$string(ProductID): (Price)[0]}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 30,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "ProductID",
+           "type": "name",
+           "position": 39
+          }
+         ]
+        }
+       ],
+       "procedure": {
+        "value": "string",
+        "type": "variable",
+        "position": 29
+       }
+      },
+      {
+       "type": "block",
+       "position": 43,
+       "expressions": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Price",
+           "type": "name",
+           "position": 48
+          }
+         ]
+        }
+       ],
+       "predicate": [
+        {
+         "type": "filter",
+         "expr": {
+          "value": 0,
+          "type": "number",
+          "position": 51
+         },
+         "position": 50
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 22
+   }
+  }
+ },
+ "case012": {
+  "expr": "Account.Order.Product.{$string(ProductID): Price}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "lhs": [
+      [
+       {
+        "type": "function",
+        "value": "(",
+        "position": 31,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "ProductID",
+            "type": "name",
+            "position": 40
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "string",
+         "type": "variable",
+         "position": 30
+        }
+       },
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "Price",
+          "type": "name",
+          "position": 48
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case013": {
+  "expr": "Account.Order.Product{ProductID: \"Product Name\"}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "ProductID",
+         "type": "name",
+         "position": 31
+        }
+       ]
+      },
+      {
+       "value": "Product Name",
+       "type": "string",
+       "position": 47
+      }
+     ]
+    ],
+    "position": 22
+   }
+  }
+ },
+ "case014": {
+  "expr": "Account.Order.Product.{ProductID: \"Product Name\"}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 23,
+     "lhs": [
+      [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "ProductID",
+          "type": "name",
+          "position": 32
+         }
+        ]
+       },
+       {
+        "value": "Product Name",
+        "type": "string",
+        "position": 48
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case015": {
+  "expr": "Account.Order{OrderID: $sum(Product.(Price*Quantity))}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "OrderID",
+         "type": "name",
+         "position": 21
+        }
+       ]
+      },
+      {
+       "type": "function",
+       "value": "(",
+       "position": 28,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "Product",
+           "type": "name",
+           "position": 35
+          },
+          {
+           "type": "block",
+           "position": 37,
+           "expressions": [
+            {
+             "type": "binary",
+             "value": "*",
+             "position": 43,
+             "lhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "Price",
+                "type": "name",
+                "position": 42
+               }
+              ]
+             },
+             "rhs": {
+              "type": "path",
+              "steps": [
+               {
+                "value": "Quantity",
+                "type": "name",
+                "position": 51
+               }
+              ]
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "procedure": {
+        "value": "sum",
+        "type": "variable",
+        "position": 27
+       }
+      }
+     ]
+    ],
+    "position": 14
+   }
+  }
+ },
+ "case016": {
+  "expr": "Account.Order.{OrderID: $sum(Product.(Price*Quantity))}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 15,
+     "lhs": [
+      [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "OrderID",
+          "type": "name",
+          "position": 22
+         }
+        ]
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 29,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Product",
+            "type": "name",
+            "position": 36
+           },
+           {
+            "type": "block",
+            "position": 38,
+            "expressions": [
+             {
+              "type": "binary",
+              "value": "*",
+              "position": 44,
+              "lhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Price",
+                 "type": "name",
+                 "position": 43
+                }
+               ]
+              },
+              "rhs": {
+               "type": "path",
+               "steps": [
+                {
+                 "value": "Quantity",
+                 "type": "name",
+                 "position": 52
+                }
+               ]
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "sum",
+         "type": "variable",
+         "position": 28
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case017": {
+  "expr": "Account.Order.Product{$.\"Product Name\": Price, $.\"Product Name\": Price}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 23
+        },
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 38
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Price",
+         "type": "name",
+         "position": 45
+        }
+       ]
+      }
+     ],
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "",
+         "type": "variable",
+         "position": 48
+        },
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 63
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Price",
+         "type": "name",
+         "position": 70
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 22
+   }
+  }
+ },
+ "case018": {
+  "expr": "Account.Order.Product{`Product Name`: Price, SKU: Price}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    },
+    {
+     "value": "Product",
+     "type": "name",
+     "position": 21
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Product Name",
+         "type": "name",
+         "position": 36
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Price",
+         "type": "name",
+         "position": 43
+        }
+       ]
+      }
+     ],
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "SKU",
+         "type": "name",
+         "position": 48
+        }
+       ]
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "Price",
+         "type": "name",
+         "position": 55
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 22
+   }
+  }
+ },
+ "case019": {
+  "expr": "Account.Order{  OrderID: {    \"TotalPrice\":$sum(Product.(Price * Quantity)),    \"Items\": Product.\"Product Name\"  }}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Account",
+     "type": "name",
+     "position": 7
+    },
+    {
+     "value": "Order",
+     "type": "name",
+     "position": 13
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "OrderID",
+         "type": "name",
+         "position": 23
+        }
+       ]
+      },
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 26,
+       "lhs": [
+        [
+         {
+          "value": "TotalPrice",
+          "type": "string",
+          "position": 42
+         },
+         {
+          "type": "function",
+          "value": "(",
+          "position": 48,
+          "arguments": [
+           {
+            "type": "path",
+            "steps": [
+             {
+              "value": "Product",
+              "type": "name",
+              "position": 55
+             },
+             {
+              "type": "block",
+              "position": 57,
+              "expressions": [
+               {
+                "type": "binary",
+                "value": "*",
+                "position": 64,
+                "lhs": {
+                 "type": "path",
+                 "steps": [
+                  {
+                   "value": "Price",
+                   "type": "name",
+                   "position": 62
+                  }
+                 ]
+                },
+                "rhs": {
+                 "type": "path",
+                 "steps": [
+                  {
+                   "value": "Quantity",
+                   "type": "name",
+                   "position": 73
+                  }
+                 ]
+                }
+               }
+              ]
+             }
+            ]
+           }
+          ],
+          "procedure": {
+           "value": "sum",
+           "type": "variable",
+           "position": 47
+          }
+         }
+        ],
+        [
+         {
+          "value": "Items",
+          "type": "string",
+          "position": 87
+         },
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "Product",
+            "type": "name",
+            "position": 96
+           },
+           {
+            "value": "Product Name",
+            "type": "name",
+            "position": 111
+           }
+          ]
+         }
+        ]
+       ]
+      }
+     ]
+    ],
+    "position": 14
+   }
+  }
+ },
+ "case020": {
+  "expr": "{  \"Order\": Account.Order.{      \"ID\": OrderID,      \"Product\": Product.{          \"Name\": $.\"Product Name\",          \"SKU\": ProductID,          \"Details\": {            \"Weight\": Description.Weight,            \"Dimensions\": Description.(Width & \" x \" & Height & \" x \" & Depth)          }        },      \"Total Price\": $sum(Product.(Price * Quantity))    }}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "Order",
+      "type": "string",
+      "position": 10
+     },
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Account",
+        "type": "name",
+        "position": 19
+       },
+       {
+        "value": "Order",
+        "type": "name",
+        "position": 25
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 27,
+        "lhs": [
+         [
+          {
+           "value": "ID",
+           "type": "string",
+           "position": 37
+          },
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "OrderID",
+             "type": "name",
+             "position": 46
+            }
+           ]
+          }
+         ],
+         [
+          {
+           "value": "Product",
+           "type": "string",
+           "position": 62
+          },
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "Product",
+             "type": "name",
+             "position": 71
+            },
+            {
+             "type": "unary",
+             "value": "{",
+             "position": 73,
+             "lhs": [
+              [
+               {
+                "value": "Name",
+                "type": "string",
+                "position": 89
+               },
+               {
+                "type": "path",
+                "steps": [
+                 {
+                  "value": "",
+                  "type": "variable",
+                  "position": 92
+                 },
+                 {
+                  "value": "Product Name",
+                  "type": "name",
+                  "position": 107
+                 }
+                ]
+               }
+              ],
+              [
+               {
+                "value": "SKU",
+                "type": "string",
+                "position": 123
+               },
+               {
+                "type": "path",
+                "steps": [
+                 {
+                  "value": "ProductID",
+                  "type": "name",
+                  "position": 134
+                 }
+                ]
+               }
+              ],
+              [
+               {
+                "value": "Details",
+                "type": "string",
+                "position": 154
+               },
+               {
+                "type": "unary",
+                "value": "{",
+                "position": 157,
+                "lhs": [
+                 [
+                  {
+                   "value": "Weight",
+                   "type": "string",
+                   "position": 177
+                  },
+                  {
+                   "type": "path",
+                   "steps": [
+                    {
+                     "value": "Description",
+                     "type": "name",
+                     "position": 190
+                    },
+                    {
+                     "value": "Weight",
+                     "type": "name",
+                     "position": 197
+                    }
+                   ]
+                  }
+                 ],
+                 [
+                  {
+                   "value": "Dimensions",
+                   "type": "string",
+                   "position": 222
+                  },
+                  {
+                   "type": "path",
+                   "steps": [
+                    {
+                     "value": "Description",
+                     "type": "name",
+                     "position": 235
+                    },
+                    {
+                     "type": "block",
+                     "position": 237,
+                     "expressions": [
+                      {
+                       "type": "binary",
+                       "value": "&",
+                       "position": 269,
+                       "lhs": {
+                        "type": "binary",
+                        "value": "&",
+                        "position": 261,
+                        "lhs": {
+                         "type": "binary",
+                         "value": "&",
+                         "position": 252,
+                         "lhs": {
+                          "type": "binary",
+                          "value": "&",
+                          "position": 244,
+                          "lhs": {
+                           "type": "path",
+                           "steps": [
+                            {
+                             "value": "Width",
+                             "type": "name",
+                             "position": 242
+                            }
+                           ]
+                          },
+                          "rhs": {
+                           "value": " x ",
+                           "type": "string",
+                           "position": 250
+                          }
+                         },
+                         "rhs": {
+                          "type": "path",
+                          "steps": [
+                           {
+                            "value": "Height",
+                            "type": "name",
+                            "position": 259
+                           }
+                          ]
+                         }
+                        },
+                        "rhs": {
+                         "value": " x ",
+                         "type": "string",
+                         "position": 267
+                        }
+                       },
+                       "rhs": {
+                        "type": "path",
+                        "steps": [
+                         {
+                          "value": "Depth",
+                          "type": "name",
+                          "position": 275
+                         }
+                        ]
+                       }
+                      }
+                     ]
+                    }
+                   ]
+                  }
+                 ]
+                ]
+               }
+              ]
+             ]
+            }
+           ]
+          }
+         ],
+         [
+          {
+           "value": "Total Price",
+           "type": "string",
+           "position": 316
+          },
+          {
+           "type": "function",
+           "value": "(",
+           "position": 323,
+           "arguments": [
+            {
+             "type": "path",
+             "steps": [
+              {
+               "value": "Product",
+               "type": "name",
+               "position": 330
+              },
+              {
+               "type": "block",
+               "position": 332,
+               "expressions": [
+                {
+                 "type": "binary",
+                 "value": "*",
+                 "position": 339,
+                 "lhs": {
+                  "type": "path",
+                  "steps": [
+                   {
+                    "value": "Price",
+                    "type": "name",
+                    "position": 337
+                   }
+                  ]
+                 },
+                 "rhs": {
+                  "type": "path",
+                  "steps": [
+                   {
+                    "value": "Quantity",
+                    "type": "name",
+                    "position": 348
+                   }
+                  ]
+                 }
+                }
+               ]
+              }
+             ]
+            }
+           ],
+           "procedure": {
+            "value": "sum",
+            "type": "variable",
+            "position": 322
+           }
+          }
+         ]
+        ]
+       }
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "case021": {
+  "expr": "{  \"Order\": Account.Order.{      \"ID\": OrderID,      \"Product\": Product.{          \"Name\": `Product Name`,          \"SKU\": ProductID,          \"Details\": {            \"Weight\": Description.Weight,            \"Dimensions\": Description.(Width & \" x \" & Height & \" x \" & Depth)          }        },      \"Total Price\": $sum(Product.(Price * Quantity))    }}",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "value": "Order",
+      "type": "string",
+      "position": 10
+     },
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "Account",
+        "type": "name",
+        "position": 19
+       },
+       {
+        "value": "Order",
+        "type": "name",
+        "position": 25
+       },
+       {
+        "type": "unary",
+        "value": "{",
+        "position": 27,
+        "lhs": [
+         [
+          {
+           "value": "ID",
+           "type": "string",
+           "position": 37
+          },
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "OrderID",
+             "type": "name",
+             "position": 46
+            }
+           ]
+          }
+         ],
+         [
+          {
+           "value": "Product",
+           "type": "string",
+           "position": 62
+          },
+          {
+           "type": "path",
+           "steps": [
+            {
+             "value": "Product",
+             "type": "name",
+             "position": 71
+            },
+            {
+             "type": "unary",
+             "value": "{",
+             "position": 73,
+             "lhs": [
+              [
+               {
+                "value": "Name",
+                "type": "string",
+                "position": 89
+               },
+               {
+                "type": "path",
+                "steps": [
+                 {
+                  "value": "Product Name",
+                  "type": "name",
+                  "position": 105
+                 }
+                ]
+               }
+              ],
+              [
+               {
+                "value": "SKU",
+                "type": "string",
+                "position": 121
+               },
+               {
+                "type": "path",
+                "steps": [
+                 {
+                  "value": "ProductID",
+                  "type": "name",
+                  "position": 132
+                 }
+                ]
+               }
+              ],
+              [
+               {
+                "value": "Details",
+                "type": "string",
+                "position": 152
+               },
+               {
+                "type": "unary",
+                "value": "{",
+                "position": 155,
+                "lhs": [
+                 [
+                  {
+                   "value": "Weight",
+                   "type": "string",
+                   "position": 175
+                  },
+                  {
+                   "type": "path",
+                   "steps": [
+                    {
+                     "value": "Description",
+                     "type": "name",
+                     "position": 188
+                    },
+                    {
+                     "value": "Weight",
+                     "type": "name",
+                     "position": 195
+                    }
+                   ]
+                  }
+                 ],
+                 [
+                  {
+                   "value": "Dimensions",
+                   "type": "string",
+                   "position": 220
+                  },
+                  {
+                   "type": "path",
+                   "steps": [
+                    {
+                     "value": "Description",
+                     "type": "name",
+                     "position": 233
+                    },
+                    {
+                     "type": "block",
+                     "position": 235,
+                     "expressions": [
+                      {
+                       "type": "binary",
+                       "value": "&",
+                       "position": 267,
+                       "lhs": {
+                        "type": "binary",
+                        "value": "&",
+                        "position": 259,
+                        "lhs": {
+                         "type": "binary",
+                         "value": "&",
+                         "position": 250,
+                         "lhs": {
+                          "type": "binary",
+                          "value": "&",
+                          "position": 242,
+                          "lhs": {
+                           "type": "path",
+                           "steps": [
+                            {
+                             "value": "Width",
+                             "type": "name",
+                             "position": 240
+                            }
+                           ]
+                          },
+                          "rhs": {
+                           "value": " x ",
+                           "type": "string",
+                           "position": 248
+                          }
+                         },
+                         "rhs": {
+                          "type": "path",
+                          "steps": [
+                           {
+                            "value": "Height",
+                            "type": "name",
+                            "position": 257
+                           }
+                          ]
+                         }
+                        },
+                        "rhs": {
+                         "value": " x ",
+                         "type": "string",
+                         "position": 265
+                        }
+                       },
+                       "rhs": {
+                        "type": "path",
+                        "steps": [
+                         {
+                          "value": "Depth",
+                          "type": "name",
+                          "position": 273
+                         }
+                        ]
+                       }
+                      }
+                     ]
+                    }
+                   ]
+                  }
+                 ]
+                ]
+               }
+              ]
+             ]
+            }
+           ]
+          }
+         ],
+         [
+          {
+           "value": "Total Price",
+           "type": "string",
+           "position": 314
+          },
+          {
+           "type": "function",
+           "value": "(",
+           "position": 321,
+           "arguments": [
+            {
+             "type": "path",
+             "steps": [
+              {
+               "value": "Product",
+               "type": "name",
+               "position": 328
+              },
+              {
+               "type": "block",
+               "position": 330,
+               "expressions": [
+                {
+                 "type": "binary",
+                 "value": "*",
+                 "position": 337,
+                 "lhs": {
+                  "type": "path",
+                  "steps": [
+                   {
+                    "value": "Price",
+                    "type": "name",
+                    "position": 335
+                   }
+                  ]
+                 },
+                 "rhs": {
+                  "type": "path",
+                  "steps": [
+                   {
+                    "value": "Quantity",
+                    "type": "name",
+                    "position": 346
+                   }
+                  ]
+                 }
+                }
+               ]
+              }
+             ]
+            }
+           ],
+           "procedure": {
+            "value": "sum",
+            "type": "variable",
+            "position": 320
+           }
+          }
+         ]
+        ]
+       }
+      ]
+     }
+    ]
+   ]
+  }
+ },
+ "case022": {
+  "expr": "Phone{type: $join(number, \", \"), \"phone\":number}",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "Phone",
+     "type": "name",
+     "position": 5
+    }
+   ],
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "type",
+         "type": "name",
+         "position": 10
+        }
+       ]
+      },
+      {
+       "type": "function",
+       "value": "(",
+       "position": 18,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "number",
+           "type": "name",
+           "position": 24
+          }
+         ]
+        },
+        {
+         "value": ", ",
+         "type": "string",
+         "position": 30
+        }
+       ],
+       "procedure": {
+        "value": "join",
+        "type": "variable",
+        "position": 17
+       }
+      }
+     ],
+     [
+      {
+       "value": "phone",
+       "type": "string",
+       "position": 40
+      },
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "number",
+         "type": "name",
+         "position": 47
+        }
+       ]
+      }
+     ]
+    ],
+    "position": 6
+   }
+  }
+ },
+ "case023": {
+  "expr": "$.{ type: $average(value), kind: $sum(value) } ",
+  "ast": {
+   "type": "path",
+   "steps": [
+    {
+     "value": "",
+     "type": "variable",
+     "position": 1
+    },
+    {
+     "type": "unary",
+     "value": "{",
+     "position": 3,
+     "lhs": [
+      [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "type",
+          "type": "name",
+          "position": 8
+         }
+        ]
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 19,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "value",
+            "type": "name",
+            "position": 24
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "average",
+         "type": "variable",
+         "position": 18
+        }
+       }
+      ],
+      [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "kind",
+          "type": "name",
+          "position": 31
+         }
+        ]
+       },
+       {
+        "type": "function",
+        "value": "(",
+        "position": 38,
+        "arguments": [
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "value",
+            "type": "name",
+            "position": 43
+           }
+          ]
+         }
+        ],
+        "procedure": {
+         "value": "sum",
+         "type": "variable",
+         "position": 37
+        }
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "case024": {
+  "expr": "{ type: $average(value), kind: $sum(value) } ",
+  "ast": {
+   "type": "unary",
+   "value": "{",
+   "position": 1,
+   "lhs": [
+    [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "type",
+        "type": "name",
+        "position": 6
+       }
+      ]
+     },
+     {
+      "type": "function",
+      "value": "(",
+      "position": 17,
+      "arguments": [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "value",
+          "type": "name",
+          "position": 22
+         }
+        ]
+       }
+      ],
+      "procedure": {
+       "value": "average",
+       "type": "variable",
+       "position": 16
+      }
+     }
+    ],
+    [
+     {
+      "type": "path",
+      "steps": [
+       {
+        "value": "kind",
+        "type": "name",
+        "position": 29
+       }
+      ]
+     },
+     {
+      "type": "function",
+      "value": "(",
+      "position": 36,
+      "arguments": [
+       {
+        "type": "path",
+        "steps": [
+         {
+          "value": "value",
+          "type": "name",
+          "position": 41
+         }
+        ]
+       }
+      ],
+      "procedure": {
+       "value": "sum",
+       "type": "variable",
+       "position": 35
+      }
+     }
+    ]
+   ]
+  }
+ },
+ "case025": {
+  "expr": "$each(jsonata, λ($v, $k){\n{\n  'date': $k,\n  'count': $v\n}\n}){\n  $substring(date, 0, 7): $sum(count)\n}\n",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 6,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "jsonata",
+       "type": "name",
+       "position": 13
+      }
+     ]
+    },
+    {
+     "type": "lambda",
+     "arguments": [
+      {
+       "value": "v",
+       "type": "variable",
+       "position": 19
+      },
+      {
+       "value": "k",
+       "type": "variable",
+       "position": 23
+      }
+     ],
+     "position": 17,
+     "body": {
+      "type": "unary",
+      "value": "{",
+      "position": 27,
+      "lhs": [
+       [
+        {
+         "value": "date",
+         "type": "string",
+         "position": 36
+        },
+        {
+         "value": "k",
+         "type": "variable",
+         "position": 40
+        }
+       ],
+       [
+        {
+         "value": "count",
+         "type": "string",
+         "position": 51
+        },
+        {
+         "value": "v",
+         "type": "variable",
+         "position": 55
+        }
+       ]
+      ]
+     }
+    }
+   ],
+   "procedure": {
+    "value": "each",
+    "type": "variable",
+    "position": 5
+   },
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "function",
+       "value": "(",
+       "position": 75,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "date",
+           "type": "name",
+           "position": 79
+          }
+         ]
+        },
+        {
+         "value": 0,
+         "type": "number",
+         "position": 82
+        },
+        {
+         "value": 7,
+         "type": "number",
+         "position": 85
+        }
+       ],
+       "procedure": {
+        "value": "substring",
+        "type": "variable",
+        "position": 74
+       }
+      },
+      {
+       "type": "function",
+       "value": "(",
+       "position": 93,
+       "arguments": [
+        {
+         "type": "path",
+         "steps": [
+          {
+           "value": "count",
+           "type": "name",
+           "position": 98
+          }
+         ]
+        }
+       ],
+       "procedure": {
+        "value": "sum",
+        "type": "variable",
+        "position": 92
+       }
+      }
+     ]
+    ],
+    "position": 61
+   }
+  }
+ },
+ "case026": {
+  "expr": "$${id:{'label':label,'value':value}}",
+  "ast": {
+   "value": "$",
+   "type": "variable",
+   "position": 2,
+   "group": {
+    "lhs": [
+     [
+      {
+       "type": "path",
+       "steps": [
+        {
+         "value": "id",
+         "type": "name",
+         "position": 5
+        }
+       ]
+      },
+      {
+       "type": "unary",
+       "value": "{",
+       "position": 7,
+       "lhs": [
+        [
+         {
+          "value": "label",
+          "type": "string",
+          "position": 14
+         },
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "label",
+            "type": "name",
+            "position": 20
+           }
+          ]
+         }
+        ],
+        [
+         {
+          "value": "value",
+          "type": "string",
+          "position": 28
+         },
+         {
+          "type": "path",
+          "steps": [
+           {
+            "value": "value",
+            "type": "name",
+            "position": 34
+           }
+          ]
+         }
+        ]
+       ]
+      }
+     ]
+    ],
+    "position": 3
+   }
+  }
+ }
+}

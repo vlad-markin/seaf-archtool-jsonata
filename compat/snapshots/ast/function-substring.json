@@ -1,0 +1,562 @@
+{
+ "case000": {
+  "expr": "$substring(\"hello world\", 0, 5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 27
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 30
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case001": {
+  "expr": "$substring(\"hello world\", -5, 5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case002": {
+  "expr": "$substring(\"hello world\", 6)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": 6,
+     "type": "number",
+     "position": 27
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case003": {
+  "expr": "$substring(blah, 6)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "type": "path",
+     "steps": [
+      {
+       "value": "blah",
+       "type": "name",
+       "position": 15
+      }
+     ]
+    },
+    {
+     "value": 6,
+     "type": "number",
+     "position": 18
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case004": {
+  "expr": "$substring('𝄞💩', 0, 2)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "𝄞💩",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": 2,
+     "type": "number",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case005": {
+  "expr": "$substring('𝄞💩', 0, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "𝄞💩",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case006": {
+  "expr": "$substring('𝄞💩', 1, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "𝄞💩",
+     "type": "string",
+     "position": 17
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 20
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 23
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case007": {
+  "expr": "$substring(\"hello world\", -5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 28
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case008": {
+  "expr": "$substring(\"hello world\", -5, 5)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": 5,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case009": {
+  "expr": "$substring(\"hello world\", -5, 4)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": 4,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case010": {
+  "expr": "$substring(\"hello world\", -5, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case011": {
+  "expr": "$substring(\"hello world\", -5, 0)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case012": {
+  "expr": "$substring(\"hello world\", -5, -1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 28
+    },
+    {
+     "value": -1,
+     "type": "number",
+     "position": 32
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case013": {
+  "expr": "$substring(\"hello world\", 0, -6)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": 0,
+     "type": "number",
+     "position": 27
+    },
+    {
+     "value": -6,
+     "type": "number",
+     "position": 31
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case014": {
+  "expr": "$substring(\"hello world\", -100, 3)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "hello world",
+     "type": "string",
+     "position": 24
+    },
+    {
+     "value": -100,
+     "type": "number",
+     "position": 30
+    },
+    {
+     "value": 3,
+     "type": "number",
+     "position": 33
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case015": {
+  "expr": "$substring(\"😂😁😀\", -2, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "😂😁😀",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": -2,
+     "type": "number",
+     "position": 23
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case016": {
+  "expr": "$substring(\"😂😁😀\", -3, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "😂😁😀",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": -3,
+     "type": "number",
+     "position": 23
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case017": {
+  "expr": "$substring(\"😂😁😀\", -4, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "😂😁😀",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": -4,
+     "type": "number",
+     "position": 23
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ },
+ "case018": {
+  "expr": "$substring(\"😂😁😀\", -5, 1)",
+  "ast": {
+   "type": "function",
+   "value": "(",
+   "position": 11,
+   "arguments": [
+    {
+     "value": "😂😁😀",
+     "type": "string",
+     "position": 19
+    },
+    {
+     "value": -5,
+     "type": "number",
+     "position": 23
+    },
+    {
+     "value": 1,
+     "type": "number",
+     "position": 26
+    }
+   ],
+   "procedure": {
+    "value": "substring",
+    "type": "variable",
+    "position": 10
+   }
+  }
+ }
+}
