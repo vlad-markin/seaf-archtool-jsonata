@@ -63,12 +63,9 @@ public class SourceIndex internal constructor(
     public fun resolveBreakpoint(line: Int, column: Int? = null): NodeInfo? {
         if (column != null) {
             // the name of a called function stands for the call: `$sum(…)` at `$sum` is the call
-            var n = nodeAt(line, column) ?: return null
-            var p = parentOf(n)
-            while (!n.operatorStop && p != null && p.start == n.start && stoppable(p)) {
-                n = p
-                p = parentOf(n)
-            }
+            val n = nodeAt(line, column) ?: return null
+            val p = parentOf(n)
+            if (p != null && p.type in CALLS && p.start == n.start && stoppable(p)) return p
             return n
         }
         val lineStart = offset(line, 1)
@@ -78,6 +75,8 @@ public class SourceIndex internal constructor(
         if (lineStart >= text.length) return null
         return nodeAt(lineStart)
     }
+
+    private val CALLS = setOf("function", "partial")
 
     private fun parentOf(n: NodeInfo): NodeInfo? = if (n.parentId < 0) null else nodes.getOrNull(n.parentId)
 
