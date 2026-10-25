@@ -99,6 +99,15 @@ internal class EvalContext(
     /** `$$` of the evaluation. */
     @JvmField var rootInput: Value? = null
 
+    private var locals: HashMap<Any, Any>? = null
+
+    /** Per-evaluation state of host functions (CallContext.local). */
+    fun <T : Any> local(key: Any, init: () -> T): T {
+        val m = locals ?: HashMap<Any, Any>().also { locals = it }
+        @Suppress("UNCHECKED_CAST")
+        return m.getOrPut(key, init) as T
+    }
+
     /** Ids of the `$eval` sources reported to the listener. */
     @JvmField var evalSources: Int = 0
 

@@ -104,6 +104,33 @@ internal class CallContextImpl(
 
     override fun remainingNanos(): Long = frame.ctx.remainingNanos()
 
+    override fun <T : Any> local(key: Any, init: () -> T): T = frame.ctx.local(key, init)
+
+    override fun attribute(name: String): Any? = frame.ctx.options.attributes[name]
+
+    override fun evaluate(expression: su.seaf.archtool.jsonata.Jsonata, input: Value?, bindings: Map<String, Value?>, frameName: String): Value? {
+        val ctx = frame.ctx
+        require(ctx.registry.descendsFrom(expression.options.functions)) {
+            "The expression must be compiled with a registry of this evaluation's chain"
+        }
+        val root = if (ctx.listener != null) expression.debugRoot() else expression.compiledRoot
+        val env = Frame(null, ctx)
+        env.lambdaName = frameName
+        env.caller = frame
+        for ((k, v) in bindings) env.bind(k, v)
+        env.bind("$", input)
+        var focus = input
+        if (input is ArrayValue && !input.isSequence) focus = ArrayValue.sequence(input).also { it.outerWrapper = true }
+        // `$$` of the nested expression is its own input, as in a separate jsonata-js evaluation
+        val outerRoot = ctx.rootInput
+        ctx.rootInput = input
+        try {
+            return root.evaluate(focus, env)
+        } finally {
+            ctx.rootInput = outerRoot
+        }
+    }
+
     /**
      * jsonata.js wraps function arguments in a closure that calls `apply(fn, args, null, environment)`: the context of
      * such a call is JS `null` (it reaches signature checks and tail calls), not undefined.

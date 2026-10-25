@@ -181,6 +181,8 @@ public class EvaluationOptions @JvmOverloads constructor(
      * through a branch where the result may differ from the reference. Null: probes cost one null check.
      */
     public val deviations: su.seaf.archtool.jsonata.deviation.DeviationSink? = null,
+    /** Values the host attaches to the evaluation for its own functions ([CallContext.attribute]). */
+    public val attributes: Map<String, Any?> = emptyMap(),
 ) {
     public companion object {
         public const val DEFAULT_MAX_DEPTH: Int = 1_000_000
@@ -224,6 +226,22 @@ public interface CallContext {
 
     /** Nanoseconds left before the deadline of the evaluation (timeouts of host calls), [Long.MAX_VALUE] without one. */
     public fun remainingNanos(): Long
+
+    /**
+     * State kept for the whole evaluation under [key] (created by [init] on first use): the store of `$set`/`$get`,
+     * caches of a function. Nested [evaluate] calls share it; another evaluation has its own.
+     */
+    public fun <T : Any> local(key: Any, init: () -> T): T
+
+    /** A value the host attached to the evaluation ([EvaluationOptions.attributes]), e.g. the request of a user. */
+    public fun attribute(name: String): Any?
+
+    /**
+     * Evaluates [expression] (compiled with a registry of this evaluation's chain) inside this evaluation: depth,
+     * deadline, budgets, cancellation, listener and [local] state are shared; the variables are only [bindings] plus
+     * `$`/`$$` = [input]. The debugger shows it as a frame named [frameName] (a manifest function: its id).
+     */
+    public fun evaluate(expression: Jsonata, input: Value?, bindings: Map<String, Value?>, frameName: String): Value?
 }
 
 /**

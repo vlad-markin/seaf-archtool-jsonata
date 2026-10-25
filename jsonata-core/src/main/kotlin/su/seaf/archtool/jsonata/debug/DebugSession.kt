@@ -214,7 +214,7 @@ public class DebugSession @JvmOverloads constructor(
     }
 
     private fun withSession(o: EvaluationOptions, t: CancellationToken) = EvaluationOptions(
-        o.maxDepth, o.timeoutMillis, o.maxSequence, o.clock, o.functions, o.hostErrors, t, o.budgets, listener, o.deviations,
+        o.maxDepth, o.timeoutMillis, o.maxSequence, o.clock, o.functions, o.hostErrors, t, o.budgets, listener, o.deviations, o.attributes,
     )
 
     // ---- commands (from other threads)
