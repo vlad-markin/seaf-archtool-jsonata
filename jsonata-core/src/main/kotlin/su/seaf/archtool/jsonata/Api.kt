@@ -123,7 +123,10 @@ public interface CallContext {
 public class FunctionRegistry private constructor(
     private val parent: FunctionRegistry?,
 ) {
-    private val functions = HashMap<String, FunctionValue>()
+    private val functions = java.util.concurrent.ConcurrentHashMap<String, FunctionValue>()
+
+    /** Set on the shared standard registry once the library is registered: it can never change afterwards. */
+    @Volatile private var frozen = false
 
     /** Creates a registry whose own functions are looked up before this one's. */
     public fun extend(): FunctionRegistry = FunctionRegistry(this)
@@ -140,6 +143,7 @@ public class FunctionRegistry private constructor(
     }
 
     internal fun register(function: NativeFunction): FunctionRegistry {
+        if (frozen) throw su.seaf.archtool.jsonata.parser.JsonataException("X0004", value = su.seaf.archtool.jsonata.value.StringValue.of(function.name))
         if (lookup(function.name) != null) {
             throw su.seaf.archtool.jsonata.parser.JsonataException("X0001", value = su.seaf.archtool.jsonata.value.StringValue.of(function.name))
         }
@@ -162,9 +166,9 @@ public class FunctionRegistry private constructor(
             return NativeFunction("", sig, arity ?: sig?.params?.size ?: 0, implementation)
         }
 
-        private val STANDARD: FunctionRegistry by lazy { FunctionRegistry(null).also { StandardLibrary.registerAll(it) } }
+        private val STANDARD: FunctionRegistry by lazy { FunctionRegistry(null).also { StandardLibrary.registerAll(it); it.frozen = true } }
 
-        /** The jsonata-js 2.2.2 standard library (shared, do not register into it). */
+        /** The jsonata-js 2.2.2 standard library: shared and read-only (registering into it fails with X0004). */
         @JvmStatic
         public fun standard(): FunctionRegistry = STANDARD
 

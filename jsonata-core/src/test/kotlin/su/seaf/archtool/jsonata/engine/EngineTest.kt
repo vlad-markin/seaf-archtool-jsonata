@@ -100,6 +100,15 @@ class EngineTest {
     }
 
     @Test
+    fun `the standard registry is read-only (RV-12)`() {
+        val e = assertFailsWith<JsonataException> { FunctionRegistry.standard().register("myfn", null, { _, _ -> NumberValue.of(1) }) }
+        assertEquals("X0004", e.code)
+        assertEquals("T1006", error("\$myfn()").code)
+        // a child registry is the way to add functions
+        assertEquals("1", eval("\$myfn()", options = CompileOptions(FunctionRegistry.create().register("myfn", null, { _, _ -> NumberValue.of(1) }))))
+    }
+
+    @Test
     fun `transform with a clone bound as a variable`() {
         var count = 0
         val clone = FunctionRegistry.function(null, { _, a -> count++; Evaluator.clone(a[0]) }, 1)
