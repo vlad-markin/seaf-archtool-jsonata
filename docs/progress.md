@@ -27,6 +27,7 @@
 - [x] **RV-13 [minor]** кэш regex без границы. LRU на 2048 записей. Тест: `EngineTest` «the regex cache is bounded» (2548 разных regex через `$eval`).
 - [x] **RV-14 [minor]** описание DEV-03 дополнено вторым направлением (значение эталона → `T0410`), примерами и правилом детектора. Тест: `EngineTest` «partial application of a native function checks its signature».
 - [x] **RV-15 [minor]** `$toMillis` без смещения — всегда UTC (решение владельца): отдельная запись DEV-07 с правилом детектора, строка из «нестабильности эталона» убрана. Тест: `EngineTest` «toMillis without an offset is UTC whatever the JVM time zone».
+- [x] **RV-16 [minor]** версия Node эталона закреплена: `engines` (`>=22 <23`) в `compat/node/package.json`, `compat/node/.nvmrc`, `traps.mjs` отказывается работать не на Node 22; README ловушек. Проверка: `traps.mjs` на Node 22 воспроизводит `expected.jsonl` без изменений.
 
 ## Сделано
 

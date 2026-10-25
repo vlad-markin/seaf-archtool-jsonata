@@ -5,6 +5,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 process.env.TZ = 'UTC';
+// expected.jsonl is recorded on Node 22: $power's last bits differ on other V8 versions (NUM-11)
+if (!process.versions.node.startsWith('22.')) {
+  console.error(`traps.mjs must run on Node 22 (found ${process.versions.node}), see .nvmrc`);
+  process.exit(1);
+}
 const dir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../traps');
 const out = [];
 for (const file of ['divergences.jsonl', 'targeted.jsonl', 'review.jsonl']) {
