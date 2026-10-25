@@ -109,6 +109,17 @@ class EngineTest {
     }
 
     @Test
+    fun `partial application of a native function checks its signature (DEV-03, RV-14)`() {
+        for (input in listOf("1", "[[1,2]]", "{\"a\":1}")) {
+            assertEquals("T0410", error("\$map(\$, \$match(?, /^(\\w*\\s\\w*)/)).match", input).code, input)
+        }
+        assertEquals("\"ab cd\"", eval("\$map(\$, \$match(?, /^(\\w*\\s\\w*)/)).match", "\"ab cd\""))
+        assertEquals("5", eval("\$sum(?)(5)"))
+        assertEquals("T0410", error("\$uppercase(?)(1)").code)
+        assertEquals("1", eval("\$count(?)(5)"))
+    }
+
+    @Test
     fun `transform with a clone bound as a variable`() {
         var count = 0
         val clone = FunctionRegistry.function(null, { _, a -> count++; Evaluator.clone(a[0]) }, 1)
