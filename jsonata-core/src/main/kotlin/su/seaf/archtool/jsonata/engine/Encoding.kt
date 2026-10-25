@@ -11,11 +11,14 @@ internal object Encoding {
         return java.util.Base64.getEncoder().encodeToString(bytes)
     }
 
-    /** `Buffer.from(str, 'base64').toString('binary')`: lenient decoding (url-safe alphabet, junk and padding ignored). */
+    /**
+     * `Buffer.from(str, 'base64').toString('binary')`: lenient decoding (url-safe alphabet, junk and padding ignored).
+     * Node classifies each UTF-16 unit by its low byte, so `'и'` (U+0438) counts as `'8'`.
+     */
     fun base64decode(s: String): String {
         val clean = StringBuilder()
-        for (c in s) {
-            when (c) {
+        for (unit in s) {
+            when (val c = (unit.code and 0xFF).toChar()) {
                 in 'A'..'Z', in 'a'..'z', in '0'..'9', '+', '/' -> clean.append(c)
                 '-' -> clean.append('+')
                 '_' -> clean.append('/')

@@ -6,6 +6,7 @@ import su.seaf.archtool.jsonata.parser.Signature
 import su.seaf.archtool.jsonata.value.ArrayValue
 import su.seaf.archtool.jsonata.value.BooleanValue
 import su.seaf.archtool.jsonata.value.FunctionValue
+import su.seaf.archtool.jsonata.value.NullValue
 import su.seaf.archtool.jsonata.value.NumberValue
 import su.seaf.archtool.jsonata.value.ObjectValue
 import su.seaf.archtool.jsonata.value.StringValue
@@ -408,9 +409,10 @@ internal class ApplyNode(ast: AstNode, @JvmField val lhs: Node, @JvmField val rh
         if (l is FunctionValue) {
             // function chaining: λ($f, $g) { λ($x){ $g($f($x)) } }
             val chain = Evaluator.chainLambda(env)
-            return Evaluator.apply(chain, listOf(l, func), null, env, null, null)
+            // jsonata.js passes JS null as the context here (evaluateApplyExpression)
+            return Evaluator.apply(chain, listOf(l, func), NullValue, env, null, null)
         }
-        return Evaluator.apply(func, listOf(l), null, env, null, null)
+        return Evaluator.apply(func, listOf(l), NullValue, env, null, null)
     }
 }
 

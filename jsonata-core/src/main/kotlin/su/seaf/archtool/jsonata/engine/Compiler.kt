@@ -42,7 +42,9 @@ internal class Compiler(private val debug: Boolean) {
             "condition" -> ConditionNode(ast, compile(ast.node("condition")!!), compile(ast.node("then")!!), ast.node("else")?.let { compile(it) })
             "block" -> BlockNode(ast, nodes(ast, "expressions"))
             "bind" -> BindNode(ast, (ast.node("lhs")!!)["value"] as String, compile(ast.node("rhs")!!))
-            "regex" -> RegexNode(ast, JsRegexPattern.of(ast["value"] as JsRegex))
+            // the parser copies the left side of `?:`/`??` through JSON (parser.js), which turns a regex into `{}`;
+            // jsonata-js then builds `new RegExp({})`, i.e. /[object Object]/ (only tested for truthiness there)
+            "regex" -> RegexNode(ast, JsRegexPattern.of(ast["value"] as? JsRegex ?: JsRegex("[object Object]", "")))
             "function" -> {
                 val procedure = ast.node("procedure")!!
                 FunctionCallNode(ast, compile(procedure), nodes(ast, "arguments"), procName(procedure), pathHint(procedure))

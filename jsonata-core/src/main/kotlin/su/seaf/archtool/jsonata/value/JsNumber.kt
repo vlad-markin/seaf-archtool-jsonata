@@ -137,31 +137,77 @@ public object JsNumber {
         return if (negative && bd.signum() != 0) "-$s" else if (negative) "-$s" else s
     }
 
-    /** JS `x.toString(radix)` for 2 ≤ radix ≤ 36. Exact for integers; fractions follow the V8 digit generation. */
+    /**
+     * JS `x.toString(radix)` for 2 ≤ radix ≤ 36: V8's DoubleToRadixCString. Digits are produced only as far as the
+     * double's precision goes; integer digits below that precision are zeros (`(1e21).toString(36)` ends in `000`).
+     */
     @JvmStatic
     public fun toString(d: Double, radix: Int): String {
         if (radix == 10) return toString(d)
         if (d.isNaN()) return "NaN"
         if (d.isInfinite()) return if (d > 0) "Infinity" else "-Infinity"
-        if (d == Math.floor(d)) {
-            val bi = BigDecimal(d).toBigInteger()
-            return bi.toString(radix)
+        val chars = "0123456789abcdefghijklmnopqrstuvwxyz"
+        var value = d
+        val negative = value < 0
+        if (negative) value = -value
+        var integer = Math.floor(value)
+        var fraction = value - integer
+        var delta = 0.5 * (Math.nextUp(value) - value)
+        delta = Math.max(Math.nextUp(0.0), delta)
+        val frac = StringBuilder()
+        if (fraction >= delta) {
+            frac.append('.')
+            do {
+                fraction *= radix
+                delta *= radix
+                val digit = fraction.toInt()
+                frac.append(chars[digit])
+                fraction -= digit
+                // round to even
+                if (fraction > 0.5 || (fraction == 0.5 && (digit and 1) == 1)) {
+                    if (fraction + delta > 1) {
+                        // carry over already written digits
+                        while (true) {
+                            val last = frac.length - 1
+                            if (last == 0) {
+                                // reached the decimal point: carry into the integer part
+                                frac.setLength(0)
+                                integer += 1
+                                break
+                            }
+                            val c = frac[last]
+                            frac.setLength(last)
+                            val dgt = if (c > '9') c - 'a' + 10 else c - '0'
+                            if (dgt + 1 < radix) {
+                                frac.append(chars[dgt + 1])
+                                break
+                            }
+                        }
+                        break
+                    }
+                }
+            } while (fraction >= delta)
+            if (frac.length == 1) frac.setLength(0)
         }
-        // fractional part (not reachable from JSONata's $formatBase, which rounds first)
-        val negative = d < 0
-        val x = Math.abs(d)
-        val ip = Math.floor(x)
-        val sb = StringBuilder(BigDecimal(ip).toBigInteger().toString(radix)).append('.')
-        var frac = x - ip
-        var n = 0
-        while (frac > 0 && n < 52) {
-            frac *= radix
-            val digit = frac.toInt()
-            sb.append(Character.forDigit(digit, radix))
-            frac -= digit
-            n++
+        val intDigits = StringBuilder()
+        while (exponentOf(integer / radix) > 0) {
+            integer /= radix
+            intDigits.append('0')
         }
-        return (if (negative) "-" else "") + sb
+        do {
+            val remainder = integer % radix
+            intDigits.append(chars[remainder.toInt()])
+            integer = (integer - remainder) / radix
+        } while (integer > 0)
+        if (negative) intDigits.append('-')
+        return intDigits.reverse().toString() + frac
+    }
+
+    /** V8 `Double(x).Exponent()`: the binary exponent of the 53-bit integer significand. */
+    private fun exponentOf(x: Double): Int {
+        val bits = java.lang.Double.doubleToRawLongBits(x)
+        val biased = ((bits ushr 52) and 0x7FF).toInt()
+        return if (biased == 0) 1 - 1075 else biased - 1075
     }
 
     /**

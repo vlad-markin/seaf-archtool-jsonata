@@ -77,6 +77,15 @@ internal object Evaluator {
             if (s != null) {
                 if (e.token == null && s.token != null) e.token = s.token
                 if (s.position != null) e.position = s.position
+            } else if (e.token == null) {
+                // jsonata-js keeps the name of the last direct call on the shared function object, so a library
+                // function called by $map or `~>` still reports its own name
+                val name = when (proc) {
+                    is NativeFunction -> proc.name
+                    is PartialNative -> proc.native.name
+                    else -> ""
+                }
+                if (name.isNotEmpty()) e.token = name
             }
             throw e
         }
@@ -153,7 +162,7 @@ internal object Evaluator {
         val env = Frame(proc.env, caller.ctx)
         val cloneFunction = env.lookup("clone")
         if (cloneFunction !is FunctionValue) throw JsonataException("T2013", node.position)
-        var result = apply(cloneFunction, listOf(obj), null, env, null)
+        var result = apply(cloneFunction, listOf(obj), NullValue, env, null)
         // a user-defined $clone may return (parts of) its argument: its result is copied before it is updated, so
         // that the input document is never modified (decision 8, review RV-2); the standard $clone is already a copy
         if (cloneFunction !== FunctionRegistry.standard().lookup("clone")) result = copyContainers(result, env.ctx)

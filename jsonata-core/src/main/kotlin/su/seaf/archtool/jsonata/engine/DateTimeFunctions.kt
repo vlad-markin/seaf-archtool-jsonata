@@ -183,7 +183,15 @@ internal object DateTimeFunctions {
         50 to "l", 40 to "xl", 10 to "x", 9 to "ix", 5 to "v", 4 to "iv", 1 to "i")
     private val romanValues = mapOf('M' to 1000.0, 'D' to 500.0, 'C' to 100.0, 'L' to 50.0, 'X' to 10.0, 'V' to 5.0, 'I' to 1.0)
 
+    /**
+     * jsonata-js builds roman numerals recursively, one call per numeral: from about 10 million it exhausts the JS stack
+     * (RangeError). The engine stops at the same order of magnitude with X0002 instead of writing millions of `m`
+     * (DEV-02).
+     */
+    private const val ROMAN_LIMIT = 1e7
+
     private fun decimalToRoman(value: Double): String {
+        if (value >= ROMAN_LIMIT) throw JsonataException("X0002")
         val sb = StringBuilder()
         var v = value
         outer@ while (true) {
@@ -652,7 +660,12 @@ internal object DateTimeFunctions {
                     'F' -> days.getOrNull((value as Double).toInt().takeIf { !value.isNaN() } ?: -1)
                     else -> throw JsonataException("D3133", value = StringValue.of(c.toString()))
                 }
-                if (name == null) throw JsonataException("D3133", value = StringValue.of(c.toString()))
+                if (name == null) {
+                    // an invalid date: jsonata-js appends the JS undefined as text when it does not touch the name
+                    // further (title case, no width); otherwise it fails with a TypeError
+                    if (spec.names == Case.TITLE && spec.width?.max == null) return "undefined"
+                    throw JsonataException("D3133", value = StringValue.of(c.toString()))
+                }
                 if (spec.names == Case.UPPER) name = name.uppercase()
                 else if (spec.names == Case.LOWER) name = name.lowercase()
                 val max = spec.width?.max

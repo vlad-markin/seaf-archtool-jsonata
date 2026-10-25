@@ -86,7 +86,11 @@ internal class CallContextImpl(
 ) : CallContext {
     override val timestamp: Long get() = frame.ctx.timestamp
 
-    override fun call(function: FunctionValue, args: List<Value?>): Value? = Evaluator.apply(function, args, null, frame, null)
+    /**
+     * jsonata.js wraps function arguments in a closure that calls `apply(fn, args, null, environment)`: the context of
+     * such a call is JS `null` (it reaches signature checks and tail calls), not undefined.
+     */
+    override fun call(function: FunctionValue, args: List<Value?>): Value? = Evaluator.apply(function, args, NullValue, frame, null)
 
     /** jsonata.js: createSequence. */
     fun sequence(): ArrayValue = ArrayValue.sequence()

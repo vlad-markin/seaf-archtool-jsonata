@@ -398,6 +398,44 @@ class EngineTest {
     }
 
     @Test
+    fun `invalid dates format as jsonata-js does (fuzzing)`() {
+        assertEquals("\"NaNth undefined NaN\"", eval("\$fromMillis(\$toMillis(\"2018-13-01\"), \"[D1o] [MNn] [Y]\")"))
+        assertEquals("\"undefined, NaN undefined NaN\"", eval("\$fromMillis(\$toMillis(\"2018-13-01\"), \"[FNn], [D] [MNn] [Y]\")"))
+    }
+
+    @Test
+    fun `roman numerals of huge numbers fail fast as the reference does (fuzzing)`() {
+        val t0 = System.nanoTime()
+        assertEquals("X0002", error("\$formatInteger(9007199254740991, \"i\")").code)
+        assertTrue((System.nanoTime() - t0) / 1_000_000 < 1000)
+        assertEquals(9765, JsonWriter.stringify(Jsonata.compile("\$formatInteger(9765661, \"I\")").evaluate(null)).count { it == 'M' })
+    }
+
+    @Test
+    fun `formatBase follows V8 for large numbers (fuzzing)`() {
+        assertEquals("\"5v1j4f4ds7c000\"", eval("\$formatBase(1e21, 36)"))
+        assertEquals("\"q1ysz911igw00\"", eval("\$formatBase(123456789012345680000, 36)"))
+    }
+
+    @Test
+    fun `functions called by higher-order functions get JS null as context (fuzzing)`() {
+        assertEquals("T0411", error("\$map([\"a\"], function(\$v){\$uppercase()})").code)
+        assertEquals("T0411", error("\$filter(3.5, function(\$v){\$pad(1234.5678)})").code)
+    }
+
+    @Test
+    fun `a regex on the left of the elvis operator (fuzzing)`() {
+        assertEquals("1", eval("/zz/ ?: 1"))
+        assertEquals("[true]", eval("[systems[\$contains(name, /a/i)], true] ?: 2"))
+        assertEquals("true", eval("\$exists(/a/ ?? 1)"))
+    }
+
+    @Test
+    fun `base64decode reads non-Latin characters by their low byte as Node does (fuzzing)`() {
+        assertEquals("\"ónA\"", eval("\$base64decode(\"Привет мир\")"))
+    }
+
+    @Test
     fun `undefined is not null`() {
         assertEquals("undefined", eval("a", """{"b":null}"""))
         assertEquals("null", eval("b", """{"b":null}"""))
