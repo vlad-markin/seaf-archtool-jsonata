@@ -263,4 +263,21 @@ class DebugSessionTest {
         // a breakpoint on an empty line is not verified
         assertNull(h.session.setBreakpoints("main", listOf(BreakpointSpec(9)))[0].node)
     }
+
+    @Test
+    fun `a stop 50 000 levels deep with a watch evaluated there (condition U6)`() {
+        val expr = "(\$f := function(\$n){ \$n = 0 ? 0 : 1 + \$f(\$n - 1) }; \$f(60000))"
+        val d = Driver(expr)
+        d.session.setBreakpoints("main", listOf(BreakpointSpec(1, expr.indexOf("= 0") + 1, condition = "\$n = 10000")))
+        d.start(null)
+        assertEquals("BREAKPOINT \$n = 0", d.next())
+        val page = d.session.stackTrace(0, 10)
+        assertEquals(10, page.frames.size)
+        assertEquals(50_002, page.totalFrames) // 50 001 calls of $f and <main>
+        // the evaluation runs on a stack segment thread: the watch runs on that thread, not on the session's
+        assertEquals("10000", d.session.evaluate(0, "\$n").toString())
+        assertEquals("10001", d.session.evaluate(1, "\$n").toString())
+        d.session.resume()
+        assertEquals("60000", d.finish().toString())
+    }
 }
