@@ -122,5 +122,23 @@
   "dataset": null,
   "scale": null,
   "expr": "($f := function($n){ $n = 0 ? 0 : 1 + $f($n - 1) }; $f(100000))"
+ },
+ {
+  "name": "recursion depth 30 in map (20k)",
+  "dataset": null,
+  "scale": null,
+  "expr": "($f := function($n){ $n = 0 ? 0 : 1 + $f($n - 1) }; $sum([1..20000].$f(30)))"
+ },
+ {
+  "name": "recursion depth 40 in map (20k)",
+  "dataset": null,
+  "scale": null,
+  "expr": "($f := function($n){ $n = 0 ? 0 : 1 + $f($n - 1) }; $sum([1..20000].$f(40)))"
+ },
+ {
+  "name": "recursion depth 200 in map (2k)",
+  "dataset": null,
+  "scale": null,
+  "expr": "($f := function($n){ $n = 0 ? 0 : 1 + $f($n - 1) }; $sum([1..2000].$f(200)))"
  }
 ]

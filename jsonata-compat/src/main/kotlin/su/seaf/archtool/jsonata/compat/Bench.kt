@@ -9,21 +9,26 @@ import java.io.File
 
 /**
  * Rough timing (not JMH: orders of magnitude only) of compat/bench/cases.json, the same cases and scaling as
- * compat/node/bench.mjs runs on jsonata@2.2.2. `./gradlew :jsonata-compat:bench` (`-PbenchFilter=text` runs the cases whose name contains it).
+ * compat/node/bench.mjs runs on jsonata@2.2.2. `./gradlew :jsonata-compat:bench` (`-PbenchFilter=text` runs the cases whose name contains it, `!text` the others, `-PbenchFresh=true` compiles before every run).
  */
 fun main(args: Array<String>) {
     val root = File(args.getOrElse(0) { "compat" })
     val iterations = args.getOrElse(1) { "10" }.toInt()
     val filter = args.getOrElse(2) { "" }
+    // fresh: compile before every run, so that each run is the first evaluation of its expression
+    val fresh = args.getOrElse(3) { "false" }.toBoolean()
     val cases = mapper.readTree(File(root, "bench/cases.json"))
     println(String.format("%-36s %10s %10s  %s", "case", "median ms", "min ms", "result"))
     for (c in cases) {
-        if (filter.isNotEmpty() && !c.get("name").asText().contains(filter)) continue
+        val name = c.get("name").asText()
+        if (filter.startsWith("!") && name.contains(filter.substring(1))) continue
+        if (filter.isNotEmpty() && !filter.startsWith("!") && !name.contains(filter)) continue
         val input = load(root, c)?.let { toValue(it) }
-        val expr = Jsonata.compile(c.get("expr").asText())
+        var expr = Jsonata.compile(c.get("expr").asText())
         val times = ArrayList<Double>()
         var result = ""
         repeat(iterations + 5) { i ->
+            if (fresh) expr = Jsonata.compile(c.get("expr").asText())
             val t0 = System.nanoTime()
             val r = expr.evaluate(input)
             val ms = (System.nanoTime() - t0) / 1e6

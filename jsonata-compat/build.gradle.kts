@@ -21,7 +21,7 @@ tasks.register<JavaExec>("bench") {
     description = "Rough timing of compat/bench/cases.json (compare with compat/node/bench.mjs)."
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("su.seaf.archtool.jsonata.compat.BenchKt")
-    args(rootProject.file("compat").absolutePath, providers.gradleProperty("benchIterations").getOrElse("10"), providers.gradleProperty("benchFilter").getOrElse(""))
+    args(rootProject.file("compat").absolutePath, providers.gradleProperty("benchIterations").getOrElse("10"), providers.gradleProperty("benchFilter").getOrElse(""), providers.gradleProperty("benchFresh").getOrElse("false"))
     jvmArgs("-Xmx2g")
     // -PbenchJfr=/path/file.jfr records a JFR profile of the run
     providers.gradleProperty("benchJfr").orNull?.let { jvmArgs("-XX:StartFlightRecording=filename=$it,settings=profile") }

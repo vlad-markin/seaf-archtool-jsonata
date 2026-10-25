@@ -132,46 +132,47 @@ internal class EvalContext(
     @JvmField var segmentBase: Int = 0
 
     /** Nesting allowed on the current segment before the evaluation continues on a new one. */
-    @JvmField var segmentLimit: Int = FIRST_SEGMENT_LIMIT
+    @JvmField var segmentLimit: Int = if (SegmentPool.onSegmentThread()) SEGMENT_LIMIT else FIRST_SEGMENT_LIMIT
+
+    /** The segment task this evaluation is running in now (null on the caller's thread). */
+    private var currentTask: SegmentPool.Task? = null
+
+    /** Segments this evaluation has entered (for the profile, story 5). */
+    @JvmField var segmentsEntered: Int = 0
+
+    /** Called when this evaluation enters its first segment (the compiled expression remembers it goes deep). */
+    @JvmField var onDeep: (() -> Unit)? = null
 
     /**
-     * Segmented stack (review RV-4): jsonata-js 2.2.2 recurses as deep as its heap allows (100 000 non-tail levels
-     * work), while one JVM thread stack holds a few hundred to a few thousand levels. When the nesting on the current
-     * thread exceeds [segmentLimit], [block] continues on a new platform thread with a large stack and the current
-     * thread waits for it. The evaluation stays sequential: one thread runs at a time and `join` orders memory.
+     * Segmented stack (review RV-4, condition U1): jsonata-js 2.2.2 recurses as deep as its heap allows (100 000
+     * non-tail levels work), while one JVM thread stack holds a few hundred to a few thousand levels. When the nesting
+     * on the current thread exceeds [segmentLimit], [block] continues on a pooled platform thread with a large stack
+     * ([SegmentPool]) and the current thread parks until it is done. The evaluation stays sequential: one thread runs
+     * at a time, and the volatile completion flag of the task orders memory between them.
      */
-    fun <T> onNewSegment(block: () -> T): T {
+    fun <T> onNewSegment(block: () -> T): T = onSegment(depth, block)
+
+    /** Runs the whole evaluation on a segment thread from the start. */
+    fun <T> fromSegment(block: () -> T): T = onSegment(depth, block)
+
+    private fun <T> onSegment(base: Int, block: () -> T): T {
         val savedBase = segmentBase
         val savedLimit = segmentLimit
-        var result: Any? = null
-        var failure: Throwable? = null
-        val thread = Thread.ofPlatform().name("jsonata-stack-segment").daemon(true).stackSize(SEGMENT_STACK_BYTES).unstarted {
-            segmentBase = depth
+        val savedTask = currentTask
+        savedTask?.wentDeep = true
+        if (segmentsEntered++ == 0) onDeep?.invoke()
+        val task = SegmentPool.run { t ->
+            segmentBase = base
             segmentLimit = SEGMENT_LIMIT
-            try {
-                result = block()
-            } catch (e: Throwable) {
-                failure = e
-            }
+            currentTask = t
+            block()
         }
-        thread.start()
-        var interrupted = false
-        while (true) {
-            try {
-                thread.join()
-                break
-            } catch (_: InterruptedException) {
-                // cancellation reaches the thread that does the work (phase 7 checks it at the checkpoint)
-                interrupted = true
-                thread.interrupt()
-            }
-        }
-        if (interrupted) Thread.currentThread().interrupt()
         segmentBase = savedBase
         segmentLimit = savedLimit
-        failure?.let { throw it }
+        currentTask = savedTask
+        task.failure?.let { throw it }
         @Suppress("UNCHECKED_CAST")
-        return result as T
+        return task.result as T
     }
 
     companion object {
@@ -179,7 +180,6 @@ internal class EvalContext(
         const val FIRST_SEGMENT_LIMIT: Int = 120
         /** Segment threads: a 256 MB stack reservation (committed only as used) for 20 000 nested evaluations. */
         const val SEGMENT_LIMIT: Int = 20_000
-        const val SEGMENT_STACK_BYTES: Long = 256L shl 20
     }
 }
 

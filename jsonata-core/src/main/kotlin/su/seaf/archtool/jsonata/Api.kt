@@ -22,7 +22,17 @@ public class Jsonata private constructor(
     private val ast: AstNode,
     private val root: Node,
     private val options: CompileOptions,
+    recursive: Boolean,
 ) {
+    /**
+     * Set when the expression binds a recursive lambda, or once an evaluation of it has needed a stack segment:
+     * evaluations then start on a segment thread, so that a recursion just deeper than the caller's first segment pays one hand-over per evaluation
+     * instead of one per crossing (condition U1).
+     */
+    @Volatile private var deep = recursive
+
+    private val markDeep: () -> Unit = { deep = true }
+
     /** jsonata-js `ast()`. */
     public fun ast(): AstNode = ast
 
@@ -35,14 +45,14 @@ public class Jsonata private constructor(
         input: Value?,
         bindings: Map<String, Value?> = emptyMap(),
         evaluation: EvaluationOptions = EvaluationOptions.DEFAULT,
-    ): Value? = Evaluator.run(root, input, bindings, options, evaluation)
+    ): Value? = Evaluator.run(root, input, bindings, options, evaluation, null, deep, markDeep)
 
     /** Evaluation with debugger entry points (effective only when compiled with [CompileOptions.debug]). */
     internal fun evaluate(input: Value?, hook: su.seaf.archtool.jsonata.engine.DebugHook): Value? =
-        Evaluator.run(root, input, emptyMap(), options, EvaluationOptions.DEFAULT, hook)
+        Evaluator.run(root, input, emptyMap(), options, EvaluationOptions.DEFAULT, hook, deep, markDeep)
 
     internal fun evaluate(input: Value?, bindings: Map<String, Value?>, evaluation: EvaluationOptions, hook: su.seaf.archtool.jsonata.engine.DebugHook): Value? =
-        Evaluator.run(root, input, bindings, options, evaluation, hook)
+        Evaluator.run(root, input, bindings, options, evaluation, hook, deep, markDeep)
 
     internal val compiledRoot: Node get() = root
 
@@ -52,9 +62,50 @@ public class Jsonata private constructor(
         @JvmOverloads
         public fun compile(expression: String, options: CompileOptions = CompileOptions.DEFAULT): Jsonata {
             val ast = JsonataParser.ast(expression)
-            return Jsonata(expression, ast, Compiler(options.debug).compile(ast), options)
+            val compiler = Compiler(options.debug)
+            val root = compiler.compile(ast)
+            return Jsonata(expression, ast, root, options, compiler.recursive)
         }
     }
+}
+
+/**
+ * Process-wide stack segments of deep evaluations (review RV-4, condition U1). A recursion deeper than the caller's
+ * thread can hold continues on pooled platform threads with a 256 MB stack reservation each; every segment holds up to
+ * 20 000 nested evaluation steps (about 4 000 levels of non-tail recursion) and commits the stack memory it touches,
+ * outside the Java heap: about 0.9 GB for 100 000 levels. See `docs/limits.md`.
+ */
+public object StackSegments {
+    /** Default [budget]: enough for one evaluation to reach [EvaluationOptions.DEFAULT_MAX_DEPTH] (D1011 first). */
+    public const val DEFAULT_BUDGET: Int = 64
+
+    /**
+     * The most segments running at once in the process, over all evaluations; one more fails the evaluation that
+     * needs it with X0005. A host setting: lower it to bound the memory outside the heap (an IDE, a small pod).
+     */
+    @Volatile
+    @JvmStatic
+    public var budget: Int = DEFAULT_BUDGET
+        set(value) {
+            require(value >= 0) { "budget must not be negative" }
+            field = value
+        }
+
+    /** Segments running now. */
+    @JvmStatic
+    public val active: Int get() = su.seaf.archtool.jsonata.engine.SegmentPool.activeSegments
+
+    /** Segment threads alive now (running or idle in the pool). */
+    @JvmStatic
+    public val threads: Int get() = su.seaf.archtool.jsonata.engine.SegmentPool.liveThreads
+
+    /** Segment threads started since the process began (reuse keeps it far below [entered]). */
+    @JvmStatic
+    public val threadsCreated: Long get() = su.seaf.archtool.jsonata.engine.SegmentPool.createdThreads
+
+    /** Segments entered since the process began. */
+    @JvmStatic
+    public val entered: Long get() = su.seaf.archtool.jsonata.engine.SegmentPool.segmentsRun
 }
 
 /** Compile-time options. */

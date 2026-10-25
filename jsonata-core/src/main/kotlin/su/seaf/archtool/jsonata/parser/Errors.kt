@@ -145,6 +145,7 @@ internal object Messages {
         "X0002" to "The evaluation exhausted the JVM stack. Check for non-terminating recursion or rewrite it as tail-recursive",
         "X0003" to "Invalid regular expression {{value}}: {{{message}}}",
         "X0004" to "The standard library registry is read-only; register {{value}} in FunctionRegistry.create() instead",
+        "X0005" to "The evaluation needs more stack segments than the process budget allows ({{value}} running at once); see StackSegments.budget",
     )
 
     // populateMessage: {{{field}}} is replaced with the raw field, {{field}} with JSON.stringify(err[field]).

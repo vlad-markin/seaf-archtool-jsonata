@@ -25,13 +25,25 @@ internal class JsRegexPattern(val source: String, val flags: String, private val
 
         const val CACHE_LIMIT: Int = 2048
 
-        internal fun cacheSize(): Int = synchronized(cache) { cache.size }
+        /** A [java.util.concurrent.locks.ReentrantLock], not `synchronized`: a virtual thread must not pin here. */
+        private val lock = java.util.concurrent.locks.ReentrantLock()
+
+        internal fun cacheSize(): Int = locked { cache.size }
+
+        private inline fun <T> locked(block: () -> T): T {
+            lock.lock()
+            try {
+                return block()
+            } finally {
+                lock.unlock()
+            }
+        }
 
         fun of(regex: JsRegex): JsRegexPattern {
             val key = regex.flags + "/" + regex.pattern
-            synchronized(cache) { cache[key]?.let { return it } }
+            locked { cache[key] }?.let { return it }
             val compiled = compile(regex)
-            synchronized(cache) { cache[key] = compiled }
+            locked { cache[key] = compiled }
             return compiled
         }
 

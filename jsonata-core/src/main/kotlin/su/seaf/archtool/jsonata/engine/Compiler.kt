@@ -14,6 +14,14 @@ import su.seaf.archtool.jsonata.value.StringValue
  * every node reports to the evaluation's debug hook (the tree is otherwise identical); without it no node does.
  */
 internal class Compiler(private val debug: Boolean) {
+    /**
+     * True when the expression binds a lambda that refers to its own name (`$f := function(){ ... $f(...) }`): such
+     * an expression may recurse deeper than the caller's first stack segment, so it starts on a segment thread
+     * (condition U1). A hint only: shadowing is ignored, and recursion without one is found at run time.
+     */
+    var recursive: Boolean = false
+        private set
+
     fun compile(ast: AstNode): Node {
         val node = compileNode(ast)
         return node
@@ -42,7 +50,12 @@ internal class Compiler(private val debug: Boolean) {
             "parent" -> ParentNode(ast, (ast.node("slot")!!)["label"] as String)
             "condition" -> ConditionNode(ast, compile(ast.node("condition")!!), compile(ast.node("then")!!), ast.node("else")?.let { compile(it) })
             "block" -> BlockNode(ast, nodes(ast, "expressions"))
-            "bind" -> BindNode(ast, (ast.node("lhs")!!)["value"] as String, compile(ast.node("rhs")!!))
+            "bind" -> {
+                val name = (ast.node("lhs")!!)["value"] as String
+                val rhs = ast.node("rhs")!!
+                if (!recursive && rhs.type == "lambda" && refersTo(rhs, name)) recursive = true
+                BindNode(ast, name, compile(rhs))
+            }
             // the parser copies the left side of `?:`/`??` through JSON (parser.js), which turns a regex into `{}`;
             // jsonata-js then builds `new RegExp({})`, i.e. /[object Object]/ (only tested for truthiness there)
             "regex" -> RegexNode(ast, JsRegexPattern.of(ast["value"] as? JsRegex ?: JsRegex("[object Object]", "")))
@@ -103,6 +116,25 @@ internal class Compiler(private val debug: Boolean) {
         if (ast["tuple"] == true) node.tuple = true
         ast.node("ancestor")?.let { node.ancestorLabel = it["label"] as String }
         if (ast["consarray"] == true) node.consarray = true
+    }
+
+    /** Whether a `variable` node named [name] occurs anywhere under [ast]. */
+    private fun refersTo(ast: AstNode, name: String): Boolean {
+        val stack = ArrayList<Any?>()
+        val seen = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<Any, Boolean>())
+        stack.add(ast)
+        while (stack.isNotEmpty()) {
+            when (val x = stack.removeAt(stack.size - 1)) {
+                is AstNode -> {
+                    if (!seen.add(x)) continue
+                    if (x.type == "variable" && x["value"] == name) return true
+                    for (k in x.keys) stack.add(x[k])
+                }
+                is List<*> -> stack.addAll(x)
+                is Array<*> -> stack.addAll(x)
+            }
+        }
+        return false
     }
 
     private fun compilePath(ast: AstNode): Node {

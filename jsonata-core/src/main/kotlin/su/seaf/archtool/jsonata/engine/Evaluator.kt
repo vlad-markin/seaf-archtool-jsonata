@@ -19,9 +19,26 @@ import java.util.IdentityHashMap
 
 /** The evaluation procedures of jsonata.js that are shared by several nodes, and the entry point. */
 internal object Evaluator {
+    init {
+        // The error classes must be initialized before the JIT compiles the evaluation path: a compiled catch block
+        // that refers to an uninitialized class is a trap, and an error unwinding a deep recursion would otherwise
+        // deoptimize every compiled frame on its way (about 1 000 000 frames and 8 s for D1011 at the default depth).
+        JsonataException("D1011").token = null
+    }
+
     /** jsonata.js: jsonata(expr).evaluate(input, bindings). */
-    fun run(root: Node, input: Value?, bindings: Map<String, Value?>, options: CompileOptions, evaluation: EvaluationOptions, hook: DebugHook? = null): Value? {
+    fun run(
+        root: Node,
+        input: Value?,
+        bindings: Map<String, Value?>,
+        options: CompileOptions,
+        evaluation: EvaluationOptions,
+        hook: DebugHook? = null,
+        deep: Boolean = false,
+        onDeep: (() -> Unit)? = null,
+    ): Value? {
         val ctx = EvalContext(options.functions, evaluation, evaluation.clock(), hook)
+        ctx.onDeep = onDeep
         val env = Frame(null, ctx)
         for ((k, v) in bindings) env.bind(k, v)
         env.bind("$", input)
@@ -31,6 +48,8 @@ internal object Evaluator {
             focus = ArrayValue.sequence(input).also { it.outerWrapper = true }
         }
         try {
+            // an expression known to go deep starts on a segment thread (one hand-over instead of one per crossing)
+            if (deep && !SegmentPool.onSegmentThread()) return ctx.fromSegment { root.evaluate(focus, env) }
             return root.evaluate(focus, env)
         } catch (_: StackOverflowError) {
             // jsonata-js fails with a JS RangeError (no JSONata code) here

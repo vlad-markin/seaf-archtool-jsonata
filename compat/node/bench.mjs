@@ -1,5 +1,5 @@
 // Rough timing of jsonata@2.2.2 on compat/bench/cases.json (same scaling as the Kotlin Bench).
-// Usage: node bench.mjs [iterations]
+// Usage: node bench.mjs [iterations] [name filter]
 import jsonata from 'jsonata';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const cases = JSON.parse(fs.readFileSync(path.join(root, 'bench/cases.json'), 'utf8'));
 const iterations = Number(process.argv[2] || 10);
+const filter = process.argv[3] || '';
 
 function load(c) {
   if (!c.dataset) return undefined;
@@ -26,6 +27,7 @@ function load(c) {
 
 const results = [];
 for (const c of cases) {
+  if (filter && !c.name.includes(filter)) continue;
   const input = load(c);
   const expr = jsonata(c.expr);
   const times = [];
