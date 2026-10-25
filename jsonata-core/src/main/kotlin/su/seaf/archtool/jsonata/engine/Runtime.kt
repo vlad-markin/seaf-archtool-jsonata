@@ -75,8 +75,6 @@ internal class EvalContext(
     @JvmField val options: EvaluationOptions,
     @JvmField val timestamp: Long,
     @JvmField val hook: DebugHook?,
-    /** Decision 17: agreed deviations from jsonata-js apply only in [su.seaf.archtool.jsonata.Compatibility.AGREED]. */
-    @JvmField val compatibility: su.seaf.archtool.jsonata.Compatibility = su.seaf.archtool.jsonata.Compatibility.JSONATA_JS,
 ) {
     /** jsonata.js: environment.base.depth — the number of nested `evaluate` calls. */
     @JvmField var depth: Int = 0

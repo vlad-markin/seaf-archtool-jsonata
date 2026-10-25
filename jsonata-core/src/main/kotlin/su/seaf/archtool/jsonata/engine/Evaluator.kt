@@ -19,8 +19,8 @@ import java.util.IdentityHashMap
 /** The evaluation procedures of jsonata.js that are shared by several nodes, and the entry point. */
 internal object Evaluator {
     /** jsonata.js: jsonata(expr).evaluate(input, bindings). */
-    fun run(root: Node, input: Value?, bindings: Map<String, Value?>, options: CompileOptions, evaluation: EvaluationOptions): Value? {
-        val ctx = EvalContext(options.functions, evaluation, evaluation.clock(), null, options.compatibility)
+    fun run(root: Node, input: Value?, bindings: Map<String, Value?>, options: CompileOptions, evaluation: EvaluationOptions, hook: DebugHook? = null): Value? {
+        val ctx = EvalContext(options.functions, evaluation, evaluation.clock(), hook)
         val env = Frame(null, ctx)
         for ((k, v) in bindings) env.bind(k, v)
         env.bind("$", input)
@@ -58,6 +58,7 @@ internal object Evaluator {
 
     /** jsonata.js: applyInner. */
     private fun applyInner(proc: Value?, args: List<Value?>, input: Value?, env: Frame, site: CallSite?, callNode: Node?): Value? {
+        if (site != null && proc is Lambda) proc.lastSite = site
         try {
             var validated = args
             if (proc is EngineFunction) {
@@ -73,9 +74,10 @@ internal object Evaluator {
                 else -> throw JsonataException("T1006")
             }
         } catch (e: JsonataException) {
-            if (site != null) {
-                if (e.token == null && site.token != null) e.token = site.token
-                if (site.position != null) e.position = site.position
+            val s = if (proc is Lambda) proc.lastSite else site
+            if (s != null) {
+                if (e.token == null && s.token != null) e.token = s.token
+                if (s.position != null) e.position = s.position
             }
             throw e
         }

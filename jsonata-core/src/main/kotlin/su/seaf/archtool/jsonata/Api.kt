@@ -37,6 +37,12 @@ public class Jsonata private constructor(
         evaluation: EvaluationOptions = EvaluationOptions.DEFAULT,
     ): Value? = Evaluator.run(root, input, bindings, options, evaluation)
 
+    /** Evaluation with debugger entry points (effective only when compiled with [CompileOptions.debug]). */
+    internal fun evaluate(input: Value?, hook: su.seaf.archtool.jsonata.engine.DebugHook): Value? =
+        Evaluator.run(root, input, emptyMap(), options, EvaluationOptions.DEFAULT, hook)
+
+    internal val compiledRoot: Node get() = root
+
     public companion object {
         /** Parses and compiles; throws [su.seaf.archtool.jsonata.parser.JsonataException] on a syntax error. */
         @JvmStatic
@@ -48,14 +54,6 @@ public class Jsonata private constructor(
     }
 }
 
-/**
- * Compatibility mode (decision 17): one engine setting. [JSONATA_JS] behaves as jsonata-js 2.2.2, bugs included, and is
- * what the 2.2.2 test-suite runs in. [AGREED] enables the deviations agreed with the owner and recorded in
- * `docs/deviations.md` (none yet); every such deviation is implemented behind this setting, never instead of the
- * reference behaviour.
- */
-public enum class Compatibility { JSONATA_JS, AGREED }
-
 /** Compile-time options. */
 public class CompileOptions @JvmOverloads constructor(
     /** Functions visible to the expression: the standard library plus the caller's own. */
@@ -65,8 +63,6 @@ public class CompileOptions @JvmOverloads constructor(
      * calls at all.
      */
     public val debug: Boolean = false,
-    /** Compatibility mode (decision 17); the default reproduces jsonata-js 2.2.2 including its bugs. */
-    public val compatibility: Compatibility = Compatibility.JSONATA_JS,
 ) {
     public companion object {
         @JvmField public val DEFAULT: CompileOptions = CompileOptions()
@@ -144,6 +140,17 @@ public class FunctionRegistry private constructor(
     public fun lookup(name: String): FunctionValue? = functions[name] ?: parent?.lookup(name)
 
     public companion object {
+        /**
+         * A function value implemented in Kotlin that is not registered under a name, e.g. the result of a registered
+         * function that returns a function.
+         */
+        @JvmStatic
+        @JvmOverloads
+        public fun function(signature: String?, implementation: NativeImplementation, arity: Int? = null): FunctionValue {
+            val sig = signature?.let { Signature.parse(it) }
+            return NativeFunction("", sig, arity ?: sig?.params?.size ?: 0, implementation)
+        }
+
         private val STANDARD: FunctionRegistry by lazy { FunctionRegistry(null).also { StandardLibrary.registerAll(it) } }
 
         /** The jsonata-js 2.2.2 standard library (shared, do not register into it). */

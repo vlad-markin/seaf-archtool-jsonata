@@ -9,10 +9,13 @@ import su.seaf.archtool.jsonata.parser.JsonataException
  * raises D1001.
  */
 public object JsonWriter {
-    /** Plain `JSON.stringify(value)`; undefined (null) gives "undefined". NaN and infinities are written as `null`. */
+    /**
+     * Plain `JSON.stringify(value)`: undefined (null) and a function give "undefined"; inside a structure a function
+     * is skipped in an object and written as `null` in an array, as JS does. NaN and infinities are written as `null`.
+     */
     @JvmStatic
     public fun stringify(value: Value?, indent: Int = 0): String {
-        if (value == null) return "undefined"
+        if (value == null || value is FunctionValue) return "undefined"
         val sb = StringBuilder()
         write(sb, value, indent, 0, false)
         return sb.toString()
@@ -38,7 +41,7 @@ public object JsonWriter {
                 if (d.isNaN() || d.isInfinite()) sb.append("null") else sb.append(JsNumber.toString(d))
             }
             is StringValue -> quote(sb, value.value)
-            is FunctionValue -> if (replacer) sb.append("\"\"") else sb.append("{}")
+            is FunctionValue -> if (replacer) sb.append("\"\"") else sb.append("null")
             is ArrayValue -> {
                 if (value.isEmpty()) {
                     sb.append("[]")
@@ -46,11 +49,13 @@ public object JsonWriter {
                 }
                 sb.append('[')
                 var first = true
-                for (item in value) {
+                for (i in 0 until value.size) {
                     if (!first) sb.append(',')
                     first = false
                     newline(sb, indent, level + 1)
-                    write(sb, item, indent, level + 1, replacer)
+                    // an undefined item (possible inside sequences) is written as null, as JSON.stringify does
+                    val item = value.getOrNull(i)
+                    if (item == null) sb.append("null") else write(sb, item, indent, level + 1, replacer)
                 }
                 newline(sb, indent, level)
                 sb.append(']')
@@ -63,6 +68,7 @@ public object JsonWriter {
                 sb.append('{')
                 var first = true
                 for (key in value.keys) {
+                    if (!replacer && value[key] is FunctionValue) continue
                     if (!first) sb.append(',')
                     first = false
                     newline(sb, indent, level + 1)
@@ -70,7 +76,7 @@ public object JsonWriter {
                     sb.append(if (indent > 0) ": " else ":")
                     write(sb, value[key]!!, indent, level + 1, replacer)
                 }
-                newline(sb, indent, level)
+                if (!first) newline(sb, indent, level)
                 sb.append('}')
             }
         }

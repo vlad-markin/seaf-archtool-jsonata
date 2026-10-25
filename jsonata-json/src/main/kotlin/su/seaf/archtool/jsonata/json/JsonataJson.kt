@@ -117,7 +117,7 @@ public object JsonataJson {
 
     /**
      * Writes [value] as JSON text. Numbers use JS formatting (`1e+21`, `0.1`), NaN and infinities become `null`,
-     * functions are written as `{}` (what `JSON.stringify` does with a lambda's own properties is not reproduced).
+     * functions are skipped in objects and written as `null` elsewhere.
      */
     @JvmStatic
     public fun write(value: Value, out: Writer, indent: Int = 0) {
@@ -136,7 +136,7 @@ public object JsonataJson {
                 is BooleanValue -> gen.writeBoolean(v.value)
                 is NumberValue -> if (v.value.isNaN() || v.value.isInfinite()) gen.writeNull() else gen.writeNumber(JsNumber.toString(v.value))
                 is StringValue -> gen.writeString(v.value)
-                is FunctionValue -> { gen.writeStartObject(); gen.writeEndObject() }
+                is FunctionValue -> gen.writeNull()
                 is ArrayValue -> { gen.writeStartArray(); stack += Frame(v.iterator(), false) }
                 is ObjectValue -> { gen.writeStartObject(); stack += Frame(v.entries.iterator(), true) }
             }
@@ -152,6 +152,7 @@ public object JsonataJson {
             val next = top.items.next()
             if (top.isObject) {
                 val entry = next as Pair<*, *>
+                if (entry.second is FunctionValue) continue
                 gen.writeFieldName(entry.first as String)
                 emit(entry.second as Value)
             } else {

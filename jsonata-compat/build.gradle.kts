@@ -17,3 +17,10 @@ tasks.test {
     systemProperty("jsonata.compat.report", layout.buildDirectory.file("compat-report.json").get().asFile.absolutePath)
 }
 tasks.test { systemProperty("jsonata.compat.update", providers.gradleProperty("compatUpdate").getOrElse("false")) }
+tasks.register<JavaExec>("bench") {
+    description = "Rough timing of compat/bench/cases.json (compare with compat/node/bench.mjs)."
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("su.seaf.archtool.jsonata.compat.BenchKt")
+    args(rootProject.file("compat").absolutePath, providers.gradleProperty("benchIterations").getOrElse("10"))
+    jvmArgs("-Xmx2g")
+}
