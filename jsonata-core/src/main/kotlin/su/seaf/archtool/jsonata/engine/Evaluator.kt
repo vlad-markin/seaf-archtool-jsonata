@@ -54,8 +54,9 @@ internal object Evaluator {
         ctx.start()
         try {
             // an expression known to go deep starts on a segment thread (one hand-over instead of one per crossing)
-            if (deep && !SegmentPool.onSegmentThread()) return ctx.fromSegment { root.evaluate(focus, env) }
-            return root.evaluate(focus, env)
+            val result = if (deep && !SegmentPool.onSegmentThread()) ctx.fromSegment { root.evaluate(focus, env) } else root.evaluate(focus, env)
+            ctx.checkResult(result)
+            return result
         } catch (_: StackOverflowError) {
             // jsonata-js fails with a JS RangeError (no JSONata code) here
             throw JsonataException("X0002")
@@ -865,7 +866,7 @@ internal object Evaluator {
 
     /** functions.js: string. */
     fun string(arg: Value, prettify: Boolean = false, ctx: EvalContext? = null): String {
-        val tick: (() -> Unit)? = ctx?.let { c -> { c.tick() } }
+        val tick: ((Int) -> Unit)? = ctx?.let { c -> { length -> c.tick(); c.checkString(length.toLong()) } }
         return when (arg) {
             is StringValue -> arg.value
             is FunctionValue -> ""

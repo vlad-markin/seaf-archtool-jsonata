@@ -38,3 +38,23 @@ public class CancellationToken {
         running.remove(ctx)
     }
 }
+
+/**
+ * Budgets of one evaluation (CAP-13 p. 5), zero meaning no limit; exceeding one fails with X0010 naming it
+ * (`details["budget"]`: `steps`, `string`, `result`). There is no budget of allocated memory (owner's decision K5):
+ * these bound what an expression can build, the host's heap limit bounds the rest (`docs/limits.md`).
+ *
+ * @property maxSteps evaluation steps (nodes entered)
+ * @property maxStringLength length (UTF-16 units) of a string the evaluation builds: checked before the allocation
+ *   where the length is known in advance (`&`, `$join`, `$pad`) and while building (`$replace`, `$string`)
+ * @property maxResultSize size of the final result: one per value, plus key and string lengths
+ */
+public class Budgets @JvmOverloads constructor(
+    public val maxSteps: Long = 0,
+    public val maxStringLength: Int = 0,
+    public val maxResultSize: Long = 0,
+) {
+    public companion object {
+        @JvmField public val NONE: Budgets = Budgets()
+    }
+}

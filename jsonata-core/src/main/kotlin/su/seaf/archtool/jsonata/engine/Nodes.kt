@@ -270,7 +270,12 @@ internal class BinaryNode(ast: AstNode, @JvmField val op: BinaryOp, @JvmField va
                 BinaryOp.EQ -> if (l == null || r == null) BooleanValue.FALSE else BooleanValue.of(su.seaf.archtool.jsonata.value.Values.deepEquals(l, r))
                 BinaryOp.NE -> if (l == null || r == null) BooleanValue.FALSE else BooleanValue.of(!su.seaf.archtool.jsonata.value.Values.deepEquals(l, r))
                 BinaryOp.LT, BinaryOp.LE, BinaryOp.GT, BinaryOp.GE -> Evaluator.compare(l, r, op)
-                BinaryOp.CONCAT -> StringValue.of((if (l != null) Evaluator.string(l, false, env.ctx) else "") + (if (r != null) Evaluator.string(r, false, env.ctx) else ""))
+                BinaryOp.CONCAT -> {
+                    val ls = if (l != null) Evaluator.string(l, false, env.ctx) else ""
+                    val rs = if (r != null) Evaluator.string(r, false, env.ctx) else ""
+                    env.ctx.checkString(ls.length.toLong() + rs.length)
+                    StringValue.of(ls + rs)
+                }
                 BinaryOp.RANGE -> Evaluator.range(l, r, env)
                 BinaryOp.IN -> Evaluator.includes(l, r)
                 else -> throw IllegalStateException(op.token)

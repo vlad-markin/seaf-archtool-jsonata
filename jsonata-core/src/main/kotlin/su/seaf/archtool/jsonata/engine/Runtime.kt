@@ -86,6 +86,38 @@ internal class EvalContext(
 
     private val token = options.cancellation
 
+    private val maxSteps = options.budgets.maxSteps
+    private val maxStringLength = options.budgets.maxStringLength
+    private val maxResultSize = options.budgets.maxResultSize
+
+    private fun budget(name: String, limit: Long): JsonataException =
+        JsonataException("X0010", value = limit.toDouble(), details = mapOf("budget" to name))
+
+    /** The string budget, before building a string of [length] units (or while building it). */
+    fun checkString(length: Long) {
+        if (maxStringLength > 0 && length > maxStringLength) throw budget("string", maxStringLength.toLong())
+    }
+
+    /** The result budget over the final value: one per value, plus key and string lengths. */
+    fun checkResult(result: Value?) {
+        if (maxResultSize <= 0 || result == null) return
+        var size = 0L
+        val stack = ArrayList<Value>()
+        stack.add(result)
+        while (stack.isNotEmpty()) {
+            tick()
+            val v = stack.removeAt(stack.size - 1)
+            size++
+            when (v) {
+                is su.seaf.archtool.jsonata.value.StringValue -> size += v.value.length
+                is su.seaf.archtool.jsonata.value.ArrayValue -> for (i in 0 until v.size) v.raw(i)?.let { stack.add(it) }
+                is su.seaf.archtool.jsonata.value.ObjectValue -> v.forEach { k, x -> size += 1 + k.length; stack.add(x) }
+                else -> {}
+            }
+            if (size > maxResultSize) throw budget("result", maxResultSize)
+        }
+    }
+
     /** True when the evaluation has a deadline: long native operations (regex matching) then check it too. */
     @JvmField val hasDeadline: Boolean = options.timeoutMillis > 0
     @JvmField val maxSequence: Int = options.maxSequence
@@ -143,7 +175,12 @@ internal class EvalContext(
     private var nextCheck: Long = CHECK_INTERVAL
 
     private fun slowPath() {
-        nextCheck = steps + CHECK_INTERVAL
+        if (maxSteps > 0) {
+            if (steps > maxSteps) throw budget("steps", maxSteps)
+            nextCheck = minOf(steps + CHECK_INTERVAL, maxSteps + 1)
+        } else {
+            nextCheck = steps + CHECK_INTERVAL
+        }
         checkpoint()
     }
 

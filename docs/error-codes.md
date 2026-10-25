@@ -13,6 +13,7 @@
 | X0007 | X-STDLIB | {{value}} is a standard library function; register it with overridesStandard to replace it | регистрация имени stdlib без `overridesStandard` |
 | X0008 | X-INTERNAL | Internal engine error: {{{message}}} | исключение JVM, которое не пришло из функции хоста (ошибка движка; причина — `cause`) |
 | X0009 | X-CANCEL | The evaluation was cancelled | отмена: `CancellationToken.cancel()`, `Thread.interrupt()` потока вычисления, `InterruptedException` функции хоста (`cause`) |
+| X0010 | X-BUDGET | The evaluation exceeded the {{{budget}}} budget ({{value}}) | бюджет `steps`, `string` или `result` (`EvaluationOptions.budgets`; имя — `details["budget"]`, лимит — `value`) |
 | X0900–X0999 | — | шаблон хоста (`HostErrorCodes.register`) | функции хоста со своим кодом; коды эталона и `X0001`–`X0899` регистрировать нельзя |
 
 Кроме кода, у ошибки есть `position` (как у эталона), диапазон узла `start`/`end`, `token`, `value`, стек кадров `frames` (имя функции или лямбды, место вызова; кадры хвостовых вызовов заменяются, как стек трамплина) и `functionId` функции манифеста (история 3). Исключение функции хоста выходит наружу тем же объектом; место в выражении хост получает через `EvaluationOptions.hostErrors` (один раз на объект исключения).

@@ -22,9 +22,10 @@ public object JsonWriter {
     }
 
     /** The JSON text `$string` produces for a non-string value (functions.js: string, after the type checks). */
-    internal fun stringifyJsonata(value: Value, prettify: Boolean, tick: (() -> Unit)? = null): String {
+    /** [progress] gets the length written so far, at every value (the checkpoint and the string budget). */
+    internal fun stringifyJsonata(value: Value, prettify: Boolean, progress: ((Int) -> Unit)? = null): String {
         val sb = StringBuilder()
-        write(sb, value, if (prettify) 2 else 0, 0, true, tick)
+        write(sb, value, if (prettify) 2 else 0, 0, true, progress)
         return sb.toString()
     }
 
@@ -35,10 +36,10 @@ public object JsonWriter {
     }
 
     /** Writes without recursion, so that nesting depth is limited only by memory (review RV-4). */
-    private fun write(sb: StringBuilder, root: Value, indent: Int, level0: Int, replacer: Boolean, tick: (() -> Unit)? = null) {
+    private fun write(sb: StringBuilder, root: Value, indent: Int, level0: Int, replacer: Boolean, progress: ((Int) -> Unit)? = null) {
         val stack = ArrayList<Open>()
         fun scalarOrOpen(value: Value?, level: Int) {
-            tick?.invoke()
+            progress?.invoke(sb.length)
             when (value) {
                 null, is NullValue -> sb.append("null")
                 is BooleanValue -> sb.append(if (value.value) "true" else "false")

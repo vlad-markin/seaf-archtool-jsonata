@@ -42,7 +42,7 @@ internal object StandardLibrary {
         def(r, "uppercase", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(it.uppercase()) } }
         def(r, "length", "<s-:n>", 1) { _, a -> str(a[0])?.let { NumberValue.of(it.codePointCount(0, it.length)) } }
         def(r, "trim", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(trim(it)) } }
-        def(r, "pad", "<s-ns?:s>", 3) { _, a -> pad(a[0], a[1], a[2]) }
+        def(r, "pad", "<s-ns?:s>", 3) { c, a -> pad(ctx(c), a[0], a[1], a[2]) }
         def(r, "match", "<s-f<s:o>n?:a<o>>", 3) { c, a -> match(c, a[0], a[1], a[2]) }
         def(r, "contains", "<s-(sf):b>", 2) { c, a -> contains(c, a[0], a[1]) }
         def(r, "replace", "<s-(sf)(sf)n?:s>", 4) { c, a -> replace(c, a[0], a[1], a[2], a[3]) }
@@ -51,7 +51,13 @@ internal object StandardLibrary {
             (a[0] as ArrayValue?)?.let { arr ->
                 val sep = str(a.getOrNull(1)) ?: ""
                 val context = ctx(c)
-                StringValue.of((0 until arr.size).joinToString(sep) { context.tick(); (arr.raw(it) as? StringValue)?.value ?: "" })
+                var total = if (arr.size > 0) sep.length.toLong() * (arr.size - 1) else 0L
+                for (i in 0 until arr.size) {
+                    context.tick()
+                    total += ((arr.raw(i) as? StringValue)?.value?.length ?: 0)
+                }
+                context.checkString(total)
+                StringValue.of((0 until arr.size).joinToString(sep) { (arr.raw(it) as? StringValue)?.value ?: "" })
             }
         }
         def(r, "formatBase", "<n-n?:s>", 2) { _, a -> formatBase(a[0], a[1]) }
@@ -198,7 +204,7 @@ internal object StandardLibrary {
         return result
     }
 
-    private fun pad(strArg: Value?, widthArg: Value?, charArg: Value?): Value? {
+    private fun pad(ctx: EvalContext, strArg: Value?, widthArg: Value?, charArg: Value?): Value? {
         val s = str(strArg) ?: return null
         var c = str(charArg)
         if (c == null || c.isEmpty()) c = " "
@@ -206,6 +212,7 @@ internal object StandardLibrary {
         val width = if (w.isNaN()) 0.0 else if (w < 0) Math.ceil(w) else Math.floor(w)
         val padLength = Math.abs(width) - s.codePointCount(0, s.length)
         if (padLength <= 0) return StringValue.of(s)
+        ctx.checkString(s.length + padLength.toLong() * c.length)
         var padding = c.repeat(padLength.toInt())
         if (c.length > 1) padding = sliceCodePoints(padding.codePoints().toArray(), 0.0, padLength)
         return StringValue.of(if (width > 0) s + padding else padding + s)
@@ -290,6 +297,7 @@ internal object StandardLibrary {
             var index = s.indexOf(p, position)
             while (index != -1 && (limit == null || count < limit)) {
                 result.append(s, position, index).append(rep)
+                ctx(c).checkString(result.length.toLong())
                 position = index + p.length
                 count++
                 index = s.indexOf(p, position)
@@ -303,6 +311,7 @@ internal object StandardLibrary {
             pattern.forEachMatchFrom(first, s, ctx(c), limit) { m ->
                 result.append(s, position, m.start())
                 result.append(substitute(replacement.value, s.substring(m.start(), m.end()), pattern.groups(s, m)))
+                ctx(c).checkString(result.length.toLong())
                 position = m.end()
             }
             result.append(s, position, s.length)
@@ -314,7 +323,7 @@ internal object StandardLibrary {
             val start = ((m["start"] as? NumberValue)?.value ?: 0.0).toInt()
             result.append(jsSubstring(s, position, start))
             val replacedWith = replacer(m)
-            if (replacedWith is StringValue) result.append(replacedWith.value)
+            if (replacedWith is StringValue) result.append(replacedWith.value).also { ctx(c).checkString(result.length.toLong()) }
             else throw JsonataException("D3012", value = replacedWith)
             position = start + ((m["match"] as? StringValue)?.value?.length ?: 0)
             count++

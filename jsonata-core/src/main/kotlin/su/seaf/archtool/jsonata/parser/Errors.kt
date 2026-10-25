@@ -218,6 +218,7 @@ internal object Messages {
         "X0007" to "{{value}} is a standard library function; register it with overridesStandard to replace it",
         "X0008" to "Internal engine error: {{{message}}}",
         "X0009" to "The evaluation was cancelled",
+        "X0010" to "The evaluation exceeded the {{{budget}}} budget ({{value}})",
     )
 
     // populateMessage: {{{field}}} is replaced with the raw field, {{field}} with JSON.stringify(err[field]).
