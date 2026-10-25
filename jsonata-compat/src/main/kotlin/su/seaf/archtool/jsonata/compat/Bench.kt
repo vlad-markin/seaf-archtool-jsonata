@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
     val root = File(args.getOrElse(0) { "compat" })
     val iterations = args.getOrElse(1) { "10" }.toInt()
     val cases = mapper.readTree(File(root, "bench/cases.json"))
-    println(String.format("%-36s %12s  %s", "case", "median ms", "result"))
+    println(String.format("%-36s %10s %10s  %s", "case", "median ms", "min ms", "result"))
     for (c in cases) {
         val input = load(root, c)?.let { toValue(it) }
         val expr = Jsonata.compile(c.get("expr").asText())
@@ -29,7 +29,7 @@ fun main(args: Array<String>) {
             result = JsonWriter.stringify(r).take(60)
         }
         times.sort()
-        println(String.format("%-36s %12.2f  %s", c.get("name").asText(), times[times.size / 2], result))
+        println(String.format("%-36s %10.2f %10.2f  %s", c.get("name").asText(), times[times.size / 2], times[0], result))
     }
 }
 

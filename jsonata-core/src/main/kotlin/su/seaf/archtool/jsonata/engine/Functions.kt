@@ -121,13 +121,12 @@ internal object SignatureValidator {
         val supplied = StringBuilder(args.size)
         for (a in args) supplied.append(symbol(a))
         val sig = supplied.toString()
-        val m = signature.pattern.matcher(sig)
-        if (!m.matches()) throwValidationError(signature, args, sig)
+        val groups = matchGroups(signature, sig) ?: throwValidationError(signature, args, sig)
         val validated = ArrayList<Value?>(signature.params.size)
         var argIndex = 0
         signature.params.forEachIndexed { index, param ->
             var arg = args.getOrNull(argIndex)
-            val match = m.group(index + 1) ?: ""
+            val match = groups[index]
             if (match.isEmpty()) {
                 val ctxPattern = signature.contextPatterns[index]
                 if (param.context && ctxPattern != null) {
@@ -180,6 +179,22 @@ internal object SignatureValidator {
         }
         return validated
     }
+
+    /**
+     * The text matched by each parameter of the signature regex for a string of argument symbols, or null when it
+     * does not match. Memoized per signature: a function is called with few distinct symbol strings, and running the
+     * regex on every call was the main cost of native calls.
+     */
+    private fun matchGroups(signature: Signature, sig: String): Array<String>? {
+        val memo = signature.matchMemo
+        memo[sig]?.let { return if (it === NO_MATCH) null else it }
+        val m = signature.pattern.matcher(sig)
+        val groups = if (m.matches()) Array(signature.params.size) { m.group(it + 1) ?: "" } else null
+        if (memo.size < 256) memo[sig] = groups ?: NO_MATCH
+        return groups
+    }
+
+    private val NO_MATCH = arrayOf<String>()
 
     private fun throwValidationError(signature: Signature, badArgs: List<Value?>, badSig: String): Nothing {
         val partial = StringBuilder("^")

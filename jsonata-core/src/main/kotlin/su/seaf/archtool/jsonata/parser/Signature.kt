@@ -28,6 +28,9 @@ public class Signature internal constructor(public val definition: String, publi
     /** Compiled [regex], cached: signatures are validated on every call. */
     internal val pattern: java.util.regex.Pattern by lazy { java.util.regex.Pattern.compile(regex) }
 
+    /** Signature regex groups by argument symbol string (see SignatureValidator), shared between threads. */
+    internal val matchMemo: java.util.concurrent.ConcurrentHashMap<String, Array<String>> = java.util.concurrent.ConcurrentHashMap()
+
     /** Per-parameter context patterns (`new RegExp(param.contextRegex)` in signature.js, unanchored). */
     internal val contextPatterns: List<java.util.regex.Pattern?> by lazy {
         params.map { p -> p.contextRegex?.let { java.util.regex.Pattern.compile(it) } }

@@ -316,20 +316,27 @@ internal object Evaluator {
             if (stages != null) result = stages(stages, result, env)
             return result
         }
-        val result = ArrayValue.sequence()
+        val result = ArrayValue(if (input is ArrayValue) input.size else 1)
+        result.isSequence = true
         val stages = expr.stages
+        var flatten = false
         forEachItem(input) { item ->
             var res = expr.evaluate(item, env)
             if (stages != null) {
                 for (s in stages) if (s is FilterStage) res = filter(s.expr, res, env)
             }
-            if (res != null) result.add(res)
+            if (res != null) {
+                result.add(res)
+                if (res is ArrayValue && !res.cons) flatten = true
+            }
         }
         env.ctx.checkSequence(result.size)
         if (lastStep && result.size == 1) {
             val only = result.raw(0)
             if (only is ArrayValue && !only.isSequence) return only
         }
+        // nothing to flatten: the collected sequence is already the result
+        if (!flatten) return result
         val resultSequence = ArrayValue.sequence()
         for (i in 0 until result.size) {
             val res = result.raw(i)
