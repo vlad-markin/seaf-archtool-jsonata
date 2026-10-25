@@ -63,12 +63,12 @@ private fun mb(xmx: String): Int = when {
     else -> (xmx.toLong() / 1048576).toInt()
 }
 
-/** The smallest heap in MB (step 16 MB) with which [passes] succeeds, or null when it fails at [max]. */
+/** The smallest heap in MB (to 5 %, at least 4 MB) with which [passes] succeeds, or null when it fails at [max]. */
 private fun bisect(max: Int, passes: (Int) -> Boolean): Int? {
     if (!passes(max)) return null
-    var lo = 16
+    var lo = 4
     var hi = max
-    while (hi - lo > 16) {
+    while (hi - lo > maxOf(4, hi / 20)) {
         val mid = (lo + hi) / 2
         if (passes(mid)) hi = mid else lo = mid
     }
@@ -113,7 +113,7 @@ private fun summary(results: File, dumps: File, queries: List<Query>, sizes: Lis
         sb.append("| ${q.name} | $size | ${f(jm)} / ${f(num(j, "eval_ms_p95"))} | $jsNote | $speed | ${f(num(j, "alloc_mb_median"))} | ${f(num(j, "heap_peak_mb"))} | $same | ${f(num(j, "loadavg1"))} |\n")
     }
     if (heapRows.isNotEmpty()) {
-        sb.append("\n## Минимальная куча, при которой запрос проходит (бисекция, шаг 16 МБ)\n\n| запрос | размер | JVM `-Xmx`, МБ | V8 `--max-old-space-size`, МБ | JVM / V8 |\n|---|---:|---:|---:|---:|\n")
+        sb.append("\n## Минимальная куча, при которой запрос проходит (бисекция, точность 5 %)\n\n| запрос | размер | JVM `-Xmx`, МБ | V8 `--max-old-space-size`, МБ | JVM / V8 |\n|---|---:|---:|---:|---:|\n")
         heapRows.forEach { sb.append(it).append('\n') }
     }
     return sb.toString()

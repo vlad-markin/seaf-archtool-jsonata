@@ -24,7 +24,8 @@ object StandRunner {
         val data = File(a.getValue("data"))
         val size = a.getValue("size").toInt()
         val queries = Queries.load(File(a.getValue("queries")))
-        val input = JsonataJson.parse(data.readText())
+        // streamed: the JSON text is not kept, so the heap measures the model and the evaluation
+        val input = data.inputStream().buffered().use { JsonataJson.parse(it) }
         a["once"]?.let { name ->
             val q = queries.first { it.name == name }
             try {
