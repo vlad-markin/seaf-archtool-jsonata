@@ -28,55 +28,76 @@ public object JsonWriter {
         return sb.toString()
     }
 
-    private fun write(sb: StringBuilder, value: Value, indent: Int, level: Int, replacer: Boolean) {
-        when (value) {
-            is NullValue -> sb.append("null")
-            is BooleanValue -> sb.append(if (value.value) "true" else "false")
-            is NumberValue -> {
-                var d = value.value
-                if (replacer) {
-                    if (d.isInfinite()) throw JsonataException("D1001", value = value)
-                    if (!d.isNaN() && d != Math.floor(d)) d = JsNumber.toPrecision15(d)
+    /** A container being written: its items (array values or object keys), the next index, its level. */
+    private class Open(val array: ArrayValue?, val obj: ObjectValue?, val keys: List<String>?, val level: Int) {
+        var index = 0
+        var first = true
+    }
+
+    /** Writes without recursion, so that nesting depth is limited only by memory (review RV-4). */
+    private fun write(sb: StringBuilder, root: Value, indent: Int, level0: Int, replacer: Boolean) {
+        val stack = ArrayList<Open>()
+        fun scalarOrOpen(value: Value?, level: Int) {
+            when (value) {
+                null, is NullValue -> sb.append("null")
+                is BooleanValue -> sb.append(if (value.value) "true" else "false")
+                is NumberValue -> {
+                    var d = value.value
+                    if (replacer) {
+                        if (d.isInfinite()) throw JsonataException("D1001", value = value)
+                        if (!d.isNaN() && d != Math.floor(d)) d = JsNumber.toPrecision15(d)
+                    }
+                    if (d.isNaN() || d.isInfinite()) sb.append("null") else sb.append(JsNumber.toString(d))
                 }
-                if (d.isNaN() || d.isInfinite()) sb.append("null") else sb.append(JsNumber.toString(d))
+                is StringValue -> quote(sb, value.value)
+                is FunctionValue -> if (replacer) sb.append("\"\"") else sb.append("null")
+                is ArrayValue -> if (value.isEmpty()) sb.append("[]") else {
+                    sb.append('[')
+                    stack += Open(value, null, null, level)
+                }
+                is ObjectValue -> if (value.isEmpty()) sb.append("{}") else {
+                    sb.append('{')
+                    stack += Open(null, value, value.keys, level)
+                }
             }
-            is StringValue -> quote(sb, value.value)
-            is FunctionValue -> if (replacer) sb.append("\"\"") else sb.append("null")
-            is ArrayValue -> {
-                if (value.isEmpty()) {
-                    sb.append("[]")
-                    return
-                }
-                sb.append('[')
-                var first = true
-                for (i in 0 until value.size) {
-                    if (!first) sb.append(',')
-                    first = false
-                    newline(sb, indent, level + 1)
+        }
+        scalarOrOpen(root, level0)
+        while (stack.isNotEmpty()) {
+            val top = stack[stack.size - 1]
+            val arr = top.array
+            if (arr != null) {
+                if (top.index < arr.size) {
+                    if (!top.first) sb.append(',')
+                    top.first = false
+                    newline(sb, indent, top.level + 1)
                     // an undefined item (possible inside sequences) is written as null, as JSON.stringify does
-                    val item = value.getOrNull(i)
-                    if (item == null) sb.append("null") else write(sb, item, indent, level + 1, replacer)
+                    scalarOrOpen(arr.getOrNull(top.index++), top.level + 1)
+                } else {
+                    stack.removeAt(stack.size - 1)
+                    newline(sb, indent, top.level)
+                    sb.append(']')
                 }
-                newline(sb, indent, level)
-                sb.append(']')
+                continue
             }
-            is ObjectValue -> {
-                if (value.isEmpty()) {
-                    sb.append("{}")
-                    return
-                }
-                sb.append('{')
-                var first = true
-                for (key in value.keys) {
-                    if (!replacer && value[key] is FunctionValue) continue
-                    if (!first) sb.append(',')
-                    first = false
-                    newline(sb, indent, level + 1)
-                    quote(sb, key)
-                    sb.append(if (indent > 0) ": " else ":")
-                    write(sb, value[key]!!, indent, level + 1, replacer)
-                }
-                if (!first) newline(sb, indent, level)
+            val obj = top.obj!!
+            val keys = top.keys!!
+            var wrote = false
+            while (top.index < keys.size) {
+                val key = keys[top.index++]
+                val v = obj[key]
+                if (!replacer && v is FunctionValue) continue
+                if (!top.first) sb.append(',')
+                top.first = false
+                newline(sb, indent, top.level + 1)
+                quote(sb, key)
+                sb.append(if (indent > 0) ": " else ":")
+                scalarOrOpen(v, top.level + 1)
+                wrote = true
+                break
+            }
+            if (!wrote) {
+                stack.removeAt(stack.size - 1)
+                if (!top.first) newline(sb, indent, top.level)
                 sb.append('}')
             }
         }

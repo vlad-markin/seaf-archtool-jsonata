@@ -121,17 +121,59 @@ class EngineTest {
         assertEquals("D2015", error("\$append([0..600], [0..600]) ~> \$count()", limits = EvaluationOptions(maxSequence = 1000)).code)
     }
 
-    @Test
-    fun `deep non-tail recursion reports X0002 instead of crashing`() {
-        val t = Thread(null, {
-            val e = assertFailsWith<JsonataException> { Jsonata.compile("(\$f := function(\$n){ \$n = 0 ? 0 : 1 + \$f(\$n - 1) }; \$f(10000000))").evaluate(null) }
-            assertEquals("X0002", e.code)
-        }, "small-stack", 256 * 1024)
+    /** Runs [body] on a thread with a small stack, as a virtual thread or a 512 KB worker would be. */
+    private fun onSmallStack(body: () -> Unit) {
         var failure: Throwable? = null
-        t.setUncaughtExceptionHandler { _, ex -> failure = ex }
+        val t = Thread(null, { try { body() } catch (e: Throwable) { failure = e } }, "small-stack", 256 * 1024)
         t.start()
         t.join()
         failure?.let { throw it }
+    }
+
+    private fun nested(depth: Int, leaf: Value): Value {
+        var v = leaf
+        repeat(depth) { v = ObjectValue.of("c" to v) }
+        return v
+    }
+
+    @Test
+    fun `non-tail recursion 100 000 levels deep as jsonata-js (RV-4)`() {
+        onSmallStack {
+            assertEquals("100000", JsonWriter.stringify(Jsonata.compile("(\$f := function(\$n){ \$n = 0 ? 0 : 1 + \$f(\$n - 1) }; \$f(100000))").evaluate(null)))
+        }
+        val vt = Thread.ofVirtual().start {
+            assertEquals("5000", JsonWriter.stringify(Jsonata.compile("(\$f := function(\$n){ \$n = 0 ? 0 : 1 + \$f(\$n - 1) }; \$f(5000))").evaluate(null)))
+        }
+        vt.join()
+        // the depth limit still applies first
+        assertEquals("D1011", error("(\$f := function(\$n){ \$n = 0 ? 0 : 1 + \$f(\$n - 1) }; \$f(100000))", limits = EvaluationOptions(maxDepth = 5000)).code)
+    }
+
+    @Test
+    fun `recursion over data 100 000 levels deep (RV-4)`() {
+        val depth = 100_000
+        val deep = nested(depth - 1, ObjectValue.of("x" to NumberValue.of(1)))
+        onSmallStack {
+            assertEquals("$depth", JsonWriter.stringify(Jsonata.compile("(\$f := function(\$t){ \$t.c ? 1 + \$max(\$t.c.\$f(\$)) : 1 }; \$f(\$))").evaluate(deep)))
+            val text = JsonWriter.stringify(deep)
+            assertEquals(StringValue.of(text), Jsonata.compile("\$string(\$)").evaluate(deep))
+            assertEquals("true", JsonWriter.stringify(Jsonata.compile("\$ = \$clone(\$)").evaluate(deep)))
+            assertEquals("${depth + 1}", JsonWriter.stringify(Jsonata.compile("\$count(**)").evaluate(deep)))
+            assertEquals(text, JsonWriter.stringify(Jsonata.compile("\$ ~> |x|{}|").evaluate(deep)))
+            var arr: Value = NumberValue.of(7)
+            repeat(depth) { arr = ArrayValue.of(arr) }
+            assertEquals("[7]", JsonWriter.stringify(Jsonata.compile("\$.*").evaluate(ObjectValue.of("a" to arr))))
+        }
+    }
+
+    @Test
+    fun `JVM stack exhaustion is reported as X0002`() {
+        // a native callback that recurses into the evaluator without passing through a JSONata frame boundary
+        val registry = FunctionRegistry.create().register("again", "<f:x>", { c, a -> c.call(a[0] as FunctionValue, listOf(a[0])) })
+        val e = assertFailsWith<JsonataException> {
+            Jsonata.compile("\$again(function(\$g){ \$again(\$g) })", CompileOptions(registry)).evaluate(null)
+        }
+        assertTrue(e.code == "X0002" || e.code == "D1011", e.code)
     }
 
     @Test

@@ -5,27 +5,40 @@ public object Values {
     /** utils.js: isDeepEqual. Undefined equals only undefined; numbers compare as JS `===`; object key order is ignored. */
     @JvmStatic
     public fun deepEquals(lhs: Value?, rhs: Value?): Boolean {
-        if (lhs === rhs) return true
-        if (lhs == null || rhs == null) return false
-        return when (lhs) {
-            is NumberValue -> rhs is NumberValue && lhs.value == rhs.value
-            is StringValue -> rhs is StringValue && lhs.value == rhs.value
-            is ArrayValue -> {
-                if (rhs !is ArrayValue || lhs.size != rhs.size) return false
-                for (i in 0 until lhs.size) if (!deepEquals(lhs.getOrNull(i), rhs.getOrNull(i))) return false
-                true
-            }
-            is ObjectValue -> {
-                if (rhs !is ObjectValue || lhs.size != rhs.size) return false
-                for (k in lhs.keys) {
-                    val r = rhs[k] ?: return false
-                    if (!deepEquals(lhs[k], r)) return false
+        // pairs still to compare; no recursion, so nesting depth is limited only by memory
+        val left = ArrayList<Value?>()
+        val right = ArrayList<Value?>()
+        left += lhs
+        right += rhs
+        while (left.isNotEmpty()) {
+            val a = left.removeAt(left.size - 1)
+            val b = right.removeAt(right.size - 1)
+            if (a === b) continue
+            if (a == null || b == null) return false
+            when (a) {
+                is NumberValue -> if (!(b is NumberValue && a.value == b.value)) return false
+                is StringValue -> if (!(b is StringValue && a.value == b.value)) return false
+                is ArrayValue -> {
+                    if (b !is ArrayValue || a.size != b.size) return false
+                    for (i in a.size - 1 downTo 0) {
+                        left += a.getOrNull(i)
+                        right += b.getOrNull(i)
+                    }
                 }
-                true
+                is ObjectValue -> {
+                    if (b !is ObjectValue || a.size != b.size) return false
+                    val keys = a.keys
+                    for (i in keys.size - 1 downTo 0) {
+                        val r = b[keys[i]] ?: return false
+                        left += a[keys[i]]
+                        right += r
+                    }
+                }
+                // booleans and null are singletons; functions compare by identity
+                else -> return false
             }
-            // booleans and null are singletons; functions compare by identity
-            else -> false
         }
+        return true
     }
 
     /** functions.js: boolean — the effective boolean value; undefined for undefined. */

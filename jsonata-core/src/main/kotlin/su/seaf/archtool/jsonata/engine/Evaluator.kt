@@ -249,27 +249,45 @@ internal object Evaluator {
         return deepCopy(a!!)
     }
 
-    private fun deepCopy(v: Value): Value = when (v) {
-        is NumberValue -> {
-            val d = v.value
-            if (d.isInfinite()) throw JsonataException("D1001", value = v)
-            if (d.isNaN()) NullValue
-            else if (d != Math.floor(d)) NumberValue.of(su.seaf.archtool.jsonata.value.JsNumber.toPrecision15(d))
-            else if (d == 0.0) NumberValue.of(0.0)
-            else v
+    /** `JSON.parse($string(v))` without recursion (review RV-4). */
+    private fun deepCopy(v: Value): Value {
+        fun scalar(x: Value): Value = when (x) {
+            is NumberValue -> {
+                val d = x.value
+                if (d.isInfinite()) throw JsonataException("D1001", value = x)
+                if (d.isNaN()) NullValue
+                else if (d != Math.floor(d)) NumberValue.of(su.seaf.archtool.jsonata.value.JsNumber.toPrecision15(d))
+                else if (d == 0.0) NumberValue.of(0.0)
+                else x
+            }
+            is FunctionValue -> StringValue.EMPTY
+            is ArrayValue -> ArrayValue(x.size)
+            is ObjectValue -> ObjectValue()
+            else -> x
         }
-        is FunctionValue -> StringValue.EMPTY
-        is ArrayValue -> {
-            val out = ArrayValue(v.size)
-            for (i in 0 until v.size) out.add(v.raw(i)?.let { deepCopy(it) } ?: NullValue)
-            out
+        val root = scalar(v)
+        val stack = ArrayList<Pair<Value, Value>>() // source container, empty copy
+        if (v is ArrayValue || v is ObjectValue) stack += v to root
+        while (stack.isNotEmpty()) {
+            val (src, dst) = stack.removeAt(stack.size - 1)
+            if (src is ArrayValue) {
+                val out = dst as ArrayValue
+                for (i in 0 until src.size) {
+                    val item = src.raw(i)
+                    val copy = if (item == null) NullValue else scalar(item)
+                    out.add(copy)
+                    if (item is ArrayValue || item is ObjectValue) stack += item to copy
+                }
+            } else {
+                val out = dst as ObjectValue
+                (src as ObjectValue).forEach { k, item ->
+                    val copy = scalar(item)
+                    out.put(k, copy)
+                    if (item is ArrayValue || item is ObjectValue) stack += item to copy
+                }
+            }
         }
-        is ObjectValue -> {
-            val out = ObjectValue()
-            v.forEach { k, c -> out.put(k, deepCopy(c)) }
-            out
-        }
-        else -> v
+        return root
     }
 
     // ---- paths ----
@@ -781,22 +799,48 @@ internal object Evaluator {
         return out
     }
 
-    /** jsonata.js: flatten — every level of nesting. */
+    /** jsonata.js: flatten — every level of nesting, in order, without recursion. */
     fun flatten(arg: Value?, out: ArrayValue) {
-        if (arg is ArrayValue) {
-            for (i in 0 until arg.size) flatten(arg.raw(i), out)
-        } else {
+        if (arg !is ArrayValue) {
             out.addNullable(arg)
+            return
+        }
+        val arrays = ArrayList<ArrayValue>()
+        val indexes = ArrayList<Int>()
+        arrays += arg
+        indexes += 0
+        while (arrays.isNotEmpty()) {
+            val top = arrays.size - 1
+            val a = arrays[top]
+            val i = indexes[top]
+            if (i >= a.size) {
+                arrays.removeAt(top)
+                indexes.removeAt(top)
+                continue
+            }
+            indexes[top] = i + 1
+            val item = a.raw(i)
+            if (item is ArrayValue) {
+                arrays += item
+                indexes += 0
+            } else {
+                out.addNullable(item)
+            }
         }
     }
 
-    /** jsonata.js: recurseDescendants. */
+    /** jsonata.js: recurseDescendants — pre-order, without recursion. */
     fun recurseDescendants(input: Value?, results: ArrayValue) {
-        if (input !is ArrayValue) results.addNullable(input)
-        if (input is ArrayValue) {
-            for (i in 0 until input.size) recurseDescendants(input.raw(i), results)
-        } else if (input is ObjectValue) {
-            input.forEach { _, v -> recurseDescendants(v, results) }
+        val stack = ArrayList<Iterator<Value?>>()
+        fun visit(v: Value?) {
+            if (v !is ArrayValue) results.addNullable(v)
+            if (v is ArrayValue) stack += (0 until v.size).asSequence().map { v.raw(it) }.iterator()
+            else if (v is ObjectValue) stack += v.keys.asSequence().map { v[it] }.iterator()
+        }
+        visit(input)
+        while (stack.isNotEmpty()) {
+            val it = stack[stack.size - 1]
+            if (it.hasNext()) visit(it.next()) else stack.removeAt(stack.size - 1)
         }
     }
 }

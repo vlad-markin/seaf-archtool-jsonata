@@ -110,5 +110,11 @@
   "dataset": null,
   "scale": null,
   "expr": "($f := function($n, $acc){ $n = 0 ? $acc : $f($n - 1, $acc + $n) }; $f(100000, 0))"
+ },
+ {
+  "name": "non-tail recursion 100k",
+  "dataset": null,
+  "scale": null,
+  "expr": "($f := function($n){ $n = 0 ? 0 : 1 + $f($n - 1) }; $f(100000))"
  }
 ]

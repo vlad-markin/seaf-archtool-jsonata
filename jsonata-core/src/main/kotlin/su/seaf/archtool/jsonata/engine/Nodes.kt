@@ -73,6 +73,15 @@ internal abstract class Node(@JvmField val ast: AstNode) {
         val ctx = env.ctx
         ctx.enter()
         try {
+            if (ctx.depth - ctx.segmentBase > ctx.segmentLimit) return ctx.onNewSegment { evaluateBody(input, env) }
+            return evaluateBody(input, env)
+        } finally {
+            ctx.depth--
+        }
+    }
+
+    private fun evaluateBody(input: Value?, env: Frame): Value? {
+        run {
             var result = eval(input, env)
             val preds = predicates
             if (preds != null) for (p in preds) result = Evaluator.filter(p, result, env)
@@ -84,8 +93,6 @@ internal abstract class Node(@JvmField val ast: AstNode) {
                 else if (result.size == 1 && !result.keepSingleton) result = result.raw(0)
             }
             return result
-        } finally {
-            ctx.depth--
         }
     }
 }
