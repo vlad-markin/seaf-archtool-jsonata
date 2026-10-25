@@ -73,6 +73,20 @@ class JsonataJsonTest {
     }
 
     @Test
+    fun `undefined items in results are written as null (RV-3)`() {
+        val m = su.seaf.archtool.jsonata.Jsonata.compile("\$match('b', /(a)?b/)").evaluate(null)
+        assertEquals("""{"match":"b","index":0,"groups":[null]}""", JsonataJson.stringify(m))
+        val r = su.seaf.archtool.jsonata.Jsonata.compile("x.a[true]").evaluate(JsonataJson.parse("""{"x":[{"a":1},{"b":2},{"c":3}]}""")) as ArrayValue
+        assertEquals("[1,null,null]", JsonataJson.stringify(r))
+        assertEquals(su.seaf.archtool.jsonata.value.NullValue, r[1])
+        assertEquals(3, r.toList().size)
+        assertEquals(3, r.count())
+        assertEquals(null, r.getOrNull(1))
+        val groups = (m as ObjectValue)["groups"] as ArrayValue
+        assertEquals(listOf<su.seaf.archtool.jsonata.value.Value>(su.seaf.archtool.jsonata.value.NullValue), groups.toList())
+    }
+
+    @Test
     fun `malformed input`() {
         assertFailsWith<Exception> { JsonataJson.parse("") }
         assertFailsWith<Exception> { JsonataJson.parse("[1,") }

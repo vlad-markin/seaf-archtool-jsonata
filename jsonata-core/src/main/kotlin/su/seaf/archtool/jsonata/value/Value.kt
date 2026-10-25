@@ -81,7 +81,11 @@ public class StringValue(public val value: String) : Value() {
 /**
  * An array, or a JSONata sequence ([isSequence]): the result of a path, which collapses to its single item unless it
  * keeps singletons. The flags mirror the properties jsonata-js sets on JS arrays (utils.js, jsonata.js:
- * `sequence`, `keepSingleton`, `tupleStream`, `outerWrapper`, `cons`). Items are never `undefined`.
+ * `sequence`, `keepSingleton`, `tupleStream`, `outerWrapper`, `cons`).
+ *
+ * A result can contain an `undefined` item where jsonata-js produces one (an optional regex group that did not match,
+ * a filter that keeps a missing value). The public reads [get], [iterator] and [toList] give [NullValue] for it, as
+ * `JSON.stringify` writes it; [getOrNull] gives null (undefined).
  */
 public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
     @PublishedApi internal var items: Array<Value?> = arrayOfNulls(initialCapacity.coerceAtLeast(1))
@@ -100,9 +104,10 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
     public val size: Int get() = count
     public fun isEmpty(): Boolean = count == 0
 
+    /** The item at [index]; an undefined item reads as [NullValue]. */
     public operator fun get(index: Int): Value {
         if (index < 0 || index >= count) throw IndexOutOfBoundsException("index $index, size $count")
-        return items[index]!!
+        return items[index] ?: NullValue
     }
 
     /** JS `array[index]`: undefined (null) outside the bounds. */
@@ -140,10 +145,10 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
     override fun iterator(): Iterator<Value> = object : Iterator<Value> {
         var i = 0
         override fun hasNext(): Boolean = i < count
-        override fun next(): Value = if (i < count) items[i++]!! else throw NoSuchElementException()
+        override fun next(): Value = if (i < count) items[i++] ?: NullValue else throw NoSuchElementException()
     }
 
-    public fun toList(): List<Value> = List(count) { items[it]!! }
+    public fun toList(): List<Value> = List(count) { items[it] ?: NullValue }
 
     /** Deep equality as jsonata-js `isDeepEqual` (arrays and sequences compare alike). */
     override fun equals(other: Any?): Boolean = other is Value && Values.deepEquals(this, other)

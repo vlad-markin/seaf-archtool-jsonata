@@ -13,6 +13,7 @@
 
 - [x] **RV-1 [blocker]** debug меняет результат. Обёртка `DebugNode` удалена: компилятор только помечает узлы (`Node.debug`), хук вызывается из `Node.evaluate`. Тесты: `DebugParityTest` (весь test-suite с записывающим хуком, сравнение значения/кода/позиции/токена; случаи из ревью), второй прогон eval в `CompatRatchetTest` с `debug = true` (`debugDiffs` в отчёте).
 - [x] **RV-2 [major]** трансформация с переопределённым `$clone` меняла вход. Результат пользовательского `$clone` структурно копируется перед изменением (встроенный `$clone` уже даёт копию). Тест: `EngineTest` «transform with a user clone returning its argument».
+- [x] **RV-3 [major]** NPE на `undefined` внутри массива. Публичные `ArrayValue.get`/итератор/`toList` отдают для него `NullValue` (как его пишет `JSON.stringify`), `getOrNull` — null; `JsonataJson` пишет `null`. Тесты: `JsonataJsonTest` «undefined items in results» (`$match` с необязательной группой, `x.a[true]`); `KotlinEngine` сериализует каждый результат test-suite через `JsonataJson`.
 
 ## Сделано
 

@@ -67,6 +67,8 @@ class KotlinEngineImpl(private val debug: Boolean) : CompatEngine {
         }
         return try {
             val result = expr.evaluate(case.input?.let { toValue(it) }, case.bindings.mapValues { toValue(it.value) }, limits)
+            // every result must also serialise through the public codec (review RV-3)
+            if (result != null) su.seaf.archtool.jsonata.json.JsonataJson.stringify(result)
             if (result == null) Outcome.Undefined else Outcome.Value(fromValue(result))
         } catch (e: JsonataException) {
             val code = if (limits !== EvaluationOptions.DEFAULT && (e.code == "D1011" || e.code == "D1012")) "U1001" else e.code
