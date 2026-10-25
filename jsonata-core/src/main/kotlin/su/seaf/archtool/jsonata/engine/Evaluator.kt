@@ -371,7 +371,11 @@ internal object Evaluator {
             if (res !is ArrayValue || res.cons) {
                 resultSequence.addNullable(res)
             } else {
-                for (j in 0 until res.size) resultSequence.addNullable(res.raw(j))
+                for (j in 0 until res.size) {
+                    // DEV-12: undefined does not enter sequences
+                    val v = res.raw(j)
+                    if (v != null) resultSequence.add(v) else env.ctx.deviation(Deviations.UNDEFINED_IN_SEQUENCES.id, expr.position)
+                }
             }
         }
         env.ctx.checkSequence(resultSequence.size)
@@ -509,14 +513,23 @@ internal object Evaluator {
                 for (k in 0 until arr.size) {
                     var ii = Math.floor((arr.raw(k) as NumberValue).value)
                     if (ii < 0) ii += items.size
-                    if (ii == index.toDouble()) results.addNullable(item)
+                    if (ii == index.toDouble()) addDefined(results, item, predicate, env)
                 }
             } else if (Values.toBoolean(res) == true) {
-                results.addNullable(item)
+                addDefined(results, item, predicate, env)
             }
         }
         env.ctx.checkSequence(results.size)
         return results
+    }
+
+    /**
+     * DEV-12: a filter keeps no undefined item. jsonata-js wraps a missing value into `[undefined]` and keeps it when
+     * the predicate accepts it (`x.a[true]` gives `[1, undefined, undefined]`, written `[1,null,null]`); the predicate
+     * is still evaluated for it, so errors and side effects are those of the reference.
+     */
+    private fun addDefined(results: ArrayValue, item: Value?, predicate: Node, env: Frame) {
+        if (item != null) results.add(item) else env.ctx.deviation(Deviations.UNDEFINED_IN_SEQUENCES.id, predicate.position)
     }
 
     private fun isArrayOfNumbers(v: Value?): Boolean {

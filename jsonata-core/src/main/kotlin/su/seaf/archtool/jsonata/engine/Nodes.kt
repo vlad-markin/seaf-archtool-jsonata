@@ -1,5 +1,6 @@
 package su.seaf.archtool.jsonata.engine
 
+import su.seaf.archtool.jsonata.deviation.Deviations
 import su.seaf.archtool.jsonata.parser.AstNode
 import su.seaf.archtool.jsonata.parser.JsonataException
 import su.seaf.archtool.jsonata.parser.Signature
@@ -181,6 +182,13 @@ internal class PathNode(
             if (step.tuple) isTupleStream = true
             if (ii == 0 && step.consarray) {
                 resultSequence = step.evaluate(inputSequence, env)
+                if (ii < last && resultSequence != null && resultSequence !is ArrayValue) {
+                    // DEV-12: a filter that selects one item of an array constructor collapses the step to that item;
+                    // jsonata-js then iterates it by `.length` (nothing for an object or number, the characters of a
+                    // string); the engine iterates the item itself: `[{"a":1},{"a":2}][0].a` gives 1, not undefined
+                    env.ctx.deviation(Deviations.UNDEFINED_IN_SEQUENCES.id, step.position)
+                    resultSequence = ArrayValue.sequence(resultSequence)
+                }
             } else if (isTupleStream) {
                 tupleBindings = Evaluator.tupleStep(step, inputSequence, tupleBindings, env)
             } else {

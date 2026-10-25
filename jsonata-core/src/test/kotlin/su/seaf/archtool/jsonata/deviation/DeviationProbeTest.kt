@@ -83,4 +83,38 @@ class DeviationProbeTest {
         assertEquals(listOf("DEV-11", "DEV-11"), r.hits.map { it.first })
         assertEquals(listOf("DEV-11@14", "DEV-11@35"), scan("\$base64encode('é') & \$base64decode('w6k=')").filter { it.startsWith("DEV-11") })
     }
+
+    @Test
+    fun `DEV-12 undefined does not enter sequences`() {
+        val input = """{"x":[{"a":1},{"b":2},{"c":3}]}"""
+        val r = Recorder()
+        assertEquals("1", eval("x.a[true]", input, r)) // jsonata-js 2.2.2: [1,null,null]
+        assertEquals(listOf<Pair<String, Int?>>("DEV-12" to 8, "DEV-12" to 8), r.hits)
+        assertEquals("[1,3]", eval("x.(a ? a : c)[true]", """{"x":[{"a":1},{"b":2},{"c":3}]}"""))
+        // the predicate is still evaluated for the missing value: its errors stay
+        assertEquals("T2002", error("{\"x\":[{\"a\":1},{\"b\":2}]}.x.a[\$ - \"s\"]").code)
+        // a numeric index never selected undefined: no difference, no probe
+        val r2 = Recorder()
+        assertEquals("1", eval("x.a[0]", input, r2))
+        assertEquals(emptyList<Pair<String, Int?>>(), r2.hits)
+
+        // a step after a filtered array constructor iterates the selected item (jsonata-js 2.2.2: undefined)
+        val r3 = Recorder()
+        assertEquals("1", eval("[{\"a\":1},{\"a\":2}][0].a", r = r3))
+        assertEquals(listOf<Pair<String, Int?>>("DEV-12" to 1), r3.hits)
+        assertEquals("2", eval("[{\"a\":1},{\"a\":2}][a=2].a"))
+        assertEquals("6", eval("[5][0].(\$ + 1)"))
+        assertEquals("\"ABC\"", eval("[\"abc\"][0].\$uppercase(\$)")) // jsonata-js 2.2.2: ["A","B","C"]
+        // unchanged: several selected items, an array item, parentheses, a single step
+        val r4 = Recorder()
+        assertEquals("[1,2]", eval("[{\"a\":1},{\"a\":2}][true].a", r = r4))
+        assertEquals("[10,20]", eval("[[1,2]][0].(\$ * 10)", r = r4))
+        assertEquals("1", eval("([{\"a\":1},{\"a\":2}][0]).a", r = r4))
+        assertEquals("{\"a\":1}", eval("[{\"a\":1},{\"a\":2}][0]", r = r4))
+        assertEquals(emptyList<Pair<String, Int?>>(), r4.hits)
+
+        assertEquals(listOf("DEV-12@1"), scan("[{\"a\":1},{\"a\":2}][0].a").filter { it.startsWith("DEV-12") })
+        assertEquals(listOf("DEV-12@3"), scan("x.a[true]").filter { it.startsWith("DEV-12") })
+        assertTrue(scan("x.a[0]").none { it.startsWith("DEV-12") })
+    }
 }

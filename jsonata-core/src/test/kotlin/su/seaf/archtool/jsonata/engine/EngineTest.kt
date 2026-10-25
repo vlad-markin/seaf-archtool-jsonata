@@ -477,7 +477,8 @@ class EngineTest {
     fun `undefined is not null`() {
         assertEquals("undefined", eval("a", """{"b":null}"""))
         assertEquals("null", eval("b", """{"b":null}"""))
-        assertEquals("[1,null,null]", eval("x.a[true]", """{"x":[{"a":1},{"b":2},{"c":3}]}"""))
+        // a filter keeps no undefined (DEV-12; jsonata-js 2.2.2 gives [1,null,null])
+        assertEquals("1", eval("x.a[true]", """{"x":[{"a":1},{"b":2},{"c":3}]}"""))
         assertNull(Jsonata.compile("nothing").evaluate(null))
     }
 }

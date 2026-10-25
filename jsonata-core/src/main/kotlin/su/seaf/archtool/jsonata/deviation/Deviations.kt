@@ -45,8 +45,11 @@ public object Deviations {
     public val BASE64_UTF8: Deviation =
         Deviation("DEV-11", "STR-03", V010, true, "\$base64encode/\$base64decode use UTF-8")
 
+    public val UNDEFINED_IN_SEQUENCES: Deviation =
+        Deviation("DEV-12", "SEQ (undefined)", V010, true, "Undefined does not enter sequences; a step after a filtered array constructor iterates its item")
+
     /** Deviations that have a probe or a static rule here, by id. */
-    public val all: List<Deviation> = listOf(POSITION_IN_LAMBDA, BASE64_UTF8)
+    public val all: List<Deviation> = listOf(POSITION_IN_LAMBDA, BASE64_UTF8, UNDEFINED_IN_SEQUENCES)
 
     public fun byId(id: String): Deviation? = all.firstOrNull { it.id == id }
 
@@ -79,7 +82,33 @@ public object Deviations {
                 }
             }
         },
+        { node, out ->
+            if (node.type == "path") {
+                val steps = node["steps"] as? List<*>
+                val first = steps?.firstOrNull() as? AstNode
+                if (steps != null && steps.size > 1 && first != null && first["consarray"] == true && first["predicate"] != null) {
+                    out += Finding(
+                        UNDEFINED_IN_SEQUENCES.id, first.position,
+                        "the steps after a filtered array constructor iterate the selected item " +
+                            "(jsonata-js 2.2.2 gives undefined when the filter selects one object or number); " +
+                            "parentheses give the same result on both: ([…][0]).a",
+                    )
+                }
+            }
+            val filters = ((node["stages"] as? List<*>).orEmpty() + (node["predicate"] as? List<*>).orEmpty())
+                .filterIsInstance<AstNode>().filter { it.type == "filter" }
+            if (filters.isNotEmpty() && node.type in UNDEFINED_PRONE && filters.any { (it["expr"] as? AstNode)?.type != "number" }) {
+                out += Finding(
+                    UNDEFINED_IN_SEQUENCES.id, node.position,
+                    "a filter on a value that is missing for some items keeps no undefined in the result " +
+                        "(jsonata-js 2.2.2 keeps it, written as null in JSON)",
+                )
+            }
+        },
     )
+
+    /** Step kinds whose value may be missing for an item of the path, so that a filter sees undefined. */
+    private val UNDEFINED_PRONE = setOf("name", "variable", "function", "block", "condition", "lambda")
 
     private fun walk(root: AstNode, visit: (AstNode) -> Unit) {
         val seen = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<Any, Boolean>())
