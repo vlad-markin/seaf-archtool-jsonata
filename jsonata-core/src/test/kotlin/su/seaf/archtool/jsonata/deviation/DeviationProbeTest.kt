@@ -60,4 +60,27 @@ class DeviationProbeTest {
         assertEquals(listOf("DEV-10@16"), scan("(\$f := function(){ 1 + \"a\" }; \$f())").filter { it.startsWith("DEV-10") })
         assertTrue(scan("1 + 2").isEmpty())
     }
+
+    @Test
+    fun `DEV-11 base64 in UTF-8`() {
+        // expectations: Node 22 Buffer.from(s, 'utf8').toString('base64') and Buffer.from(b, 'base64').toString('utf8')
+        val encode = listOf(
+            "hello" to "aGVsbG8=", "é" to "w6k=", "Привет" to "0J/RgNC40LLQtdGC", "\uD83D\uDE00" to "8J+YgA==",
+            "a\uD800b" to "Ye+/vWI=", "\uDC00" to "77+9", "ÿĀ" to "w7/EgA==",
+        )
+        for ((s, b) in encode) assertEquals(b, Jsonata.compile("\$base64encode(\$)").evaluate(su.seaf.archtool.jsonata.value.StringValue.of(s)).let { (it as su.seaf.archtool.jsonata.value.StringValue).value }, s)
+        val decode = listOf(
+            "w6k=" to "é", "6Q==" to "\uFFFD", "0J/RgNC40LLQtdGC" to "Привет", "8J+YgA==" to "\uD83D\uDE00", "!!!" to "",
+            "gA==" to "\uFFFD", "wMCA" to "\uFFFD\uFFFD\uFFFD", "7aCA" to "\uFFFD\uFFFD\uFFFD", "8J+Y" to "\uFFFD", "aGk" to "hi",
+        )
+        for ((b, s) in decode) assertEquals(s, Jsonata.compile("\$base64decode(\$)").evaluate(su.seaf.archtool.jsonata.value.StringValue.of(b)).let { (it as su.seaf.archtool.jsonata.value.StringValue).value }, b)
+        // jsonata-js 2.2.2 gives "6Q==" and "Ã©"; the probe fires only where the reference differs
+        val r = Recorder()
+        assertEquals("\"w6k=\"", eval("\$base64encode('é')", r = r))
+        assertEquals("\"aGk=\"", eval("\$base64encode('hi')", r = r))
+        assertEquals("\"é\"", eval("\$base64decode('w6k=')", r = r))
+        assertEquals("\"hi\"", eval("\$base64decode('aGk=')", r = r))
+        assertEquals(listOf("DEV-11", "DEV-11"), r.hits.map { it.first })
+        assertEquals(listOf("DEV-11@14", "DEV-11@35"), scan("\$base64encode('é') & \$base64decode('w6k=')").filter { it.startsWith("DEV-11") })
+    }
 }

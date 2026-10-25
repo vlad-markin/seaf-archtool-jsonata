@@ -98,8 +98,8 @@ internal object StandardLibrary {
         def(r, "sort", "<af?:a>", 2) { c, a -> sort(c, a[0], a.getOrNull(1)) }
         def(r, "shuffle", "<a:a>", 1) { _, a -> shuffle(a[0]) }
         def(r, "distinct", "<x:x>", 1) { c, a -> distinct(ctx(c), a[0]) }
-        def(r, "base64encode", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.base64encode(it)) } }
-        def(r, "base64decode", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.base64decode(it)) } }
+        def(r, "base64encode", "<s-:s>", 1) { c, a -> str(a[0])?.let { StringValue.of(Encoding.base64encode(it, ctx(c))) } }
+        def(r, "base64decode", "<s-:s>", 1) { c, a -> str(a[0])?.let { StringValue.of(Encoding.base64decode(it, ctx(c))) } }
         def(r, "encodeUrlComponent", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.encodeUri(it, true, "encodeUrlComponent")) } }
         def(r, "encodeUrl", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.encodeUri(it, false, "encodeUrl")) } }
         def(r, "decodeUrlComponent", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.decodeUri(it, true, "decodeUrlComponent")) } }

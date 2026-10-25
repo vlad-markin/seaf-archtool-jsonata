@@ -42,8 +42,11 @@ public object Deviations {
     public val POSITION_IN_LAMBDA: Deviation =
         Deviation("DEV-10", "ERR (position)", V010, true, "An error inside a lambda keeps the position of the failing operator")
 
+    public val BASE64_UTF8: Deviation =
+        Deviation("DEV-11", "STR-03", V010, true, "\$base64encode/\$base64decode use UTF-8")
+
     /** Deviations that have a probe or a static rule here, by id. */
-    public val all: List<Deviation> = listOf(POSITION_IN_LAMBDA)
+    public val all: List<Deviation> = listOf(POSITION_IN_LAMBDA, BASE64_UTF8)
 
     public fun byId(id: String): Deviation? = all.firstOrNull { it.id == id }
 
@@ -62,6 +65,18 @@ public object Deviations {
                     "a runtime error inside this function reports the position of the failing operator, " +
                         "not of the call (jsonata-js 2.2.2 reports the call)",
                 )
+            }
+        },
+        { node, out ->
+            if (node.type == "function") {
+                val name = (node["procedure"] as? AstNode)?.let { if (it.type == "variable") it["value"] else null }
+                if (name == "base64encode" || name == "base64decode") {
+                    out += Finding(
+                        BASE64_UTF8.id, node.position,
+                        "characters above U+007F are encoded and decoded as UTF-8 " +
+                            "(jsonata-js 2.2.2 keeps only the low byte of each character)",
+                    )
+                }
             }
         },
     )

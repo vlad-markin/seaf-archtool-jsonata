@@ -468,7 +468,9 @@ class EngineTest {
 
     @Test
     fun `base64decode reads non-Latin characters by their low byte as Node does (fuzzing)`() {
-        assertEquals("\"ónA\"", eval("\$base64decode(\"Привет мир\")"))
+        // the bytes F3 69 C0 (from the low bytes of the letters) are decoded as UTF-8 (DEV-11): Node's
+        // Buffer.from(s, 'base64').toString('utf8') gives the same
+        assertEquals("\"\uFFFDnA\"", eval("\$base64decode(\"Привет мир\")"))
     }
 
     @Test
