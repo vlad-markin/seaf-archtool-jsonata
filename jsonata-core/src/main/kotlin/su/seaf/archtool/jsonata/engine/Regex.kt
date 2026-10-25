@@ -7,7 +7,6 @@ import su.seaf.archtool.jsonata.value.NumberValue
 import su.seaf.archtool.jsonata.value.ObjectValue
 import su.seaf.archtool.jsonata.value.StringValue
 import su.seaf.archtool.jsonata.value.Value
-import java.util.concurrent.ConcurrentHashMap
 import java.util.regex.Pattern
 
 /**
@@ -19,14 +18,29 @@ internal class JsRegexPattern(val source: String, val flags: String, private val
     val pattern: Pattern get() = compiled ?: throw JsonataException("X0003", value = StringValue.of(source), details = mapOf("message" to error))
 
     companion object {
-        private val cache = ConcurrentHashMap<String, JsRegexPattern>()
+        /** Patterns by flags and source, least recently used dropped beyond [CACHE_LIMIT] (sources may come from `$eval`). */
+        private val cache = object : LinkedHashMap<String, JsRegexPattern>(256, 0.75f, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, JsRegexPattern>?): Boolean = size > CACHE_LIMIT
+        }
 
-        fun of(regex: JsRegex): JsRegexPattern = cache.getOrPut(regex.flags + "/" + regex.pattern) {
+        const val CACHE_LIMIT: Int = 2048
+
+        internal fun cacheSize(): Int = synchronized(cache) { cache.size }
+
+        fun of(regex: JsRegex): JsRegexPattern {
+            val key = regex.flags + "/" + regex.pattern
+            synchronized(cache) { cache[key]?.let { return it } }
+            val compiled = compile(regex)
+            synchronized(cache) { cache[key] = compiled }
+            return compiled
+        }
+
+        private fun compile(regex: JsRegex): JsRegexPattern {
             val multiline = 'm' in regex.flags
             var flags = 0
             if ('i' in regex.flags) flags = flags or Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
             if ('s' in regex.flags) flags = flags or Pattern.DOTALL
-            try {
+            return try {
                 JsRegexTranslator.validate(regex.pattern)
                 JsRegexPattern(regex.source, regex.flags, Pattern.compile(JsRegexTranslator.translate(regex.pattern, multiline, 's' in regex.flags), flags), null)
             } catch (e: java.util.regex.PatternSyntaxException) {

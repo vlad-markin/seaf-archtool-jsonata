@@ -323,6 +323,13 @@ class EngineTest {
     }
 
     @Test
+    fun `the regex cache is bounded (RV-13)`() {
+        val expr = Jsonata.compile("\$eval('\$contains(\"a\" & \$string(\$), /a' & \$string(\$) & '/)', \$)")
+        for (i in 0 until JsRegexPattern.CACHE_LIMIT + 500) assertEquals("true", JsonWriter.stringify(expr.evaluate(NumberValue.of(i))))
+        assertTrue(JsRegexPattern.cacheSize() <= JsRegexPattern.CACHE_LIMIT)
+    }
+
+    @Test
     fun `custom matcher functions`() {
         val repeating = FunctionRegistry.create().register("repeatingLetters", "<sn:f>", { _, a ->
             val chars = (a[0] as StringValue).value.repeat((a[1] as NumberValue).value.toInt())
