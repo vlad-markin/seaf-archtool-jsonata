@@ -65,6 +65,41 @@ class EngineTest {
     }
 
     @Test
+    fun `a lambda runs under the evaluation that calls it (RV-9)`() {
+        val f = Jsonata.compile("function(\$x){ \$x * 2 }").evaluate(null, emptyMap(), EvaluationOptions(timeoutMillis = 50))
+        Thread.sleep(100)
+        assertEquals("42", JsonWriter.stringify(Jsonata.compile("\$f(21)").evaluate(null, mapOf("f" to f))))
+        // the caller's limits apply
+        val g = Jsonata.compile("function(\$n){ (\$r := function(\$k){ \$k = 0 ? 0 : 1 + \$r(\$k - 1) }; \$r(\$n)) }").evaluate(null)
+        val e = assertFailsWith<JsonataException> {
+            Jsonata.compile("\$g(1000)").evaluate(null, mapOf("g" to g), EvaluationOptions(maxDepth = 50))
+        }
+        assertEquals("D1011", e.code)
+        // the caller's clock
+        val m = Jsonata.compile("function(){ \$millis() }").evaluate(null, emptyMap(), EvaluationOptions(clock = { 1L }))
+        assertEquals("2", JsonWriter.stringify(Jsonata.compile("\$m()").evaluate(null, mapOf("m" to m), EvaluationOptions(clock = { 2L }))))
+        // a transformer too
+        val t = Jsonata.compile("|a|{'b': \$millis()}|").evaluate(null, emptyMap(), EvaluationOptions(clock = { 1L }))
+        assertEquals("{\"a\":{\"b\":3}}", JsonWriter.stringify(Jsonata.compile("\$t({'a': {}})").evaluate(null, mapOf("t" to t), EvaluationOptions(clock = { 3L }))))
+    }
+
+    @Test
+    fun `one lambda failing in several evaluations at once reports each call site (RV-9)`() {
+        val f = Jsonata.compile("function(\$x){ \$x + 'a' }").evaluate(null)
+        val pool = Executors.newFixedThreadPool(8)
+        val exprs = listOf("\$f(1)", "  \$f(1)", "    \$f(1)", "      \$f(1)")
+        val futures = (0 until 400).map { i ->
+            val expr = exprs[i % exprs.size]
+            pool.submit<Pair<Int?, Int>> {
+                val e = assertFailsWith<JsonataException> { Jsonata.compile(expr).evaluate(null, mapOf("f" to f)) }
+                e.position to expr.indexOf('(') + 1
+            }
+        }
+        futures.forEach { val (got, want) = it.get(10, TimeUnit.SECONDS); assertEquals(want, got) }
+        pool.shutdown()
+    }
+
+    @Test
     fun `transform with a clone bound as a variable`() {
         var count = 0
         val clone = FunctionRegistry.function(null, { _, a -> count++; Evaluator.clone(a[0]) }, 1)

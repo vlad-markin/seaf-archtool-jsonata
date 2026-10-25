@@ -98,6 +98,19 @@ internal class EvalContext(
     private var ticks = 0
 
     /**
+     * The last call site of each lambda in this evaluation. jsonata-js records token and position on the lambda object
+     * at every call (evaluateFunction, the trampoline) and errors raised inside take them over, so the latest call
+     * wins. Kept per evaluation, not on the lambda, so that one lambda can run in several evaluations at once.
+     */
+    private var lastCalls: java.util.IdentityHashMap<Lambda, CallSite>? = null
+
+    fun recordCall(lambda: Lambda, site: CallSite) {
+        (lastCalls ?: java.util.IdentityHashMap<Lambda, CallSite>().also { lastCalls = it })[lambda] = site
+    }
+
+    fun lastCall(lambda: Lambda): CallSite? = lastCalls?.get(lambda)
+
+    /**
      * The checkpoint for loops inside native code (ranges, higher-order functions, `**`, `$clone`, `$string`,
      * sorting): a counter, with the full [checkpoint] every 1024 iterations (review RV-6).
      */

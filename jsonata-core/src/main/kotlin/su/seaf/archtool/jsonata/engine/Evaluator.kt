@@ -57,7 +57,7 @@ internal object Evaluator {
 
     /** jsonata.js: applyInner. */
     private fun applyInner(proc: Value?, args: List<Value?>, input: Value?, env: Frame, site: CallSite?, callNode: Node?): Value? {
-        if (site != null && proc is Lambda) proc.lastSite = site
+        if (site != null && proc is Lambda) env.ctx.recordCall(proc, site)
         try {
             var validated = args
             if (proc is EngineFunction) {
@@ -69,11 +69,11 @@ internal object Evaluator {
                 is NativeFunction -> CallContextImpl(env, input).let { c -> c.checked(proc.implementation.invoke(c, validated)) }
                 is PartialNative -> applyPartialNative(proc, validated, env)
                 is InternalFunction -> proc.body(CallContextImpl(env, input), validated)
-                is Transformer -> transform(proc, validated.getOrNull(0))
+                is Transformer -> transform(proc, validated.getOrNull(0), env)
                 else -> throw JsonataException("T1006")
             }
         } catch (e: JsonataException) {
-            val s = if (proc is Lambda) proc.lastSite else site
+            val s = if (proc is Lambda) env.ctx.lastCall(proc) else site
             if (s != null) {
                 if (e.token == null && s.token != null) e.token = s.token
                 if (s.position != null) e.position = s.position
@@ -84,7 +84,9 @@ internal object Evaluator {
 
     /** jsonata.js: applyProcedure. */
     private fun applyProcedure(proc: Lambda, args: List<Value?>, caller: Frame, callNode: Node?): Value? {
-        val frame = Frame(proc.env, proc.env.ctx)
+        // the call runs under the caller's evaluation (limits, clock, registry), wherever the lambda was created
+        // (review RV-9): the context comes from the calling frame, the variables from the closure
+        val frame = Frame(proc.env, caller.ctx)
         frame.callSite = callNode
         frame.caller = caller
         val params = proc.params
@@ -107,7 +109,7 @@ internal object Evaluator {
 
     /** jsonata.js: partialApplyProcedure. */
     fun partialLambda(proc: Lambda, args: Array<Any?>, env: Frame): Lambda {
-        val frame = Frame(proc.env, proc.env.ctx)
+        val frame = Frame(proc.env, env.ctx)
         val unbound = ArrayList<String>()
         for (i in proc.params.indices) {
             val arg = args.getOrNull(i)
@@ -130,7 +132,7 @@ internal object Evaluator {
     fun asNative(proc: EngineFunction): NativeFunction = NativeFunction("", null, proc.arity, { ctx, args ->
         when (proc) {
             is InternalFunction -> proc.body(ctx as CallContextImpl, args)
-            is Transformer -> transform(proc, args.getOrNull(0))
+            is Transformer -> transform(proc, args.getOrNull(0), (ctx as CallContextImpl).frame)
             else -> null
         }
     })
@@ -144,10 +146,11 @@ internal object Evaluator {
 
     // ---- transform ----
 
-    private fun transform(proc: Transformer, obj: Value?): Value? {
+    private fun transform(proc: Transformer, obj: Value?, caller: Frame): Value? {
         if (obj == null) return null
         val node = proc.node
-        val env = proc.env
+        // the transformer's variables, the caller's evaluation (review RV-9)
+        val env = Frame(proc.env, caller.ctx)
         val cloneFunction = env.lookup("clone")
         if (cloneFunction !is FunctionValue) throw JsonataException("T2013", node.position)
         var result = apply(cloneFunction, listOf(obj), null, env, null)

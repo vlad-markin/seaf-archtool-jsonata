@@ -46,13 +46,6 @@ internal class Lambda(
     @JvmField val source: Node?,
 ) : EngineFunction() {
     override val arity: Int get() = params.size
-
-    /**
-     * The last call site that invoked this lambda by name: jsonata-js records token and position on the lambda object
-     * at every call (evaluateFunction, the trampoline) and errors raised inside take them over, so the innermost call
-     * wins. A lambda belongs to one evaluation, so this state is never shared between threads.
-     */
-    @JvmField var lastSite: CallSite? = null
 }
 
 /** A native function with some arguments bound (jsonata.js: partialApplyNativeFunction). */
