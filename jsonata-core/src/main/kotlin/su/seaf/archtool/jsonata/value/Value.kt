@@ -87,8 +87,9 @@ public class StringValue(public val value: String) : Value() {
  * a filter that keeps a missing value). The public reads [get], [iterator] and [toList] give [NullValue] for it, as
  * `JSON.stringify` writes it; [getOrNull] gives null (undefined).
  */
-public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
-    @PublishedApi internal var items: Array<Value?> = arrayOfNulls(initialCapacity.coerceAtLeast(1))
+public class ArrayValue(initialCapacity: Int = 0) : Value(), Iterable<Value> {
+    // allocated on first add when no capacity is given: many sequences stay empty or hold one item
+    @PublishedApi internal var items: Array<Value?> = if (initialCapacity > 0) arrayOfNulls(initialCapacity) else EMPTY
     private var count = 0
 
     /** A sequence produced by evaluation rather than an array from the input or an array constructor. */
@@ -115,7 +116,7 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
 
     /** Appends an item; only for arrays under construction. */
     public fun add(value: Value) {
-        if (count == items.size) items = items.copyOf(maxOf(8, count * 2))
+        if (count == items.size) items = items.copyOf(if (count == 0) 4 else count * 2)
         items[count++] = value
     }
 
@@ -135,7 +136,7 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
      * undefined context). Such items exist only inside evaluation; they collapse away or are written as JSON null.
      */
     internal fun addNullable(value: Value?) {
-        if (count == items.size) items = items.copyOf(maxOf(8, count * 2))
+        if (count == items.size) items = items.copyOf(if (count == 0) 4 else count * 2)
         items[count++] = value
     }
 
@@ -159,6 +160,8 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
     }
 
     public companion object {
+        private val EMPTY = arrayOfNulls<Value>(0)
+
         @JvmStatic public fun of(vararg values: Value): ArrayValue = ArrayValue(values.size).also { a -> values.forEach { a.add(it) } }
 
         @JvmStatic public fun of(values: Collection<Value>): ArrayValue = ArrayValue(values.size).also { a -> values.forEach { a.add(it) } }
