@@ -829,8 +829,18 @@ internal object StandardLibrary {
             input = focus
             if (input is ArrayValue && !input.isSequence) input = ArrayValue.sequence(input).also { it.outerWrapper = true }
         }
+        val listener = ctx.frame.ctx.listener
         val node = try {
-            Compiler(false).compile(JsonataParser.ast(expr))
+            if (listener == null) {
+                Compiler(false).compile(JsonataParser.ast(expr))
+            } else {
+                // with a listener the text of $eval is a source of its own, compiled for debugging (CAP-10 p. 9)
+                val id = "eval:" + (++ctx.frame.ctx.evalSources)
+                val parsed = JsonataParser.parseWithRanges(expr)
+                Compiler(true, parsed.ranges, id).compile(parsed.ast).also {
+                    listener.source(su.seaf.archtool.jsonata.debug.SourceInfo(id, expr, su.seaf.archtool.jsonata.debug.SourceInfo.Kind.EVAL))
+                }
+            }
         } catch (e: JsonataException) {
             throw JsonataException("D3120", value = StringValue.of(e.message), cause = e)
         }

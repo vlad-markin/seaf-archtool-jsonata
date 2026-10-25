@@ -169,17 +169,16 @@ class ControlTest {
     @Test
     fun `a debugger pause does not count against the deadline (TC-18)`() {
         var paused = false
-        val hook = object : su.seaf.archtool.jsonata.engine.DebugHook {
-            override fun enter(node: su.seaf.archtool.jsonata.engine.Node, input: Value?, frame: su.seaf.archtool.jsonata.engine.Frame) {
-                if (!paused && node.ast.type == "function") {
+        val listener = object : su.seaf.archtool.jsonata.debug.EvaluationListener {
+            override fun enter(node: su.seaf.archtool.jsonata.debug.NodeInfo, input: Value?, frame: su.seaf.archtool.jsonata.debug.DebugFrame, iteration: su.seaf.archtool.jsonata.debug.Iteration?) {
+                if (!paused && node.type == "function") {
                     paused = true
-                    frame.ctx.paused { Thread.sleep(1000) }
+                    (frame as su.seaf.archtool.jsonata.engine.FrameView).frame.ctx.paused { Thread.sleep(1000) }
                 }
             }
-            override fun exit(node: su.seaf.archtool.jsonata.engine.Node, input: Value?, frame: su.seaf.archtool.jsonata.engine.Frame, result: Value?) {}
         }
-        val expr = Jsonata.compile("\$sum([1..1000])", CompileOptions(debug = true))
-        val r = expr.evaluate(null, emptyMap(), EvaluationOptions(timeoutMillis = 500), hook)
+        val expr = Jsonata.compile("\$sum([1..1000])")
+        val r = expr.evaluate(null, emptyMap(), EvaluationOptions(timeoutMillis = 500, listener = listener))
         assertTrue(paused)
         assertEquals(NumberValue.of(500500), r)
         // the same wait outside a pause does count

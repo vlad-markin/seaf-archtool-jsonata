@@ -60,8 +60,13 @@ class KotlinEngineImpl(private val debug: Boolean) : CompatEngine {
         }
         // run-test-suite.js timeboxExpression: depth counted per evaluate() entry and a time limit, both reported as
         // U1001; the jsonata-js 2.2.2 options `stack`/`timeout` count the same way (D1011/D1012)
-        val limits = if (case.timelimit != null && case.depth != null) {
-            EvaluationOptions(maxDepth = case.depth, timeoutMillis = case.timelimit)
+        // the debug run evaluates through the debugging tree with a listener that only observes
+        val listener = if (debug) object : su.seaf.archtool.jsonata.debug.EvaluationListener {} else null
+        val timeboxed = case.timelimit != null && case.depth != null
+        val limits = if (timeboxed) {
+            EvaluationOptions(maxDepth = case.depth!!, timeoutMillis = case.timelimit!!, listener = listener)
+        } else if (debug) {
+            EvaluationOptions(listener = listener)
         } else {
             EvaluationOptions.DEFAULT
         }
@@ -71,7 +76,7 @@ class KotlinEngineImpl(private val debug: Boolean) : CompatEngine {
             if (result != null) su.seaf.archtool.jsonata.json.JsonataJson.stringify(result)
             if (result == null) Outcome.Undefined else Outcome.Value(fromValue(result))
         } catch (e: JsonataException) {
-            val code = if (limits !== EvaluationOptions.DEFAULT && (e.code == "D1011" || e.code == "D1012")) "U1001" else e.code
+            val code = if (timeboxed && (e.code == "D1011" || e.code == "D1012")) "U1001" else e.code
             Outcome.Failed(EngineError(code, e.position, tokenText(e.token), e.message))
         }
     }

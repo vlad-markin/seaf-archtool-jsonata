@@ -27,6 +27,12 @@ internal class Frame(
     /** The frame active at the call site. */
     @JvmField var caller: Frame? = null
 
+    /** Name of the lambda invocation this frame is for (`f`, `λ`, `λ via $map`); null for blocks and the root. */
+    @JvmField var lambdaName: String? = null
+
+    /** The invocation came from the tail-call trampoline. */
+    @JvmField var tailCall: Boolean = false
+
     fun bind(name: String, value: Value?) {
         var ns = names
         if (ns == null) {
@@ -74,8 +80,25 @@ internal class EvalContext(
     @JvmField val registry: FunctionRegistry,
     @JvmField val options: EvaluationOptions,
     @JvmField val timestamp: Long,
-    @JvmField val hook: DebugHook?,
 ) {
+    /** The listener of the evaluation (debugger, profiler, tracer); the debugging tree calls it at every node. */
+    @JvmField val listener: su.seaf.archtool.jsonata.debug.EvaluationListener? = options.listener
+
+    /** Item i of n that the next node entered (a path step) evaluates; set only with a listener. */
+    @JvmField var iteration: su.seaf.archtool.jsonata.debug.Iteration? = null
+
+    /** Names of the native functions being called, innermost last (a lambda they call is "λ via $name"). */
+    @JvmField var nativeCalls: ArrayList<String>? = null
+
+    /** The next lambda invocation comes from the tail-call trampoline (its frame replaces the caller's). */
+    @JvmField var tailCallNext: Boolean = false
+
+    /** `$$` of the evaluation. */
+    @JvmField var rootInput: Value? = null
+
+    /** Ids of the `$eval` sources reported to the listener. */
+    @JvmField var evalSources: Int = 0
+
     /** jsonata.js: environment.base.depth — the number of nested `evaluate` calls. */
     @JvmField var depth: Int = 0
     private val maxDepth = options.maxDepth
@@ -368,13 +391,42 @@ internal class EvalContext(
 }
 
 /**
- * Debugger entry points, called around every node when the expression is compiled with debugging enabled; when it is
- * not, no node calls them. The contract is internal until the debugger specification is settled.
+ * The function frame of [frame] as the debugger sees it: the innermost lambda invocation that [frame] belongs to (a
+ * block or tuple frame belongs to the invocation around it), or the main expression.
  */
-internal interface DebugHook {
-    fun enter(node: Node, input: Value?, frame: Frame)
-    fun exit(node: Node, input: Value?, frame: Frame, result: Value?)
-    fun error(node: Node, input: Value?, frame: Frame, error: Throwable) {}
+internal class FrameView private constructor(@JvmField val frame: Frame) : su.seaf.archtool.jsonata.debug.DebugFrame {
+    override val name: String get() = frame.lambdaName ?: "<main>"
+    override val callSite: su.seaf.archtool.jsonata.debug.NodeInfo? get() = frame.callSite?.info
+    override val tailCall: Boolean get() = frame.tailCall
+    override val parent: su.seaf.archtool.jsonata.debug.DebugFrame? get() = frame.caller?.let { of(it) }
+
+    override fun root(): Value? = frame.ctx.rootInput
+
+    override fun bindings(): List<su.seaf.archtool.jsonata.debug.Binding> {
+        val seen = HashSet<String>()
+        val out = ArrayList<su.seaf.archtool.jsonata.debug.Binding>()
+        var f: Frame? = scope
+        while (f != null) {
+            for ((n, v) in f.localBindings()) if (seen.add(n)) out += su.seaf.archtool.jsonata.debug.Binding(n, v)
+            f = f.parent
+        }
+        return out
+    }
+
+    /** The innermost frame of the event (its bindings are the visible variables). */
+    private var scope: Frame = frame
+
+    override fun equals(other: Any?): Boolean = other is FrameView && other.frame === frame
+    override fun hashCode(): Int = System.identityHashCode(frame)
+    override fun toString(): String = name
+
+    companion object {
+        fun of(env: Frame): FrameView {
+            var f: Frame = env
+            while (f.lambdaName == null && f.parent != null) f = f.parent!!
+            return FrameView(f).also { it.scope = env }
+        }
+    }
 }
 
 /** Where a function is invoked from: the name used at the call and the position (jsonata.js: proc.token/position). */

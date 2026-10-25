@@ -49,14 +49,22 @@ public class Jsonata private constructor(
         input: Value?,
         bindings: Map<String, Value?> = emptyMap(),
         evaluation: EvaluationOptions = EvaluationOptions.DEFAULT,
-    ): Value? = Evaluator.run(root, input, bindings, options, evaluation, null, deep, markDeep)
+    ): Value? = if (evaluation.listener == null) {
+        Evaluator.run(root, input, bindings, options, evaluation, deep, markDeep)
+    } else {
+        Evaluator.run(debugRoot(), input, bindings, options, evaluation, deep, markDeep, mainSource)
+    }
 
-    /** Evaluation with debugger entry points (effective only when compiled with [CompileOptions.debug]). */
-    internal fun evaluate(input: Value?, hook: su.seaf.archtool.jsonata.engine.DebugHook): Value? =
-        Evaluator.run(root, input, emptyMap(), options, EvaluationOptions.DEFAULT, hook, deep, markDeep)
+    /** The debugging tree: the same expression with listener calls at every node, compiled once (CAS, no monitor). */
+    private val debugTree = java.util.concurrent.atomic.AtomicReference<Node?>(if (options.debug) root else null)
 
-    internal fun evaluate(input: Value?, bindings: Map<String, Value?>, evaluation: EvaluationOptions, hook: su.seaf.archtool.jsonata.engine.DebugHook): Value? =
-        Evaluator.run(root, input, bindings, options, evaluation, hook, deep, markDeep)
+    internal fun debugRoot(): Node {
+        debugTree.get()?.let { return it }
+        debugTree.compareAndSet(null, Compiler(true, ranges).compile(ast))
+        return debugTree.get()!!
+    }
+
+    private val mainSource = su.seaf.archtool.jsonata.debug.SourceInfo("main", expression, su.seaf.archtool.jsonata.debug.SourceInfo.Kind.MAIN)
 
     internal val compiledRoot: Node get() = root
 
@@ -157,6 +165,11 @@ public class EvaluationOptions @JvmOverloads constructor(
     public val cancellation: CancellationToken? = null,
     /** Budgets of steps, built strings and the result size (X0010); [Budgets.NONE] by default. */
     public val budgets: Budgets = Budgets.NONE,
+    /**
+     * Observes the evaluation node by node (the debugger, the profiler, the value tracer): the expression is then
+     * evaluated by its debugging tree. Null: no listener calls at all.
+     */
+    public val listener: su.seaf.archtool.jsonata.debug.EvaluationListener? = null,
     /**
      * Receives probe hits of deliberate differences from jsonata-js 2.2.2 (`docs/deviations.md`): the evaluation went
      * through a branch where the result may differ from the reference. Null: probes cost one null check.

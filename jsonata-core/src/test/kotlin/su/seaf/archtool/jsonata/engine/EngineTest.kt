@@ -310,19 +310,18 @@ class EngineTest {
         val expr = Jsonata.compile("(\$f := function(\$x){ \$x * 2 }; \$f(21))", CompileOptions(debug = true))
         val entered = ArrayList<String?>()
         var maxStack = 0
-        val result = expr.evaluate(null, object : DebugHook {
-            override fun enter(node: Node, input: Value?, frame: Frame) {
-                entered += node.ast.type
+        val result = expr.evaluate(null, emptyMap(), EvaluationOptions(listener = object : su.seaf.archtool.jsonata.debug.EvaluationListener {
+            override fun enter(node: su.seaf.archtool.jsonata.debug.NodeInfo, input: Value?, frame: su.seaf.archtool.jsonata.debug.DebugFrame, iteration: su.seaf.archtool.jsonata.debug.Iteration?) {
+                entered += node.type
                 var depth = 0
-                var f: Frame? = frame
-                while (f != null) {
-                    if (f.callSite != null) depth++
-                    f = f.caller ?: f.parent
+                var f: su.seaf.archtool.jsonata.debug.DebugFrame? = frame
+                while (f?.parent != null) {
+                    depth++
+                    f = f.parent
                 }
                 maxStack = maxOf(maxStack, depth)
             }
-            override fun exit(node: Node, input: Value?, frame: Frame, result: Value?) {}
-        })
+        }))
         assertEquals("42", JsonWriter.stringify(result))
         assertTrue("binary" in entered && "lambda" in entered && "function" in entered, entered.toString())
         assertEquals(1, maxStack)

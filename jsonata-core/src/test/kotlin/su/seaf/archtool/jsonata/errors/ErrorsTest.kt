@@ -6,9 +6,6 @@ import su.seaf.archtool.jsonata.EvaluationOptions
 import su.seaf.archtool.jsonata.FunctionRegistry
 import su.seaf.archtool.jsonata.Jsonata
 import su.seaf.archtool.jsonata.deviation.DeviationSink
-import su.seaf.archtool.jsonata.engine.DebugHook
-import su.seaf.archtool.jsonata.engine.Frame
-import su.seaf.archtool.jsonata.engine.Node
 import su.seaf.archtool.jsonata.parser.ErrorFrame
 import su.seaf.archtool.jsonata.parser.HostErrorCodes
 import su.seaf.archtool.jsonata.parser.JsonataException
@@ -113,11 +110,12 @@ class ErrorsTest {
     @Test
     fun `an unexpected exception of the engine is X0008 with the cause`() {
         val bug = IllegalStateException("bug")
-        val hook = object : DebugHook {
-            override fun enter(node: Node, input: Value?, frame: Frame) { if (node.ast.type == "number") throw bug }
-            override fun exit(node: Node, input: Value?, frame: Frame, result: Value?) {}
+        val listener = object : su.seaf.archtool.jsonata.debug.EvaluationListener {
+            override fun enter(node: su.seaf.archtool.jsonata.debug.NodeInfo, input: Value?, frame: su.seaf.archtool.jsonata.debug.DebugFrame, iteration: su.seaf.archtool.jsonata.debug.Iteration?) {
+                if (node.type == "number") throw bug
+            }
         }
-        val e = assertFailsWith<JsonataException> { Jsonata.compile("1 + 2", CompileOptions(debug = true)).evaluate(null, hook) }
+        val e = assertFailsWith<JsonataException> { Jsonata.compile("1 + 2").evaluate(null, emptyMap(), EvaluationOptions(listener = listener)) }
         assertEquals("X0008", e.code)
         assertSame(bug, e.cause)
         assertEquals("Internal engine error: IllegalStateException: bug", e.message)

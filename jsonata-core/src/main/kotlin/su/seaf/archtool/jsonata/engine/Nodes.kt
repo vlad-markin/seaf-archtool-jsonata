@@ -33,6 +33,9 @@ internal abstract class Node(@JvmField val ast: AstNode) {
     @JvmField var start: Int = -1
     @JvmField var end: Int = -1
 
+    /** The node as the debugger sees it; set in the debugging tree only. */
+    @JvmField var info: su.seaf.archtool.jsonata.debug.NodeInfo? = null
+
     @JvmField var predicates: Array<Node>? = null
     @JvmField var group: GroupSpec? = null
     @JvmField var keepArray: Boolean = false
@@ -56,21 +59,26 @@ internal abstract class Node(@JvmField val ast: AstNode) {
 
     fun evaluate(input: Value?, env: Frame): Value? {
         if (debug) {
-            val hook = env.ctx.hook
-            if (hook != null) return evaluateDebug(hook, input, env)
+            val listener = env.ctx.listener
+            if (listener != null) return evaluateDebug(listener, input, env)
         }
         return evaluateNode(input, env)
     }
 
-    private fun evaluateDebug(hook: DebugHook, input: Value?, env: Frame): Value? {
-        hook.enter(this, input, env)
+    private fun evaluateDebug(listener: su.seaf.archtool.jsonata.debug.EvaluationListener, input: Value?, env: Frame): Value? {
+        val ctx = env.ctx
+        val node = info!!
+        val view = FrameView.of(env)
+        val iteration = ctx.iteration
+        ctx.iteration = null
+        listener.enter(node, input, view, iteration)
         val result = try {
             evaluateNode(input, env)
         } catch (e: Throwable) {
-            hook.error(this, input, env, e)
+            listener.error(node, input, view, e)
             throw e
         }
-        hook.exit(this, input, env, result)
+        listener.exit(node, input, view, result)
         return result
     }
 

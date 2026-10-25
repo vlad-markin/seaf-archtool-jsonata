@@ -18,7 +18,12 @@ internal class Compiler(
     private val debug: Boolean,
     /** Source ranges of the AST nodes (null: nodes get no range, e.g. internal helper expressions). */
     private val ranges: SourceRanges? = null,
+    /** Source of the expression for the debugger (`main`, `eval:N`, a manifest function). */
+    private val sourceId: String = "main",
 ) {
+    private var nextId = 0
+    private val parents = ArrayList<Int>()
+
     /**
      * True when the expression binds a lambda that refers to its own name (`$f := function(){ ... $f(...) }`): such
      * an expression may recurse deeper than the caller's first stack segment, so it starts on a segment thread
@@ -28,7 +33,21 @@ internal class Compiler(
         private set
 
     fun compile(ast: AstNode): Node {
-        val node = compileNode(ast)
+        if (!debug) return compileNode(ast)
+        // the debugging tree: every node gets its NodeInfo (id in pre-order, parent, range, stop kind)
+        val id = nextId++
+        val parent = parents.lastOrNull() ?: -1
+        parents.add(id)
+        val node = try {
+            compileNode(ast)
+        } finally {
+            parents.removeAt(parents.size - 1)
+        }
+        val value = ast["value"]?.let { if (it is Double) su.seaf.archtool.jsonata.value.JsNumber.toString(it) else it.toString() }
+        node.info = su.seaf.archtool.jsonata.debug.NodeInfo(
+            id, ast.type ?: "?", value, sourceId, node.start, node.end, executable = true,
+            literal = node is LiteralNode, operatorStop = ast.type in OPERATOR_STOPS, parentId = parent,
+        )
         return node
     }
 
@@ -81,7 +100,7 @@ internal class Compiler(
                 ast,
                 ast.nodes("arguments")!!.map { (it as AstNode)["value"] as String }.toTypedArray(),
                 ast["signature"] as? Signature,
-                compile(ast.node("body")!!),
+                compile(ast.node("body")!!).also { body -> if (ast["thunk"] != true) body.info?.operatorStop = true },
                 ast["thunk"] == true,
             )
             "apply" -> ApplyNode(ast, compile(ast.node("lhs")!!), compile(ast.node("rhs")!!))
@@ -124,6 +143,11 @@ internal class Compiler(
         if (ast["consarray"] == true) node.consarray = true
     }
 
+    private companion object {
+        /** Stops of the default step granularity besides path steps and lambda bodies. */
+        val OPERATOR_STOPS = setOf("function", "partial", "apply", "block")
+    }
+
     /** Whether a `variable` node named [name] occurs anywhere under [ast]. */
     private fun refersTo(ast: AstNode, name: String): Boolean {
         val stack = ArrayList<Any?>()
@@ -145,6 +169,7 @@ internal class Compiler(
 
     private fun compilePath(ast: AstNode): Node {
         val steps = nodes(ast, "steps")
+        for (s in steps) s.info?.operatorStop = true
         return PathNode(ast, steps, ast["keepSingletonArray"] == true, ast["tuple"] == true, ast.node("group")?.let { groupSpec(it) })
     }
 

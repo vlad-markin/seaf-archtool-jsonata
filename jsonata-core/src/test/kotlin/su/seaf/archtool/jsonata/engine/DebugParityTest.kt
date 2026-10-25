@@ -25,16 +25,16 @@ class DebugParityTest {
     /** JSON text is a JSONata expression: no JSON library needed in the core tests. */
     private fun json(text: String): Value? = Jsonata.compile(text).evaluate(null)
 
-    private class CountingHook : DebugHook {
+    private class CountingHook : su.seaf.archtool.jsonata.debug.EvaluationListener {
         var events = 0
-        override fun enter(node: Node, input: Value?, frame: Frame) { events++ }
-        override fun exit(node: Node, input: Value?, frame: Frame, result: Value?) { events++ }
+        override fun enter(node: su.seaf.archtool.jsonata.debug.NodeInfo, input: Value?, frame: su.seaf.archtool.jsonata.debug.DebugFrame, iteration: su.seaf.archtool.jsonata.debug.Iteration?) { events++ }
+        override fun exit(node: su.seaf.archtool.jsonata.debug.NodeInfo, input: Value?, frame: su.seaf.archtool.jsonata.debug.DebugFrame, result: Value?) { events++ }
     }
 
     private fun outcome(expr: String, input: Value?, bindings: Map<String, Value?>, debug: Boolean, hook: CountingHook): String = try {
         val compiled = Jsonata.compile(expr, CompileOptions(FunctionRegistry.standard(), debug))
         val clock = { 1_700_000_000_000L }
-        val r = if (debug) compiled.evaluate(input, bindings, EvaluationOptions(clock = clock), hook)
+        val r = if (debug) compiled.evaluate(input, bindings, EvaluationOptions(clock = clock, listener = hook))
         else compiled.evaluate(input, bindings, EvaluationOptions(clock = clock))
         "value " + JsonWriter.stringify(r)
     } catch (e: JsonataException) {

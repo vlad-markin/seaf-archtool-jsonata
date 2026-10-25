@@ -34,15 +34,16 @@ internal object Evaluator {
         bindings: Map<String, Value?>,
         options: CompileOptions,
         evaluation: EvaluationOptions,
-        hook: DebugHook? = null,
         deep: Boolean = false,
         onDeep: (() -> Unit)? = null,
+        source: su.seaf.archtool.jsonata.debug.SourceInfo? = null,
     ): Value? {
         val registry = evaluation.functions?.also {
             require(it.descendsFrom(options.functions)) { "EvaluationOptions.functions must extend the registry the expression was compiled with" }
         } ?: options.functions
-        val ctx = EvalContext(registry, evaluation, evaluation.clock(), hook)
+        val ctx = EvalContext(registry, evaluation, evaluation.clock())
         ctx.onDeep = onDeep
+        ctx.rootInput = input
         val env = Frame(null, ctx)
         for ((k, v) in bindings) env.bind(k, v)
         env.bind("$", input)
@@ -53,6 +54,7 @@ internal object Evaluator {
         }
         ctx.start()
         try {
+            if (source != null) ctx.listener?.source(source)
             // an expression known to go deep starts on a segment thread (one hand-over instead of one per crossing)
             val result = if (deep && !SegmentPool.onSegmentThread()) ctx.fromSegment { root.evaluate(focus, env) } else root.evaluate(focus, env)
             ctx.checkResult(result)
@@ -83,8 +85,33 @@ internal object Evaluator {
             val token = (procedure as? VariableNode)?.name
             val nextArgs = ArrayList<Value?>(body.arguments.size)
             for (a in body.arguments) nextArgs.add(a.evaluate(result.input, result.env))
+            env.ctx.tailCallNext = true
             result = applyInner(next, nextArgs, input, env, CallSite(token, procedure.position), body)
         }
+        return result
+    }
+
+    /** A native call with the listener told before and after; lambdas it calls are named after it. */
+    private fun invokeObserved(
+        listener: su.seaf.archtool.jsonata.debug.EvaluationListener,
+        proc: NativeFunction,
+        c: CallContextImpl,
+        args: List<Value?>,
+        env: Frame,
+        callNode: Node?,
+    ): Value? {
+        val ctx = env.ctx
+        val view = FrameView.of(env)
+        val name = proc.name.ifEmpty { "native" }
+        listener.nativeEnter(name, proc.source, args, view)
+        val calls = ctx.nativeCalls ?: ArrayList<String>().also { ctx.nativeCalls = it }
+        calls.add(name)
+        val result = try {
+            c.checked(invokeNative(proc, c, args, ctx, callNode))
+        } finally {
+            calls.removeAt(calls.size - 1)
+        }
+        listener.nativeExit(name, result, view)
         return result
     }
 
@@ -125,7 +152,10 @@ internal object Evaluator {
             }
             return when (proc) {
                 is Lambda -> applyProcedure(proc, validated, env, callNode)
-                is NativeFunction -> CallContextImpl(env, input).let { c -> c.checked(invokeNative(proc, c, validated, env.ctx, callNode)) }
+                is NativeFunction -> CallContextImpl(env, input).let { c ->
+                    val listener = env.ctx.listener
+                    if (listener == null) c.checked(invokeNative(proc, c, validated, env.ctx, callNode)) else invokeObserved(listener, proc, c, validated, env, callNode)
+                }
                 is PartialNative -> applyPartialNative(proc, validated, env)
                 is InternalFunction -> proc.body(CallContextImpl(env, input), validated)
                 is Transformer -> transform(proc, validated.getOrNull(0), env)
@@ -168,12 +198,24 @@ internal object Evaluator {
     private fun applyProcedure(proc: Lambda, args: List<Value?>, caller: Frame, callNode: Node?): Value? {
         // the call runs under the caller's evaluation (limits, clock, registry), wherever the lambda was created
         // (review RV-9): the context comes from the calling frame, the variables from the closure
-        val frame = Frame(proc.env, caller.ctx)
+        val ctx = caller.ctx
+        val frame = Frame(proc.env, ctx)
         frame.callSite = callNode
         frame.caller = caller
+        frame.tailCall = ctx.tailCallNext
+        ctx.tailCallNext = false
+        if (ctx.listener != null) frame.lambdaName = lambdaName(callNode, ctx)
         val params = proc.params
         for (i in params.indices) frame.bind(params[i], args.getOrNull(i))
         return proc.body.evaluate(proc.input, frame)
+    }
+
+    /** The debugger's name of a lambda invocation: the name at the call, or `λ via $native` from a higher-order function. */
+    private fun lambdaName(callNode: Node?, ctx: EvalContext): String {
+        val name = (callNode as? FunctionCallNode)?.procName as? String
+        if (name != null) return name
+        if (callNode == null) ctx.nativeCalls?.lastOrNull()?.let { return "λ via \$$it" }
+        return "λ"
     }
 
     private fun applyPartialNative(proc: PartialNative, args: List<Value?>, env: Frame): Value? {
@@ -394,7 +436,12 @@ internal object Evaluator {
         result.isSequence = true
         val stages = expr.stages
         var flatten = false
+        val observed = env.ctx.listener != null
+        val count = if (input is ArrayValue) input.size else if (input is StringValue) input.value.length else 0
+        var index = 0
         forEachItem(input) { item ->
+            // the debugger sees which item of the step's input is evaluated (one test outside the loop body otherwise)
+            if (observed) env.ctx.iteration = su.seaf.archtool.jsonata.debug.Iteration(index++, count)
             var res = expr.evaluate(item, env)
             if (stages != null) {
                 for (s in stages) if (s is FilterStage) res = filter(s.expr, res, env)
