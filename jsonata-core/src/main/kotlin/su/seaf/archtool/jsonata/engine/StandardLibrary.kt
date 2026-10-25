@@ -112,7 +112,7 @@ internal object StandardLibrary {
     }
 
     fun def(r: FunctionRegistry, name: String, signature: String, arity: Int, paramCount: Int = arity, impl: NativeImplementation) {
-        r.register(NativeFunction(name, Signature.parse(signature), arity, impl, maxOf(paramCount, arity)))
+        r.register(NativeFunction(name, Signature.parse(signature), arity, impl, maxOf(paramCount, arity), source = su.seaf.archtool.jsonata.FunctionSource.STDLIB))
     }
 
     private fun str(v: Value?): String? = (v as? StringValue)?.value

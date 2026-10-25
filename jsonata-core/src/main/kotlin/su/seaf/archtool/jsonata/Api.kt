@@ -7,7 +7,9 @@ import su.seaf.archtool.jsonata.engine.Node
 import su.seaf.archtool.jsonata.engine.StandardLibrary
 import su.seaf.archtool.jsonata.parser.AstNode
 import su.seaf.archtool.jsonata.parser.JsonataParser
+import su.seaf.archtool.jsonata.parser.JsonataException
 import su.seaf.archtool.jsonata.parser.Signature
+import su.seaf.archtool.jsonata.value.StringValue
 import su.seaf.archtool.jsonata.value.FunctionValue
 import su.seaf.archtool.jsonata.value.Value
 
@@ -141,6 +143,12 @@ public class EvaluationOptions @JvmOverloads constructor(
     /** Clock for `$now()`/`$millis()` (milliseconds since the epoch), read once per evaluation. */
     public val clock: () -> Long = { System.currentTimeMillis() },
     /**
+     * Functions for this evaluation only (CAP-4 p. 5): a descendant of the registry the expression was compiled with
+     * (`compileRegistry.extend().register(...).freeze()`), else `evaluate` fails with IllegalArgumentException.
+     * Null: the compile registry.
+     */
+    public val functions: FunctionRegistry? = null,
+    /**
      * Receives probe hits of deliberate differences from jsonata-js 2.2.2 (`docs/deviations.md`): the evaluation went
      * through a branch where the result may differ from the reference. Null: probes cost one null check.
      */
@@ -172,48 +180,102 @@ public interface CallContext {
 }
 
 /**
- * The functions an expression can call, by name without `$`. Registries form a chain: [standard] holds the jsonata-js
- * 2.2.2 library, [extend] creates a child for the caller's functions (decision 14: the main way the language grows).
- * Registering a name that is already taken, by the standard library or by another registered function, fails with
- * X0001 (decision 18): there is no silent replacement. Configure a registry before compiling expressions with it; it
- * is read concurrently afterwards.
+ * The functions an expression can call, by name without `$` (CAP-4, CAP-7). Registries form a chain: [standard] holds
+ * the jsonata-js 2.2.2 library, [extend] creates a child for the caller's functions (decision 14: the main way the
+ * language grows). There is no silent replacement (decision 18):
+ * - a name must be callable from an expression (`$` + name is one variable token), else X0006;
+ * - a standard library name needs [FunctionDefinition.overridesStandard], else X0007;
+ * - a name already registered in the registry or in a parent (other than a standard name overridden as above) fails
+ *   with X0001.
+ *
+ * A local variable shadows a function of the same name. [freeze] makes an immutable snapshot, which is what a service
+ * or a shared environment should hand to evaluations; a registry that is not frozen may be configured before compiling
+ * expressions and is read concurrently afterwards. [EvaluationOptions.functions] adds functions for one evaluation: it
+ * must be a descendant of the registry the expression was compiled with.
  */
 public class FunctionRegistry private constructor(
     private val parent: FunctionRegistry?,
+    snapshot: Map<String, FunctionValue>?,
 ) {
-    private val functions = java.util.concurrent.ConcurrentHashMap<String, FunctionValue>()
+    /** Own functions: a concurrent map while open, an immutable copy in a frozen snapshot. */
+    private val functions: MutableMap<String, FunctionValue>? = if (snapshot == null) java.util.concurrent.ConcurrentHashMap() else null
+    private val frozenFunctions: Map<String, FunctionValue>? = snapshot
 
     /** Set on the shared standard registry once the library is registered: it can never change afterwards. */
-    @Volatile private var frozen = false
+    @Volatile private var standardFrozen = false
+
+    /** True for a [freeze] snapshot and for [standard]. */
+    public val isFrozen: Boolean get() = frozenFunctions != null || standardFrozen
+
+    private fun own(): Map<String, FunctionValue> = frozenFunctions ?: functions!!
 
     /** Creates a registry whose own functions are looked up before this one's. */
-    public fun extend(): FunctionRegistry = FunctionRegistry(this)
+    public fun extend(): FunctionRegistry = FunctionRegistry(this, null)
 
     /**
      * Registers a native function. [signature] uses the JSONata syntax (`<s-n?:s>`), or null for no checks. [arity]
      * is what higher-order functions see (how many of value/index/array they pass); by default the number of
-     * parameters in the signature.
+     * parameters in the signature. Without documentation: prefer [register] with a [FunctionDefinition].
      */
     @JvmOverloads
-    public fun register(name: String, signature: String?, implementation: NativeImplementation, arity: Int? = null): FunctionRegistry {
-        val sig = signature?.let { Signature.parse(it) }
-        return register(NativeFunction(name, sig, arity ?: sig?.params?.size ?: 0, implementation))
+    public fun register(name: String, signature: String?, implementation: NativeImplementation, arity: Int? = null): FunctionRegistry =
+        register(FunctionDefinition(name, signature, implementation, FunctionDoc(LocalizedText(emptyMap())), arity = arity))
+
+    /** Registers a documented function; the rules are those of the class. */
+    public fun register(definition: FunctionDefinition): FunctionRegistry {
+        val sig = definition.signature?.let { Signature.parse(it) }
+        return register(NativeFunction(definition.name, sig, definition.arity ?: sig?.params?.size ?: 0, definition.implementation, definition = definition))
     }
 
     internal fun register(function: NativeFunction): FunctionRegistry {
-        if (frozen) throw su.seaf.archtool.jsonata.parser.JsonataException("X0004", value = su.seaf.archtool.jsonata.value.StringValue.of(function.name))
-        if (lookup(function.name) != null) {
-            throw su.seaf.archtool.jsonata.parser.JsonataException("X0001", value = su.seaf.archtool.jsonata.value.StringValue.of(function.name))
+        val name = function.name
+        if (standardFrozen) throw JsonataException("X0004", value = StringValue.of(name))
+        check(frozenFunctions == null) { "the registry is frozen: register \$$name in a registry made by extend()" }
+        if (function.source != FunctionSource.STDLIB && !isCallableName(name)) throw JsonataException("X0006", value = StringValue.of(name))
+        if (functions!!.containsKey(name)) throw JsonataException("X0001", value = StringValue.of(name))
+        val existing = parent?.lookup(name) as? NativeFunction
+        val overrides = function.definition?.overridesStandard == true
+        when {
+            existing == null && parent?.lookup(name) != null -> throw JsonataException("X0001", value = StringValue.of(name))
+            existing == null -> require(!overrides) { "\$$name is not a standard library function: overridesStandard does not apply" }
+            existing.source == FunctionSource.STDLIB && !overrides -> throw JsonataException("X0007", value = StringValue.of(name))
+            existing.source != FunctionSource.STDLIB -> throw JsonataException("X0001", value = StringValue.of(name))
         }
-        functions[function.name] = function
+        functions[name] = function
         return this
     }
 
-    /** Names registered in this registry itself, without the parents (tests, the future catalog). */
-    internal fun ownNames(): Set<String> = functions.keys.toSet()
+    /**
+     * An immutable snapshot of this registry: later registrations here do not reach it. The parent must be frozen
+     * too ([standard] is), so that the whole chain is fixed.
+     */
+    public fun freeze(): FunctionRegistry {
+        if (isFrozen) return this
+        check(parent == null || parent.isFrozen) { "freeze the parent registry first" }
+        return FunctionRegistry(parent, java.util.Collections.unmodifiableMap(LinkedHashMap(functions!!)))
+    }
 
     /** The function registered under [name] here or in a parent, or null. */
-    public fun lookup(name: String): FunctionValue? = functions[name] ?: parent?.lookup(name)
+    public fun lookup(name: String): FunctionValue? = own()[name] ?: parent?.lookup(name)
+
+    /** Names defined more than once along the chain (an overridden standard function), CAP-7 p. 5. */
+    public fun conflicts(): List<NameConflict> {
+        val chain = generateSequence(this) { it.parent }.toList().asReversed()
+        val byName = LinkedHashMap<String, MutableList<FunctionSource>>()
+        for (r in chain) for ((name, f) in r.own()) byName.getOrPut(name) { ArrayList() } += (f as? NativeFunction)?.source ?: FunctionSource.HOST
+        return byName.filterValues { it.size > 1 }.map { (name, sources) -> NameConflict(name, sources, sources.last()) }
+    }
+
+    /** Whether this registry is [other] or extends it. */
+    internal fun descendsFrom(other: FunctionRegistry): Boolean = generateSequence(this) { it.parent }.any { it === other }
+
+    /** Names registered in this registry itself, without the parents (tests, the future catalog). */
+    internal fun ownNames(): Set<String> = own().keys.toSet()
+
+    /** The registries of the chain from the outermost (the standard library) to this one. */
+    internal fun chain(): List<FunctionRegistry> = generateSequence(this) { it.parent }.toList().asReversed()
+
+    internal fun ownFunctions(): Map<String, FunctionValue> = own()
 
     public companion object {
         /**
@@ -227,7 +289,19 @@ public class FunctionRegistry private constructor(
             return NativeFunction("", sig, arity ?: sig?.params?.size ?: 0, implementation)
         }
 
-        private val STANDARD: FunctionRegistry by lazy { FunctionRegistry(null).also { StandardLibrary.registerAll(it); it.frozen = true } }
+        /** `$` + name must be exactly one variable token whose value is the name (the tokenizer of expressions). */
+        internal fun isCallableName(name: String): Boolean {
+            if (name.isEmpty()) return false
+            return try {
+                val lexer = su.seaf.archtool.jsonata.parser.Tokenizer("\$" + name)
+                val t = lexer.next(false)
+                t != null && t.type == su.seaf.archtool.jsonata.parser.TokenType.VARIABLE && t.value == name && lexer.next(true) == null
+            } catch (_: JsonataException) {
+                false
+            }
+        }
+
+        private val STANDARD: FunctionRegistry = FunctionRegistry(null, null).also { StandardLibrary.registerAll(it); it.standardFrozen = true }
 
         /** The jsonata-js 2.2.2 standard library: shared and read-only (registering into it fails with X0004). */
         @JvmStatic

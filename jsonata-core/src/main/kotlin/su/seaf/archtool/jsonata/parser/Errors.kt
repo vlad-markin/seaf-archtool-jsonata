@@ -145,6 +145,8 @@ internal object Messages {
         "X0002" to "The evaluation exhausted the JVM stack. Check for non-terminating recursion or rewrite it as tail-recursive",
         "X0003" to "Invalid regular expression {{value}}: {{{message}}}",
         "X0004" to "The standard library registry is read-only; register {{value}} in FunctionRegistry.create() instead",
+        "X0006" to "{{value}} cannot be called from an expression and cannot be registered as a function name",
+        "X0007" to "{{value}} is a standard library function; register it with overridesStandard to replace it",
         "X0005" to "The evaluation needs more stack segments than the process budget allows ({{value}} running at once); see StackSegments.budget",
     )
 

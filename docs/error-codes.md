@@ -1,0 +1,15 @@
+# Коды ошибок движка (`X`)
+
+Коды эталона (`S`, `T`, `D`, `U`) и их тексты — как в `errorCodes` jsonata-js 2.2.2 (`compat/jsonata-js/src/jsonata.js`). Собственные ошибки движка — в том же формате с буквой `X` (решение 18). Номер — **следующий свободный** в момент коммита (`docs/compat-policy.md`); тексты лежат в `parser/Errors.kt` (`engineTemplates`). В дизайне (`docs/plan/design.md` §3.2) коды названы символьными именами `X-…`; ниже — их номера.
+
+| Код | Имя в дизайне | Текст | Где возникает |
+|---|---|---|---|
+| X0001 | — | A function named {{value}} is already registered; registered names cannot be replaced | регистрация: имя уже занято в реестре или в цепочке |
+| X0002 | — | The evaluation exhausted the JVM stack. Check for non-terminating recursion or rewrite it as tail-recursive | последняя защита: стек JVM исчерпан вне границ сегментов (DEV-02) |
+| X0003 | — | Invalid regular expression {{value}}: {{{message}}} | литерал regex, недопустимый в JS (DEV-04) |
+| X0004 | — | The standard library registry is read-only; register {{value}} in FunctionRegistry.create() instead | регистрация в `FunctionRegistry.standard()` |
+| X0005 | процессный бюджет сегментов (У1) | The evaluation needs more stack segments than the process budget allows ({{value}} running at once); see StackSegments.budget | глубокая рекурсия сверх `StackSegments.budget` (`docs/limits.md`) |
+| X0006 | X-NAME | {{value}} cannot be called from an expression and cannot be registered as a function name | регистрация: `$` + имя не даёт один токен переменной |
+| X0007 | X-STDLIB | {{value}} is a standard library function; register it with overridesStandard to replace it | регистрация имени stdlib без `overridesStandard` |
+
+Перевод в `innerCode` ошибок сервиса — фаза 9, по этой таблице, без разбора текста.

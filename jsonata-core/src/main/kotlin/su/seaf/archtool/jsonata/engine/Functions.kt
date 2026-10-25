@@ -1,6 +1,8 @@
 package su.seaf.archtool.jsonata.engine
 
 import su.seaf.archtool.jsonata.CallContext
+import su.seaf.archtool.jsonata.FunctionDefinition
+import su.seaf.archtool.jsonata.FunctionSource
 import su.seaf.archtool.jsonata.NativeImplementation
 import su.seaf.archtool.jsonata.parser.JsonataException
 import su.seaf.archtool.jsonata.parser.Signature
@@ -32,7 +34,14 @@ internal class NativeFunction(
     val implementation: NativeImplementation,
     /** Number of declared JS parameters, used by partial application (jsonata.js: getNativeFunctionArguments). */
     val paramCount: Int = maxOf(arity, signature?.params?.size ?: 0),
-) : EngineFunction()
+    /** The registration, with documentation and flags; null for the standard library and unregistered values. */
+    val definition: FunctionDefinition? = null,
+    /** Where the function comes from (the standard library registers with [FunctionSource.STDLIB]). */
+    val source: FunctionSource = definition?.source ?: FunctionSource.HOST,
+) : EngineFunction() {
+    /** Must not run in a debugger watch expression. */
+    val sideEffects: Boolean get() = definition?.sideEffects ?: false
+}
 
 /** A lambda closure (jsonata.js: evaluateLambda, partialApplyProcedure). */
 internal class Lambda(

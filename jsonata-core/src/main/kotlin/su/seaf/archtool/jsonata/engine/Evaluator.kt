@@ -38,7 +38,10 @@ internal object Evaluator {
         deep: Boolean = false,
         onDeep: (() -> Unit)? = null,
     ): Value? {
-        val ctx = EvalContext(options.functions, evaluation, evaluation.clock(), hook)
+        val registry = evaluation.functions?.also {
+            require(it.descendsFrom(options.functions)) { "EvaluationOptions.functions must extend the registry the expression was compiled with" }
+        } ?: options.functions
+        val ctx = EvalContext(registry, evaluation, evaluation.clock(), hook)
         ctx.onDeep = onDeep
         val env = Frame(null, ctx)
         for ((k, v) in bindings) env.bind(k, v)

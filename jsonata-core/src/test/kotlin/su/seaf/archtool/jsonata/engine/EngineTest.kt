@@ -56,7 +56,8 @@ class EngineTest {
     @Test
     fun `registry names cannot be replaced (decision 18)`() {
         val r = FunctionRegistry.create()
-        assertEquals("X0001", assertFailsWith<JsonataException> { r.register("sum", null, { _, _ -> null }) }.code)
+        // a standard name needs overridesStandard (X0007, CAP-7); RegistryTest covers the rules in full
+        assertEquals("X0007", assertFailsWith<JsonataException> { r.register("sum", null, { _, _ -> null }) }.code)
         r.register("mine", null, { _, _ -> null })
         assertEquals("X0001", assertFailsWith<JsonataException> { r.register("mine", null, { _, _ -> null }) }.code)
         assertEquals("X0001", assertFailsWith<JsonataException> { r.extend().register("mine", null, { _, _ -> null }) }.code)
