@@ -258,6 +258,9 @@ public class FunctionRegistry private constructor(
     /** The function registered under [name] here or in a parent, or null. */
     public fun lookup(name: String): FunctionValue? = own()[name] ?: parent?.lookup(name)
 
+    /** The functions an expression compiled with this registry can call, with their documentation (CAP-8). */
+    public fun catalog(): su.seaf.archtool.jsonata.catalog.FunctionCatalog = su.seaf.archtool.jsonata.catalog.FunctionCatalog.of(this)
+
     /** Names defined more than once along the chain (an overridden standard function), CAP-7 p. 5. */
     public fun conflicts(): List<NameConflict> {
         val chain = generateSequence(this) { it.parent }.toList().asReversed()
