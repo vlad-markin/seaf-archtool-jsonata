@@ -181,7 +181,11 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
 public class ObjectValue : Value() {
     private val map = LinkedHashMap<String, Value>()
     private var indexKeys = 0
-    private var orderedKeys: List<String>? = null
+    /**
+     * Keys in JS order, computed on first read. A parsed document is read by many threads (decision 8): the list is
+     * immutable and published through a volatile field, so a reader sees it fully built (review RV-7).
+     */
+    @Volatile private var orderedKeys: List<String>? = null
 
     override val typeName: String get() = "object"
 
@@ -210,11 +214,11 @@ public class ObjectValue : Value() {
     public val keys: List<String>
         get() {
             orderedKeys?.let { return it }
-            val result = if (indexKeys == 0) {
-                ArrayList(map.keys)
+            val result: List<String> = if (indexKeys == 0) {
+                java.util.Collections.unmodifiableList(ArrayList(map.keys))
             } else {
                 val idx = map.keys.filter { isArrayIndex(it) }.sortedBy { it.toLong() }
-                idx + map.keys.filter { !isArrayIndex(it) }
+                java.util.Collections.unmodifiableList(idx + map.keys.filter { !isArrayIndex(it) })
             }
             orderedKeys = result
             return result

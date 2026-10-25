@@ -26,6 +26,24 @@ class ValueTest {
     }
 
     @Test
+    fun `a shared document is read safely from many threads (RV-7)`() {
+        val expr = su.seaf.archtool.jsonata.Jsonata.compile("[\$keys(\$), \$string(\$), \$each(\$, function(\$v, \$k){ \$k })]")
+        val pool = java.util.concurrent.Executors.newFixedThreadPool(8)
+        repeat(200) { round ->
+            // a fresh document per round, so that the first key reads race with each other
+            val doc = ObjectValue()
+            for (i in 0 until 50) doc.put(if (i % 3 == 0) "$i" else "k$i", n(i.toDouble()))
+            val expected = JsonWriter.stringify(expr.evaluate(ObjectValue().also { c -> doc.keys.forEach { c.put(it, doc[it]!!) } }))
+            val start = java.util.concurrent.CountDownLatch(1)
+            val futures = (1..8).map { pool.submit<String> { start.await(); JsonWriter.stringify(expr.evaluate(doc)) } }
+            start.countDown()
+            futures.forEach { assertEquals(expected, it.get(), "round $round") }
+        }
+        pool.shutdown()
+        assertTrue(runCatching { (ObjectValue.of("a" to n(1.0)).keys as MutableList<String>).add("x") }.isFailure)
+    }
+
+    @Test
     fun `deep equality is JS isDeepEqual`() {
         assertEquals(n(0.0), n(-0.0))
         assertNotEquals(n(Double.NaN), n(Double.NaN))
