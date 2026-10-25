@@ -46,7 +46,19 @@ object KotlinEngine : CompatEngine by KotlinEngineImpl(debug = false)
 /** The same engine compiled with debugging on: results must be identical (decision 15, review RV-1). */
 object DebugKotlinEngine : CompatEngine by KotlinEngineImpl(debug = true)
 
-class KotlinEngineImpl(private val debug: Boolean) : CompatEngine {
+/** The engine with a profiler and a value tracer on every case: results must be identical (CAP-11 p. 4, TC-16). */
+object TracedKotlinEngine : CompatEngine by KotlinEngineImpl(debug = true, {
+    su.seaf.archtool.jsonata.debug.trace.CompositeListener(
+        su.seaf.archtool.jsonata.debug.trace.Profiler(),
+        su.seaf.archtool.jsonata.debug.trace.ValueTracer({ true }, k = 3, maxEntryBytes = 256, maxEntries = 200),
+    )
+})
+
+class KotlinEngineImpl(
+    private val debug: Boolean,
+    /** A listener per case for the debug run; by default one that only observes. */
+    private val listenerFactory: () -> su.seaf.archtool.jsonata.debug.EvaluationListener = { object : su.seaf.archtool.jsonata.debug.EvaluationListener {} },
+) : CompatEngine {
     override fun ast(expr: String): JsonNode = try {
         toJson(JsonataParser.ast(expr))
     } catch (e: JsonataException) {
@@ -61,7 +73,7 @@ class KotlinEngineImpl(private val debug: Boolean) : CompatEngine {
         // run-test-suite.js timeboxExpression: depth counted per evaluate() entry and a time limit, both reported as
         // U1001; the jsonata-js 2.2.2 options `stack`/`timeout` count the same way (D1011/D1012)
         // the debug run evaluates through the debugging tree with a listener that only observes
-        val listener = if (debug) object : su.seaf.archtool.jsonata.debug.EvaluationListener {} else null
+        val listener = if (debug) listenerFactory() else null
         val timeboxed = case.timelimit != null && case.depth != null
         val limits = if (timeboxed) {
             EvaluationOptions(maxDepth = case.depth!!, timeoutMillis = case.timelimit!!, listener = listener)
