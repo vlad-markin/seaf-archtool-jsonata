@@ -9,3 +9,4 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.10")
     testImplementation(kotlin("test"))
 }
+tasks.test { systemProperty("jsonata.compat", rootProject.file("compat").absolutePath) }
