@@ -34,10 +34,16 @@ class CompatRatchetTest {
                 Status.entries.forEach { s -> put(s.name.lowercase(), results.count { it.status == s }) }
                 put("ratcheted", passList.ids.size)
                 putPOJO("newlyPassing", newlyPassing)
-                putPOJO("failing", results.filter { it.status != Status.PASS && it.status != Status.NOT_IMPLEMENTED }
+                putPOJO("deviations", results.filter { it.status == Status.DEVIATION }.map { "${it.id} ${it.detail ?: ""}".trim() })
+                putPOJO("failing", results.filter { it.status != Status.PASS && it.status != Status.NOT_IMPLEMENTED && it.status != Status.DEVIATION }
                     .map { "${it.id} ${it.status} ${it.detail ?: ""}".trim() })
             }
         }
+        // a case listed with a deviation must still differ; otherwise it belongs back in the ratchet
+        val deviations = DeviationList(File(root, "pass/deviations.txt")).ids
+        val stale = runs.getValue("eval").filter { it.id in deviations && it.status != Status.DEVIATION }
+            .map { "${it.id} ${deviations[it.id]}: ${it.status} ${it.detail ?: ""}".trim() }
+        report.putPOJO("staleDeviations", stale)
         // decision 15: the debug compilation gives the same outcome on every case
         val debugHarness = Harness(DebugKotlinEngine, suite, AstSnapshots(root))
         val debugDiffs = runs.getValue("eval").zip(cases.map(debugHarness::runEval))
@@ -49,5 +55,6 @@ class CompatRatchetTest {
             .writeText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(report))
         assertTrue(regressions.isEmpty(), "regressions: ${regressions.joinToString("\n")}")
         assertTrue(debugDiffs.isEmpty(), "debug compilation differs:\n${debugDiffs.joinToString("\n")}")
+        assertTrue(stale.isEmpty(), "cases in pass/deviations.txt that no longer differ:\n${stale.joinToString("\n")}")
     }
 }

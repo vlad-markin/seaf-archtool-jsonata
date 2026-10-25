@@ -67,7 +67,7 @@
 
 | Гейт | Что | Где | Порог |
 |---|---|---|---|
-| **test-suite** (CAP-2 п. 1) | `ast` и `eval` по 1686 случаям, значение, код ошибки (позиция и имя — шаг 1.2); второй прогон `eval` с `debug = true` | `./gradlew :jsonata-compat:test`, отчёт `jsonata-compat/build/compat-report.json`; храповик `compat/pass/{ast,eval}.txt` | `ast` 1686/1686; `eval` 1686/1686 за вычетом id из `compat/pass/deviations.txt`; 0 расхождений отладочного прогона |
+| **test-suite** (CAP-2 п. 1) | `ast` и `eval` по 1686 случаям: значение, код ошибки, `position` и `token` (эталон — `compat/pass/eval-errors.jsonl`, `compat/node/dump-eval-errors.mjs`); второй прогон `eval` с `debug = true` | `./gradlew :jsonata-compat:test`, отчёт `jsonata-compat/build/compat-report.json`; храповик `compat/pass/{ast,eval}.txt` | `ast` 1686/1686; `eval` 1686/1686 за вычетом id из `compat/pass/deviations.txt`; 0 расхождений отладочного прогона |
 | **Целостность** (CAP-3) | версия эталона, храповик против `deviations.md`, список и сигнатуры stdlib | `SuiteIntegrityTest`, `StdlibFreezeTest` (шаги 1.2, 1.3) | зелёные |
 | **Ловушки** | 431 случай из отчёта jsonata-java, ревью и фаззинга, ожидания сняты с `jsonata@2.2.2` | `TrapsTest`, `compat/traps` | расхождения только из списка разрешённых со ссылкой на DEV |
 | **Корпус SEAF** (CAP-2 п. 2) | разбор и AST ≥ 1215 выражений метамодели | `CorpusAstTest`, **локально** (корпус в репо нет) | 100 %; детектор даёт число затронутых выражений на каждое отличие |

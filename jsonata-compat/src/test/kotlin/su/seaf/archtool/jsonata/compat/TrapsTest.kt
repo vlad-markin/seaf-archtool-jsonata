@@ -58,16 +58,23 @@ class TrapsTest {
             }
         } catch (e: JsonataException) {
             val code = if (bounds != null && (e.code == "D1011" || e.code == "D1012")) "U1001" else e.code
-            "error $code"
+            "error $code @${e.position} ${tokenText(e.token)}"
         }
     }
 
     private fun expected(e: com.fasterxml.jackson.databind.JsonNode): String = when {
         e.has("json") -> "json " + e.get("json").asText()
         e.has("undefined") -> "undefined"
-        e.has("error") -> "error " + e.get("error").asText()
+        e.has("error") -> "error " + e.get("error").asText() + " @" + e.get("position")?.takeIf { !it.isNull }?.asInt() + " " +
+            e.get("token")?.takeIf { !it.isNull }?.let { if (it.isNumber) su.seaf.archtool.jsonata.value.JsNumber.toString(it.asDouble()) else it.asText() }
         e.has("crash") -> "crash " + e.get("crash").asText()
         else -> "function"
+    }
+
+    private fun tokenText(token: Any?): String? = when (token) {
+        null -> null
+        is Double -> su.seaf.archtool.jsonata.value.JsNumber.toString(token)
+        else -> token.toString()
     }
 
     @Test

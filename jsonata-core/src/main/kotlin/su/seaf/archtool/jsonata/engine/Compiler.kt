@@ -168,8 +168,18 @@ internal class Compiler(private val debug: Boolean) {
 
     private fun nodes(ast: AstNode, key: String): Array<Node> = (ast.nodes(key) ?: emptyList()).map { compile(it as AstNode) }.toTypedArray()
 
-    private fun procName(procedure: AstNode): String? =
-        if (procedure.type == "path") (procedure.nodes("steps")!![0] as AstNode)["value"] as? String else procedure["value"] as? String
+    /**
+     * jsonata.js evaluateFunction: `expr.procedure.type === 'path' ? expr.procedure.steps[0].value : expr.procedure.value`
+     * — the error token of a call; a literal gives its value (`2(blah)` → token 2).
+     */
+    private fun procName(procedure: AstNode): Any? {
+        val v = if (procedure.type == "path") (procedure.nodes("steps")!![0] as AstNode)["value"] else procedure["value"]
+        return when (v) {
+            is String, is Boolean -> v
+            is Number -> v.toDouble()
+            else -> null
+        }
+    }
 
     private fun pathHint(procedure: AstNode): String? =
         if (procedure.type == "path") (procedure.nodes("steps")!![0] as AstNode)["value"] as? String else null

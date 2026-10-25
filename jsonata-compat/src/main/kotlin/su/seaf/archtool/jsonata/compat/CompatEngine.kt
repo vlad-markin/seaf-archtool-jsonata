@@ -50,13 +50,13 @@ class KotlinEngineImpl(private val debug: Boolean) : CompatEngine {
     override fun ast(expr: String): JsonNode = try {
         toJson(JsonataParser.ast(expr))
     } catch (e: JsonataException) {
-        throw EngineError(e.code, e.position, e.token?.toString(), e.message)
+        throw EngineError(e.code, e.position, tokenText(e.token), e.message)
     }
     override fun evaluate(case: SuiteCase): Outcome {
         val expr = try {
             Jsonata.compile(case.expr, CompileOptions(FunctionRegistry.standard(), debug))
         } catch (e: JsonataException) {
-            return Outcome.Failed(EngineError(e.code, e.position, e.token?.toString(), e.message))
+            return Outcome.Failed(EngineError(e.code, e.position, tokenText(e.token), e.message))
         }
         // run-test-suite.js timeboxExpression: depth counted per evaluate() entry and a time limit, both reported as
         // U1001; the jsonata-js 2.2.2 options `stack`/`timeout` count the same way (D1011/D1012)

@@ -1,0 +1,4 @@
+# Test-suite cases whose outcome differs from jsonata-js 2.2.2 by a deliberate deviation (docs/deviations.md).
+# One per line: <case-id> <DEV-id>. A case is either here or in eval.txt, never both (SuiteIntegrityTest);
+# moving a case here needs the DEV id in the commit message (docs/compat-policy.md).
+errors/case026 DEV-10

@@ -210,7 +210,6 @@ errors/case022
 errors/case023
 errors/case024
 errors/case025
-errors/case026
 fields/case000
 fields/case001
 fields/case002

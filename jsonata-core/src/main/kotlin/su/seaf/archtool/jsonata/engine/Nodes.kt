@@ -354,7 +354,7 @@ internal class FunctionCallNode(
     @JvmField val procedure: Node,
     @JvmField val arguments: Array<Node>,
     /** The name in the procedure position for error hints (`steps[0].value` of a path, else the node value). */
-    @JvmField val procName: String?,
+    @JvmField val procName: Any?,
     /** For T1005: the first step of a path procedure (`uppercase(x)` without `$`). */
     @JvmField val pathHint: String?,
 ) : Node(ast) {
@@ -369,7 +369,7 @@ internal class FunctionCallNode(
         if (hasContext) args.add(context)
         for (a in arguments) args.add(a.evaluate(input, env))
         try {
-            val site = if (proc is EngineFunction && proc.jsObject) CallSite(procName, position) else null
+            val site = if (proc is EngineFunction && proc.jsObject) CallSite(procName as? String, position) else null
             return Evaluator.apply(proc, args, input, env, site, this)
         } catch (e: JsonataException) {
             if (e.position == null) e.position = position
@@ -384,7 +384,7 @@ internal class PartialNode(
     ast: AstNode,
     @JvmField val procedure: Node,
     @JvmField val arguments: Array<Node?>,
-    @JvmField val procName: String?,
+    @JvmField val procName: Any?,
     @JvmField val pathHint: String?,
 ) : Node(ast) {
     override fun eval(input: Value?, env: Frame): Value? {
