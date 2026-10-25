@@ -56,13 +56,19 @@ public class Jsonata private constructor(
     }
 
     /** The debugging tree: the same expression with listener calls at every node, compiled once (CAS, no monitor). */
-    private val debugTree = java.util.concurrent.atomic.AtomicReference<Node?>(if (options.debug) root else null)
+    private val debugTree = java.util.concurrent.atomic.AtomicReference<DebugTree?>(null)
 
-    internal fun debugRoot(): Node {
+    internal class DebugTree(val root: Node, val infos: List<su.seaf.archtool.jsonata.debug.NodeInfo>)
+
+    internal fun debugTree(): DebugTree {
         debugTree.get()?.let { return it }
-        debugTree.compareAndSet(null, Compiler(true, ranges).compile(ast))
+        val compiler = Compiler(true, ranges)
+        val tree = compiler.compile(ast)
+        debugTree.compareAndSet(null, DebugTree(tree, compiler.infos.toList()))
         return debugTree.get()!!
     }
+
+    internal fun debugRoot(): Node = if (options.debug) root else debugTree().root
 
     private val mainSource = su.seaf.archtool.jsonata.debug.SourceInfo("main", expression, su.seaf.archtool.jsonata.debug.SourceInfo.Kind.MAIN)
 

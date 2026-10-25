@@ -24,6 +24,9 @@ internal class Compiler(
     private var nextId = 0
     private val parents = ArrayList<Int>()
 
+    /** NodeInfo of every node of the debugging tree, by id. */
+    val infos: MutableList<su.seaf.archtool.jsonata.debug.NodeInfo> = ArrayList()
+
     /**
      * True when the expression binds a lambda that refers to its own name (`$f := function(){ ... $f(...) }`): such
      * an expression may recurse deeper than the caller's first stack segment, so it starts on a segment thread
@@ -44,10 +47,15 @@ internal class Compiler(
             parents.removeAt(parents.size - 1)
         }
         val value = ast["value"]?.let { if (it is Double) su.seaf.archtool.jsonata.value.JsNumber.toString(it) else it.toString() }
-        node.info = su.seaf.archtool.jsonata.debug.NodeInfo(
-            id, ast.type ?: "?", value, sourceId, node.start, node.end, executable = true,
+        // a tail-call thunk only wraps the call: the evaluator does not stop on it
+        val executable = !(ast.type == "lambda" && ast["thunk"] == true)
+        val info = su.seaf.archtool.jsonata.debug.NodeInfo(
+            id, ast.type ?: "?", value, sourceId, node.start, node.end, executable,
             literal = node is LiteralNode, operatorStop = ast.type in OPERATOR_STOPS, parentId = parent,
         )
+        node.info = info
+        while (infos.size <= id) infos.add(info)
+        infos[id] = info
         return node
     }
 
