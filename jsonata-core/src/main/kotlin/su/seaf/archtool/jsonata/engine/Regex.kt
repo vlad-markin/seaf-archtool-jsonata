@@ -293,13 +293,25 @@ internal object RegexMatcher {
     fun create(regex: JsRegexPattern, position: Int?): InternalFunction {
         val state = intArrayOf(0) // the RegExp's lastIndex, shared by the match objects it returns
         lateinit var closure: InternalFunction
+        // one Matcher over the (surrogate-mapped) subject for all the matches of a string: mapping and matcher
+        // creation per match made iterating over a long string quadratic (review RV-5)
+        var lastSubject: String? = null
+        var matcher: java.util.regex.Matcher? = null
+        fun matcherFor(str: String): java.util.regex.Matcher {
+            val cached = matcher
+            if (cached != null && lastSubject === str) return cached
+            val m = regex.pattern.matcher(JsRegexPattern.subject(str))
+            lastSubject = str
+            matcher = m
+            return m
+        }
         fun exec(str: String, fromIndex: Int): Value? {
             state[0] = fromIndex
             if (fromIndex > str.length) {
                 state[0] = 0
                 return null
             }
-            val m = regex.pattern.matcher(JsRegexPattern.subject(str))
+            val m = matcherFor(str)
             if (!m.find(fromIndex)) {
                 state[0] = 0
                 return null

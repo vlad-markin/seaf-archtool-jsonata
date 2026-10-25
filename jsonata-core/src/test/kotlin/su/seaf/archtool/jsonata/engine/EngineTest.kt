@@ -233,6 +233,17 @@ class EngineTest {
     }
 
     @Test
+    fun `regex over a long string with surrogates is linear (RV-5)`() {
+        val s = StringValue.of("ab".repeat(80_000) + "\uD83D\uDE00")
+        val t0 = System.nanoTime()
+        assertEquals("80000", JsonWriter.stringify(Jsonata.compile("\$count(\$match(\$, /a/))").evaluate(s)))
+        assertEquals("160001", JsonWriter.stringify(Jsonata.compile("\$length(\$replace(\$, /a/, 'x'))").evaluate(s)))
+        assertEquals("80001", JsonWriter.stringify(Jsonata.compile("\$count(\$split(\$, /b/))").evaluate(s)))
+        val ms = (System.nanoTime() - t0) / 1_000_000
+        assertTrue(ms < 3000, "took $ms ms")
+    }
+
+    @Test
     fun `custom matcher functions`() {
         val repeating = FunctionRegistry.create().register("repeatingLetters", "<sn:f>", { _, a ->
             val chars = (a[0] as StringValue).value.repeat((a[1] as NumberValue).value.toInt())
