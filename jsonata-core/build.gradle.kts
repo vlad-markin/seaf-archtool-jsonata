@@ -21,3 +21,4 @@ val verifyCoreDependencies by tasks.registering {
 }
 tasks.named("check") { dependsOn(verifyCoreDependencies) }
 tasks.test { systemProperty("jsonata.compat", rootProject.file("compat").absolutePath) }
+tasks.test { maxHeapSize = "1g" }

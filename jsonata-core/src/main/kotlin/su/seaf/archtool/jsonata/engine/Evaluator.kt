@@ -153,7 +153,7 @@ internal object Evaluator {
         var result = apply(cloneFunction, listOf(obj), null, env, null)
         // a user-defined $clone may return (parts of) its argument: its result is copied before it is updated, so
         // that the input document is never modified (decision 8, review RV-2); the standard $clone is already a copy
-        if (cloneFunction !== FunctionRegistry.standard().lookup("clone")) result = copyContainers(result)
+        if (cloneFunction !== FunctionRegistry.standard().lookup("clone")) result = copyContainers(result, env.ctx)
         var matches = node.pattern.evaluate(result, env)
         if (matches != null) {
             if (matches !is ArrayValue) matches = ArrayValue.sequence(matches)
@@ -189,7 +189,7 @@ internal object Evaluator {
     }
 
     /** A structural copy of arrays and objects (values, sequence flags and undefined items kept as they are). */
-    fun copyContainers(v: Value?): Value? {
+    fun copyContainers(v: Value?, ctx: EvalContext? = null): Value? {
         if (v !is ArrayValue && v !is ObjectValue) return v
         fun shallow(x: Value): Value = when (x) {
             is ArrayValue -> ArrayValue(x.size).also { c ->
@@ -206,6 +206,7 @@ internal object Evaluator {
         val stack = ArrayList<Value>()
         stack += root
         while (stack.isNotEmpty()) {
+            ctx?.tick()
             when (val c = stack.removeAt(stack.size - 1)) {
                 is ArrayValue -> for (i in 0 until c.size) {
                     val item = c.raw(i)
@@ -243,14 +244,14 @@ internal object Evaluator {
     }
 
     /** jsonata.js: functionClone — `JSON.parse($string(arg))`. */
-    fun clone(arg: Value?): Value? {
+    fun clone(arg: Value?, ctx: EvalContext? = null): Value? {
         if (arg == null) return null
         val a = if (arg is ArrayValue && arg.outerWrapper && arg.size > 0) arg.raw(0) else arg
-        return deepCopy(a!!)
+        return deepCopy(a!!, ctx)
     }
 
     /** `JSON.parse($string(v))` without recursion (review RV-4). */
-    private fun deepCopy(v: Value): Value {
+    private fun deepCopy(v: Value, ctx: EvalContext?): Value {
         fun scalar(x: Value): Value = when (x) {
             is NumberValue -> {
                 val d = x.value
@@ -270,9 +271,11 @@ internal object Evaluator {
         if (v is ArrayValue || v is ObjectValue) stack += v to root
         while (stack.isNotEmpty()) {
             val (src, dst) = stack.removeAt(stack.size - 1)
+            ctx?.tick()
             if (src is ArrayValue) {
                 val out = dst as ArrayValue
                 for (i in 0 until src.size) {
+                    ctx?.tick()
                     val item = src.raw(i)
                     val copy = if (item == null) NullValue else scalar(item)
                     out.add(copy)
@@ -281,6 +284,7 @@ internal object Evaluator {
             } else {
                 val out = dst as ObjectValue
                 (src as ObjectValue).forEach { k, item ->
+                    ctx?.tick()
                     val copy = scalar(item)
                     out.put(k, copy)
                     if (item is ArrayValue || item is ObjectValue) stack += item to copy
@@ -642,6 +646,7 @@ internal object Evaluator {
         var k = 0
         while (i < left.size && j < right.size) {
             if (swap(left[i], right[j])) merged[k++] = right[j++] else merged[k++] = left[i++]
+            ctx.tick()
         }
         while (i < left.size) merged[k++] = left[i++]
         while (j < right.size) merged[k++] = right[j++]
@@ -744,34 +749,40 @@ internal object Evaluator {
         val result = ArrayValue(n)
         result.isSequence = true
         var x = a
+        val ctx = env.ctx
         for (i in 0 until n) {
             result.add(NumberValue.of(x))
             x += 1.0
+            ctx.tick()
         }
         return result
     }
 
     /** functions.js: string. */
-    fun string(arg: Value, prettify: Boolean = false): String = when (arg) {
-        is StringValue -> arg.value
-        is FunctionValue -> ""
-        is NumberValue -> {
-            if (arg.value.isNaN() || arg.value.isInfinite()) throw JsonataException("D3001", value = arg)
-            JsonWriter.stringifyJsonata(arg, prettify)
+    fun string(arg: Value, prettify: Boolean = false, ctx: EvalContext? = null): String {
+        val tick: (() -> Unit)? = ctx?.let { c -> { c.tick() } }
+        return when (arg) {
+            is StringValue -> arg.value
+            is FunctionValue -> ""
+            is NumberValue -> {
+                if (arg.value.isNaN() || arg.value.isInfinite()) throw JsonataException("D3001", value = arg)
+                JsonWriter.stringifyJsonata(arg, prettify)
+            }
+            is ArrayValue -> {
+                val a = if (arg.outerWrapper) arg.raw(0) else arg
+                if (a == null) "undefined" else JsonWriter.stringifyJsonata(a, prettify, tick)
+            }
+            else -> JsonWriter.stringifyJsonata(arg, prettify, tick)
         }
-        is ArrayValue -> {
-            val a = if (arg.outerWrapper) arg.raw(0) else arg
-            if (a == null) "undefined" else JsonWriter.stringifyJsonata(a, prettify)
-        }
-        else -> JsonWriter.stringifyJsonata(arg, prettify)
     }
 
     /** functions.js: lookup. */
-    fun lookup(input: Value?, key: String): Value? {
+    fun lookup(input: Value?, key: String, ctx: EvalContext? = null): Value? {
         if (input is ArrayValue) {
             val result = ArrayValue.sequence()
             for (i in 0 until input.size) {
-                val res = lookup(input.raw(i), key) ?: continue
+                ctx?.tick()
+                val res = lookup(input.raw(i), key, ctx) ?: continue
                 if (res is ArrayValue) {
                     for (j in 0 until res.size) result.addNullable(res.raw(j))
                 } else {
@@ -785,14 +796,20 @@ internal object Evaluator {
     }
 
     /** functions.js: append — the concatenation is a plain array (JS `concat` does not keep the sequence flag). */
-    fun append(arg1: Value?, arg2: Value?): Value? {
+    fun append(arg1: Value?, arg2: Value?, ctx: EvalContext? = null): Value? {
         if (arg1 == null) return arg2
         if (arg2 == null) return arg1
         val a = if (arg1 is ArrayValue) arg1 else ArrayValue.sequence(arg1)
         val out = ArrayValue(a.size + 1)
-        for (i in 0 until a.size) out.addNullable(a.raw(i))
+        for (i in 0 until a.size) {
+            out.addNullable(a.raw(i))
+            ctx?.tick()
+        }
         if (arg2 is ArrayValue) {
-            for (i in 0 until arg2.size) out.addNullable(arg2.raw(i))
+            for (i in 0 until arg2.size) {
+                out.addNullable(arg2.raw(i))
+                ctx?.tick()
+            }
         } else {
             out.add(arg2)
         }
@@ -800,7 +817,7 @@ internal object Evaluator {
     }
 
     /** jsonata.js: flatten — every level of nesting, in order, without recursion. */
-    fun flatten(arg: Value?, out: ArrayValue) {
+    fun flatten(arg: Value?, out: ArrayValue, ctx: EvalContext? = null) {
         if (arg !is ArrayValue) {
             out.addNullable(arg)
             return
@@ -819,6 +836,7 @@ internal object Evaluator {
                 continue
             }
             indexes[top] = i + 1
+            ctx?.tick()
             val item = a.raw(i)
             if (item is ArrayValue) {
                 arrays += item
@@ -830,9 +848,10 @@ internal object Evaluator {
     }
 
     /** jsonata.js: recurseDescendants — pre-order, without recursion. */
-    fun recurseDescendants(input: Value?, results: ArrayValue) {
+    fun recurseDescendants(input: Value?, results: ArrayValue, ctx: EvalContext? = null) {
         val stack = ArrayList<Iterator<Value?>>()
         fun visit(v: Value?) {
+            ctx?.tick()
             if (v !is ArrayValue) results.addNullable(v)
             if (v is ArrayValue) stack += (0 until v.size).asSequence().map { v.raw(it) }.iterator()
             else if (v is ObjectValue) stack += v.keys.asSequence().map { v[it] }.iterator()

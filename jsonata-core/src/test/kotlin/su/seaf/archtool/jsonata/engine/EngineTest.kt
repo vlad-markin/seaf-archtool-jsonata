@@ -149,6 +149,36 @@ class EngineTest {
         assertEquals("D1011", error("(\$f := function(\$n){ \$n = 0 ? 0 : 1 + \$f(\$n - 1) }; \$f(100000))", limits = EvaluationOptions(maxDepth = 5000)).code)
     }
 
+    /** D1012 must come within a small margin of the deadline, also from loops inside native functions (RV-6). */
+    private fun assertTimesOut(expr: String, input: Value? = null, timeout: Long = 5) {
+        val t0 = System.nanoTime()
+        val e = assertFailsWith<JsonataException>(expr) {
+            Jsonata.compile(expr).evaluate(input, emptyMap(), EvaluationOptions(timeoutMillis = timeout))
+        }
+        val ms = (System.nanoTime() - t0) / 1_000_000
+        assertEquals("D1012", e.code, expr)
+        assertTrue(ms < timeout + 250, "$expr: D1012 after $ms ms")
+    }
+
+    @Test
+    fun `native loops pass the checkpoint (RV-6)`() {
+        val big = ArrayValue(400_000).also { a -> repeat(400_000) { a.add(ObjectValue.of("k" to NumberValue.of(it), "s" to StringValue.of("v$it"))) } }
+        val nums = ArrayValue(1_000_000).also { a -> repeat(1_000_000) { a.add(NumberValue.of(it)) } }
+        Jsonata.compile("\$count(\$)").evaluate(big) // warm up
+        assertTimesOut("\$count([1..10000000])", timeout = 1)
+        assertTimesOut("\$count(\$map(\$, \$string))", nums)
+        assertTimesOut("\$count(\$filter(\$, \$boolean))", nums)
+        assertTimesOut("\$reduce(\$, function(\$a, \$b){ \$a + \$b })", nums)
+        assertTimesOut("\$count(**)", big)
+        assertTimesOut("\$count(\$clone(\$).k)", big)
+        assertTimesOut("\$length(\$string(\$))", big)
+        assertTimesOut("\$count(\$sort(\$, function(\$a, \$b){ \$a < \$b }))", nums)
+        assertTimesOut("\$count(\$distinct(\$))", nums)
+        assertTimesOut("\$count(\$append(\$, \$))", nums)
+        assertTimesOut("\$count(\$keys(\$))", big)
+        assertTimesOut("\$count(\$zip(\$, \$))", nums)
+    }
+
     @Test
     fun `runaway recursion stops at the default depth limit`() {
         val e = error("(\$f := function(\$n){ 1 + \$f(\$n + 1) }; \$f(0))")

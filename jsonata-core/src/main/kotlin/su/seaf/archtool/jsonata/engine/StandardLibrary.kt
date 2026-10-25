@@ -28,7 +28,7 @@ internal object StandardLibrary {
         def(r, "max", "<a<n>:n>", 1) { _, a -> extreme(a[0], true) }
         def(r, "min", "<a<n>:n>", 1) { _, a -> extreme(a[0], false) }
         def(r, "average", "<a<n>:n>", 1) { _, a -> average(a[0]) }
-        def(r, "string", "<x-b?:s>", 1, 2) { _, a -> a[0]?.let { StringValue.of(Evaluator.string(it, (a.getOrNull(1) as? BooleanValue)?.value == true)) } }
+        def(r, "string", "<x-b?:s>", 1, 2) { c, a -> a[0]?.let { StringValue.of(Evaluator.string(it, (a.getOrNull(1) as? BooleanValue)?.value == true, ctx(c))) } }
         def(r, "substring", "<s-nn?:s>", 3) { _, a -> substring(a[0], a[1], a[2]) }
         def(r, "substringBefore", "<s-s:s>", 2) { _, a -> str(a[0])?.let { s -> val p = s.indexOf(str(a[1]) ?: "undefined"); StringValue.of(if (p > -1) s.substring(0, p) else s) } }
         def(r, "substringAfter", "<s-s:s>", 2) { _, a ->
@@ -70,13 +70,13 @@ internal object StandardLibrary {
         def(r, "boolean", "<x-:b>", 1) { _, a -> boolean(a[0])?.let { BooleanValue.of(it) } }
         def(r, "not", "<x-:b>", 1) { _, a -> a[0]?.let { BooleanValue.of(boolean(it) != true) } }
         def(r, "map", "<af>", 2) { c, a -> map(c, a[0], a[1]) }
-        def(r, "zip", "<a+>", 0) { _, a -> zip(a) }
+        def(r, "zip", "<a+>", 0) { c, a -> zip(c, a) }
         def(r, "filter", "<af>", 2) { c, a -> filter(c, a[0], a[1]) }
         def(r, "single", "<af?>", 2) { c, a -> single(c, a[0], a.getOrNull(1)) }
         def(r, "reduce", "<afj?:j>", 3) { c, a -> foldLeft(c, a[0], a[1], a.getOrNull(2)) }
         def(r, "sift", "<o-f?:o>", 2) { c, a -> sift(c, a[0], a.getOrNull(1)) }
-        def(r, "keys", "<x-:a<s>>", 1) { _, a -> keys(a[0]) }
-        def(r, "lookup", "<x-s:x>", 2) { _, a -> Evaluator.lookup(a[0], str(a[1]) ?: "undefined") }
+        def(r, "keys", "<x-:a<s>>", 1) { c, a -> keys(ctx(c), a[0]) }
+        def(r, "lookup", "<x-s:x>", 2) { c, a -> Evaluator.lookup(a[0], str(a[1]) ?: "undefined", ctx(c)) }
         def(r, "append", "<xx:a>", 2) { c, a -> append(c, a[0], a[1]) }
         def(r, "exists", "<x:b>", 1) { _, a -> BooleanValue.of(a[0] != null) }
         def(r, "spread", "<x-:a<o>>", 1) { c, a -> spread(c, a[0]) }
@@ -97,7 +97,7 @@ internal object StandardLibrary {
         def(r, "type", "<x:s>", 1) { _, a -> type(a[0]) }
         def(r, "sort", "<af?:a>", 2) { c, a -> sort(c, a[0], a.getOrNull(1)) }
         def(r, "shuffle", "<a:a>", 1) { _, a -> shuffle(a[0]) }
-        def(r, "distinct", "<x:x>", 1) { _, a -> distinct(a[0]) }
+        def(r, "distinct", "<x:x>", 1) { c, a -> distinct(ctx(c), a[0]) }
         def(r, "base64encode", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.base64encode(it)) } }
         def(r, "base64decode", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.base64decode(it)) } }
         def(r, "encodeUrlComponent", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.encodeUri(it, true, "encodeUrlComponent")) } }
@@ -105,7 +105,7 @@ internal object StandardLibrary {
         def(r, "decodeUrlComponent", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.decodeUri(it, true, "decodeUrlComponent")) } }
         def(r, "decodeUrl", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.decodeUri(it, false, "decodeUrl")) } }
         def(r, "eval", "<sx?:x>", 2) { c, a -> eval(c, a[0], a.getOrNull(1)) }
-        def(r, "clone", "<(oa)-:o>", 1) { _, a -> Evaluator.clone(a[0]) }
+        def(r, "clone", "<(oa)-:o>", 1) { c, a -> Evaluator.clone(a[0], ctx(c)) }
         def(r, "millis", "<:n>", 0) { c, _ -> NumberValue.of(c.timestamp.toDouble()) }
         DateTimeFunctions.register(r)
         NumberFormatting.register(r)
@@ -116,6 +116,9 @@ internal object StandardLibrary {
     }
 
     private fun str(v: Value?): String? = (v as? StringValue)?.value
+
+    /** The evaluation behind a native call: its [EvalContext.tick] is the checkpoint of native loops (review RV-6). */
+    private fun ctx(c: CallContext): EvalContext = (c as CallContextImpl).frame.ctx
     private fun num(v: Value?): Double? = (v as? NumberValue)?.value
 
     // ---- aggregation ----
@@ -519,7 +522,9 @@ internal object StandardLibrary {
         val arr = arrArg as ArrayValue? ?: return null
         val func = fn(funcArg)
         val result = ArrayValue.sequence()
+        val ctx = ctx(c)
         for (i in 0 until arr.size) {
+            ctx.tick()
             val res = c.call(func, hofArgs(func, arr.raw(i), NumberValue.of(i), arr))
             if (res != null) result.add(res)
         }
@@ -530,7 +535,9 @@ internal object StandardLibrary {
         val arr = arrArg as ArrayValue? ?: return null
         val func = fn(funcArg)
         val result = ArrayValue.sequence()
+        val ctx = ctx(c)
         for (i in 0 until arr.size) {
+            ctx.tick()
             val entry = arr.raw(i)
             if (boolean(c.call(func, hofArgs(func, entry, NumberValue.of(i), arr))) == true) result.addNullable(entry)
         }
@@ -541,7 +548,9 @@ internal object StandardLibrary {
         val arr = arrArg as ArrayValue? ?: return null
         var found = false
         var result: Value? = null
+        val ctx = ctx(c)
         for (i in 0 until arr.size) {
+            ctx.tick()
             val entry = arr.raw(i)
             var positive = true
             if (funcArg != null) {
@@ -575,7 +584,9 @@ internal object StandardLibrary {
             result = init
             index = 0
         }
+        val ctx = ctx(c)
         while (index < seq.size) {
+            ctx.tick()
             val args = ArrayList<Value?>(4)
             args.add(result)
             args.add(seq.raw(index))
@@ -591,7 +602,9 @@ internal object StandardLibrary {
         val obj = arg as? ObjectValue ?: return null
         val func = fn(funcArg)
         val result = ObjectValue()
+        val ctx = ctx(c)
         for (k in obj.keys) {
+            ctx.tick()
             val entry = obj[k]
             if (boolean(c.call(func, hofArgs(func, entry, StringValue.of(k), obj))) == true) result.put(k, entry!!)
         }
@@ -602,18 +615,22 @@ internal object StandardLibrary {
         val result = ArrayValue.sequence()
         val obj = arg as? ObjectValue ?: return result
         val func = fn(funcArg)
+        val ctx = ctx(c)
         for (k in obj.keys) {
+            ctx.tick()
             val v = c.call(func, hofArgs(func, obj[k], StringValue.of(k), obj))
             if (v != null) result.add(v)
         }
         return result
     }
 
-    private fun zip(args: List<Value?>): Value {
+    private fun zip(c: CallContext, args: List<Value?>): Value {
+        val ctx = ctx(c)
         val result = ArrayValue()
         if (args.isEmpty()) return result
         val length = args.minOf { if (it is ArrayValue) it.size else 0 }
         for (i in 0 until length) {
+            ctx.tick()
             val tuple = ArrayValue(args.size)
             for (a in args) tuple.addNullable((a as ArrayValue).raw(i))
             result.add(tuple)
@@ -623,12 +640,13 @@ internal object StandardLibrary {
 
     // ---- arrays and objects ----
 
-    private fun keys(arg: Value?): Value {
+    private fun keys(ctx: EvalContext, arg: Value?): Value {
+        ctx.tick()
         val result = ArrayValue.sequence()
         if (arg is ArrayValue) {
             val merged = LinkedHashSet<String>()
             for (i in 0 until arg.size) {
-                val k = keys(arg.raw(i)) as ArrayValue
+                val k = keys(ctx, arg.raw(i)) as ArrayValue
                 for (j in 0 until k.size) merged += (k.raw(j) as StringValue).value
             }
             val ordered = ObjectValue()
@@ -641,7 +659,7 @@ internal object StandardLibrary {
     }
 
     private fun append(c: CallContext, a: Value?, b: Value?): Value? {
-        val result = Evaluator.append(a, b)
+        val result = Evaluator.append(a, b, ctx(c))
         if (result is ArrayValue && a != null && b != null) (c as CallContextImpl).frame.ctx.checkSequence(result.size)
         return result
     }
@@ -715,13 +733,14 @@ internal object StandardLibrary {
         return ArrayValue(arr.size).also { out -> result.forEach { out.addNullable(it) } }
     }
 
-    private fun distinct(arg: Value?): Value? {
+    private fun distinct(ctx: EvalContext, arg: Value?): Value? {
         if (arg !is ArrayValue || arg.size <= 1) return arg
         val results = if (arg.isSequence) ArrayValue.sequence() else ArrayValue()
         // deep equality (utils.js: isDeepEqual) through hashing: equal values have equal hash codes
         val seen = HashSet<Value>()
         var seenUndefined = false
         for (i in 0 until arg.size) {
+            ctx.tick()
             val v = arg.raw(i)
             if (v == null) {
                 if (!seenUndefined) {

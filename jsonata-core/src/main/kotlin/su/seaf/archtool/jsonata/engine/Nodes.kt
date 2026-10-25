@@ -104,7 +104,7 @@ internal class LiteralNode(ast: AstNode, @JvmField val value: Value?) : Node(ast
 /** jsonata.js: evaluateName → functions.js: lookup. */
 internal class NameNode(ast: AstNode, @JvmField val key: String) : Node(ast) {
     override fun eval(input: Value?, env: Frame): Value? {
-        val r = Evaluator.lookup(input, key)
+        val r = Evaluator.lookup(input, key, env.ctx)
         if (r is ArrayValue && r.isSequence) env.ctx.checkSequence(r.size)
         return r
     }
@@ -119,8 +119,8 @@ internal class WildcardNode(ast: AstNode) : Node(ast) {
         fun visit(value: Value?) {
             if (value is ArrayValue) {
                 val flat = ArrayValue()
-                Evaluator.flatten(value, flat)
-                results = Evaluator.append(results, flat) as ArrayValue
+                Evaluator.flatten(value, flat, env.ctx)
+                results = Evaluator.append(results, flat, env.ctx) as ArrayValue
             } else {
                 results.addNullable(value)
             }
@@ -141,7 +141,7 @@ internal class DescendantNode(ast: AstNode) : Node(ast) {
     override fun eval(input: Value?, env: Frame): Value? {
         if (input == null) return null
         val results = ArrayValue.sequence()
-        Evaluator.recurseDescendants(input, results)
+        Evaluator.recurseDescendants(input, results, env.ctx)
         env.ctx.checkSequence(results.size)
         return if (results.size == 1) results.raw(0) else results
     }
@@ -247,7 +247,7 @@ internal class BinaryNode(ast: AstNode, @JvmField val op: BinaryOp, @JvmField va
                 BinaryOp.EQ -> if (l == null || r == null) BooleanValue.FALSE else BooleanValue.of(su.seaf.archtool.jsonata.value.Values.deepEquals(l, r))
                 BinaryOp.NE -> if (l == null || r == null) BooleanValue.FALSE else BooleanValue.of(!su.seaf.archtool.jsonata.value.Values.deepEquals(l, r))
                 BinaryOp.LT, BinaryOp.LE, BinaryOp.GT, BinaryOp.GE -> Evaluator.compare(l, r, op)
-                BinaryOp.CONCAT -> StringValue.of((if (l != null) Evaluator.string(l) else "") + (if (r != null) Evaluator.string(r) else ""))
+                BinaryOp.CONCAT -> StringValue.of((if (l != null) Evaluator.string(l, false, env.ctx) else "") + (if (r != null) Evaluator.string(r, false, env.ctx) else ""))
                 BinaryOp.RANGE -> Evaluator.range(l, r, env)
                 BinaryOp.IN -> Evaluator.includes(l, r)
                 else -> throw IllegalStateException(op.token)

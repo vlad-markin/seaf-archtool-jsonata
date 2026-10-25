@@ -92,6 +92,16 @@ internal class EvalContext(
         if (guarded) checkpoint()
     }
 
+    private var ticks = 0
+
+    /**
+     * The checkpoint for loops inside native code (ranges, higher-order functions, `**`, `$clone`, `$string`,
+     * sorting): a counter, with the full [checkpoint] every 1024 iterations (review RV-6).
+     */
+    fun tick() {
+        if (guarded && (++ticks and 1023) == 0) checkpoint()
+    }
+
     fun checkpoint() {
         if (maxDepth > 0 && depth > maxDepth) throw JsonataException("D1011", value = maxDepth.toDouble())
         if (deadline != 0L && System.nanoTime() - deadline > 0) throw JsonataException("D1012", value = options.timeoutMillis.toDouble())
