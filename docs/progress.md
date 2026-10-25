@@ -26,6 +26,7 @@
 - [x] **RV-12 [minor]** изменяемый общий реестр stdlib. Реестр стандартной библиотеки замораживается после регистрации (`X0004` при попытке), хранилище — `ConcurrentHashMap`. Тест: `EngineTest` «the standard registry is read-only».
 - [x] **RV-13 [minor]** кэш regex без границы. LRU на 2048 записей. Тест: `EngineTest` «the regex cache is bounded» (2548 разных regex через `$eval`).
 - [x] **RV-14 [minor]** описание DEV-03 дополнено вторым направлением (значение эталона → `T0410`), примерами и правилом детектора. Тест: `EngineTest` «partial application of a native function checks its signature».
+- [x] **RV-15 [minor]** `$toMillis` без смещения — всегда UTC (решение владельца): отдельная запись DEV-07 с правилом детектора, строка из «нестабильности эталона» убрана. Тест: `EngineTest` «toMillis without an offset is UTC whatever the JVM time zone».
 
 ## Сделано
 

@@ -384,6 +384,20 @@ class EngineTest {
     }
 
     @Test
+    fun `toMillis without an offset is UTC whatever the JVM time zone (DEV-07, RV-15)`() {
+        val saved = java.util.TimeZone.getDefault()
+        try {
+            for (zone in listOf("Europe/Moscow", "America/New_York", "UTC")) {
+                java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone(zone))
+                assertEquals("1700000000000", eval("\$toMillis(\"2023-11-14T22:13:20\")"), zone)
+                assertEquals("1699920000000", eval("\$toMillis(\"2023-11-14\")"), zone)
+            }
+        } finally {
+            java.util.TimeZone.setDefault(saved)
+        }
+    }
+
+    @Test
     fun `undefined is not null`() {
         assertEquals("undefined", eval("a", """{"b":null}"""))
         assertEquals("null", eval("b", """{"b":null}"""))
