@@ -813,7 +813,16 @@ internal object StandardLibrary {
         try {
             return node.evaluate(input, ctx.frame)
         } catch (e: JsonataException) {
+            // DEV-13: engine codes (X) pass unwrapped; jsonata-js wraps every error into D3121
+            if (e.code.startsWith("X")) {
+                ctx.frame.ctx.deviation(su.seaf.archtool.jsonata.deviation.Deviations.EVAL_KEEPS_ENGINE_ERRORS.id, null)
+                throw e
+            }
             throw JsonataException("D3121", value = StringValue.of(e.message), cause = e)
+        } catch (e: RuntimeException) {
+            // DEV-13: an exception of a host function passes unchanged (CAP-9 p. 4)
+            ctx.frame.ctx.deviation(su.seaf.archtool.jsonata.deviation.Deviations.EVAL_KEEPS_ENGINE_ERRORS.id, null)
+            throw e
         }
     }
 }

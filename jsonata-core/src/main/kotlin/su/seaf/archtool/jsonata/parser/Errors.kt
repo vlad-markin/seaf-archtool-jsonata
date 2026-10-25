@@ -27,8 +27,76 @@ public class JsonataException(
     /** Offset inside a signature for S0401/S0402 before it is turned into a position in the expression. */
     internal var offset: Int? = null
 
+    private var rangeStart = -1
+    private var rangeEnd = -1
+    private var rangeFor: Int? = null
+
+    /**
+     * Source range `[start, end)` of the node the [position] belongs to (CAP-9), -1 when unknown. It follows the
+     * position: when an outer call takes the error over (jsonata-js rules), the range is that call's.
+     */
+    public val start: Int get() = if (position != null && rangeFor == position) rangeStart else -1
+
+    /** End of the range, see [start]. */
+    public val end: Int get() = if (position != null && rangeFor == position) rangeEnd else -1
+
+    private var frameList: ArrayList<ErrorFrame>? = null
+
+    /** The JSONata calls the error passed through, innermost first (lambdas and native functions, CAP-9). */
+    public val frames: List<ErrorFrame> get() = frameList ?: emptyList()
+
+    /** Id of the manifest function the error was raised in (story 3), null elsewhere. */
+    public var functionId: String? = null
+        internal set
+
+    /** Fills [start]/[end] when [nodePosition] is the error position and the range is not known for it yet. */
+    internal fun fillRange(nodePosition: Int?, start: Int, end: Int) {
+        if (nodePosition == null || position != nodePosition || rangeFor == nodePosition || start < 0) return
+        rangeStart = start
+        rangeEnd = end
+        rangeFor = nodePosition
+    }
+
+    internal fun addFrame(frame: ErrorFrame) {
+        (frameList ?: ArrayList<ErrorFrame>().also { frameList = it }).add(frame)
+    }
+
     override val message: String
         get() = Messages.format(this)
+}
+
+/**
+ * One call on the way of an error: the function [name] (the name used at the call, `null` for an anonymous lambda),
+ * the call [position] and range `[start, end)` in the expression (-1 when unknown), and the [kind] of function.
+ */
+public class ErrorFrame(
+    public val name: String?,
+    public val position: Int?,
+    public val start: Int,
+    public val end: Int,
+    public val kind: Kind,
+) {
+    public enum class Kind { LAMBDA, NATIVE }
+
+    override fun toString(): String = "${name ?: "λ"}@${position ?: "?"}"
+}
+
+/**
+ * Templates of error codes that host functions raise with their own `JsonataException(code, ...)`: `X0900`…`X0999`
+ * (design §3.2). Codes of jsonata-js (`S`, `T`, `D`, `U`) and the engine's `X0001`…`X0899` cannot be registered.
+ */
+public object HostErrorCodes {
+    private val templates = java.util.concurrent.ConcurrentHashMap<String, String>()
+    private val allowed = Regex("X09[0-9][0-9]")
+
+    /** Registers [template] (`{{value}}`, `{{token}}`, `{{{message}}}` as in jsonata-js) for [code]. */
+    @JvmStatic
+    public fun register(code: String, template: String) {
+        require(allowed.matches(code)) { "host error codes are X0900..X0999; $code is reserved for jsonata-js or the engine" }
+        templates[code] = template
+    }
+
+    internal fun template(code: String): String? = templates[code]
 }
 
 internal object Messages {
@@ -145,14 +213,15 @@ internal object Messages {
         "X0002" to "The evaluation exhausted the JVM stack. Check for non-terminating recursion or rewrite it as tail-recursive",
         "X0003" to "Invalid regular expression {{value}}: {{{message}}}",
         "X0004" to "The standard library registry is read-only; register {{value}} in FunctionRegistry.create() instead",
+        "X0005" to "The evaluation needs more stack segments than the process budget allows ({{value}} running at once); see StackSegments.budget",
         "X0006" to "{{value}} cannot be called from an expression and cannot be registered as a function name",
         "X0007" to "{{value}} is a standard library function; register it with overridesStandard to replace it",
-        "X0005" to "The evaluation needs more stack segments than the process budget allows ({{value}} running at once); see StackSegments.budget",
+        "X0008" to "Internal engine error: {{{message}}}",
     )
 
     // populateMessage: {{{field}}} is replaced with the raw field, {{field}} with JSON.stringify(err[field]).
     fun format(e: JsonataException): String {
-        val template = templates[e.code] ?: engineTemplates[e.code] ?: return e.code
+        val template = templates[e.code] ?: engineTemplates[e.code] ?: HostErrorCodes.template(e.code) ?: return e.code
         fun field(name: String): Any? = when (name) {
             "token" -> e.token
             "value" -> e.value

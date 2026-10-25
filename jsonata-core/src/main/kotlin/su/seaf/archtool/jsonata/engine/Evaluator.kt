@@ -58,6 +58,12 @@ internal object Evaluator {
         } catch (_: StackOverflowError) {
             // jsonata-js fails with a JS RangeError (no JSONata code) here
             throw JsonataException("X0002")
+        } catch (e: JsonataException) {
+            throw e
+        } catch (e: RuntimeException) {
+            // an exception of a host function leaves unchanged (CAP-9 p. 4); anything else is a bug of the engine
+            if (ctx.isHost(e)) throw e
+            throw JsonataException("X0008", details = mapOf("message" to (e.javaClass.simpleName + (e.message?.let { ": $it" } ?: ""))), cause = e)
         }
     }
 
@@ -78,6 +84,21 @@ internal object Evaluator {
         return result
     }
 
+    /** Calls a native function; an exception of a host function (not the standard library) is marked to leave unchanged. */
+    private fun invokeNative(proc: NativeFunction, c: CallContextImpl, args: List<Value?>, ctx: EvalContext, callNode: Node?): Value? {
+        if (proc.source == su.seaf.archtool.jsonata.FunctionSource.STDLIB) return proc.implementation.invoke(c, args)
+        try {
+            return proc.implementation.invoke(c, args)
+        } catch (e: JsonataException) {
+            throw e
+        } catch (e: RuntimeException) {
+            ctx.markHost(e)
+            // the call node is the innermost place (a tail call is not evaluated through its node)
+            if (callNode != null) ctx.locate(e, callNode)
+            throw e
+        }
+    }
+
     /** jsonata.js: applyInner. */
     private fun applyInner(proc: Value?, args: List<Value?>, input: Value?, env: Frame, site: CallSite?, callNode: Node?): Value? {
         if (site != null && proc is Lambda) env.ctx.recordCall(proc, site)
@@ -89,7 +110,7 @@ internal object Evaluator {
             }
             return when (proc) {
                 is Lambda -> applyProcedure(proc, validated, env, callNode)
-                is NativeFunction -> CallContextImpl(env, input).let { c -> c.checked(proc.implementation.invoke(c, validated)) }
+                is NativeFunction -> CallContextImpl(env, input).let { c -> c.checked(invokeNative(proc, c, validated, env.ctx, callNode)) }
                 is PartialNative -> applyPartialNative(proc, validated, env)
                 is InternalFunction -> proc.body(CallContextImpl(env, input), validated)
                 is Transformer -> transform(proc, validated.getOrNull(0), env)
@@ -97,6 +118,12 @@ internal object Evaluator {
             }
         } catch (e: JsonataException) {
             val s = if (proc is Lambda) env.ctx.lastCall(proc) else site
+            // the JSONata call stack of the error, on its way up only (CAP-9)
+            if (proc is Lambda || proc is NativeFunction) {
+                val name = s?.token ?: (proc as? NativeFunction)?.name?.ifEmpty { null }
+                val kind = if (proc is Lambda) su.seaf.archtool.jsonata.parser.ErrorFrame.Kind.LAMBDA else su.seaf.archtool.jsonata.parser.ErrorFrame.Kind.NATIVE
+                e.addFrame(su.seaf.archtool.jsonata.parser.ErrorFrame(name, s?.position ?: callNode?.position, callNode?.start ?: -1, callNode?.end ?: -1, kind))
+            }
             if (s != null) {
                 if (e.token == null && s.token != null) e.token = s.token
                 if (s.position != null) {

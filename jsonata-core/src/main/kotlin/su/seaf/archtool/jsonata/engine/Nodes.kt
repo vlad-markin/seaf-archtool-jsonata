@@ -81,6 +81,13 @@ internal abstract class Node(@JvmField val ast: AstNode) {
         try {
             if (ctx.depth - ctx.segmentBase > ctx.segmentLimit) return ctx.onNewSegment { evaluateBody(input, env) }
             return evaluateBody(input, env)
+        } catch (e: JsonataException) {
+            // the range of the node the error position belongs to (CAP-9)
+            e.fillRange(position, start, end)
+            throw e
+        } catch (e: RuntimeException) {
+            ctx.locate(e, this)
+            throw e
         } finally {
             ctx.depth--
         }
@@ -248,8 +255,11 @@ internal class BinaryNode(ast: AstNode, @JvmField val op: BinaryOp, @JvmField va
                 else lb || Evaluator.boolize(rhs.evaluate(input, env))
                 return BooleanValue.of(r)
             } catch (e: JsonataException) {
-                e.position = position
-                e.token = op.token
+                // jsonata-js moves any error of the operands onto the operator; engine codes (X) keep their place
+                if (!e.code.startsWith("X")) {
+                    e.position = position
+                    e.token = op.token
+                }
                 throw e
             }
         }

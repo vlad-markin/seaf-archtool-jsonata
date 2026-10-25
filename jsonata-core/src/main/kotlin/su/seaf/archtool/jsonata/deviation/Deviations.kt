@@ -48,8 +48,11 @@ public object Deviations {
     public val UNDEFINED_IN_SEQUENCES: Deviation =
         Deviation("DEV-12", "UND-SEQ", V010, true, "Undefined does not enter sequences; a step after a filtered array constructor iterates its item")
 
+    public val EVAL_KEEPS_ENGINE_ERRORS: Deviation =
+        Deviation("DEV-13", "ERR-EVAL", V010, true, "\$eval does not wrap engine errors (X codes) and host exceptions into D3121")
+
     /** Deviations that have a probe or a static rule here, by id. */
-    public val all: List<Deviation> = listOf(POSITION_IN_LAMBDA, BASE64_UTF8, UNDEFINED_IN_SEQUENCES)
+    public val all: List<Deviation> = listOf(POSITION_IN_LAMBDA, BASE64_UTF8, UNDEFINED_IN_SEQUENCES, EVAL_KEEPS_ENGINE_ERRORS)
 
     public fun byId(id: String): Deviation? = all.firstOrNull { it.id == id }
 

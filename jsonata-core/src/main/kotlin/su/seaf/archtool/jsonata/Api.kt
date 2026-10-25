@@ -149,6 +149,11 @@ public class EvaluationOptions @JvmOverloads constructor(
      */
     public val functions: FunctionRegistry? = null,
     /**
+     * Told where in the expression an exception of a host function happened (CAP-9 p. 4): the exception itself
+     * reaches the caller unchanged, so the place comes this way, once per exception object, from the innermost node.
+     */
+    public val hostErrors: HostErrorListener? = null,
+    /**
      * Receives probe hits of deliberate differences from jsonata-js 2.2.2 (`docs/deviations.md`): the evaluation went
      * through a branch where the result may differ from the reference. Null: probes cost one null check.
      */
@@ -160,6 +165,16 @@ public class EvaluationOptions @JvmOverloads constructor(
 
         @JvmField public val DEFAULT: EvaluationOptions = EvaluationOptions()
     }
+}
+
+/** Where an exception of a host function happened: the node's range `[start, end)` and its jsonata-js position. */
+public class ErrorLocation(public val start: Int, public val end: Int, public val position: Int?) {
+    override fun toString(): String = "$start..$end@${position ?: "?"}"
+}
+
+/** Receives the place of host exceptions; see [EvaluationOptions.hostErrors]. Should not throw: its exceptions are ignored. */
+public fun interface HostErrorListener {
+    public fun located(error: Throwable, location: ErrorLocation)
 }
 
 /** A function implemented in Kotlin. Arguments are already checked and coerced by the signature, if any. */

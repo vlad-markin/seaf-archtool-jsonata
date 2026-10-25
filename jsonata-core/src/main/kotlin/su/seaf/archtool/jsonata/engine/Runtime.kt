@@ -88,6 +88,36 @@ internal class EvalContext(
 
     private val deviationSink = options.deviations
 
+    private val hostErrors = options.hostErrors
+
+    /** Exceptions thrown by host functions in this evaluation: they leave it unchanged (CAP-9 p. 4). */
+    private var hostExceptions: MutableSet<Throwable>? = null
+
+    /** Host exceptions whose place was already reported. */
+    private var locatedExceptions: MutableSet<Throwable>? = null
+
+    fun markHost(e: Throwable) {
+        (hostExceptions ?: java.util.Collections.newSetFromMap(java.util.IdentityHashMap<Throwable, Boolean>()).also { hostExceptions = it }).add(e)
+    }
+
+    fun isHost(e: Throwable): Boolean = hostExceptions?.contains(e) == true
+
+    /**
+     * Reports the place of a host exception at the innermost node it passes through that has a source range (the
+     * nodes of a `$eval` text have none: the `$eval` call is reported). An exception of the listener is ignored.
+     */
+    fun locate(e: Throwable, node: Node) {
+        val listener = hostErrors ?: return
+        if (node.start < 0 || !isHost(e)) return
+        val located = locatedExceptions ?: java.util.Collections.newSetFromMap(java.util.IdentityHashMap<Throwable, Boolean>()).also { locatedExceptions = it }
+        if (!located.add(e)) return
+        try {
+            listener.located(e, su.seaf.archtool.jsonata.ErrorLocation(node.start, node.end, node.position))
+        } catch (_: RuntimeException) {
+            // the listener must not change the outcome of the evaluation
+        }
+    }
+
     /** Probe of a deliberate difference from jsonata-js 2.2.2 (`docs/deviations.md`): the result here may differ. */
     fun deviation(id: String, position: Int?) {
         deviationSink?.hit(id, position)
