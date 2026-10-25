@@ -218,6 +218,9 @@ public interface CallContext {
     /** Evaluation timestamp (milliseconds since the epoch), the same for the whole evaluation. */
     public val timestamp: Long
 
+    /** `$$`: the input of the evaluation (of the nested [evaluate] when called inside one). */
+    public val root: Value?
+
     /** Invokes a function value (a lambda, a native, a partial application) synchronously. */
     public fun call(function: FunctionValue, args: List<Value?>): Value?
 

@@ -104,6 +104,8 @@ internal class CallContextImpl(
 
     override fun remainingNanos(): Long = frame.ctx.remainingNanos()
 
+    override val root: Value? get() = frame.ctx.rootInput
+
     override fun <T : Any> local(key: Any, init: () -> T): T = frame.ctx.local(key, init)
 
     override fun attribute(name: String): Any? = frame.ctx.options.attributes[name]

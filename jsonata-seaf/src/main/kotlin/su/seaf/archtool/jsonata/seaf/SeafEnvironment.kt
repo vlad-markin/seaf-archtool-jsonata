@@ -4,6 +4,7 @@ import su.seaf.archtool.jsonata.CompileOptions
 import su.seaf.archtool.jsonata.EvaluationOptions
 import su.seaf.archtool.jsonata.FunctionRegistry
 import su.seaf.archtool.jsonata.Jsonata
+import su.seaf.archtool.jsonata.seaf.core.CoreFunctions
 import su.seaf.archtool.jsonata.value.Value
 
 /**
@@ -46,11 +47,12 @@ public class SeafEnvironment private constructor(
         /** Key of the [SeafRequest] in [EvaluationOptions.attributes]. */
         public const val REQUEST: String = "seaf.request"
 
-        /** Creates the environment of one manifest version. Manifest `functions` come with step 3.4. */
+        /** Creates the environment of one manifest version: the standard library and the core functions; manifest `functions` come with step 3.4. */
         @JvmStatic
         @JvmOverloads
         public fun create(host: SeafHost, limits: SeafLimits = SeafLimits.TEMPORARY): SeafEnvironment {
             val registry = FunctionRegistry.create()
+            CoreFunctions(host).registerAll(registry)
             return SeafEnvironment(host, limits, registry.freeze())
         }
     }

@@ -220,6 +220,8 @@ internal object Messages {
         "X0009" to "The evaluation was cancelled",
         "X0011" to "Function {{value}} is not available in a watch expression",
         "X0010" to "The evaluation exceeded the {{{budget}}} budget ({{value}})",
+        "X0012" to "Invalid schema in \$jsonschema: {{{message}}}",
+        "X0013" to "The value is too deep to validate against a JSON Schema (more than {{value}} levels)",
     )
 
     // populateMessage: {{{field}}} is replaced with the raw field, {{field}} with JSON.stringify(err[field]).
