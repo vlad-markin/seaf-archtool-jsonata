@@ -101,7 +101,8 @@ class StackSegmentsTest {
     fun `no synchronized or Thread join in the engine`() {
         val sources = File("src/main/kotlin").walkTopDown().filter { it.isFile && it.extension == "kt" }.toList()
         assertTrue(sources.size > 10, "sources not found from ${File(".").absolutePath}")
-        val forbidden = Regex("""synchronized\s*\(|@Synchronized|\.join\(\s*\)|Thread\.join|\.wait\(\s*\)""")
+        // `by lazy { }` locks a monitor too (SYNCHRONIZED mode): the engine uses PUBLICATION (CAS) or plain fields
+        val forbidden = Regex("""synchronized\s*\(|@Synchronized|\.join\(\s*\)|Thread\.join|\.wait\(\s*\)|by lazy\s*\{|lazy\(LazyThreadSafetyMode\.SYNCHRONIZED""")
         val hits = sources.flatMap { f -> f.readLines().mapIndexedNotNull { i, line -> if (!isComment(line) && forbidden.containsMatchIn(line)) "${f.name}:${i + 1}: ${line.trim()}" else null } }
         assertEquals(emptyList(), hits)
     }

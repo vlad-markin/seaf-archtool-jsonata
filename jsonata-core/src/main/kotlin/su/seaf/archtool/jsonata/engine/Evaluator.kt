@@ -204,7 +204,7 @@ internal object Evaluator {
         }
     })
 
-    private val chainNode: Node by lazy {
+    private val chainNode: Node by lazy(LazyThreadSafetyMode.PUBLICATION) {
         Compiler(false).compile(JsonataParser.ast("function(\$f, \$g) { function(\$x){ \$g(\$f(\$x)) } }"))
     }
 

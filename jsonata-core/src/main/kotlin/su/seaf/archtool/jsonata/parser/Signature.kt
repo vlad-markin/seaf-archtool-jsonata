@@ -26,13 +26,13 @@ public class Signature internal constructor(public val definition: String, publi
     public val regex: String get() = "^" + params.joinToString("") { "(" + it.regex + ")" } + "$"
 
     /** Compiled [regex], cached: signatures are validated on every call. */
-    internal val pattern: java.util.regex.Pattern by lazy { java.util.regex.Pattern.compile(regex) }
+    internal val pattern: java.util.regex.Pattern by lazy(LazyThreadSafetyMode.PUBLICATION) { java.util.regex.Pattern.compile(regex) }
 
     /** Signature regex groups by argument symbol string (see SignatureValidator), shared between threads. */
     internal val matchMemo: java.util.concurrent.ConcurrentHashMap<String, Array<String>> = java.util.concurrent.ConcurrentHashMap()
 
     /** Per-parameter context patterns (`new RegExp(param.contextRegex)` in signature.js, unanchored). */
-    internal val contextPatterns: List<java.util.regex.Pattern?> by lazy {
+    internal val contextPatterns: List<java.util.regex.Pattern?> by lazy(LazyThreadSafetyMode.PUBLICATION) {
         params.map { p -> p.contextRegex?.let { java.util.regex.Pattern.compile(it) } }
     }
 

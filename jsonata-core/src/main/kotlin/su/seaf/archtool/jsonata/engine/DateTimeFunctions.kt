@@ -613,7 +613,7 @@ internal object DateTimeFunctions {
         else -> null
     }
 
-    private val iso8601Spec: List<Part> by lazy { analyseDateTimePicture("[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01].[f001][Z01:01t]") }
+    private val iso8601Spec: List<Part> by lazy(LazyThreadSafetyMode.PUBLICATION) { analyseDateTimePicture("[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01].[f001][Z01:01t]") }
 
     private fun jsToString(v: Any?): String = when (v) {
         null -> "undefined"
