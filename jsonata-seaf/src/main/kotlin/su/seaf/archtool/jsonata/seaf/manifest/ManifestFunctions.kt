@@ -90,12 +90,11 @@ internal object ManifestFunctions {
         }
     }
 
-    /** Names that are built-in functions in [registry] (the standard library and the core). */
-    fun conflicts(functions: List<ManifestFunction>, registry: FunctionRegistry): List<NameConflictReport> = functions.mapNotNull { f ->
+    /** Ids that name a built-in function: one of the 12 core functions (checked first: `lookup` is both) or stdlib. */
+    fun conflicts(functions: List<ManifestFunction>): List<NameConflictReport> = functions.mapNotNull { f ->
         when {
             f.id in CoreFunctions.ALL_NAMES -> NameConflictReport(f.id, "core")
             FunctionRegistry.standard().lookup(f.id) != null -> NameConflictReport(f.id, "stdlib")
-            registry.lookup(f.id) != null -> NameConflictReport(f.id, "core")
             else -> null
         }
     }
@@ -122,7 +121,7 @@ internal object ManifestFunctions {
      * anyway). Returns the callables to finish with [Callable.compile] once the registry is frozen.
      */
     fun register(functions: List<ManifestFunction>, registry: FunctionRegistry, warnings: MutableList<SeafWarning>): List<Callable> {
-        val conflicts = conflicts(functions, registry)
+        val conflicts = conflicts(functions)
         if (conflicts.isNotEmpty()) {
             throw JsonataException("X0014", details = mapOf("message" to conflicts.joinToString("; ")))
         }
