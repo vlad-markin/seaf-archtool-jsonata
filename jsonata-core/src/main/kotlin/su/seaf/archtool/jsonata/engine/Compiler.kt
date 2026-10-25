@@ -24,7 +24,8 @@ internal class Compiler(private val debug: Boolean) {
             "path" -> compilePath(ast)
             "binary" -> BinaryNode(ast, BinaryOp.of(ast["value"] as String), compile(ast.node("lhs")!!), compile(ast.node("rhs")!!))
             "unary" -> compileUnary(ast)
-            "name" -> NameNode(ast, ast["value"] as String)
+            // interned: document keys from Jackson are interned too, so lookups usually match by identity
+            "name" -> NameNode(ast, (ast["value"] as String).intern())
             "string" -> LiteralNode(ast, StringValue.of(ast["value"] as String))
             "number" -> LiteralNode(ast, NumberValue.of((ast["value"] as Number).toDouble()))
             "value" -> LiteralNode(

@@ -23,6 +23,8 @@ tasks.register<JavaExec>("bench") {
     mainClass.set("su.seaf.archtool.jsonata.compat.BenchKt")
     args(rootProject.file("compat").absolutePath, providers.gradleProperty("benchIterations").getOrElse("10"))
     jvmArgs("-Xmx2g")
+    // -PbenchJfr=/path/file.jfr records a JFR profile of the run
+    providers.gradleProperty("benchJfr").orNull?.let { jvmArgs("-XX:StartFlightRecording=filename=$it,settings=profile") }
 }
 tasks.register<JavaExec>("fuzz") {
     description = "Differential fuzzing against jsonata 2.2.2 (needs Node 22 and npm ci in compat/node): -Pseed=1 -Pcount=5000, or -Pcases=file.jsonl to replay cases."

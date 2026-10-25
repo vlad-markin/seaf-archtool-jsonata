@@ -179,62 +179,135 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
  * ascending numeric order, the other keys follow in insertion order. Re-assigning a key keeps its position.
  */
 public class ObjectValue : Value() {
-    private val map = LinkedHashMap<String, Value>()
+    // Insertion-ordered parallel arrays; a hash index is built only for objects with more than INDEX_FROM keys.
+    // Small objects (the common case in documents) are searched linearly, by identity first: Jackson interns field
+    // names and the compiler interns the names in paths.
+    private var keyArray: Array<String?> = EMPTY_KEYS
+    private var valueArray: Array<Value?> = EMPTY_VALUES
+    private var count = 0
+    private var index: HashMap<String, Int>? = null
     private var indexKeys = 0
+
     /**
-     * Keys in JS order, computed on first read. A parsed document is read by many threads (decision 8): the list is
-     * immutable and published through a volatile field, so a reader sees it fully built (review RV-7).
+     * Positions in JS key order when some keys are array indices (null otherwise: insertion order is JS order),
+     * computed on first read. A parsed document is read by many threads (decision 8): the cached orders are immutable
+     * and published through volatile fields, so a reader sees them fully built (review RV-7).
      */
+    @Volatile private var jsOrder: IntArray? = null
     @Volatile private var orderedKeys: List<String>? = null
 
     override val typeName: String get() = "object"
 
-    public val size: Int get() = map.size
-    public fun isEmpty(): Boolean = map.isEmpty()
+    public val size: Int get() = count
+    public fun isEmpty(): Boolean = count == 0
 
-    public operator fun get(key: String): Value? = map[key]
-    public fun containsKey(key: String): Boolean = map.containsKey(key)
+    private fun find(key: String): Int {
+        val idx = index
+        if (idx != null) return idx[key] ?: -1
+        val ks = keyArray
+        for (i in 0 until count) if (ks[i] === key) return i
+        for (i in 0 until count) if (ks[i] == key) return i
+        return -1
+    }
+
+    public operator fun get(key: String): Value? {
+        val i = find(key)
+        return if (i < 0) null else valueArray[i]
+    }
+
+    public fun containsKey(key: String): Boolean = find(key) >= 0
 
     /** Sets a key; only for objects under construction (and for clones being transformed). */
     public fun put(key: String, value: Value) {
-        if (map.put(key, value) == null) {
-            if (isArrayIndex(key)) indexKeys++
-            orderedKeys = null
+        val i = find(key)
+        if (i >= 0) {
+            valueArray[i] = value
+            return
         }
+        if (count == keyArray.size) {
+            val n = if (count == 0) 4 else count * 2
+            keyArray = keyArray.copyOf(n)
+            valueArray = valueArray.copyOf(n)
+        }
+        keyArray[count] = key
+        valueArray[count] = value
+        index?.put(key, count)
+        count++
+        if (index == null && count > INDEX_FROM) {
+            val idx = HashMap<String, Int>(count * 2)
+            for (k in 0 until count) idx[keyArray[k]!!] = k
+            index = idx
+        }
+        if (isArrayIndex(key)) indexKeys++
+        jsOrder = null
+        orderedKeys = null
     }
 
     internal fun remove(key: String) {
-        if (map.remove(key) != null) {
-            if (isArrayIndex(key)) indexKeys--
-            orderedKeys = null
+        val i = find(key)
+        if (i < 0) return
+        System.arraycopy(keyArray, i + 1, keyArray, i, count - i - 1)
+        System.arraycopy(valueArray, i + 1, valueArray, i, count - i - 1)
+        count--
+        keyArray[count] = null
+        valueArray[count] = null
+        if (index != null) {
+            val idx = HashMap<String, Int>(count * 2)
+            for (k in 0 until count) idx[keyArray[k]!!] = k
+            index = idx
         }
+        if (isArrayIndex(key)) indexKeys--
+        jsOrder = null
+        orderedKeys = null
     }
+
+    /** Position of the [i]-th key in JS order. */
+    private fun position(i: Int): Int {
+        if (indexKeys == 0) return i
+        val order = jsOrder ?: run {
+            val idx = (0 until count).filter { isArrayIndex(keyArray[it]!!) }.sortedBy { keyArray[it]!!.toLong() }
+            val rest = (0 until count).filter { !isArrayIndex(keyArray[it]!!) }
+            (idx + rest).toIntArray().also { jsOrder = it }
+        }
+        return order[i]
+    }
+
+    /** The [i]-th key in JS order (`Object.keys(o)[i]`). */
+    public fun keyAt(i: Int): String = keyArray[position(i)]!!
+
+    /** The value of the [i]-th key in JS order. */
+    public fun valueAt(i: Int): Value = valueArray[position(i)]!!
 
     /** Keys in JS order (`Object.keys`). */
     public val keys: List<String>
         get() {
             orderedKeys?.let { return it }
-            val result: List<String> = if (indexKeys == 0) {
-                java.util.Collections.unmodifiableList(ArrayList(map.keys))
-            } else {
-                val idx = map.keys.filter { isArrayIndex(it) }.sortedBy { it.toLong() }
-                java.util.Collections.unmodifiableList(idx + map.keys.filter { !isArrayIndex(it) })
-            }
+            val result = java.util.Collections.unmodifiableList(List(count) { keyAt(it) })
             orderedKeys = result
             return result
         }
 
     /** Entries in JS key order. */
-    public val entries: List<Pair<String, Value>> get() = keys.map { it to map[it]!! }
+    public val entries: List<Pair<String, Value>> get() = List(count) { keyAt(it) to valueAt(it) }
 
     public inline fun forEach(action: (String, Value) -> Unit) {
-        for (k in keys) action(k, get(k)!!)
+        for (i in 0 until size) action(keyAt(i), valueAt(i))
     }
 
     override fun equals(other: Any?): Boolean = other is Value && Values.deepEquals(this, other)
-    override fun hashCode(): Int = map.hashCode()
+
+    /** Order-independent, consistent with [equals]. */
+    override fun hashCode(): Int {
+        var h = 0
+        for (i in 0 until count) h += keyArray[i].hashCode() xor valueArray[i].hashCode()
+        return h
+    }
 
     public companion object {
+        private const val INDEX_FROM = 8
+        private val EMPTY_KEYS = arrayOfNulls<String>(0)
+        private val EMPTY_VALUES = arrayOfNulls<Value>(0)
+
         /** A JS array index: canonical decimal integer in [0, 2^32 - 2]. */
         @JvmStatic public fun isArrayIndex(key: String): Boolean {
             val n = key.length
