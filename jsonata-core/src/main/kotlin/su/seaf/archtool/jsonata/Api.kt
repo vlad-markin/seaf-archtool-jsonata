@@ -23,7 +23,7 @@ public class Jsonata private constructor(
     public val expression: String,
     private val ast: AstNode,
     private val root: Node,
-    private val options: CompileOptions,
+    internal val options: CompileOptions,
     recursive: Boolean,
     /** Source ranges of the AST nodes (errors, the debugger). */
     internal val ranges: su.seaf.archtool.jsonata.parser.SourceRanges,
@@ -188,6 +188,9 @@ public class EvaluationOptions @JvmOverloads constructor(
 
         @JvmField public val DEFAULT: EvaluationOptions = EvaluationOptions()
     }
+
+    /** A debugger watch expression: functions with side effects fail with X0011. */
+    internal var watch: Boolean = false
 }
 
 /** Where an exception of a host function happened: the node's range `[start, end)` and its jsonata-js position. */

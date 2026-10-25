@@ -117,6 +117,8 @@ internal object Evaluator {
 
     /** Calls a native function; an exception of a host function (not the standard library) is marked to leave unchanged. */
     private fun invokeNative(proc: NativeFunction, c: CallContextImpl, args: List<Value?>, ctx: EvalContext, callNode: Node?): Value? {
+        // a debugger watch expression must not change anything (design §2.5)
+        if (ctx.options.watch && proc.sideEffects) throw JsonataException("X0011", value = StringValue.of(proc.name))
         if (proc.source == su.seaf.archtool.jsonata.FunctionSource.STDLIB) return proc.implementation.invoke(c, args)
         ctx.enterHost()
         var exited = false
@@ -570,6 +572,7 @@ internal object Evaluator {
 
     fun frameFromTuple(env: Frame, tuple: ObjectValue): Frame {
         val frame = Frame(env, env.ctx)
+        frame.tupleFrame = true
         tuple.forEach { k, v -> frame.bind(k, v) }
         return frame
     }

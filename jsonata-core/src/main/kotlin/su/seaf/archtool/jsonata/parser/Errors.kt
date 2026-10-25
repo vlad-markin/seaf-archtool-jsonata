@@ -218,6 +218,7 @@ internal object Messages {
         "X0007" to "{{value}} is a standard library function; register it with overridesStandard to replace it",
         "X0008" to "Internal engine error: {{{message}}}",
         "X0009" to "The evaluation was cancelled",
+        "X0011" to "Function {{value}} is not available in a watch expression",
         "X0010" to "The evaluation exceeded the {{{budget}}} budget ({{value}})",
     )
 

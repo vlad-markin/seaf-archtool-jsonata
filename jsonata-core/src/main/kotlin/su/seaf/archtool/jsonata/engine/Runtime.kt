@@ -33,6 +33,9 @@ internal class Frame(
     /** The invocation came from the tail-call trampoline. */
     @JvmField var tailCall: Boolean = false
 
+    /** Made from a tuple of a `@`/`#`/`%` path: its bindings are the tuple's. */
+    @JvmField var tupleFrame: Boolean = false
+
     fun bind(name: String, value: Value?) {
         var ns = names
         if (ns == null) {
@@ -414,7 +417,7 @@ internal class FrameView private constructor(@JvmField val frame: Frame) : su.se
     }
 
     /** The innermost frame of the event (its bindings are the visible variables). */
-    private var scope: Frame = frame
+    internal var scope: Frame = frame
 
     override fun equals(other: Any?): Boolean = other is FrameView && other.frame === frame
     override fun hashCode(): Int = System.identityHashCode(frame)

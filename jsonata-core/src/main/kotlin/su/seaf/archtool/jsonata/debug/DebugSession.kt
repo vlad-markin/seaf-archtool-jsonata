@@ -93,6 +93,10 @@ public class DebugSession @JvmOverloads constructor(
     private val commandArrived = lock.newCondition()
     private var command: (() -> Unit)? = null
 
+    /** Work for the evaluating thread while stopped (watch expressions run there). */
+    private val work = ArrayDeque<java.util.concurrent.FutureTask<EvalOutcome>>()
+    private val refs = References()
+
     private val indexes = HashMap<String, SourceIndex>()
     private val breakpoints = HashMap<String, Map<Int, Breakpoint>>()
     private val pending = HashMap<String, List<BreakpointSpec>>()
@@ -283,6 +287,42 @@ public class DebugSession @JvmOverloads constructor(
         return StackTraceView(frames, total)
     }
 
+    /** The scopes of frame [frameId] of the current stop (DAP `scopes`). */
+    public fun scopes(frameId: Int): List<ScopeView> {
+        val frame = frameAt(frameId) as? FrameView ?: return emptyList()
+        return lock.withLock { scopesOf(frame, stoppedInput, frameId == 0, refs) }
+    }
+
+    /** Variables of a scope or children of a value (DAP `variables`), [count] from [start] (0: all). */
+    @JvmOverloads
+    public fun variables(variablesReference: Int, start: Int = 0, count: Int = 0): List<VariableView> =
+        lock.withLock { refs.variables(variablesReference, start, count) }
+
+    /**
+     * Evaluates [expression] in frame [frameId] of the current stop (DAP `evaluate`), on the evaluating thread. It
+     * cannot change the debugged evaluation: bindings are a copy (`:=` stays local), no listener, its own budget
+     * (1 s, 1 000 000 steps), and functions with side effects fail with X0011.
+     */
+    public fun evaluate(frameId: Int, expression: String): EvalOutcome {
+        val frame = frameAt(frameId) ?: return EvalOutcome(null, IllegalStateException("the evaluation is not stopped"))
+        val input = if (frameId == 0) stoppedInput else frame.root()
+        val task = java.util.concurrent.FutureTask {
+            try {
+                val compiled = Jsonata.compile(expression, this.expression.options)
+                val watch = EvaluationOptions(timeoutMillis = 1000, budgets = su.seaf.archtool.jsonata.Budgets(maxSteps = 1_000_000)).also { it.watch = true }
+                EvalOutcome(compiled.evaluate(input, scope(frame), watch), null)
+            } catch (e: Exception) {
+                EvalOutcome(null, e)
+            }
+        }
+        lock.withLock {
+            if (stoppedNode == null) return EvalOutcome(null, IllegalStateException("the evaluation is not stopped"))
+            work.addLast(task)
+            commandArrived.signalAll()
+        }
+        return task.get(10, java.util.concurrent.TimeUnit.SECONDS)
+    }
+
     /** The frame at [frameId] of the current stop (0: the innermost). */
     internal fun frameAt(frameId: Int): DebugFrame? = generateSequence(stoppedFrame) { it.parent }.drop(frameId).firstOrNull()
 
@@ -399,13 +439,20 @@ public class DebugSession @JvmOverloads constructor(
         events.stopped(reason, node)
         val ctx = (frame as FrameView).frame.ctx
         val action = ctx.paused {
-            lock.withLock {
-                while (command == null) commandArrived.await()
-                val a = command!!
-                command = null
-                a
+            while (true) {
+                val next: Any = lock.withLock {
+                    while (command == null && work.isEmpty()) commandArrived.await()
+                    command?.also { command = null } ?: work.removeFirst()
+                }
+                if (next is java.util.concurrent.FutureTask<*>) next.run() else {
+                    @Suppress("UNCHECKED_CAST")
+                    return@paused next as () -> Unit
+                }
             }
+            @Suppress("UNREACHABLE_CODE")
+            error("unreachable")
         }
+        lock.withLock { refs.clear() }
         // the command reads the stop (step out needs its frame) before it is cleared
         action()
         stoppedNode = null
