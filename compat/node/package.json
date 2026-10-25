@@ -4,6 +4,8 @@
   "type": "module",
   "description": "Reference side of the compatibility harness: jsonata-js 2.2.2 (the version used by seaf-archtool-core).",
   "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "2.1.1",
     "jsonata": "2.2.2"
   },
   "engines": {

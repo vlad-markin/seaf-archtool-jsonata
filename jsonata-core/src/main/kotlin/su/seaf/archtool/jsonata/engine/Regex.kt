@@ -85,12 +85,16 @@ internal class JsRegexPattern(val source: String, val flags: String, private val
  * equivalent `java.util.regex` pattern. Covered differences: `.` and `\s` follow JS line terminators and white space,
  * `$`/`^` without `m` mean only the ends of the input, `[^]`/`[]`, identity escapes (`\a`, `\e`, `\Q` are plain letters
  * in JS), `\v`, `\0` and legacy octal escapes, a literal `{`/`}`/`]`, a `[` or `&&` inside a class.
+ *
+ * With [unicode] (the JS `u` flag: JSON Schema `pattern` of manifest functions, as ajv 8 compiles it) the pattern
+ * matches code points, `\p{…}` and `\u{…}` are supported and the Annex B leniencies (identity escapes of letters,
+ * legacy octal escapes, lone braces) are syntax errors.
  */
 internal object JsRegexTranslator {
     private const val WS = "\\t\\n\\u000B\\f\\r \\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000\\uFEFF"
     private const val LINE_TERMINATORS = "\\n\\r\\u2028\\u2029"
 
-    fun translate(src: String, multiline: Boolean, dotAll: Boolean = false): String {
+    fun translate(src: String, multiline: Boolean, dotAll: Boolean = false, unicode: Boolean = false): String {
         val groups = countGroups(src)
         val names = namedGroups(src)
         val sb = StringBuilder(src.length + 16)
@@ -99,8 +103,8 @@ internal object JsRegexTranslator {
         while (i < n) {
             val c = src[i]
             when (c) {
-                '\\' -> i = escape(src, i, sb, false, groups, names)
-                '[' -> i = charClass(src, i, sb)
+                '\\' -> i = escape(src, i, sb, false, groups, names, unicode)
+                '[' -> i = charClass(src, i, sb, unicode)
                 '(' -> {
                     val name = groupNameAt(src, i)
                     if (name != null) {
@@ -121,13 +125,17 @@ internal object JsRegexTranslator {
                         sb.append(m.value)
                         i += m.value.length
                     } else {
+                        if (unicode) throw IllegalArgumentException("Incomplete quantifier")
                         sb.append("\\{")
                         i++
                     }
                 }
-                '}' -> { sb.append("\\}"); i++ }
-                ']' -> { sb.append("\\]"); i++ }
-                else -> { sb.append(JsRegexPattern.unit(c)); i++ }
+                '}', ']' -> {
+                    if (unicode) throw IllegalArgumentException("Lone quantifier brackets")
+                    sb.append('\\').append(c)
+                    i++
+                }
+                else -> { sb.append(if (unicode) c else JsRegexPattern.unit(c)); i++ }
             }
         }
         return sb.toString()
@@ -229,13 +237,17 @@ internal object JsRegexTranslator {
     }
 
     /** Translates the escape at [start] (a backslash); returns the index after it. */
-    private fun escape(src: String, start: Int, sb: StringBuilder, inClass: Boolean, groups: Int, names: Map<String, String>): Int {
+    private fun escape(src: String, start: Int, sb: StringBuilder, inClass: Boolean, groups: Int, names: Map<String, String>, unicode: Boolean = false): Int {
         if (start + 1 >= src.length) {
+            if (unicode) throw IllegalArgumentException("\\ at end of pattern")
             sb.append("\\\\")
             return start + 1
         }
         val c = src[start + 1]
         var i = start + 2
+        if (unicode) {
+            unicodeEscape(src, start, sb, inClass, groups, names)?.let { return it }
+        }
         when (c) {
             'd', 'D', 'w', 'W' -> sb.append('\\').append(c)
             's' -> sb.append(if (inClass) WS else "[$WS]")
@@ -315,6 +327,166 @@ internal object JsRegexTranslator {
         return i
     }
 
+    /** JS characters that may be escaped to stand for themselves with the `u` flag (and `-` inside a class). */
+    private const val SYNTAX_CHARS = "^$\\.*+?()[]{}|/"
+
+    /**
+     * Escapes that differ with the `u` flag; returns the index after the escape, or null for an escape translated as
+     * without the flag (`\d`, `\s`, `\n`, `\x41`, `\cJ`, …).
+     */
+    private fun unicodeEscape(src: String, start: Int, sb: StringBuilder, inClass: Boolean, groups: Int, names: Map<String, String>): Int? {
+        val c = src[start + 1]
+        val i = start + 2
+        when (c) {
+            'd', 'D', 'w', 'W', 's', 'S', 'f', 'n', 'r', 't', 'v' -> return null
+            'b', 'B' -> if (c == 'b' || !inClass) return null else throw IllegalArgumentException("Invalid class escape")
+            'c' -> {
+                val l = src.getOrNull(i)
+                if (l != null && (l in 'a'..'z' || l in 'A'..'Z')) return null
+                throw IllegalArgumentException("Invalid unicode escape")
+            }
+            'x' -> {
+                val h = src.substring(i, minOf(i + 2, src.length))
+                if (h.length == 2 && h.all { it.isHexDigitChar() }) return null
+                throw IllegalArgumentException("Invalid escape")
+            }
+            'u' -> {
+                if (src.getOrNull(i) == '{') {
+                    val end = src.indexOf('}', i)
+                    val hex = if (end > 0) src.substring(i + 1, end) else ""
+                    val code = if (hex.isNotEmpty() && hex.all { it.isHexDigitChar() }) hex.toIntOrNull(16) else null
+                    if (code == null || code > 0x10FFFF) throw IllegalArgumentException("Invalid Unicode escape")
+                    sb.append("\\x{").append(code.toString(16)).append('}')
+                    return end + 1
+                }
+                val h = src.substring(i, minOf(i + 4, src.length))
+                if (h.length != 4 || !h.all { it.isHexDigitChar() }) throw IllegalArgumentException("Invalid Unicode escape")
+                var code = h.toInt(16)
+                var next = i + 4
+                // a surrogate pair written as two escapes is one code point
+                if (code in 0xD800..0xDBFF && src.startsWith("\\u", next)) {
+                    val l = src.substring(next + 2, minOf(next + 6, src.length))
+                    if (l.length == 4 && l.all { it.isHexDigitChar() } && l.toInt(16) in 0xDC00..0xDFFF) {
+                        code = Character.toCodePoint(code.toChar(), l.toInt(16).toChar())
+                        next += 6
+                    }
+                }
+                sb.append("\\x{").append(code.toString(16)).append('}')
+                return next
+            }
+            'p', 'P' -> {
+                if (src.getOrNull(i) != '{') throw IllegalArgumentException("Invalid property name")
+                val end = src.indexOf('}', i)
+                if (end < 0) throw IllegalArgumentException("Invalid property name")
+                val java = unicodeProperty(src.substring(i + 1, end)) ?: throw IllegalArgumentException("Invalid property name")
+                sb.append(if (c == 'P') negate(java, inClass) else java)
+                return end + 1
+            }
+            'k' -> {
+                if (inClass || src.getOrNull(i) != '<') throw IllegalArgumentException("Invalid named reference")
+                val end = src.indexOf('>', i)
+                val name = if (end > 0) src.substring(i + 1, end) else null
+                val mapped = name?.let { names[it] } ?: throw IllegalArgumentException("Invalid named capture referenced")
+                sb.append("\\k<").append(mapped).append('>')
+                return end + 1
+            }
+            '0' -> {
+                if (src.getOrNull(i)?.isDigit() == true) throw IllegalArgumentException("Invalid decimal escape")
+                sb.append("\\x00")
+                return i
+            }
+            in '1'..'9' -> {
+                if (inClass) throw IllegalArgumentException("Invalid class escape")
+                var j = start + 1
+                while (j < src.length && src[j].isDigit()) j++
+                val digits = src.substring(start + 1, j)
+                if (digits.toInt() > groups) throw IllegalArgumentException("Invalid escape")
+                sb.append('\\').append(digits)
+                return j
+            }
+            '-' -> if (inClass) {
+                sb.append("\\-")
+                return i
+            }
+        }
+        if (c in SYNTAX_CHARS) {
+            sb.append('\\').append(c)
+            return i
+        }
+        throw IllegalArgumentException("Invalid escape")
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    private fun negate(java: String, inClass: Boolean): String = when {
+        java.startsWith("\\p") -> "\\P" + java.substring(2)
+        java.startsWith("\\P") -> "\\p" + java.substring(2)
+        else -> "[^" + java.substring(1) // inside a class a nested class is a union in java.util.regex
+    }
+
+    /** Long names of the General_Category values (ECMA-262 table 70) → the short names `java.util.regex` knows. */
+    private val GENERAL_CATEGORIES: Map<String, String> = run {
+        val pairs = listOf(
+            "Cased_Letter" to "LC", "Close_Punctuation" to "Pe", "Connector_Punctuation" to "Pc", "Control" to "Cc",
+            "cntrl" to "Cc", "Currency_Symbol" to "Sc", "Dash_Punctuation" to "Pd", "Decimal_Number" to "Nd", "digit" to "Nd",
+            "Enclosing_Mark" to "Me", "Final_Punctuation" to "Pf", "Format" to "Cf", "Initial_Punctuation" to "Pi",
+            "Letter" to "L", "Letter_Number" to "Nl", "Line_Separator" to "Zl", "Lowercase_Letter" to "Ll", "Mark" to "M",
+            "Combining_Mark" to "M", "Math_Symbol" to "Sm", "Modifier_Letter" to "Lm", "Modifier_Symbol" to "Sk",
+            "Nonspacing_Mark" to "Mn", "Number" to "N", "Open_Punctuation" to "Ps", "Other" to "C", "Other_Letter" to "Lo",
+            "Other_Number" to "No", "Other_Punctuation" to "Po", "Other_Symbol" to "So", "Paragraph_Separator" to "Zp",
+            "Private_Use" to "Co", "Punctuation" to "P", "punct" to "P", "Separator" to "Z", "Space_Separator" to "Zs",
+            "Spacing_Mark" to "Mc", "Surrogate" to "Cs", "Symbol" to "S", "Titlecase_Letter" to "Lt", "Unassigned" to "Cn",
+            "Uppercase_Letter" to "Lu",
+        )
+        val m = HashMap<String, String>()
+        for ((long, short) in pairs) {
+            m[long] = short
+            m[short] = short
+        }
+        for (short in listOf("L", "Lu", "Ll", "Lt", "Lm", "Lo", "M", "Mn", "Mc", "Me", "N", "Nd", "Nl", "No", "P", "Pc", "Pd", "Ps", "Pe", "Pi", "Pf", "Po", "S", "Sm", "Sc", "Sk", "So", "Z", "Zs", "Zl", "Zp", "C", "Cc", "Cf", "Cs", "Co", "Cn", "LC")) m[short] = short
+        m
+    }
+
+    /** Binary Unicode properties of ECMA-262 (table 69) that `java.util.regex` supports as `\p{IsName}`. */
+    private val BINARY_PROPERTIES: Map<String, String> = mapOf(
+        "Alphabetic" to "\\p{IsAlphabetic}", "Alpha" to "\\p{IsAlphabetic}",
+        "White_Space" to "\\p{IsWhite_Space}", "space" to "\\p{IsWhite_Space}",
+        "Uppercase" to "\\p{IsUppercase}", "Upper" to "\\p{IsUppercase}",
+        "Lowercase" to "\\p{IsLowercase}", "Lower" to "\\p{IsLowercase}",
+        "Ideographic" to "\\p{IsIdeographic}", "Ideo" to "\\p{IsIdeographic}",
+        "Hex_Digit" to "\\p{IsHex_Digit}", "Hex" to "\\p{IsHex_Digit}",
+        "ASCII_Hex_Digit" to "[0-9A-Fa-f]", "AHex" to "[0-9A-Fa-f]",
+        "Noncharacter_Code_Point" to "\\p{IsNoncharacter_Code_Point}", "NChar" to "\\p{IsNoncharacter_Code_Point}",
+        "Join_Control" to "\\p{IsJoin_Control}", "Join_C" to "\\p{IsJoin_Control}",
+        "Emoji" to "\\p{IsEmoji}", "Emoji_Presentation" to "\\p{IsEmoji_Presentation}", "EPres" to "\\p{IsEmoji_Presentation}",
+        "Emoji_Modifier" to "\\p{IsEmoji_Modifier}", "EMod" to "\\p{IsEmoji_Modifier}",
+        "Emoji_Modifier_Base" to "\\p{IsEmoji_Modifier_Base}", "EBase" to "\\p{IsEmoji_Modifier_Base}",
+        "Emoji_Component" to "\\p{IsEmoji_Component}", "EComp" to "\\p{IsEmoji_Component}",
+        "Extended_Pictographic" to "\\p{IsExtended_Pictographic}", "ExtPict" to "\\p{IsExtended_Pictographic}",
+        "ASCII" to "[\\x00-\\x7F]", "Any" to "[\\x{0}-\\x{10FFFF}]", "Assigned" to "\\P{Cn}",
+    )
+
+    /** `\p{…}` of JS (with the `u` flag) as `java.util.regex` syntax, or null for a name JS does not accept. */
+    private fun unicodeProperty(body: String): String? {
+        val eq = body.indexOf('=')
+        if (eq < 0) {
+            GENERAL_CATEGORIES[body]?.let { return "\\p{$it}" }
+            return BINARY_PROPERTIES[body]
+        }
+        val name = body.substring(0, eq)
+        val value = body.substring(eq + 1)
+        return when (name) {
+            "General_Category", "gc" -> GENERAL_CATEGORIES[value]?.let { "\\p{$it}" }
+            // Script_Extensions is approximated by Script: java.util.regex has no scx
+            "Script", "sc", "Script_Extensions", "scx" -> try {
+                Character.UnicodeScript.forName(value)
+                "\\p{script=$value}"
+            } catch (_: IllegalArgumentException) {
+                null
+            }
+            else -> null
+        }
+    }
+
     private fun Char.isHexDigitChar(): Boolean = this in '0'..'9' || this in 'a'..'f' || this in 'A'..'F'
 
     /** A character matched literally. */
@@ -329,7 +501,7 @@ internal object JsRegexTranslator {
     }
 
     /** Translates the class starting at [start] (a `[`); returns the index after the closing `]`. */
-    private fun charClass(src: String, start: Int, sb: StringBuilder): Int {
+    private fun charClass(src: String, start: Int, sb: StringBuilder, unicode: Boolean = false): Int {
         var i = start + 1
         val negated = i < src.length && src[i] == '^'
         if (negated) i++
@@ -343,11 +515,12 @@ internal object JsRegexTranslator {
         while (i < src.length && src[i] != ']') {
             val c = src[i]
             when (c) {
-                '\\' -> i = escape(src, i, sb, true, 0, emptyMap())
+                '\\' -> i = escape(src, i, sb, true, 0, emptyMap(), unicode)
                 '[', '&', '^', '~' -> { sb.append('\\').append(c); i++ }
-                else -> { sb.append(JsRegexPattern.unit(c)); i++ }
+                else -> { sb.append(if (unicode) c else JsRegexPattern.unit(c)); i++ }
             }
         }
+        if (i >= src.length) throw IllegalArgumentException("Unterminated character class")
         sb.append(']')
         return i + 1
     }

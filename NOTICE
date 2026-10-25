@@ -7,3 +7,9 @@ The parser in jsonata-core is a port of jsonata-js 2.2.2 (src/parser.js, src/sig
 © Copyright IBM Corp. 2016, 2018, licensed under the MIT License.
 The reference sources and the official test suite of jsonata-js 2.2.2 are vendored
 unchanged in compat/jsonata-js/ under their original MIT License (compat/jsonata-js/LICENSE).
+
+The format checks in jsonata-seaf (schema/AjvFormats.kt) reuse the regular expressions and
+algorithms of ajv-formats 2.1.1 (src/formats.ts), Copyright (c) 2020 Evgeny Poberezkin,
+licensed under the MIT License.
+jsonata-seaf depends on networknt json-schema-validator 3.0.8 (Apache License 2.0) and,
+through it, Jackson 3 (Apache License 2.0).
