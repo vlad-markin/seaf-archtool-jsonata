@@ -143,6 +143,7 @@ internal object Messages {
     private val engineTemplates = mapOf(
         "X0001" to "A function named {{value}} is already registered; registered names cannot be replaced",
         "X0002" to "The evaluation exhausted the JVM stack. Check for non-terminating recursion or rewrite it as tail-recursive",
+        "X0003" to "Invalid regular expression {{value}}: {{{message}}}",
     )
 
     // populateMessage: {{{field}}} is replaced with the raw field, {{field}} with JSON.stringify(err[field]).

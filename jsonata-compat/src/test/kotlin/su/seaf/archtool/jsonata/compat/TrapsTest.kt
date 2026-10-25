@@ -1,0 +1,76 @@
+package su.seaf.archtool.jsonata.compat
+
+import su.seaf.archtool.jsonata.EvaluationOptions
+import su.seaf.archtool.jsonata.Jsonata
+import su.seaf.archtool.jsonata.parser.JsonataException
+import su.seaf.archtool.jsonata.value.FunctionValue
+import su.seaf.archtool.jsonata.value.JsonWriter
+import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertTrue
+
+/**
+ * The traps catalogued by the dashjoin evaluation (compat/traps, see its README): every case must give the jsonata-js
+ * 2.2.2 outcome recorded in expected.jsonl, except the ones listed in [allowed] with a reason.
+ */
+class TrapsTest {
+    private val root = File(System.getProperty("jsonata.compat"), "traps")
+
+    /** Case id → why our outcome may differ. */
+    private val allowed = mapOf(
+        "RE-01#4" to "jsonata-js fails with a JS SyntaxError (not a JSONata error); we report X0003 (docs/deviations.md DEV-04)",
+        "RE-01#5" to "the same: (?i) is Java syntax, invalid in JS",
+        "AHEAD-01#1" to "jsonata-js 2.2.2 crashes with a TypeError on an undefined matcher; we report T1006",
+    )
+
+    private fun outcome(c: com.fasterxml.jackson.databind.JsonNode): String {
+        val options = c.get("options")
+        val bounds = c.get("bounds")
+        val limits = when {
+            bounds != null -> EvaluationOptions(maxDepth = bounds.get("depth").asInt(), timeoutMillis = bounds.get("timelimit").asLong())
+            options != null -> EvaluationOptions(
+                maxDepth = options.get("stack")?.asInt() ?: 0,
+                timeoutMillis = options.get("timeout")?.asLong() ?: 0,
+                maxSequence = options.get("sequence")?.asInt() ?: 0,
+            )
+            else -> EvaluationOptions.DEFAULT
+        }
+        return try {
+            val r = Jsonata.compile(c.get("expr").asText()).evaluate(c.get("input")?.let { toValue(it) }, emptyMap(), limits)
+            when (r) {
+                null -> "undefined"
+                is FunctionValue -> "function"
+                else -> "json " + JsonWriter.stringify(r)
+            }
+        } catch (e: JsonataException) {
+            val code = if (bounds != null && (e.code == "D1011" || e.code == "D1012")) "U1001" else e.code
+            "error $code"
+        }
+    }
+
+    private fun expected(e: com.fasterxml.jackson.databind.JsonNode): String = when {
+        e.has("json") -> "json " + e.get("json").asText()
+        e.has("undefined") -> "undefined"
+        e.has("error") -> "error " + e.get("error").asText()
+        e.has("crash") -> "crash " + e.get("crash").asText()
+        else -> "function"
+    }
+
+    @Test
+    fun `traps behave as jsonata-js 2_2_2`() {
+        val expected = File(root, "expected.jsonl").readLines().filter { it.isNotBlank() }.associate { l ->
+            val n = mapper.readTree(l)
+            n.get("id").asText() to expected(n)
+        }
+        val cases = listOf("divergences.jsonl", "targeted.jsonl").flatMap { f -> File(root, f).readLines().filter { it.isNotBlank() } }
+            .map { mapper.readTree(it) }.filter { !it.has("functions") }
+        val mismatches = ArrayList<String>()
+        for (c in cases) {
+            val id = c.get("id").asText()
+            val want = expected[id] ?: error("no expected outcome for $id")
+            val got = outcome(c)
+            if (got != want && id !in allowed) mismatches += "$id: expected <$want> got <$got>  expr ${c.get("expr").asText()}"
+        }
+        assertTrue(mismatches.isEmpty(), "${mismatches.size} of ${cases.size} traps differ:\n" + mismatches.joinToString("\n"))
+    }
+}

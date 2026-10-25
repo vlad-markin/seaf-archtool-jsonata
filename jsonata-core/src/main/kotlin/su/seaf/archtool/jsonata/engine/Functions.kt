@@ -97,6 +97,12 @@ internal class CallContextImpl(
 
     /** jsonata.js: createSequence. */
     fun sequence(): ArrayValue = ArrayValue.sequence()
+
+    /** The `sequence` limit of the options for a sequence a native function built. */
+    fun checked(v: Value?): Value? {
+        if (v is ArrayValue && v.isSequence) frame.ctx.checkSequence(v.size)
+        return v
+    }
 }
 
 /** jsonata.js/signature.js: argument validation against a function signature. */

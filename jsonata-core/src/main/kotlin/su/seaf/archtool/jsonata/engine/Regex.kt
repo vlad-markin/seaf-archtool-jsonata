@@ -10,8 +10,14 @@ import su.seaf.archtool.jsonata.value.Value
 import java.util.concurrent.ConcurrentHashMap
 import java.util.regex.Pattern
 
-/** A JS regular expression literal compiled to `java.util.regex` (shared, immutable). */
-internal class JsRegexPattern(val source: String, val flags: String, val pattern: Pattern) {
+/**
+ * A JS regular expression literal compiled to `java.util.regex` (shared, immutable). A pattern that is not valid JS
+ * syntax has no [pattern] but an [error]: jsonata-js fails when it evaluates the literal (`new RegExp`), not when it
+ * compiles the expression, so the error is raised at evaluation.
+ */
+internal class JsRegexPattern(val source: String, val flags: String, private val compiled: Pattern?, val error: String?) {
+    val pattern: Pattern get() = compiled ?: throw JsonataException("X0003", value = StringValue.of(source), details = mapOf("message" to error))
+
     companion object {
         private val cache = ConcurrentHashMap<String, JsRegexPattern>()
 
@@ -20,7 +26,30 @@ internal class JsRegexPattern(val source: String, val flags: String, val pattern
             var flags = 0
             if ('i' in regex.flags) flags = flags or Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
             if ('s' in regex.flags) flags = flags or Pattern.DOTALL
-            JsRegexPattern(regex.source, regex.flags, Pattern.compile(JsRegexTranslator.translate(regex.pattern, multiline, 's' in regex.flags), flags))
+            try {
+                JsRegexTranslator.validate(regex.pattern)
+                JsRegexPattern(regex.source, regex.flags, Pattern.compile(JsRegexTranslator.translate(regex.pattern, multiline, 's' in regex.flags), flags), null)
+            } catch (e: java.util.regex.PatternSyntaxException) {
+                JsRegexPattern(regex.source, regex.flags, null, e.description)
+            } catch (e: IllegalArgumentException) {
+                JsRegexPattern(regex.source, regex.flags, null, e.message)
+            }
+        }
+
+        /**
+         * JS regexes without the `u` flag match UTF-16 code units (an astral character is two units, `.` takes one),
+         * `java.util.regex` matches code points. Surrogate units are mapped one-to-one to private use characters
+         * U+E000–U+E7FF both in the pattern and in the subject, so indices are preserved and each unit matches alone.
+         */
+        fun unit(c: Char): Char = if (c in '\uD800'..'\uDFFF') (c.code - 0xD800 + 0xE000).toChar() else c
+
+        fun subject(s: String): String {
+            var i = 0
+            while (i < s.length && !Character.isSurrogate(s[i])) i++
+            if (i == s.length) return s
+            val chars = s.toCharArray()
+            for (k in i until chars.size) chars[k] = unit(chars[k])
+            return String(chars)
         }
     }
 }
@@ -61,10 +90,61 @@ internal object JsRegexTranslator {
                 }
                 '}' -> { sb.append("\\}"); i++ }
                 ']' -> { sb.append("\\]"); i++ }
-                else -> { sb.append(c); i++ }
+                else -> { sb.append(JsRegexPattern.unit(c)); i++ }
             }
         }
         return sb.toString()
+    }
+
+    /**
+     * Rejects what `java.util.regex` accepts but JS does not (jsonata-js throws a SyntaxError there): possessive
+     * quantifiers (`a++`) and Java group constructs (`(?i)`, `(?>...)`).
+     */
+    fun validate(src: String) {
+        var i = 0
+        var inClass = false
+        var lastWasQuantifier = false
+        while (i < src.length) {
+            val c = src[i]
+            if (c == '\\') {
+                i += 2
+                lastWasQuantifier = false
+                continue
+            }
+            if (inClass) {
+                if (c == ']') inClass = false
+                i++
+                continue
+            }
+            when (c) {
+                '[' -> { inClass = true; lastWasQuantifier = false }
+                '*', '+', '?' -> {
+                    if (lastWasQuantifier && c == '+') throw IllegalArgumentException("Nothing to repeat")
+                    // `??`, `*?`, `+?` are lazy quantifiers; a `?` after a quantifier ends it
+                    lastWasQuantifier = !(lastWasQuantifier && c == '?')
+                }
+                '{' -> {
+                    val m = Regex("\\{\\d+(,\\d*)?}").matchAt(src, i)
+                    if (m != null) {
+                        i += m.value.length
+                        lastWasQuantifier = true
+                        continue
+                    }
+                    lastWasQuantifier = false
+                }
+                '(' -> {
+                    lastWasQuantifier = false
+                    if (src.getOrNull(i + 1) == '?') {
+                        val n = src.getOrNull(i + 2)
+                        val ok = n == ':' || n == '=' || n == '!' ||
+                            (n == '<' && (src.getOrNull(i + 3) == '=' || src.getOrNull(i + 3) == '!' || src.getOrNull(i + 3)?.let { it.isLetter() || it == '_' || it == '$' } == true))
+                        if (!ok) throw IllegalArgumentException("Invalid group")
+                    }
+                }
+                else -> lastWasQuantifier = false
+            }
+            i++
+        }
     }
 
     private fun countGroups(src: String): Int {
@@ -124,7 +204,8 @@ internal object JsRegexTranslator {
             'u' -> {
                 val h = src.substring(i, minOf(i + 4, src.length))
                 if (h.length == 4 && h.all { it.isHexDigitChar() }) {
-                    sb.append("\\u").append(h)
+                    val code = h.toInt(16)
+                    if (code in 0xD800..0xDFFF) sb.append(JsRegexPattern.unit(code.toChar())) else sb.append("\\u").append(h)
                     i += 4
                 } else {
                     sb.append('u')
@@ -172,8 +253,12 @@ internal object JsRegexTranslator {
     private fun Char.isHexDigitChar(): Boolean = this in '0'..'9' || this in 'a'..'f' || this in 'A'..'F'
 
     /** A character matched literally. */
-    private fun literal(c: Char): String = when {
-        c.isLetterOrDigit() -> c.toString()
+    private fun literal(c0: Char): String = when (val c = JsRegexPattern.unit(c0)) {
+        in '\uE000'..'\uE7FF' -> c.toString()
+        else -> if (c.isLetterOrDigit()) c.toString() else literalOther(c)
+    }
+
+    private fun literalOther(c: Char): String = when {
         c.code < 0x20 || c.code > 0x7e -> "\\u" + c.code.toString(16).padStart(4, '0')
         else -> "\\" + c
     }
@@ -195,7 +280,7 @@ internal object JsRegexTranslator {
             when (c) {
                 '\\' -> i = escape(src, i, sb, true, 0, false)
                 '[', '&', '^', '~' -> { sb.append('\\').append(c); i++ }
-                else -> { sb.append(c); i++ }
+                else -> { sb.append(JsRegexPattern.unit(c)); i++ }
             }
         }
         sb.append(']')
@@ -214,18 +299,18 @@ internal object RegexMatcher {
                 state[0] = 0
                 return null
             }
-            val m = regex.pattern.matcher(str)
+            val m = regex.pattern.matcher(JsRegexPattern.subject(str))
             if (!m.find(fromIndex)) {
                 state[0] = 0
                 return null
             }
             state[0] = m.end()
             val result = ObjectValue()
-            result.put("match", StringValue.of(m.group()))
+            result.put("match", StringValue.of(str.substring(m.start(), m.end())))
             result.put("start", NumberValue.of(m.start()))
             result.put("end", NumberValue.of(m.end()))
             val groups = ArrayValue(m.groupCount())
-            for (g in 1..m.groupCount()) groups.addNullable(m.group(g)?.let { StringValue.of(it) })
+            for (g in 1..m.groupCount()) groups.addNullable(if (m.start(g) < 0) null else StringValue.of(str.substring(m.start(g), m.end(g))))
             result.put("groups", groups)
             result.put("next", InternalFunction(0) { _, _ ->
                 if (state[0] >= str.length) {

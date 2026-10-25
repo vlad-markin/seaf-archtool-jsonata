@@ -423,7 +423,18 @@ internal object DateTimeFunctions {
         return if (neg) -v else v
     }
 
+    /** Analysed pictures are immutable once built, so they are shared between calls and threads. */
+    private val pictureCache = java.util.concurrent.ConcurrentHashMap<String, List<Part>>()
+    private val parserCache = java.util.concurrent.ConcurrentHashMap<String, Pair<List<Matcher>, Pattern>>()
+
     private fun analyseDateTimePicture(picture: String): List<Part> {
+        pictureCache[picture]?.let { return it }
+        val spec = analyse(picture)
+        if (pictureCache.size < 1000) pictureCache[picture] = spec
+        return spec
+    }
+
+    private fun analyse(picture: String): List<Part> {
         val spec = ArrayList<Part>()
         fun addLiteral(start: Int, end: Int) {
             if (end > start) spec += Literal(picture.substring(start, end).split("]]").joinToString("]"))
@@ -805,10 +816,13 @@ internal object DateTimeFunctions {
 
     /** datetime.js: parseDateTime. */
     private fun parseDateTime(c: CallContext, timestamp: String, picture: String): Double? {
-        val spec = analyseDateTimePicture(picture)
-        val parts = spec.map { partMatcher(it) }
-        val fullRegex = "^" + parts.joinToString("") { "(" + it.regex + ")" } + "$"
-        val pattern = Pattern.compile(JsRegexTranslator.translate(fullRegex, false), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
+        val (parts, pattern) = parserCache[picture] ?: run {
+            val parts = analyseDateTimePicture(picture).map { partMatcher(it) }
+            val fullRegex = "^" + parts.joinToString("") { "(" + it.regex + ")" } + "$"
+            val compiled = parts to Pattern.compile(JsRegexTranslator.translate(fullRegex, false), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
+            if (parserCache.size < 1000) parserCache[picture] = compiled
+            compiled
+        }
         val info = pattern.matcher(timestamp)
         if (!info.find()) return null
         val components = HashMap<Char, Any?>()

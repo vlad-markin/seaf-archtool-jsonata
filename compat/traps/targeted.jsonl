@@ -1,0 +1,261 @@
+{"id": "t-sort-stable-cmp", "expr": "$sort(items, function($l,$r){$l.k > $r.k}).n", "tags": ["targeted"], "input": {"items": [{"k": 2, "n": "a"}, {"k": 1, "n": "b"}, {"k": 2, "n": "c"}, {"k": 1, "n": "d"}, {"k": 3, "n": "e"}, {"k": 1, "n": "f"}, {"k": 2, "n": "g"}, {"k": 1, "n": "h"}, {"k": 2, "n": "i"}, {"k": 1, "n": "j"}, {"k": 2, "n": "k"}, {"k": 1, "n": "l"}]}}
+{"id": "t-sort-stable-orderby", "expr": "items^(k).n", "tags": ["targeted"], "input": {"items": [{"k": 2, "n": "a"}, {"k": 1, "n": "b"}, {"k": 2, "n": "c"}, {"k": 1, "n": "d"}, {"k": 3, "n": "e"}, {"k": 1, "n": "f"}, {"k": 2, "n": "g"}, {"k": 1, "n": "h"}, {"k": 2, "n": "i"}, {"k": 1, "n": "j"}, {"k": 2, "n": "k"}, {"k": 1, "n": "l"}]}}
+{"id": "t-sort-stable-orderby-desc", "expr": "items^(>k).n", "tags": ["targeted"], "input": {"items": [{"k": 2, "n": "a"}, {"k": 1, "n": "b"}, {"k": 2, "n": "c"}, {"k": 1, "n": "d"}, {"k": 3, "n": "e"}, {"k": 1, "n": "f"}, {"k": 2, "n": "g"}, {"k": 1, "n": "h"}, {"k": 2, "n": "i"}, {"k": 1, "n": "j"}, {"k": 2, "n": "k"}, {"k": 1, "n": "l"}]}}
+{"id": "t-sort-stable-default", "expr": "$sort(items.k)", "tags": ["targeted"], "input": {"items": [{"k": 2, "n": "a"}, {"k": 1, "n": "b"}, {"k": 2, "n": "c"}, {"k": 1, "n": "d"}, {"k": 3, "n": "e"}, {"k": 1, "n": "f"}, {"k": 2, "n": "g"}, {"k": 1, "n": "h"}, {"k": 2, "n": "i"}, {"k": 1, "n": "j"}, {"k": 2, "n": "k"}, {"k": 1, "n": "l"}]}}
+{"id": "t-sort-strings", "expr": "$sort(['b','a','B','é','e','Z','10','9','ä'])", "tags": ["targeted"]}
+{"id": "t-sort-cmp-ge", "expr": "$sort(items, function($l,$r){$l.k >= $r.k}).n", "tags": ["targeted"], "input": {"items": [{"k": 2, "n": "a"}, {"k": 1, "n": "b"}, {"k": 2, "n": "c"}, {"k": 1, "n": "d"}, {"k": 3, "n": "e"}, {"k": 1, "n": "f"}, {"k": 2, "n": "g"}, {"k": 1, "n": "h"}, {"k": 2, "n": "i"}, {"k": 1, "n": "j"}, {"k": 2, "n": "k"}, {"k": 1, "n": "l"}]}}
+{"id": "t-tz-0530", "expr": "$fromMillis(0, '[Y0001]-[M01]-[D01] [H01]:[m01] [Z]', '-0530')", "tags": ["targeted"]}
+{"id": "t-tz+0530", "expr": "$fromMillis(0, '[Y0001]-[M01]-[D01] [H01]:[m01] [Z]', '+0530')", "tags": ["targeted"]}
+{"id": "t-tz-0030", "expr": "$fromMillis(0, '[Y0001]-[M01]-[D01] [H01]:[m01] [Z]', '-0030')", "tags": ["targeted"]}
+{"id": "t-tz+0545", "expr": "$fromMillis(0, '[Y0001]-[M01]-[D01] [H01]:[m01] [Z]', '+0545')", "tags": ["targeted"]}
+{"id": "t-tz-1000", "expr": "$fromMillis(0, '[Y0001]-[M01]-[D01] [H01]:[m01] [Z]', '-1000')", "tags": ["targeted"]}
+{"id": "t-tz-0100", "expr": "$fromMillis(0, '[Y0001]-[M01]-[D01] [H01]:[m01] [Z]', '-0100')", "tags": ["targeted"]}
+{"id": "t-tz-name", "expr": "$fromMillis(0, '[z]', '-0530')", "tags": ["targeted"]}
+{"id": "t-str-0.1+0.2", "expr": "$string(0.1+0.2)", "tags": ["targeted"]}
+{"id": "t-concat-0.1+0.2", "expr": "(0.1+0.2) & ''", "tags": ["targeted"]}
+{"id": "t-str-1/3", "expr": "$string(1/3)", "tags": ["targeted"]}
+{"id": "t-concat-1/3", "expr": "(1/3) & ''", "tags": ["targeted"]}
+{"id": "t-str-123456789.123456789", "expr": "$string(123456789.123456789)", "tags": ["targeted"]}
+{"id": "t-concat-123456789.123456789", "expr": "(123456789.123456789) & ''", "tags": ["targeted"]}
+{"id": "t-str-1e-7", "expr": "$string(1e-7)", "tags": ["targeted"]}
+{"id": "t-concat-1e-7", "expr": "(1e-7) & ''", "tags": ["targeted"]}
+{"id": "t-str--1e-7", "expr": "$string(-1e-7)", "tags": ["targeted"]}
+{"id": "t-concat--1e-7", "expr": "(-1e-7) & ''", "tags": ["targeted"]}
+{"id": "t-str-1e21", "expr": "$string(1e21)", "tags": ["targeted"]}
+{"id": "t-concat-1e21", "expr": "(1e21) & ''", "tags": ["targeted"]}
+{"id": "t-str-1e-6", "expr": "$string(1e-6)", "tags": ["targeted"]}
+{"id": "t-concat-1e-6", "expr": "(1e-6) & ''", "tags": ["targeted"]}
+{"id": "t-str-100000000000000000000", "expr": "$string(100000000000000000000)", "tags": ["targeted"]}
+{"id": "t-concat-100000000000000000000", "expr": "(100000000000000000000) & ''", "tags": ["targeted"]}
+{"id": "t-str-2e20", "expr": "$string(2e20)", "tags": ["targeted"]}
+{"id": "t-concat-2e20", "expr": "(2e20) & ''", "tags": ["targeted"]}
+{"id": "t-str-12345678901234567890", "expr": "$string(12345678901234567890)", "tags": ["targeted"]}
+{"id": "t-concat-12345678901234567890", "expr": "(12345678901234567890) & ''", "tags": ["targeted"]}
+{"id": "t-str-0.000001", "expr": "$string(0.000001)", "tags": ["targeted"]}
+{"id": "t-concat-0.000001", "expr": "(0.000001) & ''", "tags": ["targeted"]}
+{"id": "t-str-1.0e15", "expr": "$string(1.0e15)", "tags": ["targeted"]}
+{"id": "t-concat-1.0e15", "expr": "(1.0e15) & ''", "tags": ["targeted"]}
+{"id": "t-str-255/256", "expr": "$string(255/256)", "tags": ["targeted"]}
+{"id": "t-concat-255/256", "expr": "(255/256) & ''", "tags": ["targeted"]}
+{"id": "t-str--0", "expr": "$string(-0)", "tags": ["targeted"]}
+{"id": "t-concat--0", "expr": "(-0) & ''", "tags": ["targeted"]}
+{"id": "t-str-1e100", "expr": "$string(1e100)", "tags": ["targeted"]}
+{"id": "t-concat-1e100", "expr": "(1e100) & ''", "tags": ["targeted"]}
+{"id": "t-str-123e-20", "expr": "$string(123e-20)", "tags": ["targeted"]}
+{"id": "t-concat-123e-20", "expr": "(123e-20) & ''", "tags": ["targeted"]}
+{"id": "t-str-pretty", "expr": "$string({'a':[1,{'b':2,'c':'x'}],'d':{}}, true)", "tags": ["targeted"]}
+{"id": "t-str-pretty-empty", "expr": "$string({'a':[],'b':{}}, true)", "tags": ["targeted"]}
+{"id": "t-str-obj-num", "expr": "$string({'a':1.5e300,'b':1e21,'c':0.1})", "tags": ["targeted"]}
+{"id": "t-str-nested-str", "expr": "$string(['a\"b', 'é', '\\u0001'])", "tags": ["targeted"]}
+{"id": "t-round-2.5", "expr": "$round(2.5)", "tags": ["targeted"]}
+{"id": "t-round2-2.5", "expr": "$round(2.5, 2)", "tags": ["targeted"]}
+{"id": "t-round--2.5", "expr": "$round(-2.5)", "tags": ["targeted"]}
+{"id": "t-round2--2.5", "expr": "$round(-2.5, 2)", "tags": ["targeted"]}
+{"id": "t-round-3.5", "expr": "$round(3.5)", "tags": ["targeted"]}
+{"id": "t-round2-3.5", "expr": "$round(3.5, 2)", "tags": ["targeted"]}
+{"id": "t-round-0.5", "expr": "$round(0.5)", "tags": ["targeted"]}
+{"id": "t-round2-0.5", "expr": "$round(0.5, 2)", "tags": ["targeted"]}
+{"id": "t-round-1.005", "expr": "$round(1.005)", "tags": ["targeted"]}
+{"id": "t-round2-1.005", "expr": "$round(1.005, 2)", "tags": ["targeted"]}
+{"id": "t-round-2.675", "expr": "$round(2.675)", "tags": ["targeted"]}
+{"id": "t-round2-2.675", "expr": "$round(2.675, 2)", "tags": ["targeted"]}
+{"id": "t-round--0.5", "expr": "$round(-0.5)", "tags": ["targeted"]}
+{"id": "t-round2--0.5", "expr": "$round(-0.5, 2)", "tags": ["targeted"]}
+{"id": "t-round-1e300", "expr": "$round(1e300)", "tags": ["targeted"]}
+{"id": "t-round2-1e300", "expr": "$round(1e300, 2)", "tags": ["targeted"]}
+{"id": "t-round-neg", "expr": "$round(1234.5678, -2)", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.00-1234.5", "expr": "$formatNumber(1234.5, '#,##0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.00-0.125", "expr": "$formatNumber(0.125, '#,##0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.00--1234.567", "expr": "$formatNumber(-1234.567, '#,##0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.00-0", "expr": "$formatNumber(0, '#,##0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.00-1000000", "expr": "$formatNumber(1000000, '#,##0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.00-0.005", "expr": "$formatNumber(0.005, '#,##0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.00-1234.5", "expr": "$formatNumber(1234.5, '0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.00-0.125", "expr": "$formatNumber(0.125, '0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.00--1234.567", "expr": "$formatNumber(-1234.567, '0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.00-0", "expr": "$formatNumber(0, '0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.00-1000000", "expr": "$formatNumber(1000000, '0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.00-0.005", "expr": "$formatNumber(0.005, '0.00')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0-1234.5", "expr": "$formatNumber(1234.5, '#,##0')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0-0.125", "expr": "$formatNumber(0.125, '#,##0')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0--1234.567", "expr": "$formatNumber(-1234.567, '#,##0')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0-0", "expr": "$formatNumber(0, '#,##0')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0-1000000", "expr": "$formatNumber(1000000, '#,##0')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0-0.005", "expr": "$formatNumber(0.005, '#,##0')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.0%-1234.5", "expr": "$formatNumber(1234.5, '0.0%')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.0%-0.125", "expr": "$formatNumber(0.125, '0.0%')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.0%--1234.567", "expr": "$formatNumber(-1234.567, '0.0%')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.0%-0", "expr": "$formatNumber(0, '0.0%')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.0%-1000000", "expr": "$formatNumber(1000000, '0.0%')", "tags": ["targeted"]}
+{"id": "t-fmtnum-0.0%-0.005", "expr": "$formatNumber(0.005, '0.0%')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.###-1234.5", "expr": "$formatNumber(1234.5, '#,##0.###')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.###-0.125", "expr": "$formatNumber(0.125, '#,##0.###')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.###--1234.567", "expr": "$formatNumber(-1234.567, '#,##0.###')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.###-0", "expr": "$formatNumber(0, '#,##0.###')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.###-1000000", "expr": "$formatNumber(1000000, '#,##0.###')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#,##0.###-0.005", "expr": "$formatNumber(0.005, '#,##0.###')", "tags": ["targeted"]}
+{"id": "t-fmtnum-000-1234.5", "expr": "$formatNumber(1234.5, '000')", "tags": ["targeted"]}
+{"id": "t-fmtnum-000-0.125", "expr": "$formatNumber(0.125, '000')", "tags": ["targeted"]}
+{"id": "t-fmtnum-000--1234.567", "expr": "$formatNumber(-1234.567, '000')", "tags": ["targeted"]}
+{"id": "t-fmtnum-000-0", "expr": "$formatNumber(0, '000')", "tags": ["targeted"]}
+{"id": "t-fmtnum-000-1000000", "expr": "$formatNumber(1000000, '000')", "tags": ["targeted"]}
+{"id": "t-fmtnum-000-0.005", "expr": "$formatNumber(0.005, '000')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#.#-1234.5", "expr": "$formatNumber(1234.5, '#.#')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#.#-0.125", "expr": "$formatNumber(0.125, '#.#')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#.#--1234.567", "expr": "$formatNumber(-1234.567, '#.#')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#.#-0", "expr": "$formatNumber(0, '#.#')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#.#-1000000", "expr": "$formatNumber(1000000, '#.#')", "tags": ["targeted"]}
+{"id": "t-fmtnum-#.#-0.005", "expr": "$formatNumber(0.005, '#.#')", "tags": ["targeted"]}
+{"id": "t-now-format", "expr": "$exists($match($now(), /^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d{3}Z$/))", "tags": ["targeted"]}
+{"id": "t-now-pic", "expr": "$exists($match($now('[Y0001]-[M01]-[D01]'), /^\\d{4}-\\d\\d-\\d\\d$/))", "tags": ["targeted"]}
+{"id": "t-now-tz", "expr": "$length($now('[H01]:[m01]', '+0100'))", "tags": ["targeted"]}
+{"id": "t-now-same", "expr": "$now() = $now()", "tags": ["targeted"]}
+{"id": "t-millis-type", "expr": "$type($millis())", "tags": ["targeted"]}
+{"id": "t-frommillis-default", "expr": "$fromMillis(1510067557121)", "tags": ["targeted"]}
+{"id": "t-tomillis-basic", "expr": "$toMillis('2017-11-07T15:12:37.121Z')", "tags": ["targeted"]}
+{"id": "t-tomillis-offset", "expr": "$toMillis('2017-11-07T15:12:37+05:30')", "tags": ["targeted"]}
+{"id": "t-tomillis-noz", "expr": "$toMillis('2017-11-07T15:12:37')", "tags": ["targeted"]}
+{"id": "t-tomillis-date", "expr": "$toMillis('2017-11-07')", "tags": ["targeted"]}
+{"id": "t-re-s-nbsp", "expr": "$replace('a\\u00a0b\\u2028c\\ufeffd', /\\s/, '_')", "tags": ["targeted"]}
+{"id": "t-re-dollar-nl", "expr": "$contains('abc\\n', /c$/)", "tags": ["targeted"]}
+{"id": "t-re-dollar-m", "expr": "$match('ab\\ncd', /^\\w+$/m).match", "tags": ["targeted"]}
+{"id": "t-re-dot-nl", "expr": "$contains('a\\nb', /a.b/)", "tags": ["targeted"]}
+{"id": "t-re-i-unicode", "expr": "$contains('é', /É/i)", "tags": ["targeted"]}
+{"id": "t-re-i-unicode2", "expr": "$replace('STRASSE straße', /ß/i, 'x')", "tags": ["targeted"]}
+{"id": "t-re-w-unicode", "expr": "$match('héllo', /\\w+/).match", "tags": ["targeted"]}
+{"id": "t-re-group-unmatched", "expr": "$match('b', /(a)|(b)/)", "tags": ["targeted"]}
+{"id": "t-re-group-optional", "expr": "$match('ac', /a(b)?c/)", "tags": ["targeted"]}
+{"id": "t-re-replace-10", "expr": "$replace('abc', /(a)(b)(c)/, '$10')", "tags": ["targeted"]}
+{"id": "t-re-replace-missing-group", "expr": "$replace('abc', /(b)/, '[$2]')", "tags": ["targeted"]}
+{"id": "t-re-replace-dollar-dollar", "expr": "$replace('abc', /b/, '$$')", "tags": ["targeted"]}
+{"id": "t-re-split-limit", "expr": "$split('a1b2c3', /\\d/, 2)", "tags": ["targeted"]}
+{"id": "t-re-match-limit", "expr": "$match('a1b2c3', /\\d/, 2).match", "tags": ["targeted"]}
+{"id": "t-re-backref", "expr": "$match('aa bb ab', /(\\w)\\1/).match", "tags": ["targeted"]}
+{"id": "t-re-named", "expr": "$match('2024-01', /(?<y>\\d+)-(?<m>\\d+)/).groups", "tags": ["targeted"]}
+{"id": "t-re-lookbehind", "expr": "$replace('price: $5', /(?<=\\$)\\d/, 'X')", "tags": ["targeted"]}
+{"id": "t-re-unicode-escape", "expr": "$contains('é', /\\u00e9/)", "tags": ["targeted"]}
+{"id": "t-re-surrogate", "expr": "$match('a😀b', /./).match", "tags": ["targeted"]}
+{"id": "t-re-emoji-class", "expr": "$replace('😀', /[😀]/, 'x')", "tags": ["targeted"]}
+{"id": "t-re-case-insens-m", "expr": "$match('A\\nb', /^b/im).match", "tags": ["targeted"]}
+{"id": "t-re-contains-str", "expr": "$contains('a.b', '.')", "tags": ["targeted"]}
+{"id": "t-re-split-str-special", "expr": "$split('a.b|c', '|')", "tags": ["targeted"]}
+{"id": "t-re-replace-str-special", "expr": "$replace('a.b', '.', '$')", "tags": ["targeted"]}
+{"id": "t-re-in-filter", "expr": "items[n ~> /[aeiou]/].n", "tags": ["targeted"], "input": {"items": [{"k": 2, "n": "a"}, {"k": 1, "n": "b"}, {"k": 2, "n": "c"}, {"k": 1, "n": "d"}, {"k": 3, "n": "e"}, {"k": 1, "n": "f"}, {"k": 2, "n": "g"}, {"k": 1, "n": "h"}, {"k": 2, "n": "i"}, {"k": 1, "n": "j"}, {"k": 2, "n": "k"}, {"k": 1, "n": "l"}]}}
+{"id": "t-str-length-emoji", "expr": "$length('😀a')", "tags": ["targeted"]}
+{"id": "t-str-substring-emoji", "expr": "$substring('a😀b😀c', 1, 3)", "tags": ["targeted"]}
+{"id": "t-str-substring-neg", "expr": "$substring('a😀b😀c', -2)", "tags": ["targeted"]}
+{"id": "t-str-pad-emoji", "expr": "$pad('😀', 4, '*')", "tags": ["targeted"]}
+{"id": "t-str-upper-sharp", "expr": "$uppercase('straße')", "tags": ["targeted"]}
+{"id": "t-str-lower-I", "expr": "$lowercase('İ')", "tags": ["targeted"]}
+{"id": "t-str-trim-unicode", "expr": "$trim('\\u00a0 a \\u2003')", "tags": ["targeted"]}
+{"id": "t-str-trim-newlines", "expr": "$trim('\\n a  b \\t')", "tags": ["targeted"]}
+{"id": "t-str-split-empty", "expr": "$split('a😀b', '')", "tags": ["targeted"]}
+{"id": "t-str-join-num", "expr": "$join(['a', 'b'], 1)", "tags": ["targeted"]}
+{"id": "t-str-compare-unicode", "expr": "'é' > 'f'", "tags": ["targeted"]}
+{"id": "t-str-compare-surrogate", "expr": "'😀' > '\\uffff'", "tags": ["targeted"]}
+{"id": "t-str-contains-emoji", "expr": "$contains('a😀', '😀')", "tags": ["targeted"]}
+{"id": "t-str-sbefore", "expr": "$substringBefore('a😀b', '😀')", "tags": ["targeted"]}
+{"id": "t-str-encodeurl", "expr": "$encodeUrl('https://x.y/a b?q=é&r=😀')", "tags": ["targeted"]}
+{"id": "t-str-encodeurlcomp", "expr": "$encodeUrlComponent('a b&c=é/😀')", "tags": ["targeted"]}
+{"id": "t-str-decodeurl", "expr": "$decodeUrlComponent('a%20b%2Bc+d')", "tags": ["targeted"]}
+{"id": "t-str-b64", "expr": "$base64encode('hello')", "tags": ["targeted"]}
+{"id": "t-str-b64-utf", "expr": "$base64encode('é')", "tags": ["targeted"]}
+{"id": "t-str-b64-dec-utf", "expr": "$base64decode('w6k=')", "tags": ["targeted"]}
+{"id": "t-num-big-input", "expr": "n + 1", "tags": ["targeted"], "input": {"n": 9007199254740993}}
+{"id": "t-num-int-div", "expr": "7 / 2", "tags": ["targeted"]}
+{"id": "t-num-mod-neg", "expr": "-7 % 3", "tags": ["targeted"]}
+{"id": "t-num-mod-float", "expr": "5.5 % 2", "tags": ["targeted"]}
+{"id": "t-num-sum-float", "expr": "$sum([0.1, 0.2, 0.3])", "tags": ["targeted"]}
+{"id": "t-num-avg", "expr": "$average([1,2,2])", "tags": ["targeted"]}
+{"id": "t-num-max-mixed", "expr": "$max([1, 2.5, -0])", "tags": ["targeted"]}
+{"id": "t-num-overflow", "expr": "1e308 * 10", "tags": ["targeted"]}
+{"id": "t-num-div-zero", "expr": "1/0", "tags": ["targeted"]}
+{"id": "t-num-neg-zero-lit", "expr": "-0", "tags": ["targeted"]}
+{"id": "t-num-neg-zero-mul", "expr": "0 * -1", "tags": ["targeted"]}
+{"id": "t-num-int-cast", "expr": "$number('42') + $number('1.50')", "tags": ["targeted"]}
+{"id": "t-num-hex", "expr": "$number('0x10')", "tags": ["targeted"]}
+{"id": "t-num-power-int", "expr": "$power(2, 62)", "tags": ["targeted"]}
+{"id": "t-num-power-big", "expr": "$power(2, 64)", "tags": ["targeted"]}
+{"id": "t-num-str-big", "expr": "$string($power(2, 64))", "tags": ["targeted"]}
+{"id": "t-num-formatbase", "expr": "$formatBase(255, 16)", "tags": ["targeted"]}
+{"id": "t-num-formatbase-neg", "expr": "$formatBase(-255, 2)", "tags": ["targeted"]}
+{"id": "t-num-formatbase-frac", "expr": "$formatBase(10.7, 2)", "tags": ["targeted"]}
+{"id": "t-num-formatint-w", "expr": "$formatInteger(123456, 'w')", "tags": ["targeted"]}
+{"id": "t-num-formatint-W", "expr": "$formatInteger(2024, 'W')", "tags": ["targeted"]}
+{"id": "t-num-formatint-I", "expr": "$formatInteger(1999, 'I')", "tags": ["targeted"]}
+{"id": "t-num-formatint-ord", "expr": "$formatInteger(22, '#;o')", "tags": ["targeted"]}
+{"id": "t-num-formatint-group", "expr": "$formatInteger(1234567, '#,##0')", "tags": ["targeted"]}
+{"id": "t-num-parseint-w", "expr": "$parseInteger('one hundred and twenty-three', 'w')", "tags": ["targeted"]}
+{"id": "t-num-range-big", "expr": "$count([1..100000])", "tags": ["targeted"]}
+{"id": "t-undef-count-null", "expr": "$count(null)", "tags": ["targeted"]}
+{"id": "t-undef-count-nullpath", "expr": "$count(a)", "tags": ["targeted"], "input": {"a": null}}
+{"id": "t-undef-map-null", "expr": "$map(null, function($v){$type($v)})", "tags": ["targeted"]}
+{"id": "t-undef-sort-null", "expr": "$sort(null)", "tags": ["targeted"]}
+{"id": "t-undef-reduce-null", "expr": "$reduce(null, function($a,$b){$a})", "tags": ["targeted"]}
+{"id": "t-undef-string-nullpath", "expr": "$string(a)", "tags": ["targeted"], "input": {"a": null}}
+{"id": "t-undef-exists-nullpath", "expr": "$exists(a)", "tags": ["targeted"], "input": {"a": null}}
+{"id": "t-undef-type-nullpath", "expr": "$type(a)", "tags": ["targeted"], "input": {"a": null}}
+{"id": "t-undef-filter-null", "expr": "$filter([null, 1], function($v){$v = null})", "tags": ["targeted"]}
+{"id": "t-undef-null-arith", "expr": "null + 1", "tags": ["targeted"]}
+{"id": "t-undef-null-concat", "expr": "null & 'x'", "tags": ["targeted"]}
+{"id": "t-undef-null-eq", "expr": "a = null", "tags": ["targeted"], "input": {"a": null}}
+{"id": "t-undef-path-null-arr", "expr": "a.b", "tags": ["targeted"], "input": {"a": [{"b": null}, {"b": 1}]}}
+{"id": "t-undef-arr-null", "expr": "[null]", "tags": ["targeted"]}
+{"id": "t-undef-obj-undef", "expr": "{'a': nothing, 'b': null}", "tags": ["targeted"]}
+{"id": "t-undef-arr-undef", "expr": "[1, nothing, 2]", "tags": ["targeted"]}
+{"id": "t-undef-single-null", "expr": "$single([null])", "tags": ["targeted"]}
+{"id": "t-undef-distinct-null", "expr": "$distinct([null, null, 1])", "tags": ["targeted"]}
+{"id": "t-undef-keys-null", "expr": "$keys({'a':null})", "tags": ["targeted"]}
+{"id": "t-undef-lookup-null", "expr": "$lookup({'a':null}, 'a')", "tags": ["targeted"]}
+{"id": "t-undef-sum-null", "expr": "$sum([1, null])", "tags": ["targeted"]}
+{"id": "t-undef-boolean-null", "expr": "$boolean(null)", "tags": ["targeted"]}
+{"id": "t-undef-not-null", "expr": "$not(null)", "tags": ["targeted"]}
+{"id": "t-undef-append-null", "expr": "$append(null, 1)", "tags": ["targeted"]}
+{"id": "t-undef-zip-null", "expr": "$zip(null)", "tags": ["targeted"]}
+{"id": "t-undef-uppercase-null", "expr": "$uppercase(null)", "tags": ["targeted"]}
+{"id": "t-undef-length-nullpath", "expr": "$length(a)", "tags": ["targeted"], "input": {"a": null}}
+{"id": "t-undef-sift-null", "expr": "$sift(null, function($v){true})", "tags": ["targeted"]}
+{"id": "t-undef-each-nullobj", "expr": "$each({'a':null}, function($v,$k){$type($v)})", "tags": ["targeted"]}
+{"id": "t-undef-merge-null", "expr": "$merge([{'a':1}, null])", "tags": ["targeted"]}
+{"id": "t-undef-spread-null", "expr": "$spread(null)", "tags": ["targeted"]}
+{"id": "t-seq-single-path", "expr": "a.b", "tags": ["targeted"], "input": {"a": [{"b": 1}]}}
+{"id": "t-seq-single-path-arr", "expr": "a.b", "tags": ["targeted"], "input": {"a": [{"b": [1]}]}}
+{"id": "t-seq-keep-arr", "expr": "a.b[]", "tags": ["targeted"], "input": {"a": [{"b": 1}]}}
+{"id": "t-seq-map-single", "expr": "$map([1], function($v){$v})", "tags": ["targeted"]}
+{"id": "t-seq-filter-single", "expr": "$filter([1,2], function($v){$v>1})", "tags": ["targeted"]}
+{"id": "t-seq-sort-single", "expr": "$sort([1])", "tags": ["targeted"]}
+{"id": "t-seq-reverse-single", "expr": "$reverse([1])", "tags": ["targeted"]}
+{"id": "t-seq-append-single", "expr": "$append([], 1)", "tags": ["targeted"]}
+{"id": "t-seq-distinct-single", "expr": "$distinct([1,1])", "tags": ["targeted"]}
+{"id": "t-seq-split-single", "expr": "$split('a', ',')", "tags": ["targeted"]}
+{"id": "t-seq-keys-single", "expr": "$keys({'a':1})", "tags": ["targeted"]}
+{"id": "t-seq-match-single", "expr": "$match('a', /a/)", "tags": ["targeted"]}
+{"id": "t-seq-wild-single", "expr": "$.*", "tags": ["targeted"], "input": {"a": 1}}
+{"id": "t-seq-desc-single", "expr": "**.b", "tags": ["targeted"], "input": {"a": {"b": 1}}}
+{"id": "t-seq-group-single", "expr": "items{n: k}", "tags": ["targeted"], "input": {"items": [{"k": 1, "n": "a"}]}}
+{"id": "t-seq-lambda-ret-arr", "expr": "(function(){[1]})()", "tags": ["targeted"]}
+{"id": "t-seq-eval-arr", "expr": "$eval('[1]')", "tags": ["targeted"]}
+{"id": "t-seq-zip", "expr": "$zip([1],[2])", "tags": ["targeted"]}
+{"id": "t-seq-spread", "expr": "$spread({'a':1})", "tags": ["targeted"]}
+{"id": "t-seq-each", "expr": "$each({'a':1}, function($v){$v})", "tags": ["targeted"]}
+{"id": "t-order-numeric-keys-input", "expr": "$", "tags": ["targeted"], "input": {"b": 1, "2": 2, "1": 3}}
+{"id": "t-order-numeric-keys-ctor", "expr": "{'b':1,'2':2,'1':3}", "tags": ["targeted"]}
+{"id": "t-order-keys-fn", "expr": "$keys({'b':1,'2':2,'1':3})", "tags": ["targeted"]}
+{"id": "t-order-group", "expr": "items{k: n}", "tags": ["targeted"], "input": {"items": [{"k": "b", "n": 1}, {"k": "2", "n": 2}, {"k": "1", "n": 3}]}}
+{"id": "t-order-merge", "expr": "$merge([{'b':1},{'1':2}])", "tags": ["targeted"]}
+{"id": "t-order-transform", "expr": "$ ~> |$|{'1':0}|", "tags": ["targeted"], "input": {"b": 1}}
+{"id": "t-order-spread", "expr": "$spread({'b':1,'1':2})", "tags": ["targeted"]}
+{"id": "t-order-string", "expr": "$string({'b':1,'1':2})", "tags": ["targeted"]}
+{"id": "t-order-each", "expr": "$each({'b':1,'1':2}, function($v,$k){$k})", "tags": ["targeted"]}
+{"id": "t-order-wild", "expr": "{'b':1,'1':2}.*", "tags": ["targeted"]}
+{"id": "t-order-sift", "expr": "$sift({'b':1,'1':2}, function(){true})", "tags": ["targeted"]}
+{"id": "t-order-lookup-multi", "expr": "$lookup([{'b':1},{'b':2}], 'b')", "tags": ["targeted"]}
+{"id": "t-order-neg-key", "expr": "{'b':1,'-1':2,'01':3,'1.5':4,'4294967295':5,'4294967294':6}", "tags": ["targeted"]}
+{"id": "t-eval-err-pos", "expr": "$eval('1 + ')", "tags": ["targeted"]}
+{"id": "t-eval-err-code", "expr": "$eval('$undefinedfn()')", "tags": ["targeted"]}
+{"id": "t-eval-inf", "expr": "$eval('1/0')", "tags": ["targeted"]}
+{"id": "t-assert-msg", "expr": "$assert(false, 'custom')", "tags": ["targeted"]}
+{"id": "t-assert-default", "expr": "$assert(false)", "tags": ["targeted"]}
+{"id": "t-error-msg", "expr": "$error('custom')", "tags": ["targeted"]}
+{"id": "t-error-obj", "expr": "$error({'a':1})", "tags": ["targeted"]}
+{"id": "t-error-default", "expr": "$error()", "tags": ["targeted"]}

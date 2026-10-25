@@ -88,7 +88,11 @@ internal class LiteralNode(ast: AstNode, @JvmField val value: Value?) : Node(ast
 
 /** jsonata.js: evaluateName → functions.js: lookup. */
 internal class NameNode(ast: AstNode, @JvmField val key: String) : Node(ast) {
-    override fun eval(input: Value?, env: Frame): Value? = Evaluator.lookup(input, key)
+    override fun eval(input: Value?, env: Frame): Value? {
+        val r = Evaluator.lookup(input, key)
+        if (r is ArrayValue && r.isSequence) env.ctx.checkSequence(r.size)
+        return r
+    }
 }
 
 /** jsonata.js: evaluateWildcard. */
@@ -112,6 +116,7 @@ internal class WildcardNode(ast: AstNode) : Node(ast) {
         } else if (inp is ArrayValue) {
             for (i in 0 until inp.size) visit(inp.raw(i))
         }
+        env.ctx.checkSequence(results.size)
         return results
     }
 }
@@ -122,6 +127,7 @@ internal class DescendantNode(ast: AstNode) : Node(ast) {
         if (input == null) return null
         val results = ArrayValue.sequence()
         Evaluator.recurseDescendants(input, results)
+        env.ctx.checkSequence(results.size)
         return if (results.size == 1) results.raw(0) else results
     }
 }
@@ -297,7 +303,15 @@ internal class BindNode(ast: AstNode, @JvmField val name: String, @JvmField val 
 
 /** jsonata.js: evaluateRegex — a matcher function `(str, fromIndex)`. */
 internal class RegexNode(ast: AstNode, @JvmField val regex: JsRegexPattern) : Node(ast) {
-    override fun eval(input: Value?, env: Frame): Value? = RegexMatcher.create(regex, position)
+    override fun eval(input: Value?, env: Frame): Value? {
+        try {
+            regex.pattern // an invalid pattern fails here, as `new RegExp` does in jsonata-js
+        } catch (e: JsonataException) {
+            e.position = position
+            throw e
+        }
+        return RegexMatcher.create(regex, position)
+    }
 }
 
 internal class LambdaNode(

@@ -12,7 +12,7 @@
 - [x] Вендоринг jsonata-js v2.2.2: `src/`, `test-suite/`, `implementation-tests.js`, `run-test-suite.js`, MIT LICENSE, `VERSION`
 - [x] Эталонные AST (`compat/node/dump-ast.mjs`), раннер с храповиком и отчётом, проверки целостности
 - [x] Корпус реальных выражений SEAF в `compat/corpus/` — **локально** (см. `compat/corpus/README.md`), снапшоты корпуса — тем же `dump-ast.mjs`
-- [ ] Раннер `compat/jsonata-js/implementation-tests.js`: перенести в Kotlin-тесты те проверки, что относятся к языку, а не к JS API (`assign`, `registerFunction`, обработка ошибок) — по мере фаз 3–5
+- [x] Раннер `compat/jsonata-js/implementation-tests.js`: перенести в Kotlin-тесты те проверки, что относятся к языку, а не к JS API (`assign`, `registerFunction`, обработка ошибок) — по мере фаз 3–5
 
 **Готово, когда:** `./gradlew build` зелёный на чистой машине, отчёт совместимости формируется.
 
@@ -65,17 +65,19 @@
 
 Перенос `src/functions.js` и `src/datetime.js` (около 70 функций), сигнатуры — как в регистрации `jsonata.js`.
 
-- [ ] Строки: `$string`, `$length`, `$substring*`, `$uppercase`/`$lowercase`, `$trim`, `$pad`, `$contains`, `$split`, `$join`, `$match`, `$replace`, `$base64*`, `$encodeUrl*`/`$decodeUrl*`, `$eval`
-- [ ] Числа: `$number`, `$abs`, `$floor`, `$ceil`, `$round` (банковское округление как в эталоне), `$power`, `$sqrt`, `$random`, `$formatNumber`, `$formatBase`, `$formatInteger`, `$parseInteger`
-- [ ] Агрегаты, логика, массивы, объекты: `$sum`/`$max`/`$min`/`$average`/`$count`, `$boolean`/`$not`/`$exists`, `$append`/`$reverse`/`$shuffle`/`$distinct`/`$zip`/`$sort`, `$keys`/`$lookup`/`$spread`/`$merge`/`$sift`/`$each`/`$error`/`$assert`/`$type`
-- [ ] HOF: `$map`, `$filter`, `$single`, `$reduce`
-- [ ] Регулярные выражения JS → `java.util.regex`: один транслятор, тесты на отличия; `$match`, `$replace` с функцией, `$split`, `$contains`
-- [ ] Даты: `$now`, `$millis`, `$fromMillis`, `$toMillis` (картинки XPath `[Y0001]-[M01]…`, часовые пояса), `java.time`
-- [ ] `$sort`: та же устойчивая сортировка слиянием, что в эталоне (порядок вызовов компаратора)
+- [x] Строки: `$string`, `$length`, `$substring*`, `$uppercase`/`$lowercase`, `$trim`, `$pad`, `$contains`, `$split`, `$join`, `$match`, `$replace`, `$base64*`, `$encodeUrl*`/`$decodeUrl*`, `$eval`
+- [x] Числа: `$number`, `$abs`, `$floor`, `$ceil`, `$round` (банковское округление как в эталоне), `$power`, `$sqrt`, `$random`, `$formatNumber`, `$formatBase`, `$formatInteger`, `$parseInteger`
+- [x] Агрегаты, логика, массивы, объекты: `$sum`/`$max`/`$min`/`$average`/`$count`, `$boolean`/`$not`/`$exists`, `$append`/`$reverse`/`$shuffle`/`$distinct`/`$zip`/`$sort`, `$keys`/`$lookup`/`$spread`/`$merge`/`$sift`/`$each`/`$error`/`$assert`/`$type`
+- [x] HOF: `$map`, `$filter`, `$single`, `$reduce`
+- [x] Регулярные выражения JS → `java.util.regex`: один транслятор, тесты на отличия; `$match`, `$replace` с функцией, `$split`, `$contains`
+- [x] Даты: `$now`, `$millis`, `$fromMillis`, `$toMillis` (картинки XPath `[Y0001]-[M01]…`, часовые пояса), `java.time`
+- [x] `$sort`: та же устойчивая сортировка слиянием, что в эталоне (порядок вызовов компаратора)
 
 Трудные группы по числу случаев: `function-fromMillis` 93, `function-formatInteger` 65, `function-tomillis` 60, `function-formatNumber` 45, `regex` 39.
 
 **Готово, когда:** храповик `eval` = 1686/1686, кроме случаев, перечисленных в `docs/deviations.md` с причиной (например, `$now`/`$millis`/`$random`/`$shuffle`, если тест зависит от недетерминизма).
+
+**Состояние 2026-10-25:** eval 1686/1686 без исключений; ловушки из оценки dashjoin — `compat/traps` (398 случаев, тест `TrapsTest`).
 
 ## Фазы 6–9 (не в облаке, кратко)
 

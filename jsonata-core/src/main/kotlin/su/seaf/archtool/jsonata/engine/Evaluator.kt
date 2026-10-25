@@ -67,7 +67,7 @@ internal object Evaluator {
             }
             return when (proc) {
                 is Lambda -> applyProcedure(proc, validated, env, callNode)
-                is NativeFunction -> proc.implementation.invoke(CallContextImpl(env, input), validated)
+                is NativeFunction -> CallContextImpl(env, input).let { c -> c.checked(proc.implementation.invoke(c, validated)) }
                 is PartialNative -> applyPartialNative(proc, validated, env)
                 is InternalFunction -> proc.body(CallContextImpl(env, input), validated)
                 is Transformer -> transform(proc, validated.getOrNull(0))
@@ -248,6 +248,7 @@ internal object Evaluator {
             }
             if (res != null) result.add(res)
         }
+        env.ctx.checkSequence(result.size)
         if (lastStep && result.size == 1) {
             val only = result.raw(0)
             if (only is ArrayValue && !only.isSequence) return only
@@ -261,6 +262,7 @@ internal object Evaluator {
                 for (j in 0 until res.size) resultSequence.addNullable(res.raw(j))
             }
         }
+        env.ctx.checkSequence(resultSequence.size)
         return resultSequence
     }
 
@@ -352,6 +354,7 @@ internal object Evaluator {
                 result.add(t)
             }
         }
+        env.ctx.checkSequence(result.size)
         val stages = expr.stages
         return if (stages != null) stages(stages, result, env) as ArrayValue else result
     }
@@ -400,6 +403,7 @@ internal object Evaluator {
                 results.addNullable(item)
             }
         }
+        env.ctx.checkSequence(results.size)
         return results
     }
 
@@ -429,7 +433,7 @@ internal object Evaluator {
                     val existing = groups[k]
                     if (existing != null) {
                         if (existing.exprIndex != pairIndex) throw JsonataException("D1009", spec.position, value = key)
-                        existing.data = append(existing.data, item)
+                        existing.append(item)
                     } else {
                         groups[k] = GroupEntry(item, pairIndex)
                     }
@@ -452,7 +456,28 @@ internal object Evaluator {
         return result
     }
 
-    private class GroupEntry(var data: Value?, val exprIndex: Int)
+    /**
+     * The items grouped under one key. The reference appends with `fn.append` (a JS `concat`, a copy per item); the
+     * result is the same plain array, built here in one buffer.
+     */
+    private class GroupEntry(first: Value?, val exprIndex: Int) {
+        private var single: Value? = first
+        private var buffer: ArrayValue? = null
+
+        val data: Value? get() = buffer ?: single
+
+        fun append(item: Value?) {
+            if (item == null) return
+            var b = buffer
+            if (b == null) {
+                val first = single ?: run { single = item; return }
+                b = ArrayValue()
+                if (first is ArrayValue) for (i in 0 until first.size) b.addNullable(first.raw(i)) else b.add(first)
+                buffer = b
+            }
+            if (item is ArrayValue) for (i in 0 until item.size) b.addNullable(item.raw(i)) else b.add(item)
+        }
+    }
 
     private fun jsKeyOrder(keys: Collection<String>): List<String> {
         if (keys.none { ObjectValue.isArrayIndex(it) }) return ArrayList(keys)

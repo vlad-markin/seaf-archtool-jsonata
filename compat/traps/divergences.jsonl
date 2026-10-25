@@ -1,0 +1,140 @@
+{"id":"API-03#1","tags":["div","div:API-03"],"expr":"$ap($ap(?, 'x'), function($s){$s & $s})","functions":[{"name":"ap","impl":"apply"}]}
+{"id":"API-03#2","tags":["div","div:API-03"],"expr":"$map(['a','b'], $hecho)","functions":[{"name":"hecho","impl":"echo"}]}
+{"id":"API-04#1","tags":["div","div:API-04"],"expr":"[1..5]","options":{"timeout":1000}}
+{"id":"API-04#2","tags":["div","div:API-04"],"expr":"[1..5]","options":{"stack":100}}
+{"id":"API-04#3","tags":["div","div:API-04"],"expr":"$append([1,2,3],[4,5,6])","options":{"sequence":5}}
+{"id":"API-04#4","tags":["div","div:API-04"],"expr":"{'a':[1,2],'b':[3,4]}.*","options":{"sequence":3}}
+{"id":"API-05#1","tags":["div","div:API-05"],"expr":"($f := function($n){$n=0?0:1+$f($n-1)}; $f(50))","bounds":{"timelimit":1000,"depth":30}}
+{"id":"UND-01#1","tags":["div","div:UND-01"],"expr":"$count(null)"}
+{"id":"UND-01#2","tags":["div","div:UND-01"],"expr":"$count(owner)","input":{"owner":null}}
+{"id":"UND-01#3","tags":["div","div:UND-01"],"expr":"$map(null, function($v){$type($v)})"}
+{"id":"UND-01#4","tags":["div","div:UND-01"],"expr":"$sort(null)"}
+{"id":"UND-01#5","tags":["div","div:UND-01"],"expr":"$reduce(null, function($a,$b){$a})"}
+{"id":"UND-01#6","tags":["div","div:UND-01"],"expr":"$zip(null)"}
+{"id":"UND-01#7","tags":["div","div:UND-01"],"expr":"$max(null)"}
+{"id":"UND-02#1","tags":["div","div:UND-02"],"expr":"$uppercase(null)"}
+{"id":"UND-02#2","tags":["div","div:UND-02"],"expr":"$length(a)","input":{"a":null}}
+{"id":"UND-02#3","tags":["div","div:UND-02"],"expr":"$hu(null)","functions":[{"name":"hu","impl":"upper","signature":"<s:s>"}]}
+{"id":"UND-02#4","tags":["div","div:UND-02"],"expr":"$sift(null, function($v){true})"}
+{"id":"NUM-01#1","tags":["div","div:NUM-01"],"expr":"a = [1,2]","input":{"a":[1,2]}}
+{"id":"NUM-01#2","tags":["div","div:NUM-01"],"expr":"o = {'x': 1}","input":{"o":{"x":1}}}
+{"id":"NUM-01#3","tags":["div","div:NUM-01"],"expr":"a != [1.5,2]","input":{"a":[1.5,2]}}
+{"id":"NUM-01#4","tags":["div","div:NUM-01"],"expr":"$distinct([1, 1.0, n])","input":{"n":1}}
+{"id":"NUM-01#5","tags":["div","div:NUM-01"],"expr":"[1] in [[1]]"}
+{"id":"NUM-01#6","tags":["div","div:NUM-01"],"expr":"{'a':1} in [{'a':1}]"}
+{"id":"NUM-02#1","tags":["div","div:NUM-02"],"expr":"$string(1e20)"}
+{"id":"NUM-02#2","tags":["div","div:NUM-02"],"expr":"12345678901234567890 & ''"}
+{"id":"NUM-02#3","tags":["div","div:NUM-02"],"expr":"$string($power(2, 64))"}
+{"id":"NUM-03#1","tags":["div","div:NUM-03"],"expr":"$formatNumber(0.125, '#.#')"}
+{"id":"NUM-03#2","tags":["div","div:NUM-03"],"expr":"$formatNumber(0.005, '0.00')"}
+{"id":"NUM-03#3","tags":["div","div:NUM-03"],"expr":"$formatNumber(0.234, '#.00e0')"}
+{"id":"NUM-03#4","tags":["div","div:NUM-03"],"expr":"$formatNumber(2392.14*(-36.58), '000,000.000###;###,###.000###')"}
+{"id":"NUM-03#5","tags":["div","div:NUM-03"],"expr":"$formatNumber(20, '#0%%')"}
+{"id":"NUM-03#6","tags":["div","div:NUM-03"],"expr":"$formatNumber(42, '---')"}
+{"id":"NUM-03#7","tags":["div","div:NUM-03"],"expr":"$formatNumber(-1, '0%', {'percent': 'pc'})"}
+{"id":"NUM-04#1","tags":["div","div:NUM-04"],"expr":"$formatInteger(1e22, 'w')"}
+{"id":"NUM-04#2","tags":["div","div:NUM-04"],"expr":"$parseInteger('ten billion trillion trillion trillion', 'w')"}
+{"id":"NUM-04#3","tags":["div","div:NUM-04"],"expr":"$parseInteger('١٢٣٤٠', '###١')"}
+{"id":"NUM-04#4","tags":["div","div:NUM-04"],"expr":"$parseInteger('ab', 'i')"}
+{"id":"NUM-04#5","tags":["div","div:NUM-04"],"expr":"$parseInteger('-5', '1')"}
+{"id":"NUM-04#6","tags":["div","div:NUM-04"],"expr":"$formatInteger(22, '#;o')"}
+{"id":"NUM-04#7","tags":["div","div:NUM-04"],"expr":"$parseInteger('12', '1')"}
+{"id":"NUM-05#1","tags":["div","div:NUM-05"],"expr":"$number('+5')"}
+{"id":"NUM-05#2","tags":["div","div:NUM-05"],"expr":"$number('1.')"}
+{"id":"NUM-05#3","tags":["div","div:NUM-05"],"expr":"$number('Hello')"}
+{"id":"NUM-05#4","tags":["div","div:NUM-05"],"expr":"$number('1e400')"}
+{"id":"NUM-06#1","tags":["div","div:NUM-06"],"expr":"$formatBase(1e22)"}
+{"id":"NUM-06#2","tags":["div","div:NUM-06"],"expr":"[1e20..5] ~> $count"}
+{"id":"NUM-06#3","tags":["div","div:NUM-06"],"expr":"[1e22..2.5]"}
+{"id":"NUM-07#1","tags":["div","div:NUM-07"],"expr":"$sum([0.1, 0.2, 0.3])"}
+{"id":"NUM-09#1","tags":["div","div:NUM-09"],"expr":"-0"}
+{"id":"NUM-09#2","tags":["div","div:NUM-09"],"expr":"0 * -1"}
+{"id":"NUM-09#3","tags":["div","div:NUM-09"],"expr":"$number('-0')"}
+{"id":"NUM-10#1","tags":["div","div:NUM-10"],"expr":"1/0"}
+{"id":"NUM-10#2","tags":["div","div:NUM-10"],"expr":"$eval('1/0')"}
+{"id":"NUM-10#3","tags":["div","div:NUM-10"],"expr":"5 % 0"}
+{"id":"NUM-10#4","tags":["div","div:NUM-10"],"expr":"$string(1/0)"}
+{"id":"NUM-11#1","tags":["div","div:NUM-11"],"expr":"$power(0.30000000000000004, 3)"}
+{"id":"STR-01#1","tags":["div","div:STR-01"],"expr":"$substring('a😀b😀c', 1, 3)"}
+{"id":"STR-01#2","tags":["div","div:STR-01"],"expr":"$substring('a😀b😀c', -2)"}
+{"id":"STR-01#3","tags":["div","div:STR-01"],"expr":"$substring('😀', -3)"}
+{"id":"STR-02#1","tags":["div","div:STR-02"],"expr":"$encodeUrl('a b')"}
+{"id":"STR-02#2","tags":["div","div:STR-02"],"expr":"$decodeUrlComponent('a+b')"}
+{"id":"STR-02#3","tags":["div","div:STR-02"],"expr":"$decodeUrl('%')"}
+{"id":"STR-02#4","tags":["div","div:STR-02"],"expr":"$encodeUrlComponent('\\ud800')"}
+{"id":"STR-03#1","tags":["div","div:STR-03"],"expr":"$base64encode('é')"}
+{"id":"STR-03#2","tags":["div","div:STR-03"],"expr":"$base64decode('w6k=')"}
+{"id":"STR-03#3","tags":["div","div:STR-03"],"expr":"$base64decode('!!!')"}
+{"id":"STR-04#1","tags":["div","div:STR-04"],"expr":"$string({'a':{}}, true)"}
+{"id":"STR-04#2","tags":["div","div:STR-04"],"expr":"$string(['x\\u2028y'])"}
+{"id":"STR-04#3","tags":["div","div:STR-04"],"expr":"$string({'a': '€ “q” – …'})"}
+{"id":"RE-01#1","tags":["div","div:RE-01"],"expr":"$replace('ab', /[^]/, 'x')"}
+{"id":"RE-01#2","tags":["div","div:RE-01"],"expr":"$contains('a', /\\0/)"}
+{"id":"RE-01#3","tags":["div","div:RE-01"],"expr":"$match('a\\bb', /[\\b]/)"}
+{"id":"RE-01#4","tags":["div","div:RE-01"],"expr":"$contains('aa', /a++/)"}
+{"id":"RE-01#5","tags":["div","div:RE-01"],"expr":"$contains('ABC', /(?i)abc/)"}
+{"id":"RE-02#1","tags":["div","div:RE-02"],"expr":"$replace('a\\u00a0b', /\\s/, '_')"}
+{"id":"RE-02#2","tags":["div","div:RE-02"],"expr":"$contains('abc\\n', /c$/)"}
+{"id":"RE-02#3","tags":["div","div:RE-02"],"expr":"$contains('é', /É/i)"}
+{"id":"RE-03#1","tags":["div","div:RE-03"],"expr":"$match('ab', /x*/)"}
+{"id":"RE-03#2","tags":["div","div:RE-03"],"expr":"$replace('abracadabra', /.*?/, '$1')"}
+{"id":"RE-03#3","tags":["div","div:RE-03"],"expr":"$split('ab', /x*/)"}
+{"id":"RE-03#4","tags":["div","div:RE-03"],"expr":"$split('42', /.*/)"}
+{"id":"RE-03#5","tags":["div","div:RE-03"],"expr":"$match('aaa', /.*/)"}
+{"id":"RE-04#1","tags":["div","div:RE-04"],"expr":"'abc' ~> /b/"}
+{"id":"RE-04#2","tags":["div","div:RE-04"],"expr":"$map(['a','b'], /a/)"}
+{"id":"RE-04#3","tags":["div","div:RE-04"],"expr":"$match('aXbX', function($s, $o){ $o = 0 ? {'match':'X','start':1,'end':2,'groups':[], 'next': function(){undefined}} })"}
+{"id":"RE-05#1","tags":["div","div:RE-05"],"expr":"$match('a1b2c3', /\\d/, 2).match"}
+{"id":"RE-06#1","tags":["div","div:RE-06"],"expr":"$replace('abc', /b/, '$$')"}
+{"id":"RE-06#2","tags":["div","div:RE-06"],"expr":"$replace('abc', /b/, function($m){42})"}
+{"id":"RE-06#3","tags":["div","div:RE-06"],"expr":"$replace('abc', '', 'x')"}
+{"id":"RE-06#4","tags":["div","div:RE-06"],"expr":"$replace('abc', 'b', 'x', -1)"}
+{"id":"RE-06#5","tags":["div","div:RE-06"],"expr":"$replace('a.b', '.', 'x', 1)"}
+{"id":"DT-01#1","tags":["div","div:DT-01"],"expr":"$toMillis('2018-02')"}
+{"id":"DT-01#2","tags":["div","div:DT-01"],"expr":"$toMillis('20180201')"}
+{"id":"DT-01#3","tags":["div","div:DT-01"],"expr":"$toMillis('2018-02-30')"}
+{"id":"DT-01#4","tags":["div","div:DT-01"],"expr":"$toMillis('foo')"}
+{"id":"DT-02#1","tags":["div","div:DT-02"],"expr":"$toMillis('1022024', '[D1][M01][Y0001]')"}
+{"id":"DT-02#2","tags":["div","div:DT-02"],"expr":"$toMillis('2026-04-08T19:05:04.5', '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01].[f1]')"}
+{"id":"DT-02#3","tags":["div","div:DT-02"],"expr":"$toMillis('2018-05-22', '[Y]-[M]-[q]')"}
+{"id":"DT-02#4","tags":["div","div:DT-02"],"expr":"$toMillis('2018-22', '[Y]-[D]')"}
+{"id":"DT-03#1","tags":["div","div:DT-03"],"expr":"$fromMillis($toMillis('2005-01-01'), '[X0001]-W[W01]-[F1]')"}
+{"id":"DT-03#2","tags":["div","div:DT-03"],"expr":"$fromMillis(1359720000000, 'Week: [w] of [xNn]')"}
+{"id":"DT-04#1","tags":["div","div:DT-04"],"expr":"$fromMillis(0, '[YN]-[M]-[D]')"}
+{"id":"DT-04#2","tags":["div","div:DT-04"],"expr":"$fromMillis(0, '[Y]', 'Z')"}
+{"id":"DT-04#3","tags":["div","div:DT-04"],"expr":"$fromMillis(0, '[H]', '+01:00')"}
+{"id":"DT-05#1","tags":["div","div:DT-05"],"expr":"$fromMillis(0, '[H01]:[m01] [Z]', '-0530')"}
+{"id":"DT-06#1","tags":["div","div:DT-06"],"expr":"$toMillis('2018-05-22T10:00:00-0130', '[Y]-[M]-[D]T[H]:[m]:[s][Z0101]')"}
+{"id":"ORD-01#1","tags":["div","div:ORD-01"],"expr":"{'b':1,'2':2,'1':3}"}
+{"id":"ORD-01#2","tags":["div","div:ORD-01"],"expr":"$keys({'b':1,'2':2,'1':3})"}
+{"id":"ORD-01#3","tags":["div","div:ORD-01"],"expr":"items{k: n}","input":{"items":[{"k":"b","n":1},{"k":"2","n":2},{"k":"1","n":3}]}}
+{"id":"ORD-01#4","tags":["div","div:ORD-01"],"expr":"$string({'b':1,'1':2})"}
+{"id":"ORD-01#5","tags":["div","div:ORD-01"],"expr":"{'b':1,'1':2}.*"}
+{"id":"SORT-01#1","tags":["div","div:SORT-01"],"expr":"[2, 0.5] ~> $sort"}
+{"id":"SORT-01#2","tags":["div","div:SORT-01"],"expr":"$sort(n)","input":{"n":[3,1.5,2]}}
+{"id":"SORT-01#3","tags":["div","div:SORT-01"],"expr":"$sort([1,'a'])"}
+{"id":"SORT-01#4","tags":["div","div:SORT-01"],"expr":"$sort([{'a':1},{'a':2}])"}
+{"id":"SORT-02#1","tags":["div","div:SORT-02"],"expr":"$sort(items, function($l,$r){$l.k >= $r.k}).n","input":{"items":[{"k":2,"n":"a"},{"k":1,"n":"b"},{"k":2,"n":"c"},{"k":1,"n":"d"},{"k":3,"n":"e"},{"k":1,"n":"f"}]}}
+{"id":"SORT-02#2","tags":["div","div:SORT-02"],"expr":"$sort([3,1,2], function($l,$r){true})"}
+{"id":"SORT-03#1","tags":["div","div:SORT-03"],"expr":"items^(k)","input":{"items":[{"k":1},{"k":"9"},{"k":null},{"k":"10"},{"k":2},{"n":"nok"}]}}
+{"id":"SEQ-01#1","tags":["div","div:SEQ-01"],"expr":"$distinct([1,1])"}
+{"id":"ERR-01#1","tags":["div","div:ERR-01"],"expr":"items{k: n}","input":{"items":[{"k":1,"n":"a"}]}}
+{"id":"ERR-01#2","tags":["div","div:ERR-01"],"expr":"($x := 1; $x())"}
+{"id":"ERR-01#3","tags":["div","div:ERR-01"],"expr":"null + 1"}
+{"id":"ERR-01#4","tags":["div","div:ERR-01"],"expr":"{'x': 1, 'x': 2}"}
+{"id":"ERR-02#1","tags":["div","div:ERR-02"],"expr":"$number('10e500')"}
+{"id":"ERR-02#2","tags":["div","div:ERR-02"],"expr":"substring(?, 0, ?)"}
+{"id":"ERR-03#1","tags":["div","div:ERR-03"],"expr":"foo("}
+{"id":"ERR-03#2","tags":["div","div:ERR-03"],"expr":"$uppercase(1)"}
+{"id":"PART-01#1","tags":["div","div:PART-01"],"expr":"$map(['abc','def'], $substring(?, 1))"}
+{"id":"PART-01#2","tags":["div","div:PART-01"],"expr":"($p := function($a,$b,$c){[$a,$b,$c]}(?, 2); $map([1,2], $p))"}
+{"id":"PART-01#3","tags":["div","div:PART-01"],"expr":"$map(['ab','cd'], $match(?, /b/))"}
+{"id":"ERR-04#1","tags":["div","div:ERR-04"],"expr":"$min(2, 3)"}
+{"id":"ERR-04#2","tags":["div","div:ERR-04"],"expr":"1 < 'a'"}
+{"id":"ERR-04#3","tags":["div","div:ERR-04"],"expr":"$average(['1','2'])"}
+{"id":"RE-07#1","tags":["div","div:RE-07"],"expr":"$match('a😀b', /./).match"}
+{"id":"RE-07#2","tags":["div","div:RE-07"],"expr":"$replace('😀', /[😀]/, 'x')"}
+{"id":"UND-03#1","tags":["div","div:UND-03"],"expr":"$match('b', /(a)|(b)/).groups"}
+{"id":"UND-03#2","tags":["div","div:UND-03"],"expr":"$match('ac', /a(b)?c/).groups"}
+{"id":"AHEAD-01#1","tags":["div","div:AHEAD-01"],"expr":"$split('a,b', nothing)"}
+{"id":"AHEAD-01#2","tags":["div","div:AHEAD-01"],"expr":"$length($pad('x', 20000000))"}

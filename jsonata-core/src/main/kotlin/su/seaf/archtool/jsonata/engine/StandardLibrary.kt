@@ -477,8 +477,9 @@ internal object StandardLibrary {
     private fun power(base: Value?, exp: Value?): Value? {
         val b = num(base) ?: return null
         val e = num(exp) ?: Double.NaN
-        // JS Math.pow differs from Java for |base| = 1 with an infinite or NaN exponent
-        val result = if (Math.abs(b) == 1.0 && (e.isInfinite() || e.isNaN())) Double.NaN else Math.pow(b, e)
+        // JS Math.pow differs from Java for |base| = 1 with an infinite or NaN exponent; StrictMath is fdlibm, as V8
+        // mostly is (the last bit can still differ from V8, docs/deviations.md)
+        val result = if (Math.abs(b) == 1.0 && (e.isInfinite() || e.isNaN())) Double.NaN else StrictMath.pow(b, e)
         if (result.isNaN() || result.isInfinite()) {
             throw JsonataException("D3061", value = base, index = 1, details = mapOf("exp" to exp))
         }

@@ -1,20 +1,114 @@
 [
-  {"name": "performance (items, 256)", "dataset": "items", "scale": {"path": ["items"], "times": 1},
-   "expr": "{\"items\": items.{\"foo\": \"bar\",\"count\": $count($$.items[text!=\"\" and text!=\"foo\"].row)}}"},
-  {"name": "performance (items, 1024)", "dataset": "items", "scale": {"path": ["items"], "times": 4},
-   "expr": "{\"items\": items.{\"foo\": \"bar\",\"count\": $count($$.items[text!=\"\" and text!=\"foo\"].row)}}"},
-  {"name": "path filter (orders x2000)", "dataset": "dataset5", "scale": {"path": ["Account", "Order"], "times": 2000},
-   "expr": "Account.Order.Product[Price > 30].SKU"},
-  {"name": "aggregate (orders x2000)", "dataset": "dataset5", "scale": {"path": ["Account", "Order"], "times": 2000},
-   "expr": "$sum(Account.Order.Product.(Price * Quantity))"},
-  {"name": "group by (orders x2000)", "dataset": "dataset5", "scale": {"path": ["Account", "Order"], "times": 2000},
-   "expr": "Account.Order.Product{ $string(ProductID): $sum(Price) }"},
-  {"name": "map/filter/reduce (orders x2000)", "dataset": "dataset5", "scale": {"path": ["Account", "Order"], "times": 2000},
-   "expr": "$reduce($filter($map(Account.Order.Product, function($p, $i){ $p.Price * ($i % 7) }), function($v){ $v > 10 }), function($a, $b){ $a + $b }, 0)"},
-  {"name": "order-by (orders x500)", "dataset": "dataset5", "scale": {"path": ["Account", "Order"], "times": 500},
-   "expr": "Account.Order.Product^(>Price, SKU).ProductID"},
-  {"name": "strings (orders x2000)", "dataset": "dataset5", "scale": {"path": ["Account", "Order"], "times": 2000},
-   "expr": "$join(Account.Order.Product.($uppercase($substring(`Product Name`, 0, 4)) & '-' & $string(Quantity)), ',')"},
-  {"name": "tail recursion 100k", "dataset": null, "scale": null,
-   "expr": "($f := function($n, $acc){ $n = 0 ? $acc : $f($n - 1, $acc + $n) }; $f(100000, 0))"}
+ {
+  "name": "performance (items, 256)",
+  "dataset": "items",
+  "scale": {
+   "path": [
+    "items"
+   ],
+   "times": 1
+  },
+  "expr": "{\"items\": items.{\"foo\": \"bar\",\"count\": $count($$.items[text!=\"\" and text!=\"foo\"].row)}}"
+ },
+ {
+  "name": "performance (items, 1024)",
+  "dataset": "items",
+  "scale": {
+   "path": [
+    "items"
+   ],
+   "times": 4
+  },
+  "expr": "{\"items\": items.{\"foo\": \"bar\",\"count\": $count($$.items[text!=\"\" and text!=\"foo\"].row)}}"
+ },
+ {
+  "name": "path filter (orders x2000)",
+  "dataset": "dataset5",
+  "scale": {
+   "path": [
+    "Account",
+    "Order"
+   ],
+   "times": 2000
+  },
+  "expr": "Account.Order.Product[Price > 30].SKU"
+ },
+ {
+  "name": "aggregate (orders x2000)",
+  "dataset": "dataset5",
+  "scale": {
+   "path": [
+    "Account",
+    "Order"
+   ],
+   "times": 2000
+  },
+  "expr": "$sum(Account.Order.Product.(Price * Quantity))"
+ },
+ {
+  "name": "group by (orders x2000)",
+  "dataset": "dataset5",
+  "scale": {
+   "path": [
+    "Account",
+    "Order"
+   ],
+   "times": 2000
+  },
+  "expr": "Account.Order.Product{ $string(ProductID): $sum(Price) }"
+ },
+ {
+  "name": "map/filter/reduce (orders x2000)",
+  "dataset": "dataset5",
+  "scale": {
+   "path": [
+    "Account",
+    "Order"
+   ],
+   "times": 2000
+  },
+  "expr": "$reduce($filter($map(Account.Order.Product, function($p, $i){ $p.Price * ($i % 7) }), function($v){ $v > 10 }), function($a, $b){ $a + $b }, 0)"
+ },
+ {
+  "name": "order-by (orders x500)",
+  "dataset": "dataset5",
+  "scale": {
+   "path": [
+    "Account",
+    "Order"
+   ],
+   "times": 500
+  },
+  "expr": "Account.Order.Product^(>Price, SKU).ProductID"
+ },
+ {
+  "name": "strings (orders x2000)",
+  "dataset": "dataset5",
+  "scale": {
+   "path": [
+    "Account",
+    "Order"
+   ],
+   "times": 2000
+  },
+  "expr": "$join(Account.Order.Product.($uppercase($substring(`Product Name`, 0, 4)) & '-' & $string(Quantity)), ',')"
+ },
+ {
+  "name": "dates and numbers (orders x2000)",
+  "dataset": "dataset5",
+  "scale": {
+   "path": [
+    "Account",
+    "Order"
+   ],
+   "times": 2000
+  },
+  "expr": "$count(Account.Order.Product.($fromMillis($toMillis('2018-02-01T09:42:13Z') + Price * 1000, '[Y]-[M01]-[D01] [H01]:[m01]') & ' ' & $formatNumber(Price, '#,##0.00')))"
+ },
+ {
+  "name": "tail recursion 100k",
+  "dataset": null,
+  "scale": null,
+  "expr": "($f := function($n, $acc){ $n = 0 ? $acc : $f($n - 1, $acc + $n) }; $f(100000, 0))"
+ }
 ]
