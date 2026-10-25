@@ -25,6 +25,14 @@ public class Signature internal constructor(public val definition: String, publi
     /** The whole-signature regex, as signature.js builds it. */
     public val regex: String get() = "^" + params.joinToString("") { "(" + it.regex + ")" } + "$"
 
+    /** Compiled [regex], cached: signatures are validated on every call. */
+    internal val pattern: java.util.regex.Pattern by lazy { java.util.regex.Pattern.compile(regex) }
+
+    /** Per-parameter context patterns (`new RegExp(param.contextRegex)` in signature.js, unanchored). */
+    internal val contextPatterns: List<java.util.regex.Pattern?> by lazy {
+        params.map { p -> p.contextRegex?.let { java.util.regex.Pattern.compile(it) } }
+    }
+
     internal companion object {
         fun parse(signature: String): Signature {
             var position = 1

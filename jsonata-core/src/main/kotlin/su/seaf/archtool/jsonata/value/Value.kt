@@ -121,9 +121,21 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
         count += n
     }
 
-    internal fun set(index: Int, value: Value) {
+    internal fun set(index: Int, value: Value?) {
         items[index] = value
     }
+
+    /**
+     * Engine-internal: jsonata-js sequences can hold `undefined` (`createSequence(undefined)`, a filter that keeps an
+     * undefined context). Such items exist only inside evaluation; they collapse away or are written as JSON null.
+     */
+    internal fun addNullable(value: Value?) {
+        if (count == items.size) items = items.copyOf(maxOf(8, count * 2))
+        items[count++] = value
+    }
+
+    /** Engine-internal read that tolerates undefined items. */
+    internal fun raw(index: Int): Value? = items[index]
 
     override fun iterator(): Iterator<Value> = object : Iterator<Value> {
         var i = 0
@@ -137,7 +149,7 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
     override fun equals(other: Any?): Boolean = other is Value && Values.deepEquals(this, other)
     override fun hashCode(): Int {
         var h = 1
-        for (i in 0 until count) h = 31 * h + items[i].hashCode()
+        for (i in 0 until count) h = 31 * h + (items[i]?.hashCode() ?: 0)
         return h
     }
 
@@ -150,6 +162,9 @@ public class ArrayValue(initialCapacity: Int = 4) : Value(), Iterable<Value> {
         @JvmStatic public fun sequence(): ArrayValue = ArrayValue().also { it.isSequence = true }
 
         @JvmStatic public fun sequence(value: Value): ArrayValue = ArrayValue(1).also { it.isSequence = true; it.add(value) }
+
+        /** `createSequence(value)` where value may be undefined. */
+        internal fun sequenceOf(value: Value?): ArrayValue = ArrayValue(1).also { it.isSequence = true; it.addNullable(value) }
     }
 }
 

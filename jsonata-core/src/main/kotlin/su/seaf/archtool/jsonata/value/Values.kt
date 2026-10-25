@@ -12,7 +12,7 @@ public object Values {
             is StringValue -> rhs is StringValue && lhs.value == rhs.value
             is ArrayValue -> {
                 if (rhs !is ArrayValue || lhs.size != rhs.size) return false
-                for (i in 0 until lhs.size) if (!deepEquals(lhs[i], rhs[i])) return false
+                for (i in 0 until lhs.size) if (!deepEquals(lhs.getOrNull(i), rhs.getOrNull(i))) return false
                 true
             }
             is ObjectValue -> {
@@ -38,8 +38,8 @@ public object Values {
     internal fun effectiveBoolean(arg: Value): Boolean = when (arg) {
         is ArrayValue -> when (arg.size) {
             0 -> false
-            1 -> effectiveBoolean(arg[0])
-            else -> arg.any { effectiveBoolean(it) }
+            1 -> arg.getOrNull(0)?.let { effectiveBoolean(it) } ?: false
+            else -> (0 until arg.size).any { i -> arg.getOrNull(i)?.let { effectiveBoolean(it) } ?: false }
         }
         is StringValue -> arg.value.isNotEmpty()
         is NumberValue -> {
