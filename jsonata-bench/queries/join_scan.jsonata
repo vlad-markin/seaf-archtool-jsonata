@@ -1,0 +1,1 @@
+($c := systems.containers.components; $rels := $c.relations; $map($filter($rels, function($v, $i){ $i < 20 }), function($r){ $c[id = $r.target].name }))

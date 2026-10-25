@@ -1,0 +1,1 @@
+systems.containers.components{type: {'count': $count(id), 'cost': $sum(properties.cost), 'max': $max(properties.cost)}}

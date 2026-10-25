@@ -1,0 +1,1 @@
+($loop := function($i, $acc){ $i = 0 ? $acc : $loop($i - 1, $acc + $i) }; $loop($count(systems.containers.components), 0))

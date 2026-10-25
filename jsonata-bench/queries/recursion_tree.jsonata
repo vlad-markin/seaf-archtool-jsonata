@@ -1,0 +1,1 @@
+($walk := function($v){ $type($v) = 'object' ? 1 + $sum($each($v, function($x){ $walk($x) })) : $type($v) = 'array' ? $sum($map($v, function($x){ $walk($x) })) : 0 }; $walk($))

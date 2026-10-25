@@ -1,0 +1,85 @@
+[
+ {
+  "name": "path_filter",
+  "desc": "path with compound filter predicate"
+ },
+ {
+  "name": "path_tags",
+  "desc": "filter on array membership + projection to object"
+ },
+ {
+  "name": "group_agg",
+  "desc": "grouping {} with $count/$sum/$max",
+  "sizes": [
+   10000,
+   50000
+  ],
+  "note": "O(n^2) in both engines: group values are accumulated with $append-style copying"
+ },
+ {
+  "name": "group_nested",
+  "desc": "group by owner within each system (nested group)"
+ },
+ {
+  "name": "join_scan",
+  "desc": "join: first 20 relations, lookup by linear filter inside lambda (O(20*N))"
+ },
+ {
+  "name": "join_index",
+  "desc": "join: all relations via an index object built with $merge, $lookup inside lambda"
+ },
+ {
+  "name": "sort_fn",
+  "desc": "$sort with a comparator lambda (cost desc, id asc)",
+  "js_sizes": [
+   10000
+  ],
+  "note": "jsonata-js 2.2.2 merge sort is O(n^2) in time and memory (slice(1) recursion); JS OOMs at 50k"
+ },
+ {
+  "name": "orderby",
+  "desc": "order-by operator ^(>cost, id)",
+  "js_sizes": [
+   10000
+  ],
+  "note": "same JS sort implementation as $sort"
+ },
+ {
+  "name": "map_filter_reduce",
+  "desc": "$map + $filter + $reduce chain with lambdas"
+ },
+ {
+  "name": "strings",
+  "desc": "string functions: $uppercase, $substringBefore, $split, $join, $length"
+ },
+ {
+  "name": "regex",
+  "desc": "regex: $contains with regex, $replace with regex + backreference, $match"
+ },
+ {
+  "name": "recursion_tree",
+  "desc": "recursive walk over the whole document (counts objects), non-tail recursion depth ~7",
+  "js_sizes": [
+   10000,
+   50000
+  ]
+ },
+ {
+  "name": "tail_loop",
+  "desc": "tail-recursive loop, iterations = number of components"
+ },
+ {
+  "name": "fib",
+  "desc": "non-tail recursion fib(18), data-independent (only run at smallest size)",
+  "sizes": [
+   10000
+  ]
+ },
+ {
+  "name": "deep_map",
+  "desc": "non-tail recursion depth 40 inside a map over 20 000 items (condition U1 of the chief architect), data-independent",
+  "sizes": [
+   10000
+  ]
+ }
+]

@@ -1,0 +1,1 @@
+$sort(systems.containers.components, function($l, $r){ $l.properties.cost = $r.properties.cost ? $l.id > $r.id : $l.properties.cost < $r.properties.cost }).id

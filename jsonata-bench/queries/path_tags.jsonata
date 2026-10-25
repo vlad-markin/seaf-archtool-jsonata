@@ -1,0 +1,1 @@
+systems.containers.components['pci' in tags].{'id': id, 'owner': properties.owner, 'n': $count(relations)}

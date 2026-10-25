@@ -1,0 +1,1 @@
+($c := systems.containers.components; $idx := $merge($c.{id: name}); $map($c.relations, function($r){ $lookup($idx, $r.target) }))

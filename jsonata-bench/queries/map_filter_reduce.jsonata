@@ -1,0 +1,1 @@
+$reduce($filter($map(systems.containers.components, function($c){ $c.properties.cost * 2 }), function($v){ $v > 100 }), function($a, $b){ $a + $b }, 0)

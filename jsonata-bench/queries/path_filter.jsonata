@@ -1,0 +1,1 @@
+systems.containers.components[properties.criticality = 'high' and properties.cost > 500].name

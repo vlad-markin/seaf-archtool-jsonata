@@ -1,0 +1,1 @@
+systems.{'system': id, 'byOwner': containers.components{properties.owner: $sum(properties.cost)}}

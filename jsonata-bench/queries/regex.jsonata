@@ -1,0 +1,1 @@
+systems.containers.components[$contains(description, /pay(ment)?s?\b/)].{'n': $replace(name, /-([0-9]+)-/, '#$1#'), 'm': $match(description, /\b[a-z]{7}\b/)[0].match}

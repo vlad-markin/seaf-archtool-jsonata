@@ -1,0 +1,1 @@
+systems.containers.components.{'n': $uppercase($substringBefore(name, '-')) & '-' & $substringAfter(id, 'c'), 'w': $count($split(description, ' ')), 'j': $join(tags, '|'), 'l': $length(description)}
