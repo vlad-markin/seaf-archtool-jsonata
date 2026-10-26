@@ -168,7 +168,7 @@ internal object SignatureValidator {
         is ObjectValue -> 'o'
     }
 
-    fun validate(signature: Signature, args: List<Value?>, context: Value?): List<Value?> {
+    fun validate(signature: Signature, args: List<Value?>, context: Value?, ctx: EvalContext? = null): List<Value?> {
         val supplied = StringBuilder(args.size)
         for (a in args) supplied.append(symbol(a))
         val sig = supplied.toString()
@@ -209,7 +209,7 @@ internal object SignatureValidator {
                                         arrayOK = if (itemType != subtype[0]) {
                                             false
                                         } else {
-                                            (0 until arr.size).all { symbol(arr.raw(it)) == itemType }
+                                            (0 until arr.size).all { ctx?.tick(); symbol(arr.raw(it)) == itemType } // a checkpoint per item (review RV2-6)
                                         }
                                     }
                                 }

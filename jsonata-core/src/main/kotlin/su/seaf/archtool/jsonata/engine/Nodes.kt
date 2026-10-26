@@ -319,7 +319,7 @@ internal class ArrayNode(ast: AstNode, @JvmField val items: Array<Node>, @JvmFie
             if (nested[i]) {
                 (result as ArrayValue).add(value)
             } else {
-                result = Evaluator.append(result, value)!!
+                result = Evaluator.append(result, value, env.ctx)!!
             }
         }
         if (isConsarray) (result as ArrayValue).cons = true

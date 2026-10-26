@@ -92,11 +92,31 @@ class ReviewRound2Test {
         val half = Jsonata.compile("\$keys(\$ ~> |\$|{}, ['k0', 'k2', 'k15']|)")
         assertEquals((listOf(1) + (3..14) + (16 until 20)).joinToString(",", "[", "]") { "\"k$it\"" }, JsonWriter.stringify(half.evaluate(wideObject(20))))
         assertEquals("19", evalWith("(\$o := \$ ~> |\$|{}, ['k0', 'k2']|; \$o.k19)", wideObject(20), emptyMap()))
-        // the delete loop passes the checkpoint: D1012 within a small margin
+        // the delete loop passes the checkpoint: D1012 within a small margin (the deletions alone take tens of ms)
         val big = wideObject(300_000)
         val t0 = System.nanoTime()
-        val e = assertFailsWith<JsonataException> { expr.evaluate(big, emptyMap(), EvaluationOptions(timeoutMillis = 100)) }
+        val e = assertFailsWith<JsonataException> { expr.evaluate(big, emptyMap(), EvaluationOptions(timeoutMillis = 3)) }
         assertEquals("D1012", e.code)
         assertTrue((System.nanoTime() - t0) / 1_000_000 < 2000)
+    }
+
+    @Test
+    fun `RV2-6 library loops over a prebuilt array stop at the deadline`() {
+        val big = su.seaf.archtool.jsonata.value.ArrayValue(20_000_000)
+        val one = su.seaf.archtool.jsonata.value.NumberValue.of(1)
+        repeat(20_000_000) { big.add(one) }
+        for (expr in listOf("\$sum(\$)", "\$max(\$)", "\$min(\$)", "\$average(\$)", "\$sum([\$])")) {
+            // warm the path up on a small input: the bound below is about the loop, not class loading and JIT
+            val warm = su.seaf.archtool.jsonata.value.ArrayValue(20_000).also { w -> repeat(20_000) { w.add(one) } }
+            repeat(5) { Jsonata.compile(expr).evaluate(warm) }
+            val t0 = System.nanoTime()
+            val e = assertFailsWith<JsonataException>(expr) { Jsonata.compile(expr).evaluate(big, emptyMap(), EvaluationOptions(timeoutMillis = 1)) }
+            assertEquals("D1012", e.code, expr)
+            assertTrue((System.nanoTime() - t0) / 1_000_000 < 100, "$expr took ${(System.nanoTime() - t0) / 1_000_000} ms")
+        }
+        val strings = su.seaf.archtool.jsonata.value.ArrayValue(5_000_000)
+        val s = StringValue.of("x")
+        repeat(5_000_000) { strings.add(s) }
+        assertEquals("D1012", assertFailsWith<JsonataException> { Jsonata.compile("\$join(\$)").evaluate(strings, emptyMap(), EvaluationOptions(timeoutMillis = 1)) }.code)
     }
 }

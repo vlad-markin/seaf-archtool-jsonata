@@ -150,7 +150,7 @@ internal object Evaluator {
             var validated = args
             if (proc is EngineFunction) {
                 val sig = proc.signature
-                if (sig != null) validated = SignatureValidator.validate(sig, args, input)
+                if (sig != null) validated = SignatureValidator.validate(sig, args, input, env.ctx)
             }
             return when (proc) {
                 is Lambda -> applyProcedure(proc, validated, env, callNode)
@@ -667,7 +667,7 @@ internal object Evaluator {
                     val existing = groups[k]
                     if (existing != null) {
                         if (existing.exprIndex != pairIndex) throw JsonataException("D1009", spec.position, value = key)
-                        existing.append(item)
+                        existing.append(item, env.ctx)
                     } else {
                         groups[k] = GroupEntry(item, pairIndex)
                     }
@@ -738,16 +738,16 @@ internal object Evaluator {
 
         val data: Value? get() = buffer ?: single
 
-        fun append(item: Value?) {
+        fun append(item: Value?, ctx: EvalContext) {
             if (item == null) return
             var b = buffer
             if (b == null) {
                 val first = single ?: run { single = item; return }
                 b = ArrayValue()
-                if (first is ArrayValue) for (i in 0 until first.size) b.addNullable(first.raw(i)) else b.add(first)
+                if (first is ArrayValue) for (i in 0 until first.size) { ctx.tick(); b.addNullable(first.raw(i)) } else b.add(first)
                 buffer = b
             }
-            if (item is ArrayValue) for (i in 0 until item.size) b.addNullable(item.raw(i)) else b.add(item)
+            if (item is ArrayValue) for (i in 0 until item.size) { ctx.tick(); b.addNullable(item.raw(i)) } else b.add(item)
         }
     }
 
