@@ -65,8 +65,10 @@ public object JsonataJson {
      * in JSONata, so this changes only memory. Bounded, so that a document of unique strings costs a fixed table.
      */
     private class StringPool {
-        // open addressing over the characters of the parser: a repeated value allocates nothing
-        private val table = arrayOfNulls<StringValue>(TABLE_SIZE)
+        // open addressing over the characters of the parser: a repeated value allocates nothing. The table is created
+        // on the first string and doubles at half load up to TABLE_SIZE, so that a small document costs a small table
+        // (review RV3-20)
+        private var table: Array<StringValue?>? = null
         private var size = 0
 
         fun of(parser: JsonParser): StringValue {
@@ -76,20 +78,43 @@ public object JsonataJson {
             val off = parser.textOffset
             var h = len
             for (i in off until off + len) h = 31 * h + chars[i].code
-            var slot = (h xor (h ushr 16)) and (TABLE_SIZE - 1)
+            val t = table ?: arrayOfNulls<StringValue>(INITIAL_SIZE).also { table = it }
+            val mask = t.size - 1
+            var slot = mix(h) and mask
             while (true) {
-                val v = table[slot] ?: break
-                val t = v.value
-                if (t.length == len && same(t, chars, off, len)) return v
-                slot = (slot + 1) and (TABLE_SIZE - 1)
+                val v = t[slot] ?: break
+                val s = v.value
+                if (s.length == len && same(s, chars, off, len)) return v
+                slot = (slot + 1) and mask
             }
             val v = StringValue.of(String(chars, off, len))
             if (size < MAX_POOLED) {
-                table[slot] = v
+                t[slot] = v
                 size++
+                if (size * 2 > t.size && t.size < TABLE_SIZE) grow(t)
             }
             return v
         }
+
+        private fun grow(old: Array<StringValue?>) {
+            val t = arrayOfNulls<StringValue>(old.size * 2)
+            val mask = t.size - 1
+            for (v in old) {
+                if (v == null) continue
+                var slot = mix(hash(v.value)) and mask
+                while (t[slot] != null) slot = (slot + 1) and mask
+                t[slot] = v
+            }
+            table = t
+        }
+
+        private fun hash(s: String): Int {
+            var h = s.length
+            for (c in s) h = 31 * h + c.code
+            return h
+        }
+
+        private fun mix(h: Int): Int = h xor (h ushr 16)
 
         private fun same(t: String, chars: CharArray, off: Int, len: Int): Boolean {
             for (i in 0 until len) if (t[i] != chars[off + i]) return false
@@ -97,8 +122,9 @@ public object JsonataJson {
         }
     }
 
-    /** Table of the pool: twice the most pooled values, so that probing stays short. */
+    /** Largest table of the pool: twice the most pooled values, so that probing stays short. */
     private const val TABLE_SIZE = 1 shl 17
+    private const val INITIAL_SIZE = 64
     private const val MAX_POOLED_LENGTH = 32
     private const val MAX_POOLED = 1 shl 16
 
