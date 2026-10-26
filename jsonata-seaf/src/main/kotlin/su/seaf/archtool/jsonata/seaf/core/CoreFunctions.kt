@@ -148,7 +148,7 @@ internal class CoreFunctions(private val host: SeafHost) {
     }
 
     private fun validate(c: CallContext, schema: CompiledSchema, data: Value?): Value {
-        val poll = { c.cancellation.throwIfCancelled() }
+        val poll = { c.checkpoint() } // cancellation and deadline (review RV3-13)
         val violations = try {
             schema.validate(data, poll)
         } catch (_: SchemaInstanceException) {

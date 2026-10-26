@@ -258,6 +258,12 @@ public interface CallContext {
     public fun remainingNanos(): Long
 
     /**
+     * The checkpoint of a long loop in a host function: throws `X0009` when the evaluation is cancelled and `D1012`
+     * when its deadline has passed, as the evaluation's own loops do. Cheap; call it every thousand or so iterations.
+     */
+    public fun checkpoint()
+
+    /**
      * State kept for the whole evaluation under [key] (created by [init] on first use): the store of `$set`/`$get`,
      * caches of a function. Nested [evaluate] calls share it; another evaluation has its own.
      */

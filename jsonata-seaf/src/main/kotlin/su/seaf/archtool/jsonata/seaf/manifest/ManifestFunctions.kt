@@ -180,7 +180,7 @@ internal object ManifestFunctions {
         fun call(c: CallContext, args: List<Value?>): Value? {
             compileError?.let { throw JsonataException(it.code, it.position, it.token, it.value, it.value2, it.index, it.details, it, f.id) }
             val code = compiled ?: error("manifest function ${f.id} is not compiled")
-            val poll = { c.cancellation.throwIfCancelled() }
+            val poll = { c.checkpoint() } // cancellation and deadline (review RV3-13)
             var input: Value? = null
             val bindings = HashMap<String, Value?>()
             val params = f.params
