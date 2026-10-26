@@ -602,4 +602,18 @@ class ReviewRound3Test {
         assertEquals("X0010", run("1+1+1", 4))
         assertEquals("3", run("1+1+1", 5))
     }
+
+    @Test
+    fun `RV3-32 the rest of the string counts against the string budget in replace`() {
+        val input = su.seaf.archtool.jsonata.value.StringValue.of("a" + "x".repeat(999))
+        val small = su.seaf.archtool.jsonata.value.StringValue.of("a" + "x".repeat(99))
+        val options = EvaluationOptions(budgets = su.seaf.archtool.jsonata.Budgets(maxStringLength = 500))
+        for (expr in listOf("\$replace(\$, \"a\", \"b\")", "\$replace(\$, /a/, \"b\")", "\$replace(\$, /a/, function(\$m){ \"b\" })")) {
+            val e = kotlin.test.assertFailsWith<JsonataException>(expr) { Jsonata.compile(expr).evaluate(input, emptyMap(), options) }
+            assertEquals("X0010", e.code, expr)
+            assertEquals("string", e.details["budget"], expr)
+            // shorter than the limit: works
+            assertEquals("\"b" + "x".repeat(99) + "\"", JsonWriter.stringify(Jsonata.compile(expr).evaluate(small, emptyMap(), options)!!), expr)
+        }
+    }
 }

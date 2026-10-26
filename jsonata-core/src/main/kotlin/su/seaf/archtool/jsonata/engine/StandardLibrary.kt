@@ -303,6 +303,8 @@ internal object StandardLibrary {
                 count++
                 index = s.indexOf(p, position)
             }
+            // the rest of the string counts against the budget too (review RV3-32)
+            ctx(c).checkString(result.length.toLong() + (s.length - position))
             result.append(s.substring(position))
             return StringValue.of(result.toString())
         }
@@ -315,6 +317,7 @@ internal object StandardLibrary {
                 ctx(c).checkString(result.length.toLong())
                 position = m.end()
             }
+            ctx(c).checkString(result.length.toLong() + (s.length - position))
             result.append(s, position, s.length)
             return StringValue.of(result.toString())
         }
@@ -330,7 +333,9 @@ internal object StandardLibrary {
             count++
             matches = evaluateMatcher(c, m["next"], null) ?: break
         }
-        result.append(jsSubstring(s, position, s.length))
+        val tail = jsSubstring(s, position, s.length)
+        ctx(c).checkString(result.length.toLong() + tail.length)
+        result.append(tail)
         return StringValue.of(result.toString())
     }
 
