@@ -14,3 +14,4 @@ application {
     applicationName = "jsonata-tools"
 }
 tasks.named<JavaExec>("run") { standardInput = System.`in` }
+tasks.test { systemProperty("jsonata.root", rootProject.projectDir.absolutePath) }
