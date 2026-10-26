@@ -397,20 +397,45 @@ internal class EvalContext(
      * ([SegmentPool]) and the current thread parks until it is done. The evaluation stays sequential: one thread runs
      * at a time, and the volatile completion flag of the task orders memory between them.
      */
-    fun <T> onNewSegment(block: () -> T): T = onSegment(depth, block)
+    fun <T> onNewSegment(block: () -> T): T = onSegment(depth, true, block)
 
-    /** Runs the whole evaluation on a segment thread from the start. */
-    fun <T> fromSegment(block: () -> T): T = onSegment(depth, block)
+    /**
+     * Runs the whole evaluation on a segment thread from the start (an expression known to go deep): one hand-over
+     * instead of one per crossing. The thread is taken on credit (review RV3-2): it uses no unit of the budget and is
+     * never refused; when all units are taken, the evaluation simply runs on the caller's thread. The unit is charged
+     * only when the evaluation goes deeper than the caller's threshold ([FIRST_SEGMENT_LIMIT]); X0005 only then.
+     */
+    fun <T> fromSegment(block: () -> T): T {
+        if (!SegmentPool.hasRoom()) return block()
+        return onSegment(depth, charge = false, block)
+    }
 
-    private fun <T> onSegment(base: Int, block: () -> T): T {
+    /** An uncharged segment task crossed the caller's threshold: charge it now or fail with X0005 (RV3-2). */
+    private fun chargeCurrent() {
+        if (!SegmentPool.reserve()) throw JsonataException("X0005", value = su.seaf.archtool.jsonata.StackSegments.budget.toDouble())
+        currentTask!!.charged = true
+        segmentLimit = SEGMENT_LIMIT
+        if (segmentsEntered++ == 0) onDeep?.invoke()
+    }
+
+    private fun <T> onSegment(base: Int, charge: Boolean = true, block: () -> T): T {
+        val task0 = currentTask
+        if (task0 != null && !task0.charged) {
+            // still within the caller's threshold of an uncharged task: charge this thread instead of a new one
+            chargeCurrent()
+            return block()
+        }
         val savedBase = segmentBase
         val savedLimit = segmentLimit
         val savedTask = currentTask
-        savedTask?.wentDeep = true
-        if (segmentsEntered++ == 0) onDeep?.invoke()
-        val task = SegmentPool.run(::interruptFromCaller) { t ->
+        val task = SegmentPool.run(::interruptFromCaller, charge) { t ->
+            if (charge) {
+                savedTask?.wentDeep = true
+                // the evaluation remembers it goes deep only once a segment was really entered (not refused)
+                if (segmentsEntered++ == 0) onDeep?.invoke()
+            }
             segmentBase = base
-            segmentLimit = SEGMENT_LIMIT
+            segmentLimit = if (charge) SEGMENT_LIMIT else FIRST_SEGMENT_LIMIT
             currentTask = t
             block()
         }

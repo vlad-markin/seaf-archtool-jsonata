@@ -101,8 +101,11 @@ public object StackSegments {
     public const val DEFAULT_BUDGET: Int = 64
 
     /**
-     * The most segments running at once in the process, over all evaluations; one more fails the evaluation that
-     * needs it with X0005. A host setting: lower it to bound the memory outside the heap (an IDE, a small pod).
+     * The most segments running at once in the process, over all evaluations, counted only for evaluations that go
+     * deeper than the caller's threshold; one more fails the evaluation that needs it with X0005. An expression with
+     * a recursive lambda starts on a segment thread on credit and uses a unit only when it really goes that deep;
+     * with no free unit it runs on the caller's thread. A host setting: lower it to bound the memory outside the
+     * heap (an IDE, a small pod); 0 forbids going deeper than the caller's threshold.
      */
     @Volatile
     @JvmStatic

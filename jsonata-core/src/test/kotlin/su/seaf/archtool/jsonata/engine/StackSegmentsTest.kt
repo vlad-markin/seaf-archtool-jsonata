@@ -54,6 +54,9 @@ class StackSegmentsTest {
             StackSegments.budget = 0
             assertEquals("X0005", assertFailsWith<JsonataException> { eval(hiddenRecursion) }.code)
             assertEquals("10", eval("(\$g := function(\$h, \$n){ \$n = 0 ? 0 : 1 + \$h(\$h, \$n - 1) }; \$g(\$g, 10))"))
+            // a direct recursive lambda that stays shallow runs on the caller's thread when no unit is free (RV3-2)
+            assertEquals("3", eval("(\$f := function(\$n){ \$n = 0 ? 0 : 1 + \$f(\$n - 1) }; \$f(3))"))
+            assertEquals("X0005", assertFailsWith<JsonataException> { eval("(\$f := function(\$n){ \$n = 0 ? 0 : 1 + \$f(\$n - 1) }; \$f(500))") }.code)
         } finally {
             StackSegments.budget = saved
         }

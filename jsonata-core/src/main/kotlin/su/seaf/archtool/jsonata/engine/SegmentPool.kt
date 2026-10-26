@@ -49,20 +49,34 @@ internal object SegmentPool {
         @JvmField var failure: Throwable? = null
         /** Set by the block when it needed a further segment: its thread has touched a deep stack. */
         @JvmField var wentDeep: Boolean = false
+        /** The task holds a unit of [StackSegments.budget] (released when it ends). */
+        @JvmField var charged: Boolean = false
     }
 
+    /** Takes a unit of the budget, or false when all units are taken (review RV3-2: only for real depth). */
+    fun reserve(): Boolean {
+        if (busy.incrementAndGet() > StackSegments.budget) {
+            busy.decrementAndGet()
+            return false
+        }
+        return true
+    }
+
+    /** Whether a unit of the budget is free now (a hint: [reserve] decides). */
+    fun hasRoom(): Boolean = busy.get() < StackSegments.budget
+
     /**
-     * Runs [block] on a segment thread and returns its result (or rethrows its exception, the same object) once it has
+     * Runs [block] on a segment thread and returns its result; with [charge] it first takes a unit of the budget
+     * (X0005 when none is free), without it the thread is taken on credit and the block charges itself if it really
+     * goes deep (see EvalContext). Returns (or rethrows its exception, the same object) once it has
      * finished. An interrupt of the waiting thread is not forwarded to the segment thread (it could arrive after the
      * task and reach the next one, review RV3-1): [onInterrupt] tells the evaluation, which checks it at its
      * checkpoint, and the interrupt is restored on the waiting thread afterwards.
      */
-    fun run(onInterrupt: () -> Unit, block: (Task) -> Any?): Task {
-        if (busy.incrementAndGet() > StackSegments.budget) {
-            busy.decrementAndGet()
-            throw JsonataException("X0005", value = StackSegments.budget.toDouble())
-        }
+    fun run(onInterrupt: () -> Unit, charge: Boolean, block: (Task) -> Any?): Task {
+        if (charge && !reserve()) throw JsonataException("X0005", value = StackSegments.budget.toDouble())
         val task = Task(Thread.currentThread(), block)
+        task.charged = charge
         try {
             handoffs.incrementAndGet()
             val worker = acquire()
@@ -78,7 +92,7 @@ internal object SegmentPool {
             }
             if (interrupted) Thread.currentThread().interrupt()
         } finally {
-            busy.decrementAndGet()
+            if (task.charged) busy.decrementAndGet()
         }
         return task
     }
