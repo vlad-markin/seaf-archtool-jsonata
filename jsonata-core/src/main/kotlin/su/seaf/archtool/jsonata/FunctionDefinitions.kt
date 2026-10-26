@@ -62,7 +62,10 @@ public class FunctionDoc @JvmOverloads constructor(
  * [overridesStandard] allows the name of a standard library function (CAP-7; the core's `$lookup` is the first such
  * case): without it that registration fails with X0007. [sideEffects] marks functions that must not run in a debugger
  * watch expression. [arity] is what higher-order functions see (how many of value, index, array they pass); by default
- * the number of parameters of the signature.
+ * the number of parameters of the signature. [overridesForEvaluation] replaces a core function with side effects (the
+ * SEAF core's `$log`) in a registry for one evaluation ([EvaluationOptions.functions]): the host's registry and other
+ * evaluations keep the original. Any other name with this flag (a standard library function, a function without side
+ * effects, a function of the host or the manifest) fails with X0001, as without it.
  */
 public class FunctionDefinition @JvmOverloads constructor(
     public val name: String,
@@ -73,6 +76,7 @@ public class FunctionDefinition @JvmOverloads constructor(
     public val overridesStandard: Boolean = false,
     public val sideEffects: Boolean = source == FunctionSource.HOST,
     public val arity: Int? = null,
+    public val overridesForEvaluation: Boolean = false,
 )
 
 /**

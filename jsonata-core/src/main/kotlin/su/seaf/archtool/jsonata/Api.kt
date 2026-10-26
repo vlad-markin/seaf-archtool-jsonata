@@ -289,7 +289,8 @@ public interface CallContext {
  * - a name must be callable from an expression (`$` + name is one variable token), else X0006;
  * - a standard library name needs [FunctionDefinition.overridesStandard], else X0007;
  * - a name already registered in the registry or in a parent (other than a standard name overridden as above) fails
- *   with X0001.
+ *   with X0001; a core function with side effects can be replaced for one evaluation with
+ *   [FunctionDefinition.overridesForEvaluation].
  *
  * A local variable shadows a function of the same name. [freeze] makes an immutable snapshot, which is what a service
  * or a shared environment should hand to evaluations; a registry that is not frozen may be configured before compiling
@@ -338,6 +339,14 @@ public class FunctionRegistry private constructor(
         if (functions!!.containsKey(name)) throw JsonataException("X0001", value = StringValue.of(name))
         val existing = parent?.lookup(name) as? NativeFunction
         val overrides = function.definition?.overridesStandard == true
+        if (function.definition?.overridesForEvaluation == true) {
+            // only a core function with side effects can be replaced for one evaluation (review RV3-19)
+            if (existing == null || existing.source != FunctionSource.CORE || existing.definition?.sideEffects != true) {
+                throw JsonataException("X0001", value = StringValue.of(name))
+            }
+            functions[name] = function
+            return this
+        }
         when {
             existing == null && parent?.lookup(name) != null -> throw JsonataException("X0001", value = StringValue.of(name))
             existing == null -> require(!overrides) { "\$$name is not a standard library function: overridesStandard does not apply" }

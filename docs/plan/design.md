@@ -220,7 +220,8 @@ public class FunctionRegistry {
     public fun catalog(): FunctionCatalog
     public fun conflicts(): List<NameConflict>       // имя, источники, какой действует (CAP-7 п. 5)
 }
-// область «на одно вычисление» (CAP-4 п. 5): EvaluationOptions(functions = compileRegistry.extend().register(...).freeze())
+// область «на одно вычисление» (CAP-4 п. 5): EvaluationOptions(functions = compileRegistry.extend().register(...).freeze());
+// функцию ядра с побочным эффектом ($log) там подменяет FunctionDefinition(overridesForEvaluation = true) (RV3-19)
 ```
 Правила регистрации:
 - Имя годится, только если `"$" + name` даёт один токен `VARIABLE` со значением `name` (тот же токенизатор). Иначе `X-NAME` (TC-09: `a.b`).

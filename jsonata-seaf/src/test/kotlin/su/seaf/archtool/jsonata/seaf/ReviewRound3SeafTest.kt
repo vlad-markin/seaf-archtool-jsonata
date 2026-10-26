@@ -149,4 +149,41 @@ class ReviewRound3SeafTest {
         // no schema at the host
         assertEquals("{}", eval("${'$'}manifestschema()"))
     }
+
+    @Test
+    fun `RV3-19 log is replaced for one evaluation`() {
+        val host = LogHost(true)
+        val env = SeafEnvironment.create(host, json("""{"inner": {"code": "${'$'}log(\"from a manifest function\")"}}"""))
+        fun journal(records: MutableList<String>) = su.seaf.archtool.jsonata.FunctionDefinition(
+            "log", null, { _, a -> records += JsonWriter.stringify(a[0]!!) + ":" + (a.getOrNull(1)?.let { JsonWriter.stringify(it) }); null },
+            su.seaf.archtool.jsonata.FunctionDoc(su.seaf.archtool.jsonata.LocalizedText.ru("Журнал вычисления")), overridesForEvaluation = true,
+        )
+        val first = java.util.Collections.synchronizedList(ArrayList<String>())
+        val second = java.util.Collections.synchronizedList(ArrayList<String>())
+        val expr = env.compile("(${'$'}log(\$, \"t\"); ${'$'}inner(); 1)")
+        fun run(input: String, records: MutableList<String>) = env.evaluate(
+            expr, json(input), options = env.limits.options().let { o ->
+                EvaluationOptions(o.maxDepth, o.timeoutMillis, o.maxSequence, functions = env.registry.extend().register(journal(records)).freeze())
+            },
+        )
+        val threads = listOf(Thread { repeat(50) { run("\"a\"", first) } }, Thread { repeat(50) { run("\"b\"", second) } })
+        threads.forEach { it.start() }
+        threads.forEach { it.join() }
+        // each evaluation writes to its own journal only, manifest functions included; the host log sees nothing
+        assertEquals(100, first.size)
+        assertEquals(setOf("\"a\":\"t\"", "\"from a manifest function\":null"), first.toSet())
+        assertEquals(setOf("\"b\":\"t\"", "\"from a manifest function\":null"), second.toSet())
+        assertTrue(host.records.isEmpty())
+        // without an override the core's $log writes to the host
+        assertEquals("1", str(env.evaluate(expr, json("\"c\""))))
+        assertEquals("content=\"c\" tag=\"t\"", host.records.first())
+        // without the flag: X0001, as before
+        val plain = su.seaf.archtool.jsonata.FunctionDefinition("log", null, { _, _ -> null }, su.seaf.archtool.jsonata.FunctionDoc(su.seaf.archtool.jsonata.LocalizedText.ru("x")))
+        assertEquals("X0001", kotlin.test.assertFailsWith<JsonataException> { env.registry.extend().register(plain) }.code)
+        // the flag does not apply to the standard library, to a core function without side effects, to a manifest function
+        for (name in listOf("string", "lookup", "inner")) {
+            val d = su.seaf.archtool.jsonata.FunctionDefinition(name, null, { _, _ -> null }, su.seaf.archtool.jsonata.FunctionDoc(su.seaf.archtool.jsonata.LocalizedText.ru("x")), overridesForEvaluation = true)
+            assertEquals("X0001", kotlin.test.assertFailsWith<JsonataException>(name) { env.registry.extend().register(d) }.code, name)
+        }
+    }
 }
