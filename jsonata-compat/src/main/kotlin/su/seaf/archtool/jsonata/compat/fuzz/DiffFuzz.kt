@@ -157,6 +157,23 @@ class Sidecar(private val nodeDir: File, private val caseTimeoutMillis: Long = 1
 /** A difference between the engine and the reference on one case. */
 data class Mismatch(val case: FuzzCase, val expected: String, val actual: String, val category: String, val known: String?)
 
+/**
+ * The gate of a fuzzing run (review RV3-30): no unexplained difference, and cases where the reference did not finish
+ * (`reference-timeout`, never explained) within their own threshold, one per thousand cases by default.
+ */
+object FuzzGate {
+    fun referenceTimeouts(mismatches: List<Mismatch>): Int = mismatches.count { it.category == "reference-timeout" }
+
+    fun unexplained(mismatches: List<Mismatch>): List<Mismatch> = mismatches.filter { it.known == null && it.category != "reference-timeout" }
+
+    fun problems(mismatches: List<Mismatch>, cases: Int, maxReferenceTimeouts: Int = maxOf(1, cases / 1000)): List<String> {
+        val out = ArrayList<String>()
+        unexplained(mismatches).size.let { if (it > 0) out += "$it unexplained differences" }
+        referenceTimeouts(mismatches).let { if (it > maxReferenceTimeouts) out += "$it cases where the reference did not finish (at most $maxReferenceTimeouts)" }
+        return out
+    }
+}
+
 /** Runs generated cases on both sides and classifies the differences (phase 8). */
 open class DiffFuzz(private val nodeDir: File) {
     private val executor = Executors.newVirtualThreadPerTaskExecutor()
@@ -230,6 +247,8 @@ open class DiffFuzz(private val nodeDir: File) {
      */
     fun classify(c: FuzzCase, want: String, got: String): Mismatch {
         val category = if (codeOnly(want) == codeOnly(got) && want.startsWith("error ")) "error-position-token" else category(want, got)
+        // a reference that did not finish explains nothing: it is counted apart and has a threshold of its own (RV3-30)
+        if (category == "reference-timeout") return Mismatch(c, want, got, category, null)
         // DEV-03 fires on any coercion in the expression: it explains only when the partial calls rewritten into direct
         // ones make the reference agree with the engine (review RV3-8)
         val partials by lazy { confirmedByRewrite(c, got, KnownDifferences.rewritePartials(c.expr)) }
@@ -313,7 +332,6 @@ object KnownDifferences {
         if (Regex("/[a-z]*i[a-z]*").containsMatchIn(c.expr) && (foldingChars.containsMatchIn(c.expr) || foldingChars.containsMatchIn(c.input?.toString() ?: ""))) {
             return "DEV-06: case folding with the i flag"
         }
-        if (want == "reference-timeout") return "the reference did not finish within the case timeout"
         // DEV-03 and DEV-09 need the reference on a rewritten expression: DiffFuzz.classify (review RV3-8)
         if (onlyEmptyArrayItems(c, want, got)) {
             return "DEV-08: object constructor over an empty array does not push undefined into it"
@@ -528,7 +546,11 @@ fun main(args: Array<String>) {
     fuzz.explainedByPosition.take(20).forEach { m ->
         sample.addObject().put("id", m.case.id).put("expr", m.case.expr).put("expected", m.expected).put("actual", m.actual).put("known", m.known)
     }
-    report.put("unexplained", mismatches.count { it.known == null })
+    report.put("unexplained", FuzzGate.unexplained(mismatches).size)
+    report.put("referenceTimeouts", FuzzGate.referenceTimeouts(mismatches))
+    val problems = FuzzGate.problems(mismatches, cases.size)
+    report.put("gate", if (problems.isEmpty()) "pass" else "fail")
+    problems.forEach { report.withArray("gateProblems").add(it) }
     val byZone = report.putObject("casesByZone")
     cases.groupingBy { it.zone }.eachCount().toSortedMap().forEach { (z, n) -> byZone.put(z, n) }
     val byCategory = report.putObject("unexplainedByCategory")

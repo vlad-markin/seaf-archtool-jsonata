@@ -134,4 +134,21 @@ class FuzzClassifierTest {
         assertEquals("node is not on the path", Sidecar.nodeVersionProblem(null, 22))
         assertNull(Sidecar.nodeVersionProblem(24, null))
     }
+
+    @Test
+    fun `a reference timeout is not explained and has its own threshold (RV3-30)`() {
+        val fuzz = DiffFuzz(node)
+        val hang = fuzz.classify(case("(\$f := function(\$n){ \$f(\$n + 1) }; \$f(0))"), "reference-timeout", "error D1011 @null null")
+        assertEquals("reference-timeout", hang.category)
+        assertNull(hang.known)
+        assertNull(KnownDifferences.explain(case("1"), "reference-timeout", "json 1"))
+        // counted apart from the unexplained differences, red above the threshold
+        val gate = su.seaf.archtool.jsonata.compat.fuzz.FuzzGate
+        assertEquals(1, gate.referenceTimeouts(listOf(hang)))
+        assertTrue(gate.unexplained(listOf(hang)).isEmpty())
+        assertTrue(gate.problems(listOf(hang), 5000).isEmpty())
+        assertEquals(listOf("2 cases where the reference did not finish (at most 1)"), gate.problems(listOf(hang, hang), 1000))
+        val other = fuzz.classify(case("1 + 1"), "json 2", "json 3")
+        assertEquals(listOf("1 unexplained differences"), gate.problems(listOf(other), 1000))
+    }
 }

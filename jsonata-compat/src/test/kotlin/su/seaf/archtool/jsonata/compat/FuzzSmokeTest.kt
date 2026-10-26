@@ -22,8 +22,9 @@ class FuzzSmokeTest {
         val gen = Generator(20261025)
         val cases = List(4000) { gen.next(it, "smoke") }
         val mismatches = DiffFuzz(node).run(cases)
-        val unexplained = mismatches.filter { it.known == null }
+        val unexplained = su.seaf.archtool.jsonata.compat.fuzz.FuzzGate.unexplained(mismatches)
         assertTrue(unexplained.isEmpty(), unexplained.joinToString("\n") { "${it.case.id} [${it.category}] ${it.case.expr}\n  input ${it.case.input}\n  expected ${it.expected}\n  actual   ${it.actual}" })
+        assertTrue(su.seaf.archtool.jsonata.compat.fuzz.FuzzGate.problems(mismatches, cases.size).isEmpty())
     }
 
     @Test
@@ -32,7 +33,9 @@ class FuzzSmokeTest {
         val gen = Generator(20261026)
         val cases = generateSequence(0) { it + 1 }.map { gen.next(it, "group") }.filter { it.zone == "grouping" }.take(600).toList()
         assertTrue(cases.count { it.expr.contains("@\$o") || it.expr.contains("#\$i") } > 100)
-        val unexplained = DiffFuzz(node).run(cases).filter { it.known == null }
+        val mismatches = DiffFuzz(node).run(cases)
+        val unexplained = su.seaf.archtool.jsonata.compat.fuzz.FuzzGate.unexplained(mismatches)
+        assertTrue(su.seaf.archtool.jsonata.compat.fuzz.FuzzGate.problems(mismatches, cases.size).isEmpty())
         assertTrue(unexplained.isEmpty(), unexplained.joinToString("\n") { "${it.case.id} ${it.case.expr}\n  input ${it.case.input}\n  expected ${it.expected}\n  actual   ${it.actual}" })
     }
 }
