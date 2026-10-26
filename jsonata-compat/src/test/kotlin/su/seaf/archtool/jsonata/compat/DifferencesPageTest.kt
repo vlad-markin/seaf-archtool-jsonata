@@ -36,4 +36,13 @@ class DifferencesPageTest {
         val text = File(docs, "user/jvm-switch.md").readText()
         assertTrue(text.contains(":jsonata-tools:installDist") && text.contains("detect --lake"))
     }
+
+    @Test
+    fun `the page tells that limit errors pass by tryexecute (RV3-41)`() {
+        val text = File(System.getProperty("jsonata.compat"), "../docs/user/differences.md").readText()
+        val section = text.substringAfter("### Ошибки лимитов мимо `\$tryexecute`", "")
+        assertTrue(section.isNotEmpty(), "no section about limit errors and \$tryexecute")
+        val body = section.substringBefore("\n### ")
+        assertTrue(body.contains("\$tryexecute(function(){") && body.contains("D1011") && body.contains("success"), body)
+    }
 }
