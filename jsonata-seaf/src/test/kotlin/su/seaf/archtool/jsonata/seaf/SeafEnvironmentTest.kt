@@ -20,7 +20,7 @@ class SeafEnvironmentTest {
         override fun loadSource(manifest: Value?, source: Value?, request: SeafRequest?, context: CallContext): Value? = null
         override fun manifestSchema(): Value? = null
         override fun versions(): Value? = null
-        override fun log(tag: String?, content: Value?) {}
+        override fun log(content: Value?, tag: Value?) {}
     }
 
     private fun json(text: String): Value? = JsonataJson.parse(text)

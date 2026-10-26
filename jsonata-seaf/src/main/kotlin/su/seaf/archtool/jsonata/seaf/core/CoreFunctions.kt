@@ -174,11 +174,10 @@ internal class CoreFunctions(private val host: SeafHost) {
 
     private fun key(v: Value?): String = keyText(v) ?: "undefined"
 
+    /** `$log(content, tag)` as the core registers it: the record goes to the host, the result is undefined (RV3-17). */
     private fun log(a: List<Value?>): Value? {
-        val tag = (a.getOrNull(0) as? StringValue)?.value
-        val content = if (a.size > 1) a[1] else a.getOrNull(0)
-        host.log(if (a.size > 1) tag else null, content)
-        return content
+        host.log(a.getOrNull(0), a.getOrNull(1))
+        return null
     }
 
     private fun schema(): Value? {

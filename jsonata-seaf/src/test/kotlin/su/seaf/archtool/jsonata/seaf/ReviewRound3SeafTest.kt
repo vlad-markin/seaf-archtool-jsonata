@@ -106,4 +106,28 @@ class ReviewRound3SeafTest {
         assertEquals("""{"success":true,"result":"null"}""", eval("${'$'}tryexecute(function(${'$'}x){ ${'$'}type(${'$'}x) }, null)"))
         assertEquals("""{"success":true,"result":1}""", eval("${'$'}tryexecute(function(){ 1 })"))
     }
+
+    /** A host that keeps its log records, or drops them when logging is off (a setting of the host). */
+    private class LogHost(private val enabled: Boolean) : SeafHost by SeafEnvironmentTest.NoHost {
+        val records = ArrayList<String>()
+        override fun log(content: Value?, tag: Value?) {
+            if (enabled) records += "content=${content?.let { str(it) }} tag=${tag?.let { str(it) }}"
+        }
+        private fun str(v: Value) = JsonWriter.stringify(v)
+    }
+
+    @Test
+    fun `RV3-17 log takes content then tag and gives no value`() {
+        val host = LogHost(true)
+        val env = SeafEnvironment.create(host)
+        fun eval(expr: String) = str(env.evaluate(env.compile(expr), null))
+        assertEquals("undefined", eval("${'$'}log(\"x\", \"tag\")"))
+        assertEquals("{}", eval("{\"r\": ${'$'}log(\"x\")}"))
+        assertEquals(listOf("content=\"x\" tag=\"tag\"", "content=\"x\" tag=null"), host.records)
+        // logging off in the host: nothing is written, the result is the same
+        val off = LogHost(false)
+        val quiet = SeafEnvironment.create(off)
+        assertEquals("undefined", str(quiet.evaluate(quiet.compile("${'$'}log(\"x\", \"tag\")"), null)))
+        assertTrue(off.records.isEmpty())
+    }
 }

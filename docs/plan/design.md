@@ -272,7 +272,7 @@ public interface SeafHost {
     public fun loadSource(manifest: Value?, source: Value?, request: SeafRequest?, context: CallContext): Value?  // $parsesource
     public fun manifestSchema(): Value?                                                    // $manifestschema (лениво)
     public fun versions(): Value?                                                          // $versions
-    public fun log(tag: String?, content: Value?)                                          // $log; выключение — настройка хоста
+    public fun log(content: Value?, tag: Value?)                                           // $log(content, tag), без результата; выключение — настройка хоста
 }
 public class SeafRequest(public val attributes: Map<String, Any?>)     // непрозрачный контекст запроса: пользователь, роль, права
 public class SeafEnvironment private constructor(...) {                 // одна версия манифеста (+ роль в режиме ролей v1)

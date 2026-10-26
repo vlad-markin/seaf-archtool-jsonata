@@ -23,6 +23,9 @@ public interface SeafHost {
     /** `$versions()`: versions of the portal parts. */
     public fun versions(): Value?
 
-    /** `$log(tag, content)`: writes to the host log; turning logging off is a setting of the host. */
-    public fun log(tag: String?, content: Value?)
+    /**
+     * `$log(content, tag)`: writes [content] with an optional [tag] (null when not given) to the host log, in the order
+     * of the core; turning logging off is a setting of the host. The call gives no value to the expression.
+     */
+    public fun log(content: Value?, tag: Value?)
 }

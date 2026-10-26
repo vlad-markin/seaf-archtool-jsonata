@@ -22,7 +22,7 @@ val result = env.evaluate(expr, input, self = selfValue, params = paramsValue, r
 | `loadSource(manifest, source, request, context)` | `$parsesource` | единственный ввод-вывод выражения, правила ниже |
 | `manifestSchema()` | `$manifestschema` | JSON Schema манифеста; спрашивается лениво |
 | `versions()` | `$versions` | версии частей портала |
-| `log(tag, content)` | `$log` | запись в журнал хоста; выключение — настройка хоста |
+| `log(content, tag)` | `$log` | запись в журнал хоста в порядке ядра, `tag` — null без метки; выражению значения не возвращает; выключение — настройка хоста |
 
 Общее для всех методов:
 

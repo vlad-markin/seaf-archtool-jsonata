@@ -33,7 +33,7 @@ class LakeDetect(private val manifest: Value?, private val contexts: Contexts = 
             throw UnsupportedOperationException("\$parsesource is not available in the detector")
         override fun manifestSchema(): Value? = null
         override fun versions(): Value? = null
-        override fun log(tag: String?, content: Value?) {}
+        override fun log(content: Value?, tag: Value?) {}
     }
 
     class Detail(val place: String, val line: Int?, val column: Int?, val id: String, val kind: String, val recommendation: String)

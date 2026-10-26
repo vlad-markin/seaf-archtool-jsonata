@@ -41,8 +41,8 @@ class CoreFunctionsTest {
             return JsonataJson.parse("""{"type":"object"}""")
         }
         override fun versions(): Value = JsonataJson.parse("""{"core":"1.0"}""")
-        override fun log(tag: String?, content: Value?) {
-            logged += "$tag:${JsonWriter.stringify(content)}"
+        override fun log(content: Value?, tag: Value?) {
+            logged += "${JsonWriter.stringify(content)}:${tag?.let { JsonWriter.stringify(it) }}"
         }
     }
 
@@ -140,9 +140,9 @@ class CoreFunctionsTest {
         assertEquals("""{"loaded":"lake/data.yaml"}""", eval("\$parsesource(\"lake/data.yaml\")", json("""{"m":1}"""), request = request))
         assertSame(request, host.lastRequest)
         assertEquals("""{"m":1}""", str(host.lastManifest))
-        assertEquals("42", eval("\$log(\"t\", 42)"))
-        assertEquals("\"x\"", eval("\$log(\"x\")"))
-        assertEquals(listOf("t:42", "null:\"x\""), host.logged)
+        assertEquals("undefined", eval("\$log(42, \"t\")"))
+        assertEquals("undefined", eval("\$log(\"x\")"))
+        assertEquals(listOf("42:\"t\"", "\"x\":null"), host.logged)
         assertEquals("{\"type\":\"object\"}", eval("\$manifestschema()"))
         eval("\$manifestschema()")
         assertEquals(1, host.schemaCalls.get())

@@ -56,7 +56,7 @@ class LakeGate(
         override fun loadSource(manifest: Value?, source: Value?, request: SeafRequest?, context: CallContext): Value? = data.parseSource(source)
         override fun manifestSchema(): Value? = data.manifestSchema()
         override fun versions(): Value? = data.versions()
-        override fun log(tag: String?, content: Value?) {}
+        override fun log(content: Value?, tag: Value?) {}
     }
 
     class Result(val case: GateCase, val engine: String, val reference: String, val explainedBy: List<String>, val engineMillis: Double?, val referenceMillis: Double?) {
