@@ -63,4 +63,35 @@ class ReviewRound3SeafTest {
         assertTrue(word.validate(json("\"a-b.c\"")).isEmpty())
         assertEquals("pattern", word.validate(json("\"a b\"")).single().keyword)
     }
+
+    @Test
+    fun `RV3-15 indexing the violations of jsonschema is a DEV-14 finding`() {
+        fun found(expr: String) = SeafDetector.indexedViolations(su.seaf.archtool.jsonata.Jsonata.compile(expr).ast())
+        for (e in listOf("${'$'}jsonschema(s)(x)[0]", "${'$'}jsonschema(s)(x)[2].keyword", "${'$'}jsonschema(s)(x)[-1]", "(${'$'}jsonschema(s)(x))[0]")) {
+            val f = found(e)
+            assertEquals(1, f.size, e)
+            assertEquals("DEV-14", f[0].id)
+            assertTrue(f[0].recommendation.contains("order"), f[0].recommendation)
+        }
+        for (e in listOf("${'$'}count(${'$'}jsonschema(s)(x))", "${'$'}jsonschema(s)(x).keyword", "${'$'}jsonschema(s)(x)[keyword = \"required\"]", "${'$'}lookup(x)[0]")) {
+            assertTrue(found(e).isEmpty(), e)
+        }
+        // scan reports it next to the finding about the texts
+        val all = SeafDetector.scan(su.seaf.archtool.jsonata.Jsonata.compile("${'$'}jsonschema(s)(x)[0]").ast()).map { it.id }
+        assertEquals(listOf("DEV-14", "DEV-14"), all)
+    }
+
+    @Test
+    fun `RV3-15 the known order of violations differs from ajv`() {
+        val env = SeafEnvironment.create(SeafEnvironmentTest.NoHost)
+        val expr = """${'$'}jsonschema({"type":"object","properties":{"c":{"type":"string"},"d":{"minimum":5}},"required":["a","b"],"additionalProperties":false})({"c":1,"d":1,"x":1}).(keyword & ":" & instancePath)"""
+        val engine = str(env.evaluate(env.compile(expr), null))
+        // the order of the engine (networknt: the order of the schema); a change of it must not pass unnoticed
+        assertEquals("""["type:/c","minimum:/d","required:","required:","additionalProperties:"]""", engine)
+        // ajv 8.20.0 of the core on the same case (reference, review round 3): the same multiset, another order
+        val ajv = """["required:","required:","additionalProperties:","type:/c","minimum:/d"]"""
+        assertTrue(engine != ajv)
+        assertEquals(json(ajv).let { (it as su.seaf.archtool.jsonata.value.ArrayValue).map { v -> str(v) }.sorted() },
+            (json(engine) as su.seaf.archtool.jsonata.value.ArrayValue).map { v -> str(v) }.sorted())
+    }
 }

@@ -35,7 +35,8 @@ public object SeafDetector {
 
     /**
      * All SEAF rules for one expression: store calls (DEV-15), `$jsonschema` and calls of manifest functions with
-     * `params`/`result` (texts of violations, DEV-14), and calls of core functions the engine does not have yet.
+     * `params`/`result` (texts of violations, DEV-14), the list of violations indexed by position (their order,
+     * DEV-14), and calls of core functions the engine does not have yet.
      */
     @JvmStatic
     @JvmOverloads
@@ -54,7 +55,62 @@ public object SeafDetector {
                 )
             }
         }
+        out += indexedViolations(ast)
         return out.sortedBy { it.position ?: -1 }
+    }
+
+    /**
+     * `$jsonschema(s)(x)[0]`, `[2].keyword`, `[-1]`: the list of violations indexed by a number. The order of the list
+     * is networknt's, not ajv's (DEV-14), so the element taken can differ from the core's; filters by value
+     * (`[keyword = "required"]`), `$count` and projections do not depend on the order (review RV3-15).
+     */
+    @JvmStatic
+    public fun indexedViolations(ast: AstNode): List<Finding> {
+        val out = ArrayList<Finding>()
+        walk(ast) { n ->
+            val call = when (n.type) {
+                "function" -> n
+                "block" -> (n["expressions"] as? List<*>)?.lastOrNull() as? AstNode
+                else -> null
+            }
+            if (call != null && isValidation(call) && numericFilter(n)) {
+                out += Finding(
+                    "DEV-14", call.position,
+                    "\$jsonschema(...)(...) indexed by position: the order of violations is networknt's, the core's is ajv's; filter by keyword or instancePath instead",
+                )
+            }
+        }
+        return out
+    }
+
+    /** `$jsonschema(schema)(value)`: the call of the validator `$jsonschema` returns. */
+    private fun isValidation(n: AstNode): Boolean {
+        if (n.type != "function") return false
+        val inner = n["procedure"] as? AstNode ?: return false
+        if (inner.type != "function") return false
+        val proc = inner["procedure"] as? AstNode ?: return false
+        return proc.type == "variable" && proc["value"] == "jsonschema"
+    }
+
+    /** A filter `[number]` among the predicates (or stages) of [n]. */
+    private fun numericFilter(n: AstNode): Boolean = listOf("predicate", "stages").any { key ->
+        (n[key] as? List<*>).orEmpty().any { f -> f is AstNode && f.type == "filter" && (f["expr"] as? AstNode)?.type == "number" }
+    }
+
+    private fun walk(root: AstNode, visit: (AstNode) -> Unit) {
+        val seen = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<Any, Boolean>())
+        val stack = ArrayList<Any?>()
+        stack.add(root)
+        while (stack.isNotEmpty()) {
+            when (val x = stack.removeAt(stack.size - 1)) {
+                is AstNode -> {
+                    if (!seen.add(x)) continue
+                    visit(x)
+                    for (v in x.values) stack.add(v)
+                }
+                is List<*> -> for (v in x) stack.add(v)
+            }
+        }
     }
 
     private val STORE = setOf("set", "get")

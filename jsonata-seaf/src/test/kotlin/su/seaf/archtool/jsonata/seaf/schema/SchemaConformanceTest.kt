@@ -18,6 +18,9 @@ import kotlin.test.assertTrue
  * `compat/seaf/ajv-expected.jsonl` from `compat/node/ajv-expected.mjs`. Compared: compile error, validity, and the
  * multiset of `instancePath` + `keyword` + `params` of the errors; texts are not (they are networknt's, a DEV record). Known
  * differences are listed in [ALLOWED] with the DEV record that explains them.
+ *
+ * The order of violations is not compared (DEV-14): both lists are sorted. The order differs from ajv and stays so
+ * (owner's decision, review RV3-15); a separate test pins the known difference (`ReviewRound3SeafTest`).
  */
 class SchemaConformanceTest {
     private val file = File(System.getProperty("jsonata.compat"), "seaf/ajv-expected.jsonl")
@@ -37,6 +40,8 @@ class SchemaConformanceTest {
         is ArrayValue -> v.joinToString(",", "[", "]") { canonical(it) }
         else -> JsonWriter.stringify(v)
     }
+
+    private val ORDER_NOT_COMPARED = "the order of violations is not compared (DEV-14)"
 
     /** Case id (and data index) → why the outcome differs from ajv. */
     private val ALLOWED: Map<String, String> = mapOf()
@@ -79,6 +84,7 @@ class SchemaConformanceTest {
             }
         }
         assertTrue(compared > 300, "compared $compared")
-        assertTrue(mismatches.isEmpty(), "${mismatches.size} mismatches:\n" + mismatches.joinToString("\n"))
+        println("ajv conformance: $compared comparisons, ${mismatches.size} mismatches; $ORDER_NOT_COMPARED")
+        assertTrue(mismatches.isEmpty(), "${mismatches.size} mismatches ($ORDER_NOT_COMPARED):\n" + mismatches.joinToString("\n"))
     }
 }
