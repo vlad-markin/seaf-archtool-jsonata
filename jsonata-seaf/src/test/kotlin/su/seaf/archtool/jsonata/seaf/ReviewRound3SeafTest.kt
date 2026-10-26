@@ -338,4 +338,19 @@ class ReviewRound3SeafTest {
         val many = """${'$'}count(${'$'}map([1..200000], function(${'$'}i){ ${'$'}jsonschema({"type":"object","properties":{"a":{"type":"number","minimum":${'$'}i}},"required":["a"]})({"a":${'$'}i}) }))"""
         assertEquals("200000", str(env.evaluate(env.compile(many), null)))
     }
+
+    @Test
+    fun `RV3-44 a conflict report suggests a free name`() {
+        val section = json("""{"sum": {"code": "1"}, "sum_mf": {"code": "2"}, "lookup": {"code": "3"}, "lookup_mf2": {"code": "4"}, "string": {"code": "5"}}""")
+        val reports = SeafDetector.manifestConflicts(section)
+        assertEquals(listOf("sum" to "sum_mf2", "lookup" to "lookup_mf", "string" to "string_mf"), reports.map { it.id to it.suggestedName })
+        val ids = setOf("sum", "sum_mf", "lookup", "lookup_mf2", "string")
+        for (r in reports) {
+            assertTrue(r.suggestedName !in ids, r.suggestedName)
+            assertTrue(r.suggestedName !in su.seaf.archtool.jsonata.seaf.core.CoreFunctions.ALL_NAMES, r.suggestedName)
+            assertEquals(null, su.seaf.archtool.jsonata.FunctionRegistry.standard().lookup(r.suggestedName), r.suggestedName)
+        }
+        assertEquals(reports.size, reports.map { it.suggestedName }.toSet().size)
+        assertTrue(reports[0].toString().endsWith("e.g. to sum_mf2"), reports[0].toString())
+    }
 }

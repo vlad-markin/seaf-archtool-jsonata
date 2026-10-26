@@ -30,10 +30,13 @@ import su.seaf.archtool.jsonata.value.StringValue
 import su.seaf.archtool.jsonata.value.Value
 import java.util.concurrent.atomic.AtomicReference
 
-/** A name of a manifest function that is also a built-in function (CAP-7 p. 3). */
-public class NameConflictReport(public val id: String, public val builtIn: String) {
-    /** `id (stdlib)`: rename the manifest function. */
-    override fun toString(): String = "$id ($builtIn): rename the manifest function"
+/**
+ * A name of a manifest function that is also a built-in function (CAP-7 p. 3), with a [suggestedName] that is free:
+ * not a function of the standard library or the core, not another id of the section (CAP-7 p. 3c, review RV3-44).
+ */
+public class NameConflictReport(public val id: String, public val builtIn: String, public val suggestedName: String) {
+    /** `id (stdlib)`: rename the manifest function, e.g. to `id_mf`. */
+    override fun toString(): String = "$id ($builtIn): rename the manifest function, e.g. to $suggestedName"
 }
 
 /** One declared parameter of a manifest function: its name in `code` and its JSON Schema. */
@@ -102,11 +105,23 @@ internal object ManifestFunctions {
     const val PARAMS_NOT_ARRAY: String = "params must be an array of parameter declarations"
 
     /** Ids that name a built-in function: one of the 12 core functions (checked first: `lookup` is both) or stdlib. */
-    fun conflicts(functions: List<ManifestFunction>): List<NameConflictReport> = functions.mapNotNull { f ->
-        when {
-            f.id in CoreFunctions.ALL_NAMES -> NameConflictReport(f.id, "core")
-            FunctionRegistry.standard().lookup(f.id) != null -> NameConflictReport(f.id, "stdlib")
-            else -> null
+    fun conflicts(functions: List<ManifestFunction>): List<NameConflictReport> {
+        val taken = HashSet<String>(functions.map { it.id })
+        fun free(name: String) = name !in taken && name !in CoreFunctions.ALL_NAMES && FunctionRegistry.standard().lookup(name) == null
+        fun suggestion(id: String): String {
+            var n = 1
+            while (true) {
+                val name = if (n == 1) "${id}_mf" else "${id}_mf$n"
+                if (free(name)) return name.also { taken += it }
+                n++
+            }
+        }
+        return functions.mapNotNull { f ->
+            when {
+                f.id in CoreFunctions.ALL_NAMES -> NameConflictReport(f.id, "core", suggestion(f.id))
+                FunctionRegistry.standard().lookup(f.id) != null -> NameConflictReport(f.id, "stdlib", suggestion(f.id))
+                else -> null
+            }
         }
     }
 

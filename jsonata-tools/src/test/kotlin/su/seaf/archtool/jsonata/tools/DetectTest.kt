@@ -20,7 +20,7 @@ class DetectTest {
         assertEquals(1, code)
         assertEquals(
             listOf(
-                "functions: X0014 lookup is a built-in function (core): rename the manifest function",
+                "functions: X0014 lookup is a built-in function (core): rename the manifest function, e.g. to lookup_mf",
                 "functions: X0017 manifest function check: the входных параметров: strict mode: unknown keyword: \"example\"",
                 "q.jsonata:2:8 DEV-15 \$set: the store of \$set/\$get lives for one evaluation in the engine; in the core it outlives evaluations of a request",
             ),

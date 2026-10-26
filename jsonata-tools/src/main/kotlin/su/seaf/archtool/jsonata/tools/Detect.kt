@@ -22,7 +22,7 @@ class Detect(private val out: PrintStream) {
         var failed = false
         if (functions != null) {
             for (c in SeafDetector.manifestConflicts(functions)) {
-                out.println("functions: X0014 ${c.id} is a built-in function (${c.builtIn}): rename the manifest function")
+                out.println("functions: X0014 ${c.id} is a built-in function (${c.builtIn}): rename the manifest function, e.g. to ${c.suggestedName}")
                 failed = true
             }
             for (f in SeafDetector.invalidDeclarations(functions)) {

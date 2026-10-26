@@ -130,7 +130,7 @@ class ManifestFunctionsTest {
         val e = assertFailsWith<JsonataException> { SeafEnvironment.create(SeafEnvironmentTest.NoHost, json("""{"sum": {"code": "1"}, "wcard": {"code": "2"}, "lookup": {"code": "3"}, "ok": {"code": "4"}}""")) }
         assertEquals("X0014", e.code)
         assertEquals(
-            "Manifest functions conflict with built-in functions: sum (stdlib): rename the manifest function; wcard (core): rename the manifest function; lookup (core): rename the manifest function",
+            "Manifest functions conflict with built-in functions: sum (stdlib): rename the manifest function, e.g. to sum_mf; wcard (core): rename the manifest function, e.g. to wcard_mf; lookup (core): rename the manifest function, e.g. to lookup_mf",
             e.message,
         )
         assertEquals(listOf("a.b"), env.warnings.map { it.functionId })
