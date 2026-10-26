@@ -18,6 +18,18 @@ internal class Frame(
     @JvmField val parent: Frame?,
     @JvmField val ctx: EvalContext,
 ) {
+    /** `$$` of an evaluation, set on its root frame (the main expression, a nested [CallContext.evaluate]). */
+    @JvmField var rootInput: Value? = null
+
+    /**
+     * The input of the evaluation this frame belongs to, by the lexical chain: a lambda created outside a manifest
+     * function and called inside it sees the outer input, and the other way round (review RV3-39).
+     */
+    fun root(): Value? {
+        var f = this
+        while (true) f = f.parent ?: return f.rootInput
+    }
+
     private var names: Array<String?>? = null
     private var values: Array<Value?>? = null
     private var size = 0
@@ -96,8 +108,6 @@ internal class EvalContext(
     /** The next lambda invocation comes from the tail-call trampoline (its frame replaces the caller's). */
     @JvmField var tailCallNext: Boolean = false
 
-    /** `$$` of the evaluation. */
-    @JvmField var rootInput: Value? = null
 
     private var locals: HashMap<Any, Any>? = null
 
@@ -513,7 +523,7 @@ internal class FrameView private constructor(@JvmField val frame: Frame) : su.se
     override val tailCall: Boolean get() = frame.tailCall
     override val parent: su.seaf.archtool.jsonata.debug.DebugFrame? get() = frame.caller?.let { of(it) }
 
-    override fun root(): Value? = frame.ctx.rootInput
+    override fun root(): Value? = frame.root()
 
     override fun bindings(): List<su.seaf.archtool.jsonata.debug.Binding> {
         val seen = HashSet<String>()

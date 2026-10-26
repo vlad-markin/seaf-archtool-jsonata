@@ -259,4 +259,35 @@ class ReviewRound3SeafTest {
         val caught = core.tryExecute(FailingCall(IllegalStateException("source is not allowed"), true), listOf(f, su.seaf.archtool.jsonata.value.ArrayValue()))
         assertEquals("""{"success":false,"result":null,"error":"source is not allowed"}""", str(caught))
     }
+
+    /** A host that records the manifest each $parsesource call gets. */
+    private class ManifestHost : SeafHost by SeafEnvironmentTest.NoHost {
+        val manifests = ArrayList<String>()
+        override fun loadSource(manifest: Value?, source: Value?, request: SeafRequest?, context: su.seaf.archtool.jsonata.CallContext): Value? {
+            manifests += str(manifest)
+            return null
+        }
+        private fun str(v: Value?) = if (v == null) "undefined" else JsonWriter.stringify(v)
+    }
+
+    @Test
+    fun `RV3-39 the root of a call comes from the lexical frame`() {
+        val host = ManifestHost()
+        val env = SeafEnvironment.create(host, json(
+            """{
+              "apply": {"code": "${'$'}f()", "params": [{"alias": "f", "callback": true}]},
+              "maker": {"code": "function(){ ${'$'}parsesource(\"s\") }", "params": [{"alias": "x"}]},
+              "load": {"code": "${'$'}parsesource(\"s\")", "params": [{"alias": "y"}]}
+            }""",
+        ))
+        fun run(expr: String) = env.evaluate(env.compile(expr), json("""{"m": 1}"""))
+        // a lambda of the outer expression called inside a manifest function: the outer input
+        run("${'$'}apply(function(){ ${'$'}parsesource(\"s\") })")
+        // a lambda of a manifest function called outside: the input of the function
+        run("${'$'}maker(5)()")
+        // the controls: directly outside and directly inside
+        run("${'$'}parsesource(\"s\")")
+        run("${'$'}load(7)")
+        assertEquals(listOf("""{"m":1}""", """{"x":5}""", """{"m":1}""", """{"y":7}"""), host.manifests)
+    }
 }

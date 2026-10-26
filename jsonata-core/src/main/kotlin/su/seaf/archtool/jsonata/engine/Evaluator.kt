@@ -43,8 +43,8 @@ internal object Evaluator {
         } ?: options.functions
         val ctx = EvalContext(registry, evaluation, evaluation.clock())
         ctx.onDeep = onDeep
-        ctx.rootInput = input
         val env = Frame(null, ctx)
+        env.rootInput = input
         for ((k, v) in bindings) env.bind(k, v)
         env.bind("$", input)
         var focus = input
@@ -91,7 +91,8 @@ internal object Evaluator {
             val nextArgs = ArrayList<Value?>(body.arguments.size)
             for (a in body.arguments) nextArgs.add(a.evaluate(result.input, result.env))
             env.ctx.tailCallNext = true
-            result = applyInner(next, nextArgs, input, env, CallSite(token, procedure.position), body)
+            // a native in tail position sees the frame it is written in (its root, review RV3-39), not the caller's
+            result = applyInner(next, nextArgs, input, env, CallSite(token, procedure.position), body, result.env)
         }
         return result
     }
@@ -152,7 +153,7 @@ internal object Evaluator {
     }
 
     /** jsonata.js: applyInner. */
-    private fun applyInner(proc: Value?, args: List<Value?>, input: Value?, env: Frame, site: CallSite?, callNode: Node?): Value? {
+    private fun applyInner(proc: Value?, args: List<Value?>, input: Value?, env: Frame, site: CallSite?, callNode: Node?, nativeFrame: Frame? = null): Value? {
         if (site != null && proc is Lambda) env.ctx.recordCall(proc, site)
         try {
             var validated = args
@@ -162,12 +163,12 @@ internal object Evaluator {
             }
             return when (proc) {
                 is Lambda -> applyProcedure(proc, validated, env, callNode)
-                is NativeFunction -> CallContextImpl(env, input).let { c ->
+                is NativeFunction -> CallContextImpl(nativeFrame ?: env, input).let { c ->
                     val listener = env.ctx.listener
                     if (listener == null) c.checked(invokeNative(proc, c, validated, env.ctx, callNode)) else invokeObserved(listener, proc, c, validated, env, callNode)
                 }
                 is PartialNative -> applyPartialNative(proc, validated, env, callNode)
-                is InternalFunction -> proc.body(CallContextImpl(env, input), validated)
+                is InternalFunction -> proc.body(CallContextImpl(nativeFrame ?: env, input), validated)
                 is Transformer -> transform(proc, validated.getOrNull(0), env)
                 else -> throw JsonataException("T1006")
             }
