@@ -256,4 +256,67 @@ class ReviewRound3Test {
         assertEquals("[2,4]", log.finish())
         assertEquals("next 2\nnext 3\n", log.output.toString())
     }
+
+    /** About 16 MB of JSON: 200 000 components with a few fields. */
+    private fun bigModel(): su.seaf.archtool.jsonata.value.ObjectValue {
+        val list = su.seaf.archtool.jsonata.value.ArrayValue()
+        for (i in 0 until 200_000) {
+            list.add(su.seaf.archtool.jsonata.value.ObjectValue().also { o ->
+                o.put("id", su.seaf.archtool.jsonata.value.StringValue.of("component.$i"))
+                o.put("title", su.seaf.archtool.jsonata.value.StringValue.of("Component number $i of the model"))
+                o.put("kind", su.seaf.archtool.jsonata.value.StringValue.of("service"))
+                o.put("size", su.seaf.archtool.jsonata.value.NumberValue.of(i.toDouble()))
+            })
+        }
+        return su.seaf.archtool.jsonata.value.ObjectValue().also { it.put("components", list) }
+    }
+
+    private fun allocated(block: () -> Unit): Long {
+        val mx = ManagementFactory.getThreadMXBean() as com.sun.management.ThreadMXBean
+        val before = mx.currentThreadAllocatedBytes
+        block()
+        return mx.currentThreadAllocatedBytes - before
+    }
+
+    @Test
+    fun `RV3-6 previews and trace entries of a big value cost O(limit)`() {
+        val model = bigModel()
+        val full = JsonWriter.stringify(model)
+        assertTrue(full.length > 15_000_000, "${full.length}")
+        // variable previews at a stop: the Context scope holds $$
+        val stops = java.util.concurrent.LinkedBlockingQueue<Any>()
+        val events = object : su.seaf.archtool.jsonata.debug.DebugEvents {
+            override fun stopped(reason: su.seaf.archtool.jsonata.debug.StopReason, at: su.seaf.archtool.jsonata.debug.NodeInfo) { stops.put(at) }
+        }
+        val session = su.seaf.archtool.jsonata.debug.DebugSession(Jsonata.compile("[1, 2].(\$ * 2)"), events)
+        session.setBreakpoints("main", listOf(su.seaf.archtool.jsonata.debug.BreakpointSpec(1, 11)))
+        val run = Thread { runCatching { session.run(model) } }
+        run.start()
+        kotlin.test.assertNotNull(stops.poll(10, java.util.concurrent.TimeUnit.SECONDS))
+        var root: su.seaf.archtool.jsonata.debug.VariableView? = null
+        val previewBytes = allocated {
+            val context = session.scopes(0).first { it.name == "Context" }
+            root = session.variables(context.variablesReference).first { it.name == "\$\$" }
+        }
+        assertEquals(full.substring(0, 197) + "...", root!!.value)
+        assertTrue(previewBytes < 1_000_000, "preview allocated $previewBytes bytes")
+        session.terminate()
+        run.join(5000)
+        // a trace entry of the whole model
+        val tracer = su.seaf.archtool.jsonata.debug.trace.ValueTracer({ true }, k = 3, maxEntryBytes = 1024)
+        val compiled = Jsonata.compile("\$")
+        val traceBytes = allocated { compiled.evaluate(model, emptyMap(), EvaluationOptions(listener = tracer)) }
+        val entry = tracer.trace.single()
+        assertEquals(full.substring(0, 1024), entry.input)
+        assertEquals(full.substring(0, 1024), entry.result)
+        assertTrue(entry.truncated)
+        assertTrue(traceBytes < 1_000_000, "trace allocated $traceBytes bytes")
+        // the bounded writer agrees with the full one on small values and cuts long strings by the limit
+        val small = Jsonata.compile("{\"a\": [1, 2.5, null, \"x\\ny\"], \"2\": {\"b\": true}}").evaluate(null)
+        assertEquals(JsonWriter.stringify(small) to false, JsonWriter.stringifyBounded(small, 1000))
+        val long = su.seaf.archtool.jsonata.value.StringValue.of("\uD83D\uDE00".repeat(1_000_000))
+        val (text, cut) = JsonWriter.stringifyBounded(long, 7)
+        assertEquals(JsonWriter.stringify(long).substring(0, 7), text)
+        assertTrue(cut)
+    }
 }

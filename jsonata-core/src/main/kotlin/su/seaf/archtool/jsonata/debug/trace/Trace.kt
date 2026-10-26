@@ -192,8 +192,7 @@ public class ValueTracer @JvmOverloads constructor(
     }
 
     private fun cut(v: Value?): Pair<String, Boolean> {
-        val s = if (v == null) "undefined" else JsonWriter.stringify(v)
-        return if (s.length <= maxEntryBytes) s to false else s.substring(0, maxEntryBytes) to true
+        return JsonWriter.stringifyBounded(v, maxEntryBytes)
     }
 
     public companion object {

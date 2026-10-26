@@ -29,14 +29,26 @@ public object JsonWriter {
         return sb.toString()
     }
 
+    /**
+     * The first [limit] characters of [stringify] and whether the text was longer. The walk stops once the limit is
+     * passed and a long string is quoted only up to it, so the cost is O([limit]) whatever the size of [value]
+     * (previews and trace entries of the debugger, review RV3-6).
+     */
+    internal fun stringifyBounded(value: Value?, limit: Int): Pair<String, Boolean> {
+        if (value == null || value is FunctionValue) return "undefined".let { if (it.length > limit) it.substring(0, limit) to true else it to false }
+        val sb = StringBuilder(minOf(limit, 1024) + 8)
+        write(sb, value, 0, 0, false, limit = limit)
+        return if (sb.length > limit) sb.substring(0, limit) to true else sb.toString() to false
+    }
+
     /** A container being written: its items (array values or object keys), the next index, its level. */
-    private class Open(val array: ArrayValue?, val obj: ObjectValue?, val keys: List<String>?, val level: Int) {
+    private class Open(val array: ArrayValue?, val obj: ObjectValue?, val level: Int) {
         var index = 0
         var first = true
     }
 
     /** Writes without recursion, so that nesting depth is limited only by memory (review RV-4). */
-    private fun write(sb: StringBuilder, root: Value, indent: Int, level0: Int, replacer: Boolean, progress: ((Int) -> Unit)? = null) {
+    private fun write(sb: StringBuilder, root: Value, indent: Int, level0: Int, replacer: Boolean, progress: ((Int) -> Unit)? = null, limit: Int = Int.MAX_VALUE) {
         val stack = ArrayList<Open>()
         fun scalarOrOpen(value: Value?, level: Int) {
             progress?.invoke(sb.length)
@@ -51,20 +63,24 @@ public object JsonWriter {
                     }
                     if (d.isNaN() || d.isInfinite()) sb.append("null") else sb.append(JsNumber.toString(d))
                 }
-                is StringValue -> quote(sb, value.value)
+                is StringValue -> {
+                    val room = limit - sb.length
+                    // one source character gives at least one output character: room + 1 of them pass the limit
+                    if (room < value.value.length) quote(sb, value.value.substring(0, maxOf(room, 0) + 1)) else quote(sb, value.value)
+                }
                 is FunctionValue -> if (replacer) sb.append("\"\"") else sb.append("null")
                 is ArrayValue -> if (value.isEmpty()) sb.append("[]") else {
                     sb.append('[')
-                    stack += Open(value, null, null, level)
+                    stack += Open(value, null, level)
                 }
                 is ObjectValue -> if (value.isEmpty()) sb.append("{}") else {
                     sb.append('{')
-                    stack += Open(null, value, value.keys, level)
+                    stack += Open(null, value, level)
                 }
             }
         }
         scalarOrOpen(root, level0)
-        while (stack.isNotEmpty()) {
+        while (stack.isNotEmpty() && sb.length <= limit) {
             val top = stack[stack.size - 1]
             val arr = top.array
             if (arr != null) {
@@ -82,11 +98,10 @@ public object JsonWriter {
                 continue
             }
             val obj = top.obj!!
-            val keys = top.keys!!
             var wrote = false
-            while (top.index < keys.size) {
-                val key = keys[top.index++]
-                val v = obj[key]
+            while (top.index < obj.size) {
+                val key = obj.keyAt(top.index)
+                val v = obj.valueAt(top.index++)
                 if (!replacer && v is FunctionValue) continue
                 if (!top.first) sb.append(',')
                 top.first = false

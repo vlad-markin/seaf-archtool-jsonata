@@ -72,14 +72,14 @@ internal class References {
         }
         val size = when (v) {
             is ArrayValue -> v.size
-            is ObjectValue -> v.keys.size
+            is ObjectValue -> v.size
             else -> 0
         }
         val ref = if (size > 0) next++.also { lazy[it] = v!! } else 0
         val preview = when (v) {
             null -> "undefined"
             is FunctionValue -> "function"
-            else -> JsonWriter.stringify(v).let { if (it.length > 200) it.substring(0, 197) + "..." else it }
+            else -> JsonWriter.stringifyBounded(v, 200).let { (text, cut) -> if (cut) text.substring(0, 197) + "..." else text }
         }
         return VariableView(name, preview, type, ref, size)
     }
