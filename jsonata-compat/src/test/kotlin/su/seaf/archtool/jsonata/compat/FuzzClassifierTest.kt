@@ -126,9 +126,12 @@ class FuzzClassifierTest {
     }
 
     @Test
-    fun `the Node major is checked (RV2-7)`() {
+    fun `the Node major is checked (RV2-7, RV3-29)`() {
         assertEquals(22, Sidecar.requiredNodeMajor(node))
-        val have = Sidecar.nodeMajor()
-        if (have != null && have != 22) assertTrue(Sidecar.unavailable(node)!!.contains("Node 22 is needed"))
+        // the comparison itself, without the environment of this machine
+        assertNull(Sidecar.nodeVersionProblem(22, 22))
+        assertEquals("Node 22 is needed (compat/node/package.json), found Node 24", Sidecar.nodeVersionProblem(24, 22))
+        assertEquals("node is not on the path", Sidecar.nodeVersionProblem(null, 22))
+        assertNull(Sidecar.nodeVersionProblem(24, null))
     }
 }

@@ -137,10 +137,14 @@ class Sidecar(private val nodeDir: File, private val caseTimeoutMillis: Long = 1
         /** Why fuzzing cannot run here, or null when it can: the installed jsonata package and the Node major of package.json (review RV2-7). */
         fun unavailable(nodeDir: File): String? {
             if (!File(nodeDir, "node_modules/jsonata").isDirectory) return "compat/node/node_modules is missing (npm ci)"
-            val have = nodeMajor() ?: return "node is not on the path"
-            val need = requiredNodeMajor(nodeDir)
-            if (need != null && have != need) return "Node $need is needed (compat/node/package.json), found Node $have"
-            return null
+            return nodeVersionProblem(nodeMajor(), requiredNodeMajor(nodeDir))
+        }
+
+        /** Why Node [have] cannot be the reference when [need] is required (null: no requirement), or null when it can. */
+        fun nodeVersionProblem(have: Int?, need: Int?): String? = when {
+            have == null -> "node is not on the path"
+            need != null && have != need -> "Node $need is needed (compat/node/package.json), found Node $have"
+            else -> null
         }
 
         fun available(nodeDir: File): Boolean = unavailable(nodeDir) == null
