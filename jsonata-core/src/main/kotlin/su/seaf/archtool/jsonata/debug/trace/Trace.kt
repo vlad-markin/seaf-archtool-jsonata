@@ -32,6 +32,9 @@ public class CompositeListener(private vararg val listeners: EvaluationListener)
     override fun nativeExit(name: String, result: Value?, frame: DebugFrame) {
         for (l in listeners) l.nativeExit(name, result, frame)
     }
+    override fun nativeError(name: String, error: Throwable, frame: DebugFrame) {
+        for (l in listeners) l.nativeError(name, error, frame)
+    }
     override fun source(source: SourceInfo) {
         for (l in listeners) l.source(source)
     }
@@ -129,6 +132,15 @@ public class Profiler @JvmOverloads constructor(private val topN: Int = 20) : Ev
     }
 
     override fun nativeExit(name: String, result: Value?, frame: DebugFrame) {
+        closeNative(name)
+    }
+
+    // a failed call ends its frame too, or the next call of the function would be timed from this start (RV3-26)
+    override fun nativeError(name: String, error: Throwable, frame: DebugFrame) {
+        closeNative(name)
+    }
+
+    private fun closeNative(name: String) {
         val start = nativeStarts.removeAt(nativeStarts.size - 1)
         val f = functions.getValue(name)
         f.active--

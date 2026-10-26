@@ -526,4 +526,31 @@ class ReviewRound3Test {
         // after the run an evaluate is refused at once
         assertTrue(session.evaluate(0, "1").error is IllegalStateException)
     }
+
+    @Test
+    fun `RV3-26 a native call that fails ends its profile frame`() {
+        val registry = su.seaf.archtool.jsonata.FunctionRegistry.create()
+            .register("guard", "<f:x>", { c, a ->
+                Thread.sleep(100)
+                try {
+                    c.call(a[0] as su.seaf.archtool.jsonata.value.FunctionValue, emptyList())
+                } catch (_: JsonataException) {
+                }
+                null
+            })
+            .register("boom", null, { _, _ -> throw JsonataException("D3137", value = su.seaf.archtool.jsonata.value.StringValue.of("boom")) })
+            .freeze()
+        val profiler = su.seaf.archtool.jsonata.debug.trace.Profiler()
+        val errors = ArrayList<String>()
+        val watcher = object : su.seaf.archtool.jsonata.debug.EvaluationListener {
+            override fun nativeError(name: String, error: Throwable, frame: su.seaf.archtool.jsonata.debug.DebugFrame) { errors += name }
+        }
+        Jsonata.compile("[\$guard(function(){ \$boom() }), \$guard(function(){ \$boom() })]", su.seaf.archtool.jsonata.CompileOptions(registry))
+            .evaluate(null, emptyMap(), EvaluationOptions(listener = su.seaf.archtool.jsonata.debug.trace.CompositeListener(profiler, watcher)))
+        val guard = profiler.functionProfiles.single { it.name == "guard" }
+        assertEquals(2, guard.calls)
+        assertTrue(guard.totalNanos >= 200_000_000, "guard total ${guard.totalNanos / 1_000_000} ms")
+        assertEquals(2, profiler.functionProfiles.single { it.name == "boom" }.calls)
+        assertEquals(listOf("boom", "boom"), errors)
+    }
 }

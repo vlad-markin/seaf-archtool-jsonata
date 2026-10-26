@@ -28,6 +28,12 @@ public interface EvaluationListener {
     /** The native function returned. */
     public fun nativeExit(name: String, result: Value?, frame: DebugFrame) {}
 
+    /**
+     * The native function failed with [error]: every [nativeEnter] ends with [nativeExit] or this, also when the
+     * error is caught further up (a host function with a callback, `$tryexecute`).
+     */
+    public fun nativeError(name: String, error: Throwable, frame: DebugFrame) {}
+
     /** A new source text takes part in the evaluation: the text of a `$eval`, the code of a manifest function. */
     public fun source(source: SourceInfo) {}
 }

@@ -113,9 +113,12 @@ internal object Evaluator {
         calls.add(name)
         val result = try {
             c.checked(invokeNative(proc, c, args, ctx, callNode))
-        } finally {
+        } catch (e: Throwable) {
             calls.removeAt(calls.size - 1)
+            listener.nativeError(name, e, view)
+            throw e
         }
+        calls.removeAt(calls.size - 1)
         listener.nativeExit(name, result, view)
         return result
     }
