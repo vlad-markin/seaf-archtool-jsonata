@@ -553,45 +553,31 @@ internal class RegexFunction(val regex: JsRegexPattern, val position: Int?) : In
         exec(str, from, c.frame.ctx)
     }
 
-    /** The RegExp's lastIndex, shared by the match objects it returns (and updated by [forEachMatch] alike). */
-    private var lastIndex = 0
-
-    // one Matcher over the (surrogate-mapped) subject for all the matches of a string: mapping and matcher
-    // creation per match made iterating over a long string quadratic (review RV-5)
-    private var lastSubject: String? = null
-    private var matcher: java.util.regex.Matcher? = null
-
-    private fun matcherFor(str: String, ctx: EvalContext): java.util.regex.Matcher {
-        val cached = matcher
-        if (cached != null && lastSubject === str) return cached
-        val subject: CharSequence = JsRegexPattern.subject(str)
-        // with a deadline, backtracking passes the checkpoint through the subject's charAt (review RV-8)
-        // the checkpoint passes through the subject's charAt, so that backtracking stops on cancellation and the
-        // deadline (review RV-8, design §2.4)
-        val m = regex.pattern.matcher(CheckedChars(subject, ctx))
-        lastSubject = str
-        matcher = m
-        return m
-    }
-
-    /** `re.lastIndex = fromIndex; re.exec(str)`: the matcher positioned on the match, or null. */
+    /**
+     * `re.lastIndex = fromIndex; re.exec(str)`: the matcher positioned on the match, or null. The RegExp state
+     * (lastIndex, the matcher over the subject) is kept per evaluation ([EvalContext.regexState]): a regex value that
+     * leaves its evaluation (a result, a binding) can be used by other evaluations, also at the same time, each with
+     * its own state and its own deadline and cancellation in the subject's charAt (review RV2-2).
+     */
     private fun find(str: String, fromIndex: Int, ctx: EvalContext): java.util.regex.Matcher? {
-        lastIndex = fromIndex
+        val st = ctx.regexState(this)
+        st.lastIndex = fromIndex
         if (fromIndex > str.length) {
-            lastIndex = 0
+            st.lastIndex = 0
             return null
         }
-        val m = matcherFor(str, ctx)
+        val m = st.matcherFor(regex, str, ctx)
         if (!m.find(fromIndex)) {
-            lastIndex = 0
+            st.lastIndex = 0
             return null
         }
-        lastIndex = m.end()
+        st.lastIndex = m.end()
         return m
     }
 
     /** `next()`: the following match, D1004 when it is empty; null at the end. */
     private fun findNext(str: String, ctx: EvalContext): java.util.regex.Matcher? {
+        val lastIndex = ctx.regexState(this).lastIndex
         if (lastIndex >= str.length) return null
         val m = find(str, lastIndex, ctx) ?: return null
         if (m.start() == m.end()) throw JsonataException("D1004", position, value = StringValue.of(regex.source))
@@ -654,6 +640,28 @@ internal class RegexFunction(val regex: JsRegexPattern, val position: Int?) : In
 
     private companion object {
         val UNUSED_BODY: (CallContextImpl, List<Value?>) -> Value? = { _, _ -> null }
+    }
+}
+
+/**
+ * The state a JS RegExp object carries between calls, for one regex value in one evaluation: lastIndex (shared by the
+ * match objects of that evaluation, as in jsonata-js) and one Matcher over the current subject, so that iterating
+ * over a long string does not rebuild the mapped subject per match (review RV-5).
+ */
+internal class RegexState {
+    @JvmField var lastIndex: Int = 0
+    private var lastSubject: String? = null
+    private var matcher: java.util.regex.Matcher? = null
+
+    fun matcherFor(regex: JsRegexPattern, str: String, ctx: EvalContext): java.util.regex.Matcher {
+        val cached = matcher
+        if (cached != null && lastSubject === str) return cached
+        // the checkpoint of this evaluation passes through the subject's charAt, so that backtracking stops on
+        // cancellation and the deadline (review RV-8, design §2.4)
+        val m = regex.pattern.matcher(CheckedChars(JsRegexPattern.subject(str), ctx))
+        lastSubject = str
+        matcher = m
+        return m
     }
 }
 

@@ -108,6 +108,20 @@ internal class EvalContext(
         return m.getOrPut(key, init) as T
     }
 
+    private var regexStates: java.util.WeakHashMap<Any, RegexState>? = null
+    private var lastRegex: Any? = null
+    private var lastRegexState: RegexState? = null
+
+    /** The RegExp state of [regex] in this evaluation (weak keys: regex values made per iteration go away). */
+    fun regexState(regex: Any): RegexState {
+        if (lastRegex === regex) return lastRegexState!!
+        val m = regexStates ?: java.util.WeakHashMap<Any, RegexState>().also { regexStates = it }
+        val st = m.getOrPut(regex) { RegexState() }
+        lastRegex = regex
+        lastRegexState = st
+        return st
+    }
+
     private var announced: java.util.IdentityHashMap<Any, Boolean>? = null
 
     /** True the first time [expression] (a nested expression) is seen in this evaluation: its source goes to the listener. */
