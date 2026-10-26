@@ -79,4 +79,16 @@ class LakeDetectTest {
         assertTrue(!LakeScan.looksLikeExpression("a/b/c.yaml"))
         assertTrue(!LakeScan.looksLikeExpression("https://example.com/x"))
     }
+
+    @Test
+    fun `summary json has no ids of manifest functions (RV3-46)`() {
+        val bad = JsonataJson.parse("""{"functions": {"lookup": {"code": "1"}, "string": {"code": "2"}, "fine": {"code": "3", "params": {"a": 1}}}}""")
+        val d = LakeDetect(bad).run(LakeScan.manifest(bad))
+        val summary = su.seaf.archtool.jsonata.value.JsonWriter.stringify(d.summary())
+        assertTrue(listOf("lookup", "\"string\"", "fine", "rename").none { summary.contains(it) }, summary)
+        assertEquals("{\"core\":1,\"stdlib\":1}", su.seaf.archtool.jsonata.value.JsonWriter.stringify(d.summary()["manifestConflicts"]))
+        // the places and recommendations are in details.json
+        val details = su.seaf.archtool.jsonata.value.JsonWriter.stringify(d.detailsValue())
+        assertTrue(details.contains("manifest:functions/lookup") && details.contains("e.g. to lookup_mf") && details.contains("manifest function fine"), details)
+    }
 }

@@ -59,6 +59,9 @@ class LakeDetect(private val manifest: Value?, private val contexts: Contexts = 
 
     fun run(found: List<FoundExpression>): LakeDetect {
         problems += conflicts.size + invalid.size
+        // ids of manifest functions go to details.json only, summary.json counts them (review RV3-46)
+        for (c in conflicts) details += Detail("manifest:functions/${c.id}", null, null, "X0014", "conflict", c.toString())
+        for (f in invalid) details += Detail("manifest:functions", null, null, f.id, "declaration", f.recommendation)
         for (e in found) scan(e)
         return this
     }
@@ -146,7 +149,7 @@ class LakeDetect(private val manifest: Value?, private val contexts: Contexts = 
         "confirmed" to ObjectValue().also { o ->
             confirmedExpr.forEach { (id, places) -> o.put(id, obj("expressions" to NumberValue.of(places.size), "evaluations" to NumberValue.of(confirmedEval[id] ?: 0))) }
         },
-        "manifestConflicts" to ArrayValue(conflicts.size).also { a -> conflicts.forEach { c -> a.add(StringValue.of(c.toString())) } },
+        "manifestConflicts" to counts(conflicts.groupingBy { it.builtIn }.eachCount().toSortedMap()),
         "invalidDeclarations" to NumberValue.of(invalid.size),
         "storeCalls" to NumberValue.of(staticByDev["DEV-15"]?.size ?: 0),
         "coverage" to obj(
