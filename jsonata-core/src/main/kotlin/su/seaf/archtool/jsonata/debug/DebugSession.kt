@@ -83,7 +83,13 @@ public class DebugSession @JvmOverloads constructor(
     private val events: DebugEvents,
     private val options: DebugOptions = DebugOptions(),
 ) {
-    private class Breakpoint(val id: Int, val spec: BreakpointSpec, val condition: Jsonata?, val logParts: List<Pair<Boolean, String>>?) {
+    /** A condition or a part of a logpoint: compiled once when the breakpoint is set, or the syntax error. */
+    private class Watch(val compiled: Jsonata?, val error: JsonataException?)
+
+    /** A part of a logpoint message: literal [text], or an expression ([watch] not null). */
+    private class LogPart(val text: String, val watch: Watch?)
+
+    private class Breakpoint(val id: Int, val spec: BreakpointSpec, val condition: Watch?, val logParts: List<LogPart>?) {
         var hits = 0
     }
 
@@ -147,13 +153,35 @@ public class DebugSession @JvmOverloads constructor(
             if (node == null) {
                 ResolvedBreakpoint(id, false, null, null, "no code at ${spec.line}${spec.column?.let { ":$it" } ?: ""}")
             } else {
-                val condition = spec.condition?.let { Jsonata.compile(it) }
-                bound[node.id] = Breakpoint(id, spec, condition, spec.logMessage?.let { logParts(it) })
+                val condition = spec.condition?.let { watch(it) }
+                val parts = spec.logMessage?.let { m -> logParts(m).map { (isExpr, text) -> LogPart(text, if (isExpr) watch(text) else null) } }
+                bound[node.id] = Breakpoint(id, spec, condition, parts)
                 ResolvedBreakpoint(id, true, node, index.range(node), null)
             }
         }
         breakpoints[sourceId] = bound
         return result
+    }
+
+    /** Compiles a condition or a logpoint part with the functions of the debugged expression (review RV3-5). */
+    private fun watch(text: String): Watch = try {
+        Watch(Jsonata.compile(text, expression.options), null)
+    } catch (e: JsonataException) {
+        Watch(null, e)
+    }
+
+    /**
+     * The options of every expression the debugger evaluates in a frame (watch, condition, logpoint): its own budget
+     * (1 s, 1 000 000 steps) and no functions with side effects (X0011).
+     */
+    private fun watchOptions(): EvaluationOptions =
+        EvaluationOptions(timeoutMillis = 1000, budgets = su.seaf.archtool.jsonata.Budgets(maxSteps = 1_000_000)).also { it.watch = true }
+
+    /** Evaluates [w] in [frame] by the watch rules, outside the deadline of the debugged evaluation. */
+    private fun evalWatch(w: Watch, input: Value?, frame: DebugFrame): Value? {
+        w.error?.let { throw it }
+        val ctx = (frame as FrameView).frame.ctx
+        return ctx.paused { w.compiled!!.evaluate(input, scope(frame), watchOptions()) }
     }
 
     /** `text {expr} text`: literal parts (false) and expressions (true). */
@@ -309,8 +337,7 @@ public class DebugSession @JvmOverloads constructor(
         val task = java.util.concurrent.FutureTask {
             try {
                 val compiled = Jsonata.compile(expression, this.expression.options)
-                val watch = EvaluationOptions(timeoutMillis = 1000, budgets = su.seaf.archtool.jsonata.Budgets(maxSteps = 1_000_000)).also { it.watch = true }
-                EvalOutcome(compiled.evaluate(input, scope(frame), watch), null)
+                EvalOutcome(compiled.evaluate(input, scope(frame), watchOptions()), null)
             } catch (e: Exception) {
                 EvalOutcome(null, e)
             }
@@ -393,10 +420,10 @@ public class DebugSession @JvmOverloads constructor(
         val bp = lock.withLock { breakpoints[node.sourceId]?.get(node.id) } ?: return false
         if (bp.condition != null) {
             val ok = try {
-                val v = bp.condition.evaluate(input, scope(frame))
+                val v = evalWatch(bp.condition, input, frame)
                 v != null && su.seaf.archtool.jsonata.engine.Evaluator.boolize(v)
             } catch (e: JsonataException) {
-                events.output("breakpoint condition failed: ${e.message}\n")
+                events.output("breakpoint condition failed: ${e.code} ${e.message}\n")
                 true // an error in the condition stops, with the message
             }
             if (!ok) return false
@@ -404,9 +431,10 @@ public class DebugSession @JvmOverloads constructor(
         bp.hits++
         bp.spec.hitCondition?.let { if (!hitMatches(it.trim(), bp.hits)) return false }
         bp.logParts?.let { parts ->
-            val text = parts.joinToString("") { (isExpr, s) ->
-                if (!isExpr) s else try {
-                    Jsonata.compile(s).evaluate(input, scope(frame))?.let { v -> if (v is su.seaf.archtool.jsonata.value.StringValue) v.value else JsonWriter.stringify(v) } ?: "undefined"
+            val text = parts.joinToString("") { part ->
+                val w = part.watch
+                if (w == null) part.text else try {
+                    evalWatch(w, input, frame)?.let { v -> if (v is su.seaf.archtool.jsonata.value.StringValue) v.value else JsonWriter.stringify(v) } ?: "undefined"
                 } catch (e: JsonataException) {
                     "<${e.code}>"
                 }

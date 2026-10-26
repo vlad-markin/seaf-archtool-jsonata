@@ -178,4 +178,82 @@ class ReviewRound3Test {
         session.terminate()
         run.join(5000)
     }
+
+    @Test
+    fun `RV3-5 breakpoint conditions and logpoints go through the watch path`() {
+        val fx = AtomicInteger()
+        val registry = su.seaf.archtool.jsonata.FunctionRegistry.create()
+            .register(su.seaf.archtool.jsonata.FunctionDefinition("pure", "<n:n>", { _, a -> su.seaf.archtool.jsonata.value.NumberValue.of((a[0] as su.seaf.archtool.jsonata.value.NumberValue).value + 1) },
+                su.seaf.archtool.jsonata.FunctionDoc(su.seaf.archtool.jsonata.LocalizedText.ru("Чистая")), sideEffects = false))
+            .register(su.seaf.archtool.jsonata.FunctionDefinition("fx", "<n:n>", { _, a -> fx.incrementAndGet(); a[0] },
+                su.seaf.archtool.jsonata.FunctionDoc(su.seaf.archtool.jsonata.LocalizedText.ru("С эффектом")), sideEffects = true))
+        class Run(condition: String? = null, log: String? = null) : su.seaf.archtool.jsonata.debug.DebugEvents {
+            val stops = java.util.concurrent.LinkedBlockingQueue<Long>()
+            val output = StringBuffer()
+            val done = java.util.concurrent.CountDownLatch(1)
+            var result: String? = null
+            val session = su.seaf.archtool.jsonata.debug.DebugSession(Jsonata.compile("[1, 2].(\$ * 2)", su.seaf.archtool.jsonata.CompileOptions(registry)), this)
+            private var t0 = System.nanoTime()
+
+            init {
+                session.setBreakpoints("main", listOf(su.seaf.archtool.jsonata.debug.BreakpointSpec(1, 11, condition = condition, logMessage = log)))
+                Thread { runCatching { session.run(null) } }.start()
+            }
+
+            override fun stopped(reason: su.seaf.archtool.jsonata.debug.StopReason, at: su.seaf.archtool.jsonata.debug.NodeInfo) {
+                stops.put((System.nanoTime() - t0) / 1_000_000)
+            }
+
+            override fun output(text: String) {
+                output.append(text)
+            }
+
+            override fun terminated(outcome: su.seaf.archtool.jsonata.debug.EvalOutcome) {
+                result = outcome.toString()
+                done.countDown()
+            }
+
+            /** Waits for a stop and returns the milliseconds since the start or the last resume. */
+            fun stop(): Long = stops.poll(10, java.util.concurrent.TimeUnit.SECONDS) ?: error("no stop; output: $output")
+
+            fun resume() {
+                t0 = System.nanoTime()
+                session.resume()
+            }
+
+            fun finish(): String {
+                assertTrue(done.await(10, java.util.concurrent.TimeUnit.SECONDS), "not finished; output: $output")
+                assertTrue(stops.isEmpty())
+                return result!!
+            }
+        }
+        // a host function in a condition works: stops only where it holds
+        val pure = Run(condition = "\$pure(\$) = 3")
+        pure.stop()
+        assertEquals("2", JsonWriter.stringify(pure.session.stoppedInput()!!))
+        pure.resume()
+        assertEquals("[2,4]", pure.finish())
+        assertEquals("", pure.output.toString())
+        // an endless condition fails within the watch limits and stops with the message
+        val endless = Run(condition = "(\$f := function(\$i){ \$f(\$i + 1) }; \$f(0))")
+        assertTrue(endless.stop() < 3000)
+        endless.resume()
+        assertTrue(endless.stop() < 3000)
+        endless.resume()
+        assertEquals("[2,4]", endless.finish())
+        assertEquals(2, endless.output.split("breakpoint condition failed:").size - 1, endless.output.toString())
+        // a function with side effects in a condition: X0011, and it is not called
+        val effect = Run(condition = "\$fx(\$) = 2")
+        effect.stop()
+        assertTrue(effect.output.toString().startsWith("breakpoint condition failed: X0011"), effect.output.toString())
+        effect.resume()
+        effect.stop()
+        effect.resume()
+        effect.finish()
+        assertEquals(0, fx.get())
+        // a logpoint with a host function
+        val log = Run(log = "next {\$pure(\$)}")
+        assertEquals("[2,4]", log.finish())
+        assertEquals("next 2\nnext 3\n", log.output.toString())
+    }
 }
