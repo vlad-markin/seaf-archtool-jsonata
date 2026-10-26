@@ -1,7 +1,8 @@
 // jsonata-js 2.2.2 side of the performance stand (story 6; jsonata-bench/.../StandRunner.kt is the engine side).
 // Same arguments and record format as StandRunner:
 //   node --expose-gc stand.mjs --data=model.json --size=N --queries=dir --out=results.jsonl [--dump=dir] [--only=a,b]
-//   node stand.mjs --data=model.json --size=N --queries=dir --once=name   (heap bisection: exit 0 when it passes)
+//   node stand.mjs --data=model.json --size=N --queries=dir --once=name   (heap bisection: exit 0 when it passes;
+//   --once=@parse only parses, the same as StandRunner)
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -18,6 +19,7 @@ const index = JSON.parse(fs.readFileSync(path.join(args.queries, 'index.json'), 
 const queries = index.map((q) => ({ ...q, expr: fs.readFileSync(path.join(args.queries, `${q.name}.jsonata`), 'utf8').trim() }));
 const data = JSON.parse(fs.readFileSync(args.data, 'utf8'));
 
+if (args.once === '@parse') process.exit(0);
 if (args.once) {
     const q = queries.find((x) => x.name === args.once);
     await jsonata(q.expr).evaluate(data);

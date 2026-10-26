@@ -15,26 +15,32 @@ import java.lang.management.MemoryType
  * a GC before each (outside the measurement); median, p95, allocations per evaluation (`ThreadMXBean`, all live threads:
  * deep evaluations run on stack segment threads), the peak of the heap pools during the query, the load average. The first result is written for comparison.
  *
- * `--once=<query>` evaluates one query once and exits 0, or 3 on OutOfMemoryError: the heap bisection runs it.
+ * `--once=<query>` evaluates one query once and exits 0, or 3 on OutOfMemoryError: the heap bisection runs it. It
+ * reads the model from a string, as `JSON.parse` of the jsonata-js side does, so that both minimums include the text
+ * during parsing (review RV3-21); `--once=@parse` only parses.
  */
 object StandRunner {
+    /** The pseudo-query of the heap bisection that only parses the model. */
+    const val PARSE_ONLY: String = "@parse"
+
     @JvmStatic
     fun main(args: Array<String>) {
         val a = args.associate { it.removePrefix("--").substringBefore('=') to it.substringAfter('=', "") }
         val data = File(a.getValue("data"))
         val size = a.getValue("size").toInt()
         val queries = Queries.load(File(a.getValue("queries")))
-        // streamed: the JSON text is not kept, so the heap measures the model and the evaluation
-        val input = data.inputStream().buffered().use { JsonataJson.parse(it) }
         a["once"]?.let { name ->
-            val q = queries.first { it.name == name }
             try {
-                Jsonata.compile(q.expr).evaluate(input)
+                // from a string, as the jsonata-js side: the text and the model are both alive while parsing
+                val input = JsonataJson.parse(data.readText())
+                if (name != PARSE_ONLY) Jsonata.compile(queries.first { it.name == name }.expr).evaluate(input)
             } catch (_: OutOfMemoryError) {
                 System.exit(3)
             }
             System.exit(0)
         }
+        // streamed: the JSON text is not kept, so the heap measures the model and the evaluation
+        val input = data.inputStream().buffered().use { JsonataJson.parse(it) }
         val out = File(a.getValue("out"))
         val dump = a["dump"]?.let { File(it).also { d -> d.mkdirs() } }
         val only = a["only"]?.split(',')?.filter { it.isNotEmpty() }?.toSet()

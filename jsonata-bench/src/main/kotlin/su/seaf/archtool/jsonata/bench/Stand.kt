@@ -45,16 +45,43 @@ fun main(args: Array<String>) {
             }
         }
         if (a["heap"] == "true") {
+            fun jvmMin(name: String) = bisect(mb(xmx)) { m -> run(listOf(java, "-Xmx${m}m", "-XX:+UseG1GC", "-Xss16m", "-cp", cp, "su.seaf.archtool.jsonata.bench.StandRunner", "--data=${data.path}", "--size=$size", "--queries=${queriesDir.path}", "--once=$name"), root, quiet = true) == 0 }
+            fun jsMin(name: String) = bisect(mb(xmx)) { m -> run(listOf("node", "--stack-size=65500", "--max-old-space-size=$m", "compat/node/stand.mjs", "--data=${data.path}", "--size=$size", "--queries=${queriesDir.path}", "--once=$name"), root, quiet = true) == 0 }
+            // both sides parse from a string: the minimum of parsing alone is the floor of every query (review RV3-21)
+            val parse = HeapMin(if ("jvm" in engines) jvmMin(StandRunner.PARSE_ONLY) else null, if ("js" in engines) jsMin(StandRunner.PARSE_ONLY) else null)
+            heapRows += heapRow(PARSE_ROW, size, parse, null)
             for (q in queries.filter { it.runsAt(size) }) {
-                val jvm = if ("jvm" in engines) bisect(mb(xmx)) { m -> run(listOf(java, "-Xmx${m}m", "-XX:+UseG1GC", "-Xss16m", "-cp", cp, "su.seaf.archtool.jsonata.bench.StandRunner", "--data=${data.path}", "--size=$size", "--queries=${queriesDir.path}", "--once=${q.name}"), root, quiet = true) == 0 } else null
-                val js = if ("js" in engines && q.jsRunsAt(size)) bisect(mb(xmx)) { m -> run(listOf("node", "--stack-size=65500", "--max-old-space-size=$m", "compat/node/stand.mjs", "--data=${data.path}", "--size=$size", "--queries=${queriesDir.path}", "--once=${q.name}"), root, quiet = true) == 0 } else null
-                heapRows += "| ${q.name} | $size | ${jvm ?: "—"} | ${js ?: "—"} | ${if (jvm != null && js != null) "%.2f".format(jvm.toDouble() / js) else "—"} |"
-                System.err.println("[heap] ${q.name} n=$size jvm=${jvm}MB js=${js}MB")
+                val min = HeapMin(if ("jvm" in engines) jvmMin(q.name) else null, if ("js" in engines && q.jsRunsAt(size)) jsMin(q.name) else null)
+                heapRows += heapRow(q.name, size, min, parse)
+                System.err.println("[heap] ${q.name} n=$size jvm=${min.jvm}MB js=${min.js}MB")
             }
         }
     }
     File(dir, "summary.md").writeText(summary(results, dumps, queries, sizes, heapRows))
     System.err.println("summary: ${File(dir, "summary.md").path}")
+}
+
+/** The smallest heaps (MB) of the two engines for one query, null when not run or failing at the maximum. */
+internal class HeapMin(val jvm: Int?, val js: Int?)
+
+internal const val PARSE_ROW = "(только разбор)"
+
+/** Whether [query] needs no more than parsing: equal to [parse] within the bisection resolution (5 %, at least 4 MB). */
+internal fun atParseFloor(query: Int?, parse: Int?): Boolean =
+    query != null && parse != null && kotlin.math.abs(query - parse) <= maxOf(4, parse / 20)
+
+/**
+ * A row of the heap table; a minimum at the parse floor is marked "= разбор": that engine's minimum is set by parsing
+ * the model, not by the query, and says nothing about the query.
+ */
+internal fun heapRow(name: String, size: Int, min: HeapMin, parse: HeapMin?): String {
+    fun cell(v: Int?, floor: Int?) = when {
+        v == null -> "—"
+        parse != null && atParseFloor(v, floor) -> "$v (= разбор)"
+        else -> "$v"
+    }
+    val ratio = if (min.jvm != null && min.js != null) "%.2f".format(min.jvm.toDouble() / min.js) else "—"
+    return "| $name | $size | ${cell(min.jvm, parse?.jvm)} | ${cell(min.js, parse?.js)} | $ratio |"
 }
 
 private fun mb(xmx: String): Int = when {
@@ -113,7 +140,7 @@ private fun summary(results: File, dumps: File, queries: List<Query>, sizes: Lis
         sb.append("| ${q.name} | $size | ${f(jm)} / ${f(num(j, "eval_ms_p95"))} | $jsNote | $speed | ${f(num(j, "alloc_mb_median"))} | ${f(num(j, "heap_peak_mb"))} | $same | ${f(num(j, "loadavg1"))} |\n")
     }
     if (heapRows.isNotEmpty()) {
-        sb.append("\n## Минимальная куча, при которой запрос проходит (бисекция, точность 5 %)\n\n| запрос | размер | JVM `-Xmx`, МБ | V8 `--max-old-space-size`, МБ | JVM / V8 |\n|---|---:|---:|---:|---:|\n")
+        sb.append("\n## Минимальная куча, при которой запрос проходит (бисекция, точность 5 %)\n\nОба движка читают модель из строки. «= разбор» — минимум равен минимуму одного разбора: его задаёт разбор, а не запрос.\n\n| запрос | размер | JVM `-Xmx`, МБ | V8 `--max-old-space-size`, МБ | JVM / V8 |\n|---|---:|---:|---:|---:|\n")
         heapRows.forEach { sb.append(it).append('\n') }
     }
     return sb.toString()
