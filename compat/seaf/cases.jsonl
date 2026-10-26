@@ -5,3 +5,8 @@
 {"id": "tryexecute-5", "note": "an array of arguments", "expr": "$tryexecute(function($a, $b){ $a + $b }, [1, 2])", "json": "{\"success\":true,\"result\":3}"}
 {"id": "tryexecute-6", "note": "null is passed as the argument", "expr": "$tryexecute(function($x){ $type($x) }, null)", "json": "{\"success\":true,\"result\":\"null\"}"}
 {"id": "tryexecute-7", "note": "no arguments", "expr": "$tryexecute(function(){ 1 })", "json": "{\"success\":true,\"result\":1}"}
+{"id": "lookup-1", "note": "an array gives a plain array, also for one value (review RV3-18)", "expr": "$lookup([{\"a\": 1}], \"a\")", "json": "[1]"}
+{"id": "lookup-2", "note": "an array without the key gives []", "expr": "$lookup([{\"b\": 1}], \"a\")", "json": "[]"}
+{"id": "lookup-3", "note": "the one-argument form takes a string or null only", "expr": "$lookup(5)", "input": {"5": "x"}, "json": "undefined"}
+{"id": "lookup-4", "note": "values that are arrays are flattened", "expr": "$lookup([{\"k\": 1}, {\"k\": [2, 3]}], \"k\")", "json": "[1,2,3]"}
+{"id": "manifestschema-1", "note": "no schema at the host gives {}", "expr": "$manifestschema()", "json": "{}"}

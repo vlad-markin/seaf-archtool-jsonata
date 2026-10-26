@@ -130,4 +130,23 @@ class ReviewRound3SeafTest {
         assertEquals("undefined", str(quiet.evaluate(quiet.compile("${'$'}log(\"x\", \"tag\")"), null)))
         assertTrue(off.records.isEmpty())
     }
+
+    @Test
+    fun `RV3-18 lookup allowedValues and manifestschema as the core`() {
+        val env = SeafEnvironment.create(SeafEnvironmentTest.NoHost)
+        fun eval(expr: String, input: String? = null) = str(env.evaluate(env.compile(expr), input?.let { json(it) }))
+        assertEquals("[1]", eval("${'$'}lookup([{\"a\":1}], \"a\")"))
+        assertEquals("[]", eval("${'$'}lookup([{\"b\":1}], \"a\")"))
+        assertEquals("undefined", eval("${'$'}lookup(5)", "{\"5\":\"x\"}"))
+        assertEquals("\"x\"", eval("${'$'}lookup(\"5\")", "{\"5\":\"x\"}"))
+        assertEquals("null", eval("${'$'}lookup(null)", "{\"5\":\"x\"}"))
+        assertEquals("[1,2,3]", eval("${'$'}lookup([{\"k\":1},{\"k\":[2,3]}], \"k\")"))
+        assertEquals("1", eval("${'$'}lookup({\"a\":1}, \"a\")"))
+        // allowedValues only inside params
+        val violation = eval("${'$'}jsonschema({\"enum\":[1,2]})(3)[0]")
+        assertTrue(violation.contains("\"params\":{\"allowedValues\":[1,2]}"), violation)
+        assertEquals("[\"instancePath\",\"schemaPath\",\"keyword\",\"params\",\"message\"]", eval("${'$'}keys(${'$'}jsonschema({\"enum\":[1,2]})(3)[0])"))
+        // no schema at the host
+        assertEquals("{}", eval("${'$'}manifestschema()"))
+    }
 }

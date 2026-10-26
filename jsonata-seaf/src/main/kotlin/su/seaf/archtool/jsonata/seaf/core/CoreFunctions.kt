@@ -51,7 +51,8 @@ internal class CoreFunctions(private val host: SeafHost) {
         def(registry, "get", null) { c, a -> store(c)[key(a.getOrNull(0))] }
         def(registry, "log", null, sideEffects = true) { _, a -> log(a) }
         def(registry, "parsesource", null, sideEffects = true) { c, a -> host.loadSource(c.root, a.getOrNull(0), c.attribute(SeafEnvironment.REQUEST) as? SeafRequest, c) }
-        def(registry, "manifestschema", null) { _, _ -> schema() }
+        // no schema at the host: {} as the core (review RV3-18)
+        def(registry, "manifestschema", null) { _, _ -> schema() ?: ObjectValue() }
         def(registry, "versions", null) { _, _ -> host.versions() }
     }
 
@@ -63,9 +64,11 @@ internal class CoreFunctions(private val host: SeafHost) {
 
     /**
      * The core's `$lookup` replaces the standard one: a `null` key gives `null` (the standard function fails with
-     * T0410), one argument looks the key up in the context, an array collects and flattens the values.
+     * T0410), one argument (a string or `null` only) looks the key up in the context, an array collects and flattens
+     * the values into a plain array, `[]` when there are none (review RV3-18).
      */
     private fun lookup(c: CallContext, a: List<Value?>): Value? {
+        if (a.size <= 1 && a.getOrNull(0) !is StringValue && a.getOrNull(0) != NullValue) return null
         val (obj, key) = if (a.size <= 1) c.input to a.getOrNull(0) else a[0] to a[1]
         if (key == NullValue) return NullValue
         val name = keyText(key) ?: return null
@@ -74,7 +77,8 @@ internal class CoreFunctions(private val host: SeafHost) {
 
     private fun lookupIn(obj: Value?, key: String): Value? = when (obj) {
         is ArrayValue -> {
-            val out = ArrayValue.sequence()
+            // a plain array, not a sequence: one value stays an array, none gives []
+            val out = ArrayValue()
             for (i in 0 until obj.size) {
                 when (val r = lookupIn(obj.getOrNull(i), key)) {
                     null -> {}
@@ -82,7 +86,7 @@ internal class CoreFunctions(private val host: SeafHost) {
                     else -> out.add(r)
                 }
             }
-            if (out.size == 0) null else out
+            out
         }
         is ObjectValue -> obj[key]
         else -> null
@@ -159,11 +163,8 @@ internal class CoreFunctions(private val host: SeafHost) {
         val errors = violations.filter { it.keyword != "if" }
         if (errors.isEmpty()) return BooleanValue.TRUE
         val out = ArrayValue(errors.size)
-        for (v in errors) {
-            val o = v.toValue()
-            (v.params["allowedValues"])?.let { o.put("allowedValues", it) }
-            out.add(o)
-        }
+        // as the core: allowedValues stays inside params only (review RV3-18)
+        for (v in errors) out.add(v.toValue())
         return out
     }
 
