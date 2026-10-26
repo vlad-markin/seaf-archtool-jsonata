@@ -302,18 +302,50 @@ internal class EvalContext(
     /** Remaining time before the deadline in nanoseconds, [Long.MAX_VALUE] without one. */
     fun remainingNanos(): Long = if (deadline == 0L) Long.MAX_VALUE else maxOf(0L, deadline + pausedNanos - System.nanoTime())
 
-    /** Before a host function runs: a cancellation now interrupts this thread. */
-    fun enterHost() {
+    /**
+     * Host calls in progress: a host function can call back into JSONata ([CallContext.call]), which calls another host
+     * function. The state stays IN_HOST until the outermost one returns (review RV3-24).
+     */
+    private var hostDepth = 0
+
+    /**
+     * Before a host function runs: a cancellation now interrupts this thread. Returns the thread of an enclosing host
+     * call, which [exitHost] restores.
+     */
+    fun enterHost(): Thread? {
+        val outer = hostThread
         hostThread = Thread.currentThread()
-        if (!state.compareAndSet(RUNNING, IN_HOST)) return
+        if (hostDepth++ > 0) return outer
+        if (!state.compareAndSet(RUNNING, IN_HOST)) return outer
         if (isCancelledByToken()) cancelFromToken()
+        return outer
+    }
+
+    /**
+     * A nested host call ended ([hostDepth] is still positive): the enclosing call stays IN_HOST on its thread. When a
+     * cancellation interrupted this call, its flag is cleared here and the enclosing call is interrupted in turn; true
+     * then (the caller fails with X0009).
+     */
+    private fun exitNested(outer: Thread?): Boolean {
+        hostThread = outer
+        while (state.get() == INTERRUPTING) Thread.onSpinWait()
+        if (state.get() != INTERRUPTED) return false
+        Thread.interrupted()
+        state.set(IN_HOST)
+        cancelFromToken()
+        return true
     }
 
     /**
      * After a host function returned or threw: back to RUNNING, or, when a cancellation interrupted the call, wait
-     * until the interrupt is delivered, clear this thread's flag and fail with X0009.
+     * until the interrupt is delivered, clear this thread's flag and fail with X0009. [outer] is what [enterHost] gave.
      */
-    fun exitHost() {
+    fun exitHost(outer: Thread?) {
+        if (--hostDepth > 0) {
+            if (exitNested(outer)) throw cancelled(null)
+            return
+        }
+        hostThread = outer
         if (state.compareAndSet(IN_HOST, RUNNING)) return
         if (state.get() == RUNNING || state.get() == DONE) return
         while (state.get() == INTERRUPTING) Thread.onSpinWait()
@@ -326,7 +358,9 @@ internal class EvalContext(
      * After a host function failed with InterruptedException: back to RUNNING; true when the interrupt came from the
      * token (then this thread's flag is cleared), false when the host interrupted the thread itself.
      */
-    fun exitHostInterrupted(): Boolean {
+    fun exitHostInterrupted(outer: Thread?): Boolean {
+        if (--hostDepth > 0) return exitNested(outer) || isCancelledByToken()
+        hostThread = outer
         if (state.compareAndSet(IN_HOST, RUNNING)) return isCancelledByToken()
         while (state.get() == INTERRUPTING) Thread.onSpinWait()
         Thread.interrupted()

@@ -125,7 +125,7 @@ internal object Evaluator {
         // a debugger watch expression must not change anything (design §2.5)
         if (ctx.options.watch && proc.sideEffects) throw JsonataException("X0011", value = StringValue.of(proc.name))
         if (proc.source == su.seaf.archtool.jsonata.FunctionSource.STDLIB) return proc.implementation.invoke(c, args)
-        ctx.enterHost()
+        val outer = ctx.enterHost()
         var exited = false
         try {
             return proc.implementation.invoke(c, args)
@@ -135,7 +135,7 @@ internal object Evaluator {
             // a blocking host call was interrupted: by the token (its interrupt is consumed) or by the host itself
             // (the flag is restored for the host)
             exited = true
-            val byToken = ctx.exitHostInterrupted()
+            val byToken = ctx.exitHostInterrupted(outer)
             if (!byToken) Thread.currentThread().interrupt()
             throw ctx.cancelled(e)
         } catch (e: RuntimeException) {
@@ -144,7 +144,7 @@ internal object Evaluator {
             if (callNode != null) ctx.locate(e, callNode)
             throw e
         } finally {
-            if (!exited) ctx.exitHost()
+            if (!exited) ctx.exitHost(outer)
         }
     }
 

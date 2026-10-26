@@ -457,4 +457,37 @@ class ReviewRound3Test {
             assertTrue(work4 <= 5 * work1, "$expr: work $work1 -> $work4")
         }
     }
+
+    @Test
+    fun `RV3-24 a nested host call keeps the outer one cancellable`() {
+        val registry = su.seaf.archtool.jsonata.FunctionRegistry.create()
+            .register("outer", "<f:x>", { c, a ->
+                c.call(a[0] as su.seaf.archtool.jsonata.value.FunctionValue, emptyList())
+                Thread.sleep(3000)
+                null
+            })
+            .register("inner", null, { _, _ -> null })
+            .register("slowInner", null, { _, _ -> Thread.sleep(3000); null })
+            .register("plain", null, { _, _ -> Thread.sleep(3000); null })
+            .freeze()
+        fun cancelledAfter(expr: String): Long {
+            val compiled = Jsonata.compile(expr, su.seaf.archtool.jsonata.CompileOptions(registry))
+            val token = su.seaf.archtool.jsonata.CancellationToken()
+            Thread {
+                Thread.sleep(200)
+                token.cancel()
+            }.start()
+            val t0 = System.nanoTime()
+            val e = kotlin.test.assertFailsWith<JsonataException>(expr) { compiled.evaluate(null, emptyMap(), EvaluationOptions(cancellation = token)) }
+            assertEquals("X0009", e.code, expr)
+            assertTrue(!Thread.currentThread().isInterrupted, "an interrupt flag is left")
+            return (System.nanoTime() - t0) / 1_000_000
+        }
+        // the control: one blocking host call
+        assertTrue(cancelledAfter("\$plain()") < 1000)
+        // a nested host call returned, the outer one blocks
+        assertTrue(cancelledAfter("\$outer(function(){ \$inner() })") < 1000)
+        // the cancellation comes while the nested one blocks
+        assertTrue(cancelledAfter("\$outer(function(){ \$slowInner() })") < 1000)
+    }
 }
