@@ -574,4 +574,16 @@ class ReviewRound3Test {
             assertTrue(ms < 200, "$expr: D1012 after $ms ms")
         }
     }
+
+    @Test
+    fun `RV3-28 a named reference before its group matches the empty string`() {
+        // values of jsonata-js 2.2.2
+        assertEquals("\"a\"", eval("\$match(\"a\", /\\k<x>(?<x>a)/).match"))
+        assertEquals("\"aa\"", eval("\$match(\"aa\", /(?<x>a)\\k<x>/).match"))
+        assertEquals("\"aba\"", eval("\$match(\"aba\", /(?:\\k<x>b|(?<x>a))+/).match"))
+        assertEquals("\"x[a]\"", eval("\$replace(\"xa\", /\\k<y>(?<y>a)/, \"[\$1]\")"))
+        // the same with the u flag (JSON Schema patterns of manifest functions)
+        assertTrue(su.seaf.archtool.jsonata.JsRegexes.compile("^\\k<x>(?<x>a)\$", "u").test("a"))
+        assertTrue(su.seaf.archtool.jsonata.JsRegexes.compile("^(?<x>a)\\k<x>\$", "u").test("aa"))
+    }
 }

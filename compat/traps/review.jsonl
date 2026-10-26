@@ -20,3 +20,6 @@
 {"id": "RV3-14#2", "tags": ["review"], "expr": "$match(\"x.-a\", /[.-\\w]+/).match"}
 {"id": "RV3-14#3", "tags": ["review"], "expr": "$match(\"a -1\", /[\\s-\\d]+/).match"}
 {"id": "RV3-14#4", "tags": ["review"], "expr": "$match(\"5-z\", /[\\d-z]+/).match"}
+{"id": "RV3-28#1", "tags": ["review"], "expr": "$match(\"a\", /\\k<x>(?<x>a)/).match"}
+{"id": "RV3-28#2", "tags": ["review"], "expr": "$match(\"aba\", /(?:\\k<x>b|(?<x>a))+/).match"}
+{"id": "RV3-28#3", "tags": ["review"], "expr": "$replace(\"xa\", /\\k<y>(?<y>a)/, \"[$1]\")"}

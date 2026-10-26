@@ -50,6 +50,10 @@ class TrapsTest {
         "RV3-14#2" to "json \"x.-a\"",
         "RV3-14#3" to "json \" -1\"",
         "RV3-14#4" to "json \"5-z\"",
+        // review RV3-28: a named reference before its group matches the empty string
+        "RV3-28#1" to "json \"a\"",
+        "RV3-28#2" to "json \"aba\"",
+        "RV3-28#3" to "json \"x[a]\"",
     )
 
     private fun outcome(c: com.fasterxml.jackson.databind.JsonNode): String {

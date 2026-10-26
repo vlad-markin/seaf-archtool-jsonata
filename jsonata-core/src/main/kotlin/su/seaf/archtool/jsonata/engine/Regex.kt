@@ -296,7 +296,7 @@ internal object JsRegexTranslator {
                     if (end < 0) throw IllegalArgumentException("Invalid named reference")
                     val name = src.substring(i + 1, end)
                     val mapped = names[name] ?: throw IllegalArgumentException("Invalid named capture referenced")
-                    sb.append("\\k<").append(mapped).append('>')
+                    namedReference(sb, mapped)
                     i = end + 1
                 } else {
                     sb.append('k')
@@ -388,7 +388,7 @@ internal object JsRegexTranslator {
                 val end = src.indexOf('>', i)
                 val name = if (end > 0) src.substring(i + 1, end) else null
                 val mapped = name?.let { names[it] } ?: throw IllegalArgumentException("Invalid named capture referenced")
-                sb.append("\\k<").append(mapped).append('>')
+                namedReference(sb, mapped)
                 return end + 1
             }
             '0' -> {
@@ -486,6 +486,16 @@ internal object JsRegexTranslator {
             }
             else -> null
         }
+    }
+
+    /**
+     * `\k<name>` of the group renamed [mapped]. A reference before the group in the pattern can never see a capture
+     * (JS resets the captures of a quantified atom on each iteration), so it matches the empty string, as in JS;
+     * java.util.regex rejects such a reference (review RV3-28). The group is opened when its `(?<gN>` is already in
+     * [sb]: literal parentheses are always escaped there.
+     */
+    private fun namedReference(sb: StringBuilder, mapped: String) {
+        if (sb.indexOf("(?<$mapped>") >= 0) sb.append("\\k<").append(mapped).append('>') else sb.append("(?:)")
     }
 
     private fun Char.isHexDigitChar(): Boolean = this in '0'..'9' || this in 'a'..'f' || this in 'A'..'F'
