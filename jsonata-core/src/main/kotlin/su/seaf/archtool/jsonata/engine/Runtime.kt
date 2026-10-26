@@ -229,7 +229,8 @@ internal class EvalContext(
 
     /** Evaluation steps so far (nodes entered). */
     @JvmField var steps: Long = 0
-    private var nextCheck: Long = CHECK_INTERVAL
+    // a small step budget is checked from the first step on (review RV3-31)
+    private var nextCheck: Long = if (maxSteps > 0) minOf(CHECK_INTERVAL, maxSteps + 1) else CHECK_INTERVAL
 
     private fun slowPath() {
         if (maxSteps > 0) {

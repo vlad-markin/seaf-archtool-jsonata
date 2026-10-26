@@ -586,4 +586,20 @@ class ReviewRound3Test {
         assertTrue(su.seaf.archtool.jsonata.JsRegexes.compile("^\\k<x>(?<x>a)\$", "u").test("a"))
         assertTrue(su.seaf.archtool.jsonata.JsRegexes.compile("^(?<x>a)\\k<x>\$", "u").test("aa"))
     }
+
+    @Test
+    fun `RV3-31 a small step budget is checked from the first step`() {
+        fun run(expr: String, steps: Long): String = try {
+            JsonWriter.stringify(Jsonata.compile(expr).evaluate(null, emptyMap(), EvaluationOptions(budgets = su.seaf.archtool.jsonata.Budgets(maxSteps = steps)))!!)
+        } catch (e: JsonataException) {
+            e.code
+        }
+        // `1` is one step, `1+1+1` five (three numbers, two operators)
+        assertEquals("1", run("1", 1))
+        assertEquals("X0010", run("1+1+1", 1))
+        assertEquals("1", run("1", 2))
+        assertEquals("X0010", run("1+1+1", 2))
+        assertEquals("X0010", run("1+1+1", 4))
+        assertEquals("3", run("1+1+1", 5))
+    }
 }
