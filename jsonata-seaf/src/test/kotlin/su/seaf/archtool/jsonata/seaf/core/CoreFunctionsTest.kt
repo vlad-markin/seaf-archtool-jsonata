@@ -93,7 +93,7 @@ class CoreFunctionsTest {
         assertEquals("""{"success":true,"result":[1,2]}""", eval("\$tryexecute(function(\$a){ \$a }, [[1, 2]])"))
         assertEquals("""{"success":true}""", eval("\$tryexecute(function(){ \$nothing })"))
         // a host exception: its message
-        assertEquals("""{"success":false,"result":null,"error":"source is not allowed"}""", eval("\$tryexecute(\$parsesource, \"fail\")"))
+        assertEquals("""{"success":false,"result":null,"error":"source is not allowed"}""", eval("\$tryexecute(\$parsesource, [\"fail\"])"))
         // D2014 is an error of the expression
         assertTrue(eval("\$tryexecute(function(){ [1..10000001] })").contains("\"success\":false"))
         // not caught: depth, deadline, budgets, cancellation

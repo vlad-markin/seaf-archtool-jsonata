@@ -104,11 +104,13 @@ internal class CoreFunctions(private val host: SeafHost) {
      * catch its own limits (CAP-13 p. 8).
      */
     private fun tryExecute(c: CallContext, a: List<Value?>): Value {
-        val f = a.getOrNull(0) as? FunctionValue ?: return failure("The first argument of \$tryexecute must be a function")
+        val f = a.getOrNull(0) as? FunctionValue ?: return failure("\$tryexecute expects a function as its first argument")
+        // as the core: the arguments are an array; undefined calls without arguments, null is passed as is (review RV3-16)
         val args: List<Value?> = when (val x = a.getOrNull(1)) {
             null -> emptyList()
             is ArrayValue -> List(x.size) { x.getOrNull(it) }
-            else -> listOf(x)
+            is NullValue -> listOf(x)
+            else -> return failure("\$tryexecute expects an array of arguments as its second argument")
         }
         return try {
             val r = c.call(f, args)

@@ -1,0 +1,7 @@
+{"id": "tryexecute-1", "note": "a value that is not an array as the arguments (review RV3-16)", "expr": "$tryexecute(function($x){ $x }, 1)", "json": "{\"success\":false,\"result\":null}", "ignore": ["error"]}
+{"id": "tryexecute-2", "note": "a string as the arguments", "expr": "$tryexecute(function($x){ $x }, \"a\")", "json": "{\"success\":false,\"result\":null}", "ignore": ["error"]}
+{"id": "tryexecute-3", "note": "an object as the arguments", "expr": "$tryexecute(function($x){ $x }, {\"a\": 1})", "json": "{\"success\":false,\"result\":null}", "ignore": ["error"]}
+{"id": "tryexecute-4", "note": "the first argument is not a function", "expr": "$tryexecute(1, [])", "json": "{\"success\":false,\"result\":null}", "ignore": ["error"]}
+{"id": "tryexecute-5", "note": "an array of arguments", "expr": "$tryexecute(function($a, $b){ $a + $b }, [1, 2])", "json": "{\"success\":true,\"result\":3}"}
+{"id": "tryexecute-6", "note": "null is passed as the argument", "expr": "$tryexecute(function($x){ $type($x) }, null)", "json": "{\"success\":true,\"result\":\"null\"}"}
+{"id": "tryexecute-7", "note": "no arguments", "expr": "$tryexecute(function(){ 1 })", "json": "{\"success\":true,\"result\":1}"}

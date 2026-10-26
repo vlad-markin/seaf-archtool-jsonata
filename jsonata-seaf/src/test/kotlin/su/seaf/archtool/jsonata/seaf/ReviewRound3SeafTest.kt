@@ -94,4 +94,16 @@ class ReviewRound3SeafTest {
         assertEquals(json(ajv).let { (it as su.seaf.archtool.jsonata.value.ArrayValue).map { v -> str(v) }.sorted() },
             (json(engine) as su.seaf.archtool.jsonata.value.ArrayValue).map { v -> str(v) }.sorted())
     }
+
+    @Test
+    fun `RV3-16 tryexecute checks its arguments as the core`() {
+        val env = SeafEnvironment.create(SeafEnvironmentTest.NoHost)
+        fun eval(expr: String) = str(env.evaluate(env.compile(expr), null))
+        assertEquals("""{"success":false,"result":null,"error":"${'$'}tryexecute expects an array of arguments as its second argument"}""", eval("${'$'}tryexecute(function(${'$'}x){ ${'$'}x }, 1)"))
+        assertEquals("""{"success":false,"result":null,"error":"${'$'}tryexecute expects a function as its first argument"}""", eval("${'$'}tryexecute(1, [])"))
+        // an array, null and no arguments as before
+        assertEquals("""{"success":true,"result":5}""", eval("${'$'}tryexecute(function(${'$'}x){ ${'$'}x }, [5])"))
+        assertEquals("""{"success":true,"result":"null"}""", eval("${'$'}tryexecute(function(${'$'}x){ ${'$'}type(${'$'}x) }, null)"))
+        assertEquals("""{"success":true,"result":1}""", eval("${'$'}tryexecute(function(){ 1 })"))
+    }
 }
