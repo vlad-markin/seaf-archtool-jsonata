@@ -126,4 +126,56 @@ class ReviewRound3Test {
         assertEquals(0, wrong.get())
         assertTrue(expected.startsWith("\"{\\\"k1\\\":1,\\\"k3\\\":3"), expected)
     }
+
+    private class HostFailure : IllegalStateException("boom")
+
+    @Test
+    fun `RV3-4 a partially applied host function takes the path of a direct call`() {
+        val failure = HostFailure()
+        val effects = AtomicInteger()
+        val started = java.util.concurrent.CountDownLatch(1)
+        val registry = su.seaf.archtool.jsonata.FunctionRegistry.create()
+            .register("boom", "<n:n>", { _, _ -> throw failure })
+            .register(su.seaf.archtool.jsonata.FunctionDefinition("fx", "<n:n>", { _, a -> effects.incrementAndGet(); a[0] },
+                su.seaf.archtool.jsonata.FunctionDoc(su.seaf.archtool.jsonata.LocalizedText.ru("с побочным эффектом")), sideEffects = true))
+            .register("block", "<n:n>", { _, a -> started.countDown(); Thread.sleep(5000); a[0] })
+            .freeze()
+        fun compile(e: String) = Jsonata.compile(e, su.seaf.archtool.jsonata.CompileOptions(registry))
+        // a host exception leaves as the same object
+        kotlin.test.assertSame(failure, kotlin.test.assertFailsWith<HostFailure> { compile("\$boom(?)(1)").evaluate(null) })
+        // the listener sees the native call
+        val names = ArrayList<String>()
+        val listener = object : su.seaf.archtool.jsonata.debug.EvaluationListener {
+            override fun nativeEnter(name: String, source: su.seaf.archtool.jsonata.FunctionSource, args: List<Value?>, frame: su.seaf.archtool.jsonata.debug.DebugFrame) { names += name }
+        }
+        assertEquals("5", JsonWriter.stringify(compile("\$fx(?)(5)").evaluate(null, emptyMap(), EvaluationOptions(listener = listener))))
+        assertEquals(listOf("fx"), names)
+        // cancellation interrupts a blocking host function called through a partial application
+        val token = su.seaf.archtool.jsonata.CancellationToken()
+        val result = arrayOfNulls<Throwable>(1)
+        val t = Thread { result[0] = runCatching { compile("\$block(?)(1)").evaluate(null, emptyMap(), EvaluationOptions(cancellation = token)) }.exceptionOrNull() }
+        t.start()
+        started.await()
+        val t0 = System.nanoTime()
+        token.cancel()
+        t.join(5000)
+        assertEquals("X0009", (result[0] as JsonataException).code)
+        assertTrue((System.nanoTime() - t0) / 1_000_000 < 1000)
+        // a watch expression may not call a function with side effects through a partial application
+        val events = object : su.seaf.archtool.jsonata.debug.DebugEvents {
+            val stops = java.util.concurrent.LinkedBlockingQueue<Any>()
+            override fun stopped(reason: su.seaf.archtool.jsonata.debug.StopReason, at: su.seaf.archtool.jsonata.debug.NodeInfo) { stops.put(at) }
+            override fun terminated(outcome: su.seaf.archtool.jsonata.debug.EvalOutcome) { stops.put(outcome) }
+        }
+        val session = su.seaf.archtool.jsonata.debug.DebugSession(compile("[1, 2].(\$ * 2)"), events)
+        session.setBreakpoints("main", listOf(su.seaf.archtool.jsonata.debug.BreakpointSpec(1, 11)))
+        val run = Thread { runCatching { session.run(null) } }
+        run.start()
+        events.stops.poll(10, java.util.concurrent.TimeUnit.SECONDS)
+        val before = effects.get()
+        assertEquals("X0011", (session.evaluate(0, "\$fx(?)(5)").error as JsonataException).code)
+        assertEquals(before, effects.get())
+        session.terminate()
+        run.join(5000)
+    }
 }

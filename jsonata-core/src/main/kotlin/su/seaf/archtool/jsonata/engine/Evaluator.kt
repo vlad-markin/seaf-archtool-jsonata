@@ -163,7 +163,7 @@ internal object Evaluator {
                     val listener = env.ctx.listener
                     if (listener == null) c.checked(invokeNative(proc, c, validated, env.ctx, callNode)) else invokeObserved(listener, proc, c, validated, env, callNode)
                 }
-                is PartialNative -> applyPartialNative(proc, validated, env)
+                is PartialNative -> applyPartialNative(proc, validated, env, callNode)
                 is InternalFunction -> proc.body(CallContextImpl(env, input), validated)
                 is Transformer -> transform(proc, validated.getOrNull(0), env)
                 else -> throw JsonataException("T1006")
@@ -230,7 +230,7 @@ internal object Evaluator {
         return "λ"
     }
 
-    private fun applyPartialNative(proc: PartialNative, args: List<Value?>, env: Frame): Value? {
+    private fun applyPartialNative(proc: PartialNative, args: List<Value?>, env: Frame, callNode: Node?): Value? {
         val full = ArrayList<Value?>(proc.bound.size)
         var k = 0
         for (b in proc.bound) {
@@ -250,7 +250,11 @@ internal object Evaluator {
             if (env.ctx.options.deviations != null && (v.size != full.size || v.indices.any { v[it] !== full[it] })) env.ctx.deviation(Deviations.PARTIAL_SIGNATURE.id, null)
             v
         } ?: full
-        return native.implementation.invoke(CallContextImpl(env, null), validated)
+        // the same path as a direct call (review RV3-4): watch check, host state for cancellation, host exceptions left
+        // unchanged and located, listener events
+        val c = CallContextImpl(env, null)
+        val listener = env.ctx.listener
+        return if (listener == null) c.checked(invokeNative(native, c, validated, env.ctx, callNode)) else invokeObserved(listener, native, c, validated, env, callNode)
     }
 
     /** jsonata.js: partialApplyProcedure. */
