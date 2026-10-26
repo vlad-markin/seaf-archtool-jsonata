@@ -16,6 +16,7 @@ internal object Encoding {
         var nonAscii = false
         var i = 0
         while (i < s.length) {
+            ctx?.tick()
             val c = s[i]
             var cp = c.code
             if (Character.isHighSurrogate(c) && i + 1 < s.length && Character.isLowSurrogate(s[i + 1])) {
@@ -123,10 +124,11 @@ internal object Encoding {
     private const val RESERVED = ";/?:@&=+$,#"
 
     /** ECMA-262 Encode (encodeURIComponent / encodeURI); a lone surrogate raises D3140. */
-    fun encodeUri(s: String, component: Boolean, functionName: String): String {
+    fun encodeUri(s: String, component: Boolean, functionName: String, ctx: EvalContext? = null): String {
         val sb = StringBuilder()
         var i = 0
         while (i < s.length) {
+            ctx?.tick()
             val c = s[i]
             if (c < '\u0080' && (c.isLetterOrDigit() || c in UNRESERVED || (!component && c in RESERVED))) {
                 sb.append(c)
@@ -152,11 +154,12 @@ internal object Encoding {
     }
 
     /** ECMA-262 Decode (decodeURIComponent / decodeURI); malformed sequences raise D3140. */
-    fun decodeUri(s: String, component: Boolean, functionName: String): String {
+    fun decodeUri(s: String, component: Boolean, functionName: String, ctx: EvalContext? = null): String {
         val sb = StringBuilder()
         var k = 0
         val n = s.length
         while (k < n) {
+            ctx?.tick()
             val c = s[k]
             if (c != '%') {
                 sb.append(c)

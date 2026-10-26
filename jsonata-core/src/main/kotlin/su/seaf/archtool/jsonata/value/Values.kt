@@ -4,13 +4,17 @@ package su.seaf.archtool.jsonata.value
 public object Values {
     /** utils.js: isDeepEqual. Undefined equals only undefined; numbers compare as JS `===`; object key order is ignored. */
     @JvmStatic
-    public fun deepEquals(lhs: Value?, rhs: Value?): Boolean {
+    public fun deepEquals(lhs: Value?, rhs: Value?): Boolean = deepEquals(lhs, rhs, null)
+
+    /** [deepEquals] calling [poll] for every pair compared (the checkpoint of an evaluation, review RV3-27). */
+    internal fun deepEquals(lhs: Value?, rhs: Value?, poll: (() -> Unit)?): Boolean {
         // pairs still to compare; no recursion, so nesting depth is limited only by memory
         val left = ArrayList<Value?>()
         val right = ArrayList<Value?>()
         left += lhs
         right += rhs
         while (left.isNotEmpty()) {
+            poll?.invoke()
             val a = left.removeAt(left.size - 1)
             val b = right.removeAt(right.size - 1)
             if (a === b) continue
@@ -21,6 +25,7 @@ public object Values {
                 is ArrayValue -> {
                     if (b !is ArrayValue || a.size != b.size) return false
                     for (i in a.size - 1 downTo 0) {
+                        poll?.invoke()
                         left += a.getOrNull(i)
                         right += b.getOrNull(i)
                     }
@@ -29,6 +34,7 @@ public object Values {
                     if (b !is ObjectValue || a.size != b.size) return false
                     val keys = a.keys
                     for (i in keys.size - 1 downTo 0) {
+                        poll?.invoke()
                         val r = b[keys[i]] ?: return false
                         left += a[keys[i]]
                         right += r

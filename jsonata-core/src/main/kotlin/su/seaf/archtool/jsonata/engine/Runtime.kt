@@ -267,6 +267,9 @@ internal class EvalContext(
         if ((++ticks and 1023) == 0) checkpoint()
     }
 
+    /** [tick] as a function value, for loops outside the engine package (`Values.deepEquals`). */
+    @JvmField val ticker: () -> Unit = { tick() }
+
     /** Cancellation (token or interrupt of the current thread) and the deadline. */
     fun checkpoint() {
         if (token != null && token.isCancelled) throw cancelled(null)

@@ -103,14 +103,14 @@ internal object StandardLibrary {
         }
         def(r, "type", "<x:s>", 1) { _, a -> type(a[0]) }
         def(r, "sort", "<af?:a>", 2) { c, a -> sort(c, a[0], a.getOrNull(1)) }
-        def(r, "shuffle", "<a:a>", 1) { _, a -> shuffle(a[0]) }
+        def(r, "shuffle", "<a:a>", 1) { c, a -> shuffle(ctx(c), a[0]) }
         def(r, "distinct", "<x:x>", 1) { c, a -> distinct(ctx(c), a[0]) }
         def(r, "base64encode", "<s-:s>", 1) { c, a -> str(a[0])?.let { StringValue.of(Encoding.base64encode(it, ctx(c))) } }
         def(r, "base64decode", "<s-:s>", 1) { c, a -> str(a[0])?.let { StringValue.of(Encoding.base64decode(it, ctx(c))) } }
-        def(r, "encodeUrlComponent", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.encodeUri(it, true, "encodeUrlComponent")) } }
-        def(r, "encodeUrl", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.encodeUri(it, false, "encodeUrl")) } }
-        def(r, "decodeUrlComponent", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.decodeUri(it, true, "decodeUrlComponent")) } }
-        def(r, "decodeUrl", "<s-:s>", 1) { _, a -> str(a[0])?.let { StringValue.of(Encoding.decodeUri(it, false, "decodeUrl")) } }
+        def(r, "encodeUrlComponent", "<s-:s>", 1) { c, a -> str(a[0])?.let { StringValue.of(Encoding.encodeUri(it, true, "encodeUrlComponent", ctx(c))) } }
+        def(r, "encodeUrl", "<s-:s>", 1) { c, a -> str(a[0])?.let { StringValue.of(Encoding.encodeUri(it, false, "encodeUrl", ctx(c))) } }
+        def(r, "decodeUrlComponent", "<s-:s>", 1) { c, a -> str(a[0])?.let { StringValue.of(Encoding.decodeUri(it, true, "decodeUrlComponent", ctx(c))) } }
+        def(r, "decodeUrl", "<s-:s>", 1) { c, a -> str(a[0])?.let { StringValue.of(Encoding.decodeUri(it, false, "decodeUrl", ctx(c))) } }
         def(r, "eval", "<sx?:x>", 2) { c, a -> eval(c, a[0], a.getOrNull(1)) }
         def(r, "clone", "<(oa)-:o>", 1) { c, a -> Evaluator.clone(a[0], ctx(c)) }
         def(r, "millis", "<:n>", 0) { c, _ -> NumberValue.of(c.timestamp.toDouble()) }
@@ -296,6 +296,7 @@ internal object StandardLibrary {
             }
             var index = s.indexOf(p, position)
             while (index != -1 && (limit == null || count < limit)) {
+                ctx(c).tick()
                 result.append(s, position, index).append(rep)
                 ctx(c).checkString(result.length.toLong())
                 position = index + p.length
@@ -399,8 +400,9 @@ internal object StandardLibrary {
         if (limit != null && limit <= 0) return result
         if (separator is StringValue) {
             val lim = if (limit == null) Long.MAX_VALUE else jsToUint32(limit)
-            for (part in jsSplit(s, separator.value)) {
+            for (part in jsSplit(s, separator.value, ctx(c))) {
                 if (result.size >= lim) break
+                ctx(c).tick()
                 result.add(StringValue.of(part))
             }
             return result
@@ -447,11 +449,12 @@ internal object StandardLibrary {
     }
 
     /** JS `String.prototype.split(separator)` with a string separator. */
-    private fun jsSplit(s: String, sep: String): List<String> {
-        if (sep.isEmpty()) return s.map { it.toString() }
+    private fun jsSplit(s: String, sep: String, ctx: EvalContext): List<String> {
+        if (sep.isEmpty()) return s.map { ctx.tick(); it.toString() }
         val out = ArrayList<String>()
         var p = 0
         while (true) {
+            ctx.tick()
             val q = s.indexOf(sep, p)
             if (q < 0) break
             out += s.substring(p, q)
@@ -729,7 +732,10 @@ internal object StandardLibrary {
             }
         } else if (arg is ObjectValue) {
             val seq = result as ArrayValue
-            for (k in arg.keys) seq.add(ObjectValue.of(k to arg[k]!!))
+            for (k in arg.keys) {
+                ctx(c).tick()
+                seq.add(ObjectValue.of(k to arg[k]!!))
+            }
         } else {
             result = arg
         }
@@ -742,7 +748,10 @@ internal object StandardLibrary {
         for (i in 0 until arr.size) {
             ctx.tick()
             val o = arr.raw(i) as? ObjectValue ?: continue
-            o.forEach { k, v -> result.put(k, v) }
+            o.forEach { k, v ->
+                ctx.tick()
+                result.put(k, v)
+            }
         }
         return result
     }
@@ -784,16 +793,17 @@ internal object StandardLibrary {
         return true
     }
 
-    private fun shuffle(arg: Value?): Value? {
+    private fun shuffle(ctx: EvalContext, arg: Value?): Value? {
         val arr = arg as ArrayValue? ?: return null
         if (arr.size <= 1) return arr
         val result = arrayOfNulls<Value>(arr.size)
         for (i in 0 until arr.size) {
+            ctx.tick()
             val j = Math.floor(Math.random() * (i + 1)).toInt()
             if (i != j) result[i] = result[j]
             result[j] = arr.raw(i)
         }
-        return ArrayValue(arr.size).also { out -> result.forEach { out.addNullable(it) } }
+        return ArrayValue(arr.size).also { out -> result.forEach { ctx.tick(); out.addNullable(it) } }
     }
 
     private fun distinct(ctx: EvalContext, arg: Value?): Value? {

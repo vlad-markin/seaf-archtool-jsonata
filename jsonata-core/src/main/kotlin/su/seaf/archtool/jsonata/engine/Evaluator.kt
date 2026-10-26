@@ -993,10 +993,13 @@ internal object Evaluator {
     }
 
     /** jsonata.js: evaluateIncludesExpression — `===` membership. */
-    fun includes(l: Value?, r: Value?): Value {
+    fun includes(l: Value?, r: Value?, ctx: EvalContext? = null): Value {
         if (l == null || r == null) return BooleanValue.FALSE
         if (r !is ArrayValue) return BooleanValue.of(strictEquals(r, l))
-        for (i in 0 until r.size) if (strictEquals(r.raw(i), l)) return BooleanValue.TRUE
+        for (i in 0 until r.size) {
+            ctx?.tick()
+            if (strictEquals(r.raw(i), l)) return BooleanValue.TRUE
+        }
         return BooleanValue.FALSE
     }
 

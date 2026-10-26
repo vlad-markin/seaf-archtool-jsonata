@@ -275,8 +275,8 @@ internal class BinaryNode(ast: AstNode, @JvmField val op: BinaryOp, @JvmField va
         try {
             return when (op) {
                 BinaryOp.ADD, BinaryOp.SUB, BinaryOp.MUL, BinaryOp.DIV, BinaryOp.MOD -> Evaluator.numeric(l, r, op)
-                BinaryOp.EQ -> if (l == null || r == null) BooleanValue.FALSE else BooleanValue.of(su.seaf.archtool.jsonata.value.Values.deepEquals(l, r))
-                BinaryOp.NE -> if (l == null || r == null) BooleanValue.FALSE else BooleanValue.of(!su.seaf.archtool.jsonata.value.Values.deepEquals(l, r))
+                BinaryOp.EQ -> if (l == null || r == null) BooleanValue.FALSE else BooleanValue.of(equal(l, r, env))
+                BinaryOp.NE -> if (l == null || r == null) BooleanValue.FALSE else BooleanValue.of(!equal(l, r, env))
                 BinaryOp.LT, BinaryOp.LE, BinaryOp.GT, BinaryOp.GE -> Evaluator.compare(l, r, op)
                 BinaryOp.CONCAT -> {
                     val ls = if (l != null) Evaluator.string(l, false, env.ctx) else ""
@@ -285,7 +285,7 @@ internal class BinaryNode(ast: AstNode, @JvmField val op: BinaryOp, @JvmField va
                     StringValue.of(ls + rs)
                 }
                 BinaryOp.RANGE -> Evaluator.range(l, r, env)
-                BinaryOp.IN -> Evaluator.includes(l, r)
+                BinaryOp.IN -> Evaluator.includes(l, r, env.ctx)
                 else -> throw IllegalStateException(op.token)
             }
         } catch (e: JsonataException) {
@@ -294,6 +294,9 @@ internal class BinaryNode(ast: AstNode, @JvmField val op: BinaryOp, @JvmField va
             throw e
         }
     }
+
+    /** `=` of two values, through the checkpoint: comparing large structures is a loop (review RV3-27). */
+    private fun equal(l: Value, r: Value, env: Frame): Boolean = su.seaf.archtool.jsonata.value.Values.deepEquals(l, r, env.ctx.ticker)
 }
 
 /** jsonata.js: evaluateUnary '-'. */

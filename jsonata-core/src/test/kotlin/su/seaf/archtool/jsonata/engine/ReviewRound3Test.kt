@@ -553,4 +553,25 @@ class ReviewRound3Test {
         assertEquals(2, profiler.functionProfiles.single { it.name == "boom" }.calls)
         assertEquals(listOf("boom", "boom"), errors)
     }
+
+    @Test
+    fun `RV3-27 library loops pass the checkpoint`() {
+        val big = su.seaf.archtool.jsonata.value.ObjectValue()
+        for (i in 0 until 1_000_000) big.put("k$i", su.seaf.archtool.jsonata.value.NumberValue.of(i.toDouble()))
+        fun nums() = su.seaf.archtool.jsonata.value.ArrayValue(3_000_000).also { a -> for (i in 0 until 3_000_000) a.add(su.seaf.archtool.jsonata.value.NumberValue.of(i.toDouble())) }
+        val text = su.seaf.archtool.jsonata.value.StringValue.of("ab,".repeat(1_000_000))
+        val words = su.seaf.archtool.jsonata.value.StringValue.of("é b".repeat(1_000_000))
+        val bindings: Map<String, Value?> = mapOf("big" to big, "nums" to nums(), "nums2" to nums(), "s" to text, "w" to words)
+        for (expr in listOf(
+            "\$spread(\$big)", "\$merge([\$big, \$big])", "\$shuffle(\$nums)", "\$split(\$s, \",\")", "\$nums = \$nums2",
+            "\$replace(\$s, \",\", \";\")", "\$encodeUrlComponent(\$w)", "\$base64encode(\$w)", "-1 in \$nums",
+        )) {
+            val compiled = Jsonata.compile(expr)
+            val t0 = System.nanoTime()
+            val e = kotlin.test.assertFailsWith<JsonataException>(expr) { compiled.evaluate(null, bindings, EvaluationOptions(timeoutMillis = 5)) }
+            val ms = (System.nanoTime() - t0) / 1_000_000
+            assertEquals("D1012", e.code, expr)
+            assertTrue(ms < 200, "$expr: D1012 after $ms ms")
+        }
+    }
 }
