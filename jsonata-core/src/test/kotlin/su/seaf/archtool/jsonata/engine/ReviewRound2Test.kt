@@ -76,4 +76,27 @@ class ReviewRound2Test {
         assertEquals(0, failures.get(), "exceptions")
         assertEquals(0, wrong.get(), "wrong results")
     }
+
+    private fun wideObject(n: Int): Value = su.seaf.archtool.jsonata.value.ObjectValue().also { o ->
+        for (i in 0 until n) o.put("k$i", su.seaf.archtool.jsonata.value.NumberValue.of(i))
+    }
+
+    @Test
+    fun `RV2-3 deleting many keys in a transform is linear and stops at the deadline`() {
+        val expr = Jsonata.compile("\$count(\$keys(\$ ~> |\$|{}, \$keys(\$)|))")
+        val input = wideObject(30_000)
+        val start = System.nanoTime()
+        assertEquals("0", JsonWriter.stringify(expr.evaluate(input)))
+        assertTrue((System.nanoTime() - start) / 1_000_000 < 1500, "30 000 deletions took too long")
+        // deleting part of the keys keeps the order and the lookups of the others
+        val half = Jsonata.compile("\$keys(\$ ~> |\$|{}, ['k0', 'k2', 'k15']|)")
+        assertEquals((listOf(1) + (3..14) + (16 until 20)).joinToString(",", "[", "]") { "\"k$it\"" }, JsonWriter.stringify(half.evaluate(wideObject(20))))
+        assertEquals("19", evalWith("(\$o := \$ ~> |\$|{}, ['k0', 'k2']|; \$o.k19)", wideObject(20), emptyMap()))
+        // the delete loop passes the checkpoint: D1012 within a small margin
+        val big = wideObject(300_000)
+        val t0 = System.nanoTime()
+        val e = assertFailsWith<JsonataException> { expr.evaluate(big, emptyMap(), EvaluationOptions(timeoutMillis = 100)) }
+        assertEquals("D1012", e.code)
+        assertTrue((System.nanoTime() - t0) / 1_000_000 < 2000)
+    }
 }

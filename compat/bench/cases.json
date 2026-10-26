@@ -140,5 +140,11 @@
   "dataset": null,
   "scale": null,
   "expr": "($f := function($n){ $n = 0 ? 0 : 1 + $f($n - 1) }; $sum([1..2000].$f(200)))"
+ },
+ {
+  "name": "transform deleting 30k keys",
+  "dataset": null,
+  "scale": null,
+  "expr": "($o := $merge([0..29999].{'k' & $: $}); $count($keys($o ~> |$|{}, $keys($)|)))"
  }
 ]

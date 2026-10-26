@@ -294,12 +294,16 @@ internal object Evaluator {
             val owned = IdentityHashMap<Value, Boolean>()
             collectContainers(result, owned, env.ctx)
             for (i in 0 until matches.size) {
+                env.ctx.tick()
                 val match = matches.raw(i)
                 val update = node.update.evaluate(match, env)
                 if (update != null) {
                     if (update !is ObjectValue) throw JsonataException("T2011", node.update.position, value = update)
                     if (match is ObjectValue && owned.containsKey(match)) {
-                        for (k in update.keys) match.put(k, update[k]!!)
+                        for (k in update.keys) {
+                            match.put(k, update[k]!!)
+                            env.ctx.tick()
+                        }
                     }
                 }
                 val delete = node.delete
@@ -309,9 +313,13 @@ internal object Evaluator {
                         val list = if (deletions is ArrayValue) deletions else ArrayValue.sequence(deletions)
                         for (j in 0 until list.size) {
                             if (list.raw(j) !is StringValue) throw JsonataException("T2012", delete.position, value = deletions)
+                            env.ctx.tick()
                         }
                         if (match is ObjectValue && owned.containsKey(match)) {
-                            for (j in 0 until list.size) match.remove((list.raw(j) as StringValue).value)
+                            for (j in 0 until list.size) {
+                                match.remove((list.raw(j) as StringValue).value)
+                                env.ctx.tick()
+                            }
                         }
                     }
                 }

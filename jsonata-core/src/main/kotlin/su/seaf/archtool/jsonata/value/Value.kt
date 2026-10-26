@@ -192,6 +192,35 @@ public class ObjectValue : Value() {
     private var indexKeys = 0
 
     /**
+     * Slots emptied by [remove] and not compacted yet: removing many keys one by one (a transform's delete list) must
+     * stay linear, so a removal only empties its slot and drops the key from the index; the next other operation
+     * compacts once (review RV2-3).
+     */
+    private var removed = 0
+
+    private fun compact() {
+        if (removed == 0) return
+        var j = 0
+        for (i in 0 until count) {
+            val k = keyArray[i] ?: continue
+            keyArray[j] = k
+            valueArray[j] = valueArray[i]
+            j++
+        }
+        for (i in j until count) {
+            keyArray[i] = null
+            valueArray[i] = null
+        }
+        count = j
+        removed = 0
+        if (index != null) {
+            val idx = HashMap<String, Int>(count * 2)
+            for (k in 0 until count) idx[keyArray[k]!!] = k
+            index = idx
+        }
+    }
+
+    /**
      * Positions in JS key order when some keys are array indices (null otherwise: insertion order is JS order),
      * computed on first read. A parsed document is read by many threads (decision 8): the cached orders are immutable
      * and published through volatile fields, so a reader sees them fully built (review RV-7).
@@ -201,8 +230,8 @@ public class ObjectValue : Value() {
 
     override val typeName: String get() = "object"
 
-    public val size: Int get() = count
-    public fun isEmpty(): Boolean = count == 0
+    public val size: Int get() = count - removed
+    public fun isEmpty(): Boolean = count == removed
 
     private fun find(key: String): Int {
         val idx = index
@@ -222,6 +251,7 @@ public class ObjectValue : Value() {
 
     /** Sets a key; only for objects under construction (and for clones being transformed). */
     public fun put(key: String, value: Value) {
+        compact()
         val i = find(key)
         if (i >= 0) {
             valueArray[i] = value
@@ -249,16 +279,10 @@ public class ObjectValue : Value() {
     internal fun remove(key: String) {
         val i = find(key)
         if (i < 0) return
-        System.arraycopy(keyArray, i + 1, keyArray, i, count - i - 1)
-        System.arraycopy(valueArray, i + 1, valueArray, i, count - i - 1)
-        count--
-        keyArray[count] = null
-        valueArray[count] = null
-        if (index != null) {
-            val idx = HashMap<String, Int>(count * 2)
-            for (k in 0 until count) idx[keyArray[k]!!] = k
-            index = idx
-        }
+        keyArray[i] = null
+        valueArray[i] = null
+        index?.remove(key)
+        removed++
         if (isArrayIndex(key)) indexKeys--
         jsOrder = null
         orderedKeys = null
@@ -266,6 +290,7 @@ public class ObjectValue : Value() {
 
     /** Position of the [i]-th key in JS order. */
     private fun position(i: Int): Int {
+        compact()
         if (indexKeys == 0) return i
         val order = jsOrder ?: run {
             val idx = (0 until count).filter { isArrayIndex(keyArray[it]!!) }.sortedBy { keyArray[it]!!.toLong() }
@@ -285,13 +310,14 @@ public class ObjectValue : Value() {
     public val keys: List<String>
         get() {
             orderedKeys?.let { return it }
+            compact()
             val result = java.util.Collections.unmodifiableList(List(count) { keyAt(it) })
             orderedKeys = result
             return result
         }
 
     /** Entries in JS key order. */
-    public val entries: List<Pair<String, Value>> get() = List(count) { keyAt(it) to valueAt(it) }
+    public val entries: List<Pair<String, Value>> get() = List(size) { keyAt(it) to valueAt(it) }
 
     public inline fun forEach(action: (String, Value) -> Unit) {
         for (i in 0 until size) action(keyAt(i), valueAt(i))
@@ -302,6 +328,7 @@ public class ObjectValue : Value() {
     /** Order-independent, consistent with [equals]. */
     override fun hashCode(): Int {
         var h = 0
+        compact()
         for (i in 0 until count) h += keyArray[i].hashCode() xor valueArray[i].hashCode()
         return h
     }
