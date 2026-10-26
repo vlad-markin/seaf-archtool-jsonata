@@ -31,6 +31,46 @@ class DeviationProbeTest {
 
     private fun scan(expr: String): List<String> = Deviations.scan(Jsonata.compile(expr).ast()).map { "${it.id}@${it.position}" }
 
+    private fun hits(expr: String, input: String? = null): List<String> {
+        val r = Recorder()
+        runCatching { eval(expr, input, r) }
+        return r.hits.map { it.first }.distinct()
+    }
+
+    @Test
+    fun `DEV-01 to DEV-08 probes fire where the result may differ (step 1-4)`() {
+        assertEquals(listOf("DEV-01"), hits("(\$r := \$ ~> |\$\$.a|{\"b\":99}|; [\$r, \$\$.a.b])", "{\"a\":{\"b\":1}}"))
+        assertEquals(emptyList(), hits("\$ ~> |a|{\"b\":99}|", "{\"a\":{\"b\":1}}"))
+        assertEquals(listOf("DEV-02"), hits("\$formatInteger(10000000, 'I')"))
+        assertEquals(listOf("DEV-03"), hits("\$count(?)(5)"))
+        assertEquals(listOf("DEV-03"), hits("\$uppercase(?)(1)"))
+        assertEquals(emptyList(), hits("\$uppercase(?)(\"a\")"))
+        assertEquals(listOf("DEV-04"), hits("\$contains(\"a\", /a++/)"))
+        assertEquals(listOf("DEV-05"), hits("\$contains(\"\\uE000\", /x/)"))
+        assertEquals(emptyList(), hits("\$contains(\"abc\", /x/)"))
+        assertEquals(listOf("DEV-07"), hits("\$toMillis(\"2023-11-14T22:13:20\")"))
+        assertEquals(emptyList(), hits("\$toMillis(\"2023-11-14T22:13:20Z\")"))
+        assertEquals(listOf("DEV-08"), hits("x{\"k\": \"v\"}", "{\"x\": []}"))
+        assertEquals(emptyList(), hits("x{\"k\": \"v\"}", "{\"x\": [1]}"))
+    }
+
+    @Test
+    fun `DEV-01 to DEV-08 static rules`() {
+        assertTrue(scan("\$ ~> |\$\$.a|{\"b\":99}|").any { it.startsWith("DEV-01") })
+        assertTrue(scan("\$ ~> |a|{\"b\":99}|").none { it.startsWith("DEV-01") })
+        assertTrue(scan("\$map([1], \$string(?))").any { it.startsWith("DEV-03") })
+        assertTrue(scan("/a++/").any { it.startsWith("DEV-04") })
+        assertTrue(scan("/(?i)a/").any { it.startsWith("DEV-04") })
+        assertTrue(scan("/a+/").none { it.startsWith("DEV-04") })
+        assertTrue(scan("/\uE000/").any { it.startsWith("DEV-05") })
+        assertTrue(scan("/s/i").any { it.startsWith("DEV-06") })
+        assertTrue(scan("/(a)\\2(b)/").any { it.startsWith("DEV-06") })
+        assertTrue(scan("/a/i").none { it.startsWith("DEV-06") })
+        assertTrue(scan("\$toMillis(x)").any { it.startsWith("DEV-07") })
+        assertTrue(scan("\$toMillis(x, '[Y]')").none { it.startsWith("DEV-07") })
+        assertTrue(scan("x{\"k\": \"v\"}").any { it.startsWith("DEV-08") })
+    }
+
     @Test
     fun `DEV-09 the probe fires only when another value of the constructor fails with another code`() {
         val r = Recorder()

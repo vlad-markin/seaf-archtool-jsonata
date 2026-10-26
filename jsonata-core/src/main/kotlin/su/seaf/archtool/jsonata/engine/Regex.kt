@@ -659,7 +659,12 @@ internal class RegexState {
         if (cached != null && lastSubject === str) return cached
         // the checkpoint of this evaluation passes through the subject's charAt, so that backtracking stops on
         // cancellation and the deadline (review RV-8, design §2.4)
-        val m = regex.pattern.matcher(CheckedChars(JsRegexPattern.subject(str), ctx))
+        val subject = JsRegexPattern.subject(str)
+        // a private use character U+E000-U+E7FF of the subject also matches the lone surrogate it stands for (DEV-05)
+        if (ctx.options.deviations != null && str.any { it in '\uE000'..'\uE7FF' }) {
+            ctx.deviation(su.seaf.archtool.jsonata.deviation.Deviations.REGEX_PRIVATE_USE.id, null)
+        }
+        val m = regex.pattern.matcher(CheckedChars(subject, ctx))
         lastSubject = str
         matcher = m
         return m

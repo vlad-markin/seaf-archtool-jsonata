@@ -61,8 +61,13 @@ internal object Evaluator {
             return result
         } catch (_: StackOverflowError) {
             // jsonata-js fails with a JS RangeError (no JSONata code) here
+            ctx.deviation(Deviations.STACK_DEPTH.id, null)
             throw JsonataException("X0002")
         } catch (e: JsonataException) {
+            when (e.code) {
+                "X0002", "X0005" -> ctx.deviation(Deviations.STACK_DEPTH.id, e.position)
+                "X0003" -> ctx.deviation(Deviations.REGEX_SYNTAX.id, e.position)
+            }
             throw e
         } catch (e: RuntimeException) {
             // an exception of a host function leaves unchanged (CAP-9 p. 4); anything else is a bug of the engine
@@ -234,7 +239,17 @@ internal object Evaluator {
         // jsonata-js calls the native implementation without signature checks (applyNativeFunction); the checks are
         // kept here so that native code always sees coerced arguments — they only differ where jsonata-js crashes
         val native = proc.native
-        val validated = native.signature?.let { SignatureValidator.validate(it, full, null) } ?: full
+        val validated = native.signature?.let { sig ->
+            val v = try {
+                SignatureValidator.validate(sig, full, null, env.ctx)
+            } catch (e: JsonataException) {
+                env.ctx.deviation(Deviations.PARTIAL_SIGNATURE.id, null)
+                throw e
+            }
+            // coerced arguments: jsonata-js passes the raw ones (DEV-03)
+            if (env.ctx.options.deviations != null && (v.size != full.size || v.indices.any { v[it] !== full[it] })) env.ctx.deviation(Deviations.PARTIAL_SIGNATURE.id, null)
+            v
+        } ?: full
         return native.implementation.invoke(CallContextImpl(env, null), validated)
     }
 
@@ -301,6 +316,9 @@ internal object Evaluator {
                 val update = node.update.evaluate(match, env)
                 if (update != null) {
                     if (update !is ObjectValue) throw JsonataException("T2011", node.update.position, value = update)
+                    if (match is ObjectValue && !owned.containsKey(match) && update.size > 0) {
+                        env.ctx.deviation(Deviations.TRANSFORM_INPUT.id, node.position)
+                    }
                     if (match is ObjectValue && owned.containsKey(match)) {
                         for (k in update.keys) {
                             match.put(k, update[k]!!)
@@ -316,6 +334,9 @@ internal object Evaluator {
                         for (j in 0 until list.size) {
                             if (list.raw(j) !is StringValue) throw JsonataException("T2012", delete.position, value = deletions)
                             env.ctx.tick()
+                        }
+                        if (match is ObjectValue && !owned.containsKey(match) && list.size > 0) {
+                            env.ctx.deviation(Deviations.TRANSFORM_INPUT.id, node.position)
                         }
                         if (match is ObjectValue && owned.containsKey(match)) {
                             for (j in 0 until list.size) {
@@ -653,7 +674,11 @@ internal object Evaluator {
         val groups = LinkedHashMap<String, GroupEntry>()
         val reduce = input is ArrayValue && input.tupleStream
         var items = if (input is ArrayValue) input else ArrayValue.sequenceOf(input)
-        if (items.size == 0 && !reduce) items = ArrayValue.sequenceOf(null)
+        if (items.size == 0 && !reduce) {
+            // jsonata-js pushes undefined into this empty array of the data (DEV-08)
+            if (input is ArrayValue && !input.isSequence) env.ctx.deviation(Deviations.EMPTY_ARRAY_GROUP.id, spec.position)
+            items = ArrayValue.sequenceOf(null)
+        }
         for (itemIndex in 0 until items.size) {
             val item = items.raw(itemIndex)
             val e = if (reduce) frameFromTuple(env, item as ObjectValue) else env

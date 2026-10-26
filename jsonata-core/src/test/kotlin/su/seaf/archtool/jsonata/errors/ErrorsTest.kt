@@ -73,7 +73,8 @@ class ErrorsTest {
         // a host exception passes unchanged
         val h = assertFailsWith<HostFailure> { Jsonata.compile("\$eval(\"\$boom()\")", CompileOptions(registry)).evaluate(null, emptyMap(), EvaluationOptions(deviations = sink)) }
         assertSame(failure, h)
-        assertEquals(listOf("DEV-13", "DEV-13"), hits)
+        // the regex error also fires DEV-04 at the evaluation boundary (step 1.4)
+        assertEquals(listOf("DEV-13", "DEV-04", "DEV-13"), hits)
     }
 
     @Test

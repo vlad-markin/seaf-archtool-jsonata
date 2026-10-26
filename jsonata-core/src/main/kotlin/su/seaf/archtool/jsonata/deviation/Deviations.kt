@@ -39,6 +39,30 @@ public fun interface DeviationSink {
 public object Deviations {
     private const val V010 = "0.1.0"
 
+    public val TRANSFORM_INPUT: Deviation =
+        Deviation("DEV-01", "DATA", V010, true, "A transform never modifies the input document")
+
+    public val STACK_DEPTH: Deviation =
+        Deviation("DEV-02", "ERR", V010, true, "Recursion depth: X0002/X0005 where jsonata-js fails with a JS RangeError")
+
+    public val PARTIAL_SIGNATURE: Deviation =
+        Deviation("DEV-03", "PART-01", V010, true, "A partially applied native function checks and coerces its arguments by the signature")
+
+    public val REGEX_SYNTAX: Deviation =
+        Deviation("DEV-04", "RE-01", V010, true, "Regex syntax that JS rejects fails with X0003")
+
+    public val REGEX_PRIVATE_USE: Deviation =
+        Deviation("DEV-05", "RE-02", V010, true, "UTF-16 units in regex are emulated with private use characters U+E000-U+E7FF")
+
+    public val REGEX_CASE_FOLDING: Deviation =
+        Deviation("DEV-06", "RE-03", V010, true, "Case folding with the i flag and back references to groups not captured yet follow java.util.regex")
+
+    public val TO_MILLIS_UTC: Deviation =
+        Deviation("DEV-07", "DT-06", V010, true, "\$toMillis of a date-time without an offset is UTC")
+
+    public val EMPTY_ARRAY_GROUP: Deviation =
+        Deviation("DEV-08", "DATA", V010, true, "An object constructor over an empty array does not push undefined into it")
+
     public val CONSTRUCTOR_ERRORS: Deviation =
         Deviation("DEV-09", "ERR", V010, true, "Several failing values of a constructor: the engine reports the first in order")
 
@@ -58,7 +82,9 @@ public object Deviations {
         Deviation("DEV-13", "ERR-EVAL", V010, true, "\$eval does not wrap engine errors (X codes) and host exceptions into D3121")
 
     /** Deviations that have a probe or a static rule here, by id. */
-    public val all: List<Deviation> = listOf(CONSTRUCTOR_ERRORS, POSITION_IN_LAMBDA, LIBRARY_FUNCTION_TOKEN, BASE64_UTF8, UNDEFINED_IN_SEQUENCES, EVAL_KEEPS_ENGINE_ERRORS)
+    public val all: List<Deviation> = listOf(
+        TRANSFORM_INPUT, STACK_DEPTH, PARTIAL_SIGNATURE, REGEX_SYNTAX, REGEX_PRIVATE_USE, REGEX_CASE_FOLDING, TO_MILLIS_UTC, EMPTY_ARRAY_GROUP,
+        CONSTRUCTOR_ERRORS, POSITION_IN_LAMBDA, LIBRARY_FUNCTION_TOKEN, BASE64_UTF8, UNDEFINED_IN_SEQUENCES, EVAL_KEEPS_ENGINE_ERRORS)
 
     public fun byId(id: String): Deviation? = all.firstOrNull { it.id == id }
 
@@ -70,6 +96,43 @@ public object Deviations {
     }
 
     private val rules: List<(AstNode, MutableList<Finding>) -> Unit> = listOf(
+        { node, out ->
+            if (node.type == "transform" && refersToInputOrVariable(node["pattern"])) {
+                out += Finding(TRANSFORM_INPUT.id, node.position, "the transform pattern refers to \$\$ or a variable: jsonata-js may update the input document in place, the engine updates only the copy")
+            }
+        },
+        { node, out ->
+            if (node.type == "partial" && (node["procedure"] as? AstNode)?.type == "variable") {
+                out += Finding(PARTIAL_SIGNATURE.id, node.position, "a partially applied function: if it is a native one, the engine checks and coerces its arguments by the signature (jsonata-js does not)")
+            }
+        },
+        { node, out ->
+            val re = node.value as? su.seaf.archtool.jsonata.parser.JsRegex
+            if (node.type == "regex" && re != null) {
+                if (JAVA_ONLY.containsMatchIn(re.pattern)) {
+                    out += Finding(REGEX_SYNTAX.id, node.position, "a regex construct of java.util.regex that JS rejects: the engine fails with X0003")
+                }
+                if (re.pattern.any { it in '\uE000'..'\uE7FF' }) {
+                    out += Finding(REGEX_PRIVATE_USE.id, node.position, "private use characters U+E000-U+E7FF in a regex: they also match lone surrogates (emulation of UTF-16 units)")
+                }
+                if ('i' in re.flags && FOLDING.containsMatchIn(re.pattern) || backReferenceBeforeGroup(re.pattern)) {
+                    out += Finding(REGEX_CASE_FOLDING.id, node.position, "case folding with the i flag (s, k, i, ß) or a back reference before its group: java.util.regex rules")
+                }
+            }
+        },
+        { node, out ->
+            if (node.type == "function") {
+                val name = (node["procedure"] as? AstNode)?.let { if (it.type == "variable") it["value"] else null }
+                if (name == "toMillis" && (node["arguments"] as? List<*>)?.size == 1) {
+                    out += Finding(TO_MILLIS_UTC.id, node.position, "\$toMillis of a date-time without an offset is UTC in the engine, local time of the Node process in jsonata-js")
+                }
+            }
+        },
+        { node, out ->
+            if (node["group"] != null) {
+                out += Finding(EMPTY_ARRAY_GROUP.id, node.position, "an object constructor over a path: on an empty array jsonata-js also pushes undefined into that array, the engine does not")
+            }
+        },
         { node, out ->
             if (node.type == "lambda") {
                 out += Finding(
@@ -115,6 +178,40 @@ public object Deviations {
             }
         },
     )
+
+    private val JAVA_ONLY = Regex("[*+?}]\\+|\\(\\?[a-zA-Z>]")
+    private val FOLDING = Regex("[skiSKIß]")
+
+    /** A back reference `\N` left of the opening of group N. */
+    private fun backReferenceBeforeGroup(p: String): Boolean {
+        var groups = 0
+        var i = 0
+        var inClass = false
+        while (i < p.length) {
+            val c = p[i]
+            when {
+                c == '\\' && i + 1 < p.length -> {
+                    val d = p[i + 1]
+                    if (!inClass && d in '1'..'9' && (d - '0') > groups && countGroups(p) >= (d - '0')) return true
+                    i++
+                }
+                inClass -> if (c == ']') inClass = false
+                c == '[' -> inClass = true
+                c == '(' && p.getOrNull(i + 1) != '?' -> groups++
+                c == '(' && p.startsWith("(?<", i) && p.getOrNull(i + 3) != '=' && p.getOrNull(i + 3) != '!' -> groups++
+            }
+            i++
+        }
+        return false
+    }
+
+    private fun countGroups(p: String): Int = Regex("\\((?!\\?)|\\(\\?<(?![=!])").findAll(p).count()
+
+    private fun refersToInputOrVariable(pattern: Any?): Boolean {
+        var found = false
+        walk(pattern as? AstNode ?: return false) { n -> if (n.type == "variable" && n["value"] != "") found = true } // `$` is the context
+        return found
+    }
 
     /** Step kinds whose value may be missing for an item of the path, so that a filter sees undefined. */
     private val UNDEFINED_PRONE = setOf("name", "variable", "function", "block", "condition", "lambda")

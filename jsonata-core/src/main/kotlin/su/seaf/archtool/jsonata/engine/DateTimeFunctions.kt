@@ -790,6 +790,11 @@ internal object DateTimeFunctions {
         val timestamp = str(timestampArg) ?: return null
         if (picture == null) {
             if (!iso8601regex.matcher(timestamp).find()) throw JsonataException("D3110", value = timestampArg)
+            // a date-time without an offset: local time of the Node process in jsonata-js, UTC here (DEV-07)
+            val ctx = (c as CallContextImpl).frame.ctx
+            if (ctx.options.deviations != null && 'T' in timestamp && !timestamp.endsWith("Z") && !Regex("[+-]\\d\\d:?\\d\\d$").containsMatchIn(timestamp)) {
+                ctx.deviation(su.seaf.archtool.jsonata.deviation.Deviations.TO_MILLIS_UTC.id, null)
+            }
             return NumberValue.of(dateParse(timestamp))
         }
         return parseDateTime(c, timestamp, str(picture) ?: "undefined")?.let { NumberValue.of(it) }
