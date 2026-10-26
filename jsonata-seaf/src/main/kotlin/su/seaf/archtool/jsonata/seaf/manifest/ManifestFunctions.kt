@@ -44,8 +44,11 @@ internal class ManifestFunction(
     val id: String,
     val title: String?,
     val params: List<ParamDeclaration>?,
-    val code: String,
+    /** Null without a string `code`: the function returns undefined, as in the core. */
+    val code: String?,
     val result: Value?,
+    /** `params` is there but not an array: X0017 at the call, as ajv of the core fails then. */
+    val paramsNotArray: Boolean = false,
 ) {
     /** The schema the arguments are checked against: `{type: object, properties, required}` of the declarations. */
     fun paramsSchema(): ObjectValue? {
@@ -73,12 +76,17 @@ internal object ManifestFunctions {
     /** Keys of a declaration that are not part of the parameter's JSON Schema. */
     private val DECLARATION_KEYS = setOf("alias", "required")
 
+    /**
+     * Every entry is a function, as the core registers it: one without a string `code` returns undefined, and its id
+     * counts for conflicts like any other (review RV3-36).
+     */
     fun parse(functions: Value?): List<ManifestFunction> {
         val section = functions as? ObjectValue ?: return emptyList()
-        return section.entries.mapNotNull { (id, decl) ->
-            val d = decl as? ObjectValue ?: return@mapNotNull null
-            val code = (d["code"] as? StringValue)?.value ?: return@mapNotNull null
-            val params = (d["params"] as? ArrayValue)?.let { list ->
+        return section.entries.map { (id, decl) ->
+            val d = decl as? ObjectValue ?: ObjectValue()
+            val code = (d["code"] as? StringValue)?.value
+            val rawParams = d["params"]
+            val params = (rawParams as? ArrayValue)?.let { list ->
                 List(list.size) { i ->
                     val p = list[i] as? ObjectValue ?: ObjectValue()
                     val alias = (p["alias"] as? StringValue)?.value
@@ -86,9 +94,12 @@ internal object ManifestFunctions {
                     ParamDeclaration(alias ?: "param$i", p["required"] == BooleanValue.TRUE, schema)
                 }
             }
-            ManifestFunction(id, (d["title"] as? StringValue)?.value, params, code, d["result"])
+            val paramsNotArray = rawParams != null && rawParams != su.seaf.archtool.jsonata.value.NullValue && rawParams !is ArrayValue
+            ManifestFunction(id, (d["title"] as? StringValue)?.value, params, code, d["result"], paramsNotArray)
         }
     }
+
+    const val PARAMS_NOT_ARRAY: String = "params must be an array of parameter declarations"
 
     /** Ids that name a built-in function: one of the 12 core functions (checked first: `lookup` is both) or stdlib. */
     fun conflicts(functions: List<ManifestFunction>): List<NameConflictReport> = functions.mapNotNull { f ->
@@ -103,10 +114,11 @@ internal object ManifestFunctions {
     fun invalidDeclarations(functions: List<ManifestFunction>): List<Pair<ManifestFunction, String>> {
         val out = ArrayList<Pair<ManifestFunction, String>>()
         for (f in functions) {
-            for ((part, schema) in listOf("входных параметров" to f.paramsSchema(), "результата" to f.result)) {
+            if (f.paramsNotArray) out += f to "входных параметров: $PARAMS_NOT_ARRAY"
+            for ((part, schema, mode) in listOf(Triple("входных параметров", f.paramsSchema(), SchemaMode.MANIFEST_FUNCTION), Triple("результата", f.result, SchemaMode.MANIFEST_RESULT))) {
                 if (schema == null) continue
                 try {
-                    JsonSchemas.compile(schema, SchemaMode.MANIFEST_FUNCTION)
+                    JsonSchemas.compile(schema, mode)
                 } catch (e: SchemaCompileException) {
                     out += f to "$part: ${e.message}"
                 }
@@ -170,8 +182,9 @@ internal object ManifestFunctions {
         private val resultSchema = AtomicReference<Any?>(null)
 
         fun compile(registry: FunctionRegistry) {
+            val text = f.code ?: return
             try {
-                compiled = Jsonata.compile(f.code, CompileOptions(registry, false, "manifest:functions/${f.id}"))
+                compiled = Jsonata.compile(text, CompileOptions(registry, false, "manifest:functions/${f.id}"))
             } catch (e: JsonataException) {
                 compileError = e
             }
@@ -179,7 +192,11 @@ internal object ManifestFunctions {
 
         fun call(c: CallContext, args: List<Value?>): Value? {
             compileError?.let { throw JsonataException(it.code, it.position, it.token, it.value, it.value2, it.index, it.details, it, f.id) }
-            val code = compiled ?: error("manifest function ${f.id} is not compiled")
+            if (f.paramsNotArray) {
+                throw JsonataException("X0017", value = StringValue.of(f.id), details = mapOf("part" to "входных параметров", "message" to PARAMS_NOT_ARRAY), functionId = f.id)
+            }
+            val code = compiled
+            if (code == null && f.code != null) error("manifest function ${f.id} is not compiled")
             val poll = { c.checkpoint() } // cancellation and deadline (review RV3-13)
             var input: Value? = null
             val bindings = HashMap<String, Value?>()
@@ -200,15 +217,16 @@ internal object ManifestFunctions {
                         }
                     }
                 }
-                val schema = schema(paramsSchema, f.paramsSchema()!!, "входных параметров")
+                val schema = schema(paramsSchema, f.paramsSchema()!!, "входных параметров", SchemaMode.MANIFEST_FUNCTION)
                 val violations = check(schema, checked, poll)
                 if (violations.isNotEmpty()) throw violation("X0015", violations)
                 input = fields
             }
-            val result = c.evaluate(code, input, bindings, f.id)
+            // no code: undefined, as the core's function of an undefined code
+            val result = if (code == null) null else c.evaluate(code, input, bindings, f.id)
             val resultDecl = f.result
             if (resultDecl != null) {
-                val violations = check(schema(resultSchema, resultDecl, "результата"), result, poll)
+                val violations = check(schema(resultSchema, resultDecl, "результата", SchemaMode.MANIFEST_RESULT), result, poll)
                 if (violations.isNotEmpty()) throw violation("X0016", violations)
             }
             return result
@@ -221,10 +239,10 @@ internal object ManifestFunctions {
         }
 
         /** Compiles a schema at the first call (as ajv of the core does), and remembers a failure too. */
-        private fun schema(cache: AtomicReference<Any?>, schema: Value, part: String): CompiledSchema {
+        private fun schema(cache: AtomicReference<Any?>, schema: Value, part: String, mode: SchemaMode): CompiledSchema {
             val cached = cache.get() ?: run {
                 val made: Any = try {
-                    JsonSchemas.compile(schema, SchemaMode.MANIFEST_FUNCTION)
+                    JsonSchemas.compile(schema, mode)
                 } catch (e: SchemaCompileException) {
                     e
                 }

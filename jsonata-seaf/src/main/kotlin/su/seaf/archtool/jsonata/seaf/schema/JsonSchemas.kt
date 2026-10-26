@@ -112,6 +112,7 @@ internal object JsonSchemas {
                 keywords += AdapterKeyword("callback") { loc, node, _, _ -> FunctionValidator("callback", loc, node) }
                 keywords += AdapterKeyword("params") { loc, node, _, _ -> FunctionValidator("params", loc, node) }
             }
+            SchemaMode.MANIFEST_RESULT -> {}
             SchemaMode.JSONSCHEMA -> {
                 keywords += NonValidationKeyword("\$rels")
                 for (k in FormatLimitValidator.KEYWORDS.keys) keywords += AdapterKeyword(k) { loc, node, parent, _ -> FormatLimitValidator(k, loc, node, parent) }

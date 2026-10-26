@@ -186,4 +186,33 @@ class ReviewRound3SeafTest {
             assertEquals("X0001", kotlin.test.assertFailsWith<JsonataException>(name) { env.registry.extend().register(d) }.code, name)
         }
     }
+
+    @Test
+    fun `RV3-36 the functions section is parsed as the core does`() {
+        // an entry without code is a function too: its id conflicts like any other
+        val conflict = kotlin.test.assertFailsWith<JsonataException> {
+            SeafEnvironment.create(SeafEnvironmentTest.NoHost, json("""{"sum": {"title": "no code"}, "wcard": {"code": "1"}}"""))
+        }
+        assertEquals("X0014", conflict.code)
+        val message = conflict.details["message"] as String
+        assertTrue(message.contains("sum (stdlib)") && message.contains("wcard (core)"), message)
+        val env = SeafEnvironment.create(SeafEnvironmentTest.NoHost, json(
+            """{"nocode": {"title": "no code"}, "bad": {"params": {"alias": "a"}, "code": "1"}, "res": {"code": "1", "result": {"callback": true}}, "ok": {"code": "1", "result": {"type": "number"}}}""",
+        ))
+        fun call(expr: String) = env.evaluate(env.compile(expr), null)
+        // without code: undefined
+        assertEquals(null, call("${'$'}nocode()"))
+        // params that are not an array: X0017 at the call
+        val bad = kotlin.test.assertFailsWith<JsonataException> { call("${'$'}bad()") }
+        assertEquals("X0017", bad.code)
+        assertEquals("bad", bad.functionId)
+        // result does not know callback/params
+        assertEquals("X0017", kotlin.test.assertFailsWith<JsonataException> { call("${'$'}res()") }.code)
+        assertEquals("1", str(call("${'$'}ok()")))
+        // the detector finds both declarations
+        val found = SeafDetector.invalidDeclarations(json(
+            """{"bad": {"params": {"alias": "a"}, "code": "1"}, "res": {"code": "1", "result": {"callback": true}}, "ok": {"code": "1"}}""",
+        )).map { it.recommendation.substringBefore(":") }
+        assertEquals(listOf("manifest function bad", "manifest function res"), found)
+    }
 }
