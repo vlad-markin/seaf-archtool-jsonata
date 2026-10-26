@@ -228,4 +228,35 @@ class ReviewRound3SeafTest {
         assertTrue(caught.startsWith("{\"success\":false"), caught)
         assertTrue(caught.contains("X0012") || caught.contains("nested deeper"), caught)
     }
+
+    /** A call context whose callback fails with [failure], reported as a host exception or not. */
+    private class FailingCall(private val failure: RuntimeException, private val host: Boolean) : su.seaf.archtool.jsonata.CallContext {
+        override val input: Value? = null
+        override val timestamp: Long = 0
+        override val root: Value? = null
+        override fun call(function: su.seaf.archtool.jsonata.value.FunctionValue, args: List<Value?>): Value? = throw failure
+        override val cancellation: su.seaf.archtool.jsonata.CancellationSignal = object : su.seaf.archtool.jsonata.CancellationSignal {
+            override val isCancelled: Boolean = false
+            override fun throwIfCancelled() {}
+        }
+        override fun remainingNanos(): Long = Long.MAX_VALUE
+        override fun checkpoint() {}
+        override fun isHostException(error: Throwable): Boolean = host && error === failure
+        override fun <T : Any> local(key: Any, init: () -> T): T = init()
+        override fun attribute(name: String): Any? = null
+        override fun evaluate(expression: su.seaf.archtool.jsonata.Jsonata, input: Value?, bindings: Map<String, Value?>, frameName: String): Value? = null
+    }
+
+    @Test
+    fun `RV3-38 tryexecute lets engine faults through as X0008`() {
+        val core = su.seaf.archtool.jsonata.seaf.core.CoreFunctions(SeafEnvironmentTest.NoHost)
+        val f = su.seaf.archtool.jsonata.FunctionRegistry.function(null, { _, _ -> null })
+        val fault = IllegalStateException("engine fault")
+        val e = kotlin.test.assertFailsWith<JsonataException> { core.tryExecute(FailingCall(fault, false), listOf(f, su.seaf.archtool.jsonata.value.ArrayValue())) }
+        assertEquals("X0008", e.code)
+        kotlin.test.assertSame(fault, e.cause)
+        // an exception of a host function is caught: success false with its message
+        val caught = core.tryExecute(FailingCall(IllegalStateException("source is not allowed"), true), listOf(f, su.seaf.archtool.jsonata.value.ArrayValue()))
+        assertEquals("""{"success":false,"result":null,"error":"source is not allowed"}""", str(caught))
+    }
 }

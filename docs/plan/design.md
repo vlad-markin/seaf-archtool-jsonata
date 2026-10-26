@@ -236,6 +236,7 @@ public class FunctionRegistry {
 public val cancellation: CancellationSignal          // isCancelled(), throwIfCancelled(); см. 2.4
 public fun remainingNanos(): Long                     // остаток дедлайна, Long.MAX_VALUE без дедлайна (таймауты хоста)
 public fun checkpoint()                               // отмена и дедлайн в долгом цикле хоста: X0009/D1012 (RV3-13)
+public fun isHostException(error: Throwable): Boolean // исключение функции хоста или сбой движка (X0008), RV3-38
 public fun <T : Any> local(key: Any, init: () -> T): T   // состояние на одно вычисление ($set/$get, кэши функции)
 public fun evaluate(expression: Jsonata, input: Value?, bindings: Map<String, Value?>, frameName: String): Value?
     // вложенное вычисление в том же контексте: глубина, отмена, бюджеты, слушатель, хранилище; кадр отладчика frameName;

@@ -637,4 +637,26 @@ class ReviewRound3Test {
         session.resume()
         assertEquals("[42]".removeSurrounding("[", "]"), (stops.poll(10, java.util.concurrent.TimeUnit.SECONDS) as su.seaf.archtool.jsonata.debug.EvalOutcome).toString())
     }
+
+    @Test
+    fun `RV3-38 a host function tells host exceptions from engine faults`() {
+        val registry = su.seaf.archtool.jsonata.FunctionRegistry.create()
+        // a function of the library that fails as the engine would: not a host exception
+        registry.register(NativeFunction("fault", null, 0, { _, _ -> throw IllegalStateException("engine fault") }, source = su.seaf.archtool.jsonata.FunctionSource.STDLIB))
+        registry.register("hostFail", null, { _, _ -> throw IllegalStateException("host failure") })
+        registry.register("isHost", "<f:b>", { c, a ->
+            try {
+                c.call(a[0] as su.seaf.archtool.jsonata.value.FunctionValue, emptyList())
+                null
+            } catch (e: RuntimeException) {
+                su.seaf.archtool.jsonata.value.BooleanValue.of(c.isHostException(e))
+            }
+        })
+        val frozen = registry.freeze()
+        fun run(expr: String) = JsonWriter.stringify(Jsonata.compile(expr, su.seaf.archtool.jsonata.CompileOptions(frozen)).evaluate(null)!!)
+        assertEquals("false", run("\$isHost(\$fault)"))
+        assertEquals("true", run("\$isHost(\$hostFail)"))
+        // the fault itself becomes X0008 at the end of the evaluation
+        assertEquals("X0008", kotlin.test.assertFailsWith<JsonataException> { Jsonata.compile("\$fault()", su.seaf.archtool.jsonata.CompileOptions(frozen)).evaluate(null) }.code)
+    }
 }

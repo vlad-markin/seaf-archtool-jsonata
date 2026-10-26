@@ -258,6 +258,13 @@ public interface CallContext {
     public fun remainingNanos(): Long
 
     /**
+     * True for an exception a host function threw in this evaluation (it leaves the evaluation unchanged, CAP-9 p. 4);
+     * false for a fault of the engine, which leaves as X0008. A host function that catches what [call] throws (such
+     * as `$tryexecute`) lets the faults through (review RV3-38).
+     */
+    public fun isHostException(error: Throwable): Boolean
+
+    /**
      * The checkpoint of a long loop in a host function: throws `X0009` when the evaluation is cancelled and `D1012`
      * when its deadline has passed, as the evaluation's own loops do. Cheap; call it every thousand or so iterations.
      */

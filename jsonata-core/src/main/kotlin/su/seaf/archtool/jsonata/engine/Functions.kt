@@ -108,6 +108,8 @@ internal class CallContextImpl(
         frame.ctx.checkpoint()
     }
 
+    override fun isHostException(error: Throwable): Boolean = frame.ctx.isHost(error)
+
     override val root: Value? get() = frame.ctx.rootInput
 
     override fun <T : Any> local(key: Any, init: () -> T): T = frame.ctx.local(key, init)

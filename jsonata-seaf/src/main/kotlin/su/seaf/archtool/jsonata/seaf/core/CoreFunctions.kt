@@ -107,7 +107,7 @@ internal class CoreFunctions(private val host: SeafHost) {
      * (depth, deadline, sequence, cancellation, budgets) and engine faults are not caught: an expression cannot
      * catch its own limits (CAP-13 p. 8).
      */
-    private fun tryExecute(c: CallContext, a: List<Value?>): Value {
+    internal fun tryExecute(c: CallContext, a: List<Value?>): Value {
         val f = a.getOrNull(0) as? FunctionValue ?: return failure("\$tryexecute expects a function as its first argument")
         // as the core: the arguments are an array; undefined calls without arguments, null is passed as is (review RV3-16)
         val args: List<Value?> = when (val x = a.getOrNull(1)) {
@@ -126,6 +126,10 @@ internal class CoreFunctions(private val host: SeafHost) {
             if (e.code in UNCATCHABLE) throw e
             failure(e.message)
         } catch (e: RuntimeException) {
+            // a fault of the engine is not an error of the expression: X0008 to the caller (design §2.3, RV3-38)
+            if (!c.isHostException(e)) {
+                throw JsonataException("X0008", details = mapOf("message" to (e.javaClass.simpleName + (e.message?.let { ": $it" } ?: ""))), cause = e)
+            }
             failure(e.message ?: "Unknown error")
         }
     }
