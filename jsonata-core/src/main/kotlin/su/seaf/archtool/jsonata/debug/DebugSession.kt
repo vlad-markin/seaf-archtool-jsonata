@@ -101,6 +101,9 @@ public class DebugSession @JvmOverloads constructor(
 
     /** Work for the evaluating thread while stopped (watch expressions run there). */
     private val work = ArrayDeque<java.util.concurrent.FutureTask<EvalOutcome>>()
+
+    /** The command of the current stop is taken: evaluations are no longer accepted for it. */
+    private var resuming = false
     private val refs = References()
 
     private val indexes = HashMap<String, SourceIndex>()
@@ -230,6 +233,7 @@ public class DebugSession @JvmOverloads constructor(
         }
         // the host's token stays in force: its cancel terminates the session, also while stopped (review RV3-7)
         val unlink = evaluation.cancellation?.onCancel { terminate(t) }
+        dropWork()
         val outcome = try {
             val value = expression.evaluate(input, bindings, withSession(evaluation, t))
             EvalOutcome(value, null)
@@ -239,6 +243,7 @@ public class DebugSession @JvmOverloads constructor(
             unlink?.invoke()
             stoppedNode = null
             stoppedFrame = null
+            dropWork()
         }
         events.terminated(outcome)
         outcome.error?.let { throw it }
@@ -353,11 +358,20 @@ public class DebugSession @JvmOverloads constructor(
             }
         }
         lock.withLock {
-            if (stoppedNode == null) return EvalOutcome(null, IllegalStateException("the evaluation is not stopped"))
+            if (stoppedNode == null || resuming) return EvalOutcome(null, IllegalStateException("the evaluation is not stopped"))
             work.addLast(task)
             commandArrived.signalAll()
         }
-        return task.get(10, java.util.concurrent.TimeUnit.SECONDS)
+        return try {
+            task.get(10, java.util.concurrent.TimeUnit.SECONDS)
+        } catch (_: java.util.concurrent.CancellationException) {
+            EvalOutcome(null, IllegalStateException("the evaluation resumed"))
+        }
+    }
+
+    /** Cancels evaluations left in the queue (their callers get "the evaluation resumed"). */
+    private fun dropWork() = lock.withLock {
+        while (work.isNotEmpty()) work.removeFirst().cancel(false)
     }
 
     /** The frame at [frameId] of the current stop (0: the innermost). */
@@ -471,6 +485,7 @@ public class DebugSession @JvmOverloads constructor(
 
     private fun stop(reason: StopReason, node: NodeInfo, frame: DebugFrame, input: Value?) {
         mode = Mode.RUN
+        lock.withLock { resuming = false }
         stoppedNode = node
         stoppedFrame = frame
         stoppedInput = input
@@ -478,9 +493,14 @@ public class DebugSession @JvmOverloads constructor(
         val ctx = (frame as FrameView).frame.ctx
         val action = ctx.paused {
             while (true) {
+                // evaluations asked before the command run first (review RV3-25); once the command is taken, no
+                // new one is accepted for this stop
                 val next: Any = lock.withLock {
                     while (command == null && work.isEmpty()) commandArrived.await()
-                    command?.also { command = null } ?: work.removeFirst()
+                    work.removeFirstOrNull() ?: command!!.also {
+                        command = null
+                        resuming = true
+                    }
                 }
                 if (next is java.util.concurrent.FutureTask<*>) next.run() else {
                     @Suppress("UNCHECKED_CAST")

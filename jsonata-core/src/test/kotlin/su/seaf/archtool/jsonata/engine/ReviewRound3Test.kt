@@ -490,4 +490,40 @@ class ReviewRound3Test {
         // the cancellation comes while the nested one blocks
         assertTrue(cancelledAfter("\$outer(function(){ \$slowInner() })") < 1000)
     }
+
+    @Test
+    fun `RV3-25 an evaluate queued before resume is answered`() {
+        val registry = su.seaf.archtool.jsonata.FunctionRegistry.create()
+            .register(su.seaf.archtool.jsonata.FunctionDefinition("slow", null, { _, _ -> Thread.sleep(500); su.seaf.archtool.jsonata.value.NumberValue.of(1.0) },
+                su.seaf.archtool.jsonata.FunctionDoc(su.seaf.archtool.jsonata.LocalizedText.ru("Медленная")), sideEffects = false))
+        val stops = java.util.concurrent.LinkedBlockingQueue<Any>()
+        val events = object : su.seaf.archtool.jsonata.debug.DebugEvents {
+            override fun stopped(reason: su.seaf.archtool.jsonata.debug.StopReason, at: su.seaf.archtool.jsonata.debug.NodeInfo) { stops.put(at) }
+            override fun terminated(outcome: su.seaf.archtool.jsonata.debug.EvalOutcome) { stops.put(outcome) }
+        }
+        // one stop only: an evaluation left in the queue would never run
+        val session = su.seaf.archtool.jsonata.debug.DebugSession(Jsonata.compile("(\$a := 5; [1].(\$ * 2))", su.seaf.archtool.jsonata.CompileOptions(registry)), events)
+        session.setBreakpoints("main", listOf(su.seaf.archtool.jsonata.debug.BreakpointSpec(1, 18)))
+        Thread { runCatching { session.run(null) } }.start()
+        assertTrue(stops.poll(10, java.util.concurrent.TimeUnit.SECONDS) is su.seaf.archtool.jsonata.debug.NodeInfo)
+        // B keeps the stop busy, A asks while it runs, then the client resumes
+        val busy = Thread { session.evaluate(0, "\$slow()") }.apply { start() }
+        Thread.sleep(100)
+        var answer: Any? = null
+        var took = 0L
+        val a = Thread {
+            val t0 = System.nanoTime()
+            answer = runCatching { session.evaluate(0, "\$a") }.getOrElse { it }
+            took = (System.nanoTime() - t0) / 1_000_000
+        }.apply { start() }
+        Thread.sleep(100)
+        session.resume()
+        a.join(15_000)
+        busy.join(15_000)
+        assertTrue(took < 1000, "answered after $took ms: $answer")
+        assertEquals("5", answer.toString())
+        assertTrue(stops.poll(10, java.util.concurrent.TimeUnit.SECONDS) is su.seaf.archtool.jsonata.debug.EvalOutcome)
+        // after the run an evaluate is refused at once
+        assertTrue(session.evaluate(0, "1").error is IllegalStateException)
+    }
 }
