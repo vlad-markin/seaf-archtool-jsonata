@@ -215,4 +215,17 @@ class ReviewRound3SeafTest {
         )).map { it.recommendation.substringBefore(":") }
         assertEquals(listOf("manifest function bad", "manifest function res"), found)
     }
+
+    @Test
+    fun `RV3-37 a schema nested too deep is an error of the schema`() {
+        val env = SeafEnvironment.create(SeafEnvironmentTest.NoHost)
+        val deep = "${'$'}reduce([1..1100], function(${'$'}a, ${'$'}v){ {\"items\": ${'$'}a} }, {})"
+        val e = kotlin.test.assertFailsWith<JsonataException> { env.evaluate(env.compile("${'$'}jsonschema($deep)([1])"), null) }
+        assertEquals("X0012", e.code)
+        assertTrue((e.details["message"] as String).contains("nested deeper than 1000"), e.details.toString())
+        // under $tryexecute: an error of the expression, not a host exception
+        val caught = str(env.evaluate(env.compile("${'$'}tryexecute(function(){ ${'$'}jsonschema($deep)([1]) })"), null))
+        assertTrue(caught.startsWith("{\"success\":false"), caught)
+        assertTrue(caught.contains("X0012") || caught.contains("nested deeper"), caught)
+    }
 }

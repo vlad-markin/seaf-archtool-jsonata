@@ -75,7 +75,12 @@ internal object JsonSchemas {
      */
     fun compile(schema: Value?, mode: SchemaMode): CompiledSchema {
         val setup = setups.getValue(mode)
-        val node = Nodes.of(schema)
+        // a schema deeper than the adapter checks is an error of the schema, not of the host (review RV3-37)
+        val node = try {
+            Nodes.of(schema)
+        } catch (_: SchemaInstanceException) {
+            throw SchemaCompileException("schema is nested deeper than ${Nodes.MAX_DEPTH} levels")
+        }
         val metaErrors = setup.meta.validate(node)
         if (metaErrors.isNotEmpty()) {
             throw SchemaCompileException("schema is invalid: " + metaErrors.joinToString(", ") { e ->
