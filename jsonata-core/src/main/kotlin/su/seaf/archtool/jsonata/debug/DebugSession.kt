@@ -215,7 +215,8 @@ public class DebugSession @JvmOverloads constructor(
 
     /**
      * Evaluates the expression under the session; blocks while stopped. [evaluation] gives the limits; the session adds
-     * its listener and a cancellation token for [terminate].
+     * its listener and its own cancellation token for [terminate]. A cancellation token of [evaluation] stays in force:
+     * cancelling it terminates the session, running or stopped.
      */
     @JvmOverloads
     public fun run(input: Value?, bindings: Map<String, Value?> = emptyMap(), evaluation: EvaluationOptions = EvaluationOptions.DEFAULT): Value? {
@@ -227,12 +228,15 @@ public class DebugSession @JvmOverloads constructor(
             level = 0
             entryPending = options.stopOnEntry
         }
+        // the host's token stays in force: its cancel terminates the session, also while stopped (review RV3-7)
+        val unlink = evaluation.cancellation?.onCancel { terminate(t) }
         val outcome = try {
             val value = expression.evaluate(input, bindings, withSession(evaluation, t))
             EvalOutcome(value, null)
         } catch (e: Throwable) {
             EvalOutcome(null, e)
         } finally {
+            unlink?.invoke()
             stoppedNode = null
             stoppedFrame = null
         }
@@ -276,8 +280,14 @@ public class DebugSession @JvmOverloads constructor(
 
     /** Ends the evaluation with X0009 (cancelled). */
     public fun terminate() {
+        token?.let { terminate(it) }
+    }
+
+    /** Terminates the run of [t] only: a late cancel of a host token does not reach the next run. */
+    private fun terminate(t: CancellationToken) {
+        lock.withLock { if (token !== t) return }
         terminating = true
-        token?.cancel()
+        t.cancel()
         send { }
     }
 

@@ -319,4 +319,62 @@ class ReviewRound3Test {
         assertEquals(JsonWriter.stringify(long).substring(0, 7), text)
         assertTrue(cut)
     }
+
+    @Test
+    fun `RV3-7 the host cancellation token works under the debugger`() {
+        class Session(expr: String, breakpoint: Int?) : su.seaf.archtool.jsonata.debug.DebugEvents {
+            val stops = java.util.concurrent.LinkedBlockingQueue<Any>()
+            val done = java.util.concurrent.CountDownLatch(1)
+            @Volatile var endedAt = 0L
+            @Volatile var error: Throwable? = null
+            val token = su.seaf.archtool.jsonata.CancellationToken()
+            val session = su.seaf.archtool.jsonata.debug.DebugSession(Jsonata.compile(expr), this)
+
+            init {
+                breakpoint?.let { session.setBreakpoints("main", listOf(su.seaf.archtool.jsonata.debug.BreakpointSpec(1, it))) }
+                Thread { runCatching { session.run(null, emptyMap(), EvaluationOptions(cancellation = token)) } }.start()
+            }
+
+            override fun stopped(reason: su.seaf.archtool.jsonata.debug.StopReason, at: su.seaf.archtool.jsonata.debug.NodeInfo) { stops.put(at) }
+
+            override fun terminated(outcome: su.seaf.archtool.jsonata.debug.EvalOutcome) {
+                endedAt = System.nanoTime()
+                error = outcome.error
+                done.countDown()
+            }
+
+            /** Runs [cancel] and returns the milliseconds until the evaluation ended with X0009. */
+            fun cancelled(cancel: () -> Unit): Long {
+                val t0 = System.nanoTime()
+                cancel()
+                assertTrue(done.await(5, java.util.concurrent.TimeUnit.SECONDS), "the evaluation did not end")
+                assertEquals("X0009", (error as JsonataException).code)
+                return (endedAt - t0) / 1_000_000
+            }
+        }
+        val endless = "\$reduce([1..10000000], function(\$a, \$b){ \$a + \$b })"
+        // the host token on a running evaluation
+        val running = Session(endless, null)
+        Thread.sleep(100)
+        assertTrue(running.done.count == 1L)
+        assertTrue(running.cancelled { running.token.cancel() } < 50)
+        // the host token on a stopped debugger
+        val stopped = Session("[1, 2].(\$ * 2)", 11)
+        kotlin.test.assertNotNull(stopped.stops.poll(10, java.util.concurrent.TimeUnit.SECONDS))
+        assertTrue(stopped.cancelled { stopped.token.cancel() } < 50)
+        // a token cancelled before the run ends it at once
+        val early = su.seaf.archtool.jsonata.CancellationToken().also { it.cancel() }
+        val e = kotlin.test.assertFailsWith<JsonataException> {
+            su.seaf.archtool.jsonata.debug.DebugSession(Jsonata.compile(endless), object : su.seaf.archtool.jsonata.debug.DebugEvents {})
+                .run(null, emptyMap(), EvaluationOptions(cancellation = early))
+        }
+        assertEquals("X0009", e.code)
+        // terminate() still works, running and stopped
+        val t1 = Session(endless, null)
+        Thread.sleep(100)
+        assertTrue(t1.cancelled { t1.session.terminate() } < 50)
+        val t2 = Session("[1, 2].(\$ * 2)", 11)
+        kotlin.test.assertNotNull(t2.stops.poll(10, java.util.concurrent.TimeUnit.SECONDS))
+        assertTrue(t2.cancelled { t2.session.terminate() } < 50)
+    }
 }

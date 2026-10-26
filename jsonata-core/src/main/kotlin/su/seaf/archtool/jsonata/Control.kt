@@ -24,10 +24,23 @@ public class CancellationToken {
     /** True once [cancel] was called. */
     public val isCancelled: Boolean get() = cancelled
 
+    private val callbacks: MutableSet<() -> Unit> = java.util.concurrent.ConcurrentHashMap.newKeySet()
+
     /** Requests the cancellation of every evaluation using this token, now and later. */
     public fun cancel() {
         cancelled = true
         for (ctx in running) ctx.cancelFromToken()
+        for (action in callbacks) action()
+    }
+
+    /**
+     * Calls [action] on [cancel], or now if the token is already cancelled; the result removes it. [action] may run
+     * twice when the two race, so it must be idempotent (a debugging session linking the host's token, review RV3-7).
+     */
+    internal fun onCancel(action: () -> Unit): () -> Unit {
+        callbacks.add(action)
+        if (cancelled) action()
+        return { callbacks.remove(action) }
     }
 
     internal fun register(ctx: EvalContext) {
