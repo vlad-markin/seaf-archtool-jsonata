@@ -48,6 +48,10 @@ class SuiteIntegrityTest {
         val recorded = Regex("^## (DEV-\\d+)\\.", RegexOption.MULTILINE).findAll(File(root, "../docs/deviations.md").readText()).map { it.groupValues[1] }.toSet()
         val undocumented = deviations.filterValues { it !in recorded }
         assertTrue(undocumented.isEmpty(), "DEV ids without a record in docs/deviations.md: $undocumented")
+        // design §2.1 item 4: and on the page for architects
+        val onPage = Regex("^### (DEV-\\d+)\\.", RegexOption.MULTILINE).findAll(File(root, "../docs/user/differences.md").readText()).map { it.groupValues[1] }.toSet()
+        val notOnPage = deviations.filterValues { it !in onPage }
+        assertTrue(notOnPage.isEmpty(), "DEV ids missing on docs/user/differences.md: $notOnPage")
     }
 
     @Test
