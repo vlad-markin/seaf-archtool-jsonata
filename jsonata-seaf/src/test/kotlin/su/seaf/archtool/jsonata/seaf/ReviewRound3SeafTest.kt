@@ -305,4 +305,23 @@ class ReviewRound3SeafTest {
         assertEquals(listOf("T1006"), ids("${'$'}wcard(\"a\", \"b\")"))
         assertEquals(emptyList(), ids("${'$'}map([1], ${'$'}wcard)"))
     }
+
+    @Test
+    fun `RV3-42 the DEV-09 probe does not run side effects`() {
+        val host = LogHost(true)
+        val env = SeafEnvironment.create(host)
+        val probes = ArrayList<String>()
+        val options = env.limits.options().let { o -> EvaluationOptions(o.maxDepth, o.timeoutMillis, o.maxSequence, deviations = { id, _ -> probes += id }) }
+        fun failing(expr: String) = kotlin.test.assertFailsWith<JsonataException>(expr) { env.evaluate(env.compile(expr), null, options = options) }
+        // a value after the failing one would log: the probe stops there instead of logging
+        assertEquals("D3137", failing("[${'$'}log(\"before\"), ${'$'}error(\"e\"), ${'$'}log(\"after\")]").code)
+        assertEquals(listOf("content=\"before\" tag=null"), host.records)
+        // $set and a shared regex variable in a constructor: the store is written once
+        val stored = failing("(${'$'}r := /a/; [${'$'}set(\"k\", ${'$'}match(\"a\", ${'$'}r).match), ${'$'}error(\"e\"), ${'$'}set(\"k2\", ${'$'}match(\"a\", ${'$'}r).match)])")
+        assertEquals("D3137", stored.code)
+        // the probe still fires where nothing has side effects
+        probes.clear()
+        failing("{\"a\": ${'$'}error(\"e\"), \"b\": 1 + \"x\"}")
+        assertEquals(listOf("DEV-09"), probes)
+    }
 }

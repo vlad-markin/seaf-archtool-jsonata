@@ -127,7 +127,8 @@ internal object Evaluator {
     /** Calls a native function; an exception of a host function (not the standard library) is marked to leave unchanged. */
     private fun invokeNative(proc: NativeFunction, c: CallContextImpl, args: List<Value?>, ctx: EvalContext, callNode: Node?): Value? {
         // a debugger watch expression must not change anything (design §2.5)
-        if (ctx.options.watch && proc.sideEffects) throw JsonataException("X0011", value = StringValue.of(proc.name))
+        // and neither may the DEV-09 probe, which evaluates values the reference would also have evaluated (RV3-42)
+        if ((ctx.options.watch || ctx.probing) && proc.sideEffects) throw JsonataException("X0011", value = StringValue.of(proc.name))
         if (proc.source == su.seaf.archtool.jsonata.FunctionSource.STDLIB) return proc.implementation.invoke(c, args)
         val outer = ctx.enterHost()
         var exited = false
@@ -740,21 +741,28 @@ internal object Evaluator {
      */
     inline fun probeOtherFailures(failure: JsonataException, env: Frame, position: Int?, next: (Int) -> Value?) {
         if (env.ctx.options.deviations == null || isLimit(failure.code)) return
-        var j = 0
-        while (true) {
-            try {
-                next(j)
-            } catch (_: NoSuchElementException) {
-                return
-            } catch (other: JsonataException) {
-                if (isLimit(other.code)) return
-                if (other.code != failure.code) {
-                    env.ctx.deviation(Deviations.CONSTRUCTOR_ERRORS.id, position)
+        // a function with side effects stops the probe (X0011 is a limit code): the probe must not change anything
+        val wasProbing = env.ctx.probing
+        env.ctx.probing = true
+        try {
+            var j = 0
+            while (true) {
+                try {
+                    next(j)
+                } catch (_: NoSuchElementException) {
                     return
+                } catch (other: JsonataException) {
+                    if (isLimit(other.code)) return
+                    if (other.code != failure.code) {
+                        env.ctx.deviation(Deviations.CONSTRUCTOR_ERRORS.id, position)
+                        return
+                    }
+                } catch (_: RuntimeException) {
                 }
-            } catch (_: RuntimeException) {
+                j++
             }
-            j++
+        } finally {
+            env.ctx.probing = wasProbing
         }
     }
 

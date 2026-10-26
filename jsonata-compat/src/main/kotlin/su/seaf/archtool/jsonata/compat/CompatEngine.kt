@@ -46,6 +46,9 @@ object KotlinEngine : CompatEngine by KotlinEngineImpl(debug = false)
 /** The same engine compiled with debugging on: results must be identical (decision 15, review RV-1). */
 object DebugKotlinEngine : CompatEngine by KotlinEngineImpl(debug = true)
 
+/** The engine with a deviation sink attached: probes must not change any outcome (design §2.1, review RV3-42). */
+object ProbedKotlinEngine : CompatEngine by KotlinEngineImpl(debug = false, deviations = { _, _ -> })
+
 /** The engine with a profiler and a value tracer on every case: results must be identical (CAP-11 p. 4, TC-16). */
 object TracedKotlinEngine : CompatEngine by KotlinEngineImpl(debug = true, {
     su.seaf.archtool.jsonata.debug.trace.CompositeListener(
@@ -58,6 +61,8 @@ class KotlinEngineImpl(
     private val debug: Boolean,
     /** A listener per case for the debug run; by default one that only observes. */
     private val listenerFactory: () -> su.seaf.archtool.jsonata.debug.EvaluationListener = { object : su.seaf.archtool.jsonata.debug.EvaluationListener {} },
+    /** A probe sink for every case (the probed run); null: no probes. */
+    private val deviations: su.seaf.archtool.jsonata.deviation.DeviationSink? = null,
 ) : CompatEngine {
     override fun ast(expr: String): JsonNode = try {
         toJson(JsonataParser.ast(expr))
@@ -76,9 +81,9 @@ class KotlinEngineImpl(
         val listener = if (debug) listenerFactory() else null
         val timeboxed = case.timelimit != null && case.depth != null
         val limits = if (timeboxed) {
-            EvaluationOptions(maxDepth = case.depth!!, timeoutMillis = case.timelimit!!, listener = listener)
-        } else if (debug) {
-            EvaluationOptions(listener = listener)
+            EvaluationOptions(maxDepth = case.depth!!, timeoutMillis = case.timelimit!!, listener = listener, deviations = deviations)
+        } else if (debug || deviations != null) {
+            EvaluationOptions(listener = listener, deviations = deviations)
         } else {
             EvaluationOptions.DEFAULT
         }

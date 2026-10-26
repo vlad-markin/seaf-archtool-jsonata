@@ -51,10 +51,18 @@ class CompatRatchetTest {
             .filter { (plain, _) -> listOf("\$random", "\$shuffle", "\$now", "\$millis").none { cases.first { c -> c.id == plain.id }.expr.contains(it) } }
             .map { (plain, debug) -> "${plain.id}: ${plain.status} ${plain.detail ?: ""} / debug ${debug.status} ${debug.detail ?: ""}" }
         report.putPOJO("debugDiffs", debugDiffs)
+        // design §2.1: a deviation sink (the probes) does not change any outcome (review RV3-42)
+        val probedHarness = Harness(ProbedKotlinEngine, suite, AstSnapshots(root))
+        val probeDiffs = runs.getValue("eval").zip(cases.map(probedHarness::runEval))
+            .filter { (plain, probed) -> plain.status != probed.status || plain.detail != probed.detail }
+            .filter { (plain, _) -> listOf("\$random", "\$shuffle", "\$now", "\$millis").none { cases.first { c -> c.id == plain.id }.expr.contains(it) } }
+            .map { (plain, probed) -> "${plain.id}: ${plain.status} ${plain.detail ?: ""} / probed ${probed.status} ${probed.detail ?: ""}" }
+        report.putPOJO("probeDiffs", probeDiffs)
         File(System.getProperty("jsonata.compat.report")).apply { parentFile.mkdirs() }
             .writeText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(report))
         assertTrue(regressions.isEmpty(), "regressions: ${regressions.joinToString("\n")}")
         assertTrue(debugDiffs.isEmpty(), "debug compilation differs:\n${debugDiffs.joinToString("\n")}")
+        assertTrue(probeDiffs.isEmpty(), "a deviation sink changes outcomes:\n${probeDiffs.joinToString("\n")}")
         assertTrue(stale.isEmpty(), "cases in pass/deviations.txt that no longer differ:\n${stale.joinToString("\n")}")
     }
 }

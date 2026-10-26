@@ -278,6 +278,9 @@ internal class EvalContext(
         if ((++ticks and 1023) == 0) checkpoint()
     }
 
+    /** The DEV-09 probe is evaluating further values: functions with side effects fail with X0011 (review RV3-42). */
+    @JvmField var probing: Boolean = false
+
     /** [tick] as a function value, for loops outside the engine package (`Values.deepEquals`). */
     @JvmField val ticker: () -> Unit = { tick() }
 
