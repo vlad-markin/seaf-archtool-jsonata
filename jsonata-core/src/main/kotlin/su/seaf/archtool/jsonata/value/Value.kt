@@ -192,9 +192,9 @@ public class ObjectValue : Value() {
     private var indexKeys = 0
 
     /**
-     * Slots emptied by [remove] and not compacted yet: removing many keys one by one (a transform's delete list) must
-     * stay linear, so a removal only empties its slot and drops the key from the index; the next other operation
-     * compacts once (review RV2-3).
+     * Slots emptied by [removeAll] and not compacted yet. Removing many keys one by one (a transform's delete list)
+     * must stay linear (review RV2-3), so the batch only empties slots and compacts once at its end; outside a batch
+     * this is always 0, so reads never write (an object may be read by many threads, review RV3-3).
      */
     private var removed = 0
 
@@ -276,7 +276,27 @@ public class ObjectValue : Value() {
         orderedKeys = null
     }
 
+    /** Removes one key (objects under construction only). */
     internal fun remove(key: String) {
+        empty(key)
+        compact()
+    }
+
+    /** Removes [keys] in one batch: linear in the number of keys and the size, one compaction at the end. */
+    internal inline fun removeAll(count: Int, key: (Int) -> String, onEach: () -> Unit) {
+        try {
+            for (j in 0 until count) {
+                empty(key(j))
+                onEach()
+            }
+        } finally {
+            compactNow()
+        }
+    }
+
+    @PublishedApi internal fun compactNow(): Unit = compact()
+
+    @PublishedApi internal fun empty(key: String) {
         val i = find(key)
         if (i < 0) return
         keyArray[i] = null
@@ -290,7 +310,6 @@ public class ObjectValue : Value() {
 
     /** Position of the [i]-th key in JS order. */
     private fun position(i: Int): Int {
-        compact()
         if (indexKeys == 0) return i
         val order = jsOrder ?: run {
             val idx = (0 until count).filter { isArrayIndex(keyArray[it]!!) }.sortedBy { keyArray[it]!!.toLong() }
@@ -310,7 +329,6 @@ public class ObjectValue : Value() {
     public val keys: List<String>
         get() {
             orderedKeys?.let { return it }
-            compact()
             val result = java.util.Collections.unmodifiableList(List(count) { keyAt(it) })
             orderedKeys = result
             return result
@@ -328,7 +346,6 @@ public class ObjectValue : Value() {
     /** Order-independent, consistent with [equals]. */
     override fun hashCode(): Int {
         var h = 0
-        compact()
         for (i in 0 until count) h += keyArray[i].hashCode() xor valueArray[i].hashCode()
         return h
     }

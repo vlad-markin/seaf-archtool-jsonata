@@ -339,10 +339,7 @@ internal object Evaluator {
                             env.ctx.deviation(Deviations.TRANSFORM_INPUT.id, node.position)
                         }
                         if (match is ObjectValue && owned.containsKey(match)) {
-                            for (j in 0 until list.size) {
-                                match.remove((list.raw(j) as StringValue).value)
-                                env.ctx.tick()
-                            }
+                            match.removeAll(list.size, { j -> (list.raw(j) as StringValue).value }) { env.ctx.tick() }
                         }
                     }
                 }

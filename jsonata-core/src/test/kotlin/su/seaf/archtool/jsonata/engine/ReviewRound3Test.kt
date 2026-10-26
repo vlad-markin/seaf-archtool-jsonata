@@ -104,4 +104,26 @@ class ReviewRound3Test {
             su.seaf.archtool.jsonata.StackSegments.budget = saved
         }
     }
+
+    @Test
+    fun `RV3-3 a transform result with deleted keys can be read by many threads`() {
+        val make = Jsonata.compile("\$merge([0..39].{'k' & \$: \$}) ~> |\$|{}, [0..19].('k' & \$ * 2)|")
+        val read = Jsonata.compile("\$string(\$x)")
+        val expected = JsonWriter.stringify(read.evaluate(null, mapOf("x" to make.evaluate(null))))
+        val pool = java.util.concurrent.Executors.newFixedThreadPool(8)
+        val wrong = AtomicInteger()
+        try {
+            repeat(3000) {
+                val x = make.evaluate(null) // not read before the threads start
+                val start = java.util.concurrent.CountDownLatch(1)
+                val futures = (1..8).map { pool.submit<String> { start.await(); runCatching { JsonWriter.stringify(read.evaluate(null, mapOf("x" to x))) }.getOrElse { it.toString() } } }
+                start.countDown()
+                futures.forEach { if (it.get() != expected) wrong.incrementAndGet() }
+            }
+        } finally {
+            pool.shutdown()
+        }
+        assertEquals(0, wrong.get())
+        assertTrue(expected.startsWith("\"{\\\"k1\\\":1,\\\"k3\\\":3"), expected)
+    }
 }
