@@ -16,3 +16,7 @@
 {"id": "RV2-14#1", "tags": ["review"], "expr": "/(?<x>a)[\\k<x>]/"}
 {"id": "RV2-14#2", "tags": ["review"], "expr": "/(?<x>a)\\k/"}
 {"id": "RV2-14#3", "tags": ["review"], "expr": "$match(\"ak\", /a[\\k]/).match"}
+{"id": "RV3-14#1", "tags": ["review"], "expr": "$match(\"a-1\", /[a-\\d]+/).match"}
+{"id": "RV3-14#2", "tags": ["review"], "expr": "$match(\"x.-a\", /[.-\\w]+/).match"}
+{"id": "RV3-14#3", "tags": ["review"], "expr": "$match(\"a -1\", /[\\s-\\d]+/).match"}
+{"id": "RV3-14#4", "tags": ["review"], "expr": "$match(\"5-z\", /[\\d-z]+/).match"}

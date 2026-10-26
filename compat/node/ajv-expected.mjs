@@ -201,6 +201,9 @@ const cases = [
     ...both({ not: { not: { type: 'string' } } }, 1),
     ...both({ allOf: [{ required: ['a'] }, { required: ['b'] }] }, {}),
     ...both({ properties: { a: { $ref: '#' } }, type: 'object' }, { a: { a: 1 } }),
+    // a class escape as a range bound (review RV3-14): SyntaxError with u (params), a literal hyphen without (jsonschema)
+    ...both({ type: 'string', pattern: '[\\d-z]' }, '-', '5', 'a'),
+    ...both({ type: 'string', pattern: '^[\\w-.]+$' }, 'a-b.c', 'a b'),
 ];
 
 console.log(JSON.stringify({ header: true, ...versions, cases: cases.length }));

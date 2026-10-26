@@ -7,6 +7,7 @@ import su.seaf.archtool.jsonata.value.FunctionValue
 import su.seaf.archtool.jsonata.value.JsonWriter
 import java.io.File
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
@@ -37,6 +38,18 @@ class TrapsTest {
         "FZ-04#2" to "DEV-02: roman numerals of huge numbers exhaust the JS stack (RangeError); we report X0002",
         "FZ-05#1" to "DEV-08: jsonata-js pushes undefined into the empty input array",
         "FZ-05#2" to "DEV-08: jsonata-js pushes undefined into the empty array of the clone",
+    )
+
+    /**
+     * Outcomes of new traps pinned by hand until expected.jsonl is regenerated on Node 22 (README): used while the id
+     * is missing there, and checked against it once it is present.
+     */
+    private val pinned: Map<String, String> = mapOf(
+        // review RV3-14: a class escape as a range bound, the hyphen is a literal without the u flag
+        "RV3-14#1" to "json \"a-1\"",
+        "RV3-14#2" to "json \"x.-a\"",
+        "RV3-14#3" to "json \" -1\"",
+        "RV3-14#4" to "json \"5-z\"",
     )
 
     private fun outcome(c: com.fasterxml.jackson.databind.JsonNode): String {
@@ -90,7 +103,8 @@ class TrapsTest {
         val mismatches = ArrayList<String>()
         for (c in cases) {
             val id = c.get("id").asText()
-            val want = expected[id] ?: error("no expected outcome for $id")
+            val want = expected[id] ?: pinned[id] ?: error("no expected outcome for $id")
+            pinned[id]?.let { pin -> expected[id]?.let { assertEquals(it, pin, "the pinned outcome of $id differs from expected.jsonl") } }
             val got = outcome(c)
             if (got != want && id !in allowed) mismatches += "$id: expected <$want> got <$got>  expr ${c.get("expr").asText()}"
         }

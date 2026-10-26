@@ -47,4 +47,20 @@ class ReviewRound3SeafTest {
             assertTrue(cms <= 400, "X0009 after $cms ms")
         }
     }
+
+    @Test
+    fun `RV3-14 a class escape as a range bound in a schema pattern`() {
+        // pinned from ajv 8.20.0 of the core (the cases are added to compat/node/ajv-expected.mjs for the local run)
+        fun compile(pattern: String, mode: su.seaf.archtool.jsonata.seaf.schema.SchemaMode) =
+            su.seaf.archtool.jsonata.seaf.schema.JsonSchemas.compile(json("""{"type":"string","pattern":${JsonWriter.quote(pattern)}}"""), mode)
+        for (p in listOf("[\\d-z]", "^[\\w-.]+${'$'}")) {
+            // params of manifest functions: the u flag, a SyntaxError in ajv
+            kotlin.test.assertFailsWith<su.seaf.archtool.jsonata.seaf.schema.SchemaCompileException>(p) { compile(p, su.seaf.archtool.jsonata.seaf.schema.SchemaMode.MANIFEST_FUNCTION) }
+            // $jsonschema: no u flag, the hyphen is a literal
+            assertTrue(compile(p, su.seaf.archtool.jsonata.seaf.schema.SchemaMode.JSONSCHEMA).validate(json("\"-\"")).isEmpty(), p)
+        }
+        val word = compile("^[\\w-.]+${'$'}", su.seaf.archtool.jsonata.seaf.schema.SchemaMode.JSONSCHEMA)
+        assertTrue(word.validate(json("\"a-b.c\"")).isEmpty())
+        assertEquals("pattern", word.validate(json("\"a b\"")).single().keyword)
+    }
 }

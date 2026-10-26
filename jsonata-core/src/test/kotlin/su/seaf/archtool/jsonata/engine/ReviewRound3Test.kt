@@ -377,4 +377,25 @@ class ReviewRound3Test {
         kotlin.test.assertNotNull(t2.stops.poll(10, java.util.concurrent.TimeUnit.SECONDS))
         assertTrue(t2.cancelled { t2.session.terminate() } < 50)
     }
+
+    @Test
+    fun `RV3-14 a class escape as a range bound`() {
+        // without u (Annex B) the hyphen is a literal; values pinned from jsonata-js 2.2.2
+        assertEquals("\"a-1\"", eval("\$match(\"a-1\", /[a-\\d]+/).match"))
+        assertEquals("\"x.-a\"", eval("\$match(\"x.-a\", /[.-\\w]+/).match"))
+        assertEquals("\" -1\"", eval("\$match(\"a -1\", /[\\s-\\d]+/).match"))
+        assertEquals("\"5-z\"", eval("\$match(\"5-z\", /[\\d-z]+/).match"))
+        for (p in listOf("[a-\\d]", "[.-\\w]", "[\\s-\\d]", "[\\d-z]", "^[\\w-.]+\$")) {
+            assertTrue(su.seaf.archtool.jsonata.JsRegexes.compile(p).test("-"), p)
+        }
+        assertTrue(su.seaf.archtool.jsonata.JsRegexes.compile("^[\\w-.]+\$").test("a-b.c"))
+        // with u: SyntaxError, as new RegExp(p, "u") and ajv
+        for (p in listOf("[\\d-z]", "^[\\w-.]+\$", "[a-\\d]", "[\\s-\\d]", "[\\p{L}-z]")) {
+            kotlin.test.assertFailsWith<IllegalArgumentException>(p) { su.seaf.archtool.jsonata.JsRegexes.compile(p, "u") }
+        }
+        // ordinary ranges stay ranges, also after a class escape
+        assertTrue(su.seaf.archtool.jsonata.JsRegexes.compile("^[\\da-c]+\$", "u").test("1b"))
+        assertTrue(!su.seaf.archtool.jsonata.JsRegexes.compile("^[a-c]\$").test("-"))
+        assertEquals("\"-\"", eval("\$match(\"x-\", /[a-c-e]/).match"))
+    }
 }

@@ -513,17 +513,51 @@ internal object JsRegexTranslator {
         }
         sb.append('[')
         if (negated) sb.append('^')
+        // the last atom could start a range, and whether it is a class escape (`\d`, `\w`, ...)
+        var rangeStart = false
+        var classEscape = false
         while (i < src.length && src[i] != ']') {
             val c = src[i]
-            when (c) {
-                '\\' -> i = escape(src, i, sb, true, 0, emptyMap(), unicode, hasNamedGroups)
-                '[', '&', '^', '~' -> { sb.append('\\').append(c); i++ }
-                else -> { sb.append(if (unicode) c else JsRegexPattern.unit(c)); i++ }
+            if (c == '-' && rangeStart && i + 1 < src.length && src[i + 1] != ']') {
+                if (classEscape || isClassEscape(src, i + 1, unicode)) {
+                    // a range with a class escape as a bound: a SyntaxError with `u`, otherwise the hyphen is a
+                    // literal (ECMA-262 Annex B, ClassAtomNoDash); java.util.regex would reject the range (RV3-14)
+                    if (unicode) throw IllegalArgumentException("Invalid character class")
+                    sb.append("\\-")
+                } else {
+                    sb.append('-')
+                }
+                i++
+                // the next atom ends this range (or stands alone): it cannot start another one
+                rangeStart = false
+                classEscape = false
+                i = classAtom(src, i, sb, unicode, hasNamedGroups)
+                continue
             }
+            classEscape = isClassEscape(src, i, unicode)
+            rangeStart = true
+            i = classAtom(src, i, sb, unicode, hasNamedGroups)
         }
         if (i >= src.length) throw IllegalArgumentException("Unterminated character class")
         sb.append(']')
         return i + 1
+    }
+
+    /** Translates one atom of a class at [i]; returns the index after it. */
+    private fun classAtom(src: String, i: Int, sb: StringBuilder, unicode: Boolean, hasNamedGroups: Boolean): Int {
+        val c = src[i]
+        return when (c) {
+            '\\' -> escape(src, i, sb, true, 0, emptyMap(), unicode, hasNamedGroups)
+            '[', '&', '^', '~' -> { sb.append('\\').append(c); i + 1 }
+            else -> { sb.append(if (unicode) c else JsRegexPattern.unit(c)); i + 1 }
+        }
+    }
+
+    /** Whether a class escape starts at [i]: `\d \D \w \W \s \S`, and `\p{…}`/`\P{…}` with `u`. */
+    private fun isClassEscape(src: String, i: Int, unicode: Boolean): Boolean {
+        if (i + 1 >= src.length || src[i] != '\\') return false
+        val e = src[i + 1]
+        return e in "dDwWsS" || (unicode && (e == 'p' || e == 'P'))
     }
 }
 
