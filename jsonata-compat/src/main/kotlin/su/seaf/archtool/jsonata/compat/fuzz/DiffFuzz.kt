@@ -42,56 +42,116 @@ private fun engineToken(t: Any?): String = when (t) {
 /** `error CODE @pos token` → `error CODE`. */
 internal fun codeOnly(outcome: String): String = if (outcome.startsWith("error ")) outcome.substringBefore(" @") else outcome
 
-class Sidecar(nodeDir: File) : AutoCloseable {
-    private val process: Process = ProcessBuilder("node", "sidecar.mjs").directory(nodeDir).redirectError(ProcessBuilder.Redirect.INHERIT).start()
-    private val out = OutputStreamWriter(process.outputStream, Charsets.UTF_8)
-    private val input = BufferedReader(InputStreamReader(process.inputStream, Charsets.UTF_8))
+class Sidecar(private val nodeDir: File, private val caseTimeoutMillis: Long = 10_000) : AutoCloseable {
+    private class Proc(val process: Process) {
+        val out = OutputStreamWriter(process.outputStream, Charsets.UTF_8)
+        /** Lines of the sidecar, read by a daemon thread; [EOF] when it ends. */
+        val lines = java.util.concurrent.LinkedBlockingQueue<String>()
+        init {
+            Thread {
+                BufferedReader(InputStreamReader(process.inputStream, Charsets.UTF_8)).use { r ->
+                    while (true) lines.put(r.readLine() ?: break)
+                }
+                lines.put(EOF)
+            }.apply { isDaemon = true }.start()
+        }
+    }
 
-    /** Outcomes in the canonical form of [outcomeOf], by case id. */
+    private var proc = start()
+
+    private fun start() = Proc(ProcessBuilder("node", "sidecar.mjs").directory(nodeDir).redirectError(ProcessBuilder.Redirect.INHERIT).start())
+
+    private fun restart() {
+        proc.process.destroyForcibly()
+        proc = start()
+    }
+
+    /**
+     * Outcomes in the canonical form of [outcomeOf], by case id. A case the reference does not finish within
+     * [caseTimeoutMillis] (an endless recursion of jsonata-js) gets `reference-timeout`; the sidecar is restarted and
+     * the run goes on with the next case (review RV2-5).
+     */
     fun evaluate(cases: List<FuzzCase>): Map<String, String> {
-        val writer = Thread {
-            for (c in cases) {
-                val req = mapper.createObjectNode().put("id", c.id).put("expr", c.expr)
-                if (c.input != null) req.set<JsonNode>("input", c.input)
-                out.write(mapper.writeValueAsString(req))
-                out.write("\n")
-            }
-            out.flush()
-        }
-        writer.start()
         val result = HashMap<String, String>()
-        repeat(cases.size) {
-            val line = input.readLine() ?: error("sidecar ended")
-            val n = mapper.readTree(line)
-            result[n.get("id").asText()] = when {
-                n.has("json") -> "json " + n.get("json").asText()
-                n.has("undefined") -> "undefined"
-                n.has("error") -> "error " + n.get("error").asText() + " @" + posText(n.get("position")) + " " + tokenText(n.get("token"))
-                else -> "crash " + n.get("crash").asText()
+        var pending = cases
+        while (pending.isNotEmpty()) {
+            val p = proc
+            val batch = pending
+            val writer = Thread {
+                try {
+                    for (c in batch) {
+                        val req = mapper.createObjectNode().put("id", c.id).put("expr", c.expr)
+                        if (c.input != null) req.set<JsonNode>("input", c.input)
+                        if (c.bindings != null) req.set<JsonNode>("bindings", c.bindings)
+                        p.out.write(mapper.writeValueAsString(req))
+                        p.out.write("\n")
+                    }
+                    p.out.flush()
+                } catch (_: java.io.IOException) {
+                    // the sidecar was restarted after a timeout
+                }
+            }.apply { isDaemon = true }
+            writer.start()
+            var next: List<FuzzCase> = emptyList()
+            for ((i, c) in batch.withIndex()) {
+                val line = p.lines.poll(caseTimeoutMillis, TimeUnit.MILLISECONDS)
+                if (line == null || line === EOF) {
+                    result[c.id] = if (line == null) "reference-timeout" else "crash sidecar ended"
+                    restart()
+                    next = batch.drop(i + 1)
+                    break
+                }
+                val n = mapper.readTree(line)
+                result[n.get("id").asText()] = when {
+                    n.has("json") -> "json " + n.get("json").asText()
+                    n.has("undefined") -> "undefined"
+                    n.has("error") -> "error " + n.get("error").asText() + " @" + posText(n.get("position")) + " " + tokenText(n.get("token"))
+                    else -> "crash " + n.get("crash").asText()
+                }
             }
+            pending = next
         }
-        writer.join()
         return result
     }
 
     override fun close() {
-        out.close()
-        process.waitFor(10, TimeUnit.SECONDS)
-        process.destroy()
+        runCatching { proc.out.close() }
+        proc.process.waitFor(10, TimeUnit.SECONDS)
+        proc.process.destroy()
     }
 
     companion object {
-        /** Node and the installed jsonata package are needed; tests skip fuzzing without them. */
-        fun available(nodeDir: File): Boolean =
-            File(nodeDir, "node_modules/jsonata").isDirectory && runCatching { ProcessBuilder("node", "--version").start().waitFor() == 0 }.getOrDefault(false)
+        private const val EOF = "\u0000EOF"
+
+        /** The Node major version of compat/node/package.json (`engines`). */
+        fun requiredNodeMajor(nodeDir: File): Int? =
+            Regex(">=\\s*(\\d+)").find(mapper.readTree(File(nodeDir, "package.json")).path("engines").path("node").asText())?.groupValues?.get(1)?.toInt()
+
+        /** The major version of `node` on the path, or null without Node. */
+        fun nodeMajor(): Int? = runCatching {
+            val p = ProcessBuilder("node", "--version").start()
+            val v = p.inputStream.bufferedReader().readText().trim()
+            if (p.waitFor() == 0) v.removePrefix("v").substringBefore('.').toInt() else null
+        }.getOrNull()
+
+        /** Why fuzzing cannot run here, or null when it can: the installed jsonata package and the Node major of package.json (review RV2-7). */
+        fun unavailable(nodeDir: File): String? {
+            if (!File(nodeDir, "node_modules/jsonata").isDirectory) return "compat/node/node_modules is missing (npm ci)"
+            val have = nodeMajor() ?: return "node is not on the path"
+            val need = requiredNodeMajor(nodeDir)
+            if (need != null && have != need) return "Node $need is needed (compat/node/package.json), found Node $have"
+            return null
+        }
+
+        fun available(nodeDir: File): Boolean = unavailable(nodeDir) == null
+
+        /** One case in a fresh sidecar process: what jsonata-js gives without the history of earlier calls. */
+        fun fresh(nodeDir: File, c: FuzzCase): String = Sidecar(nodeDir).use { it.evaluate(listOf(c)).getValue(c.id) }
     }
 }
 
 /** A difference between the engine and the reference on one case. */
 data class Mismatch(val case: FuzzCase, val expected: String, val actual: String, val category: String, val known: String?)
-
-/** A library function used as a value (`$map(x, $string)`, `~> $sum`), not called directly. */
-private val functionAsValue = Regex("\\$[a-zA-Z]+\\s*(\\)|,|~>|$)")
 
 /** Runs generated cases on both sides and classifies the differences (phase 8). */
 class DiffFuzz(private val nodeDir: File) {
@@ -105,7 +165,9 @@ class DiffFuzz(private val nodeDir: File) {
             try {
                 val expr = Jsonata.compile(c.expr)
                 val options = EvaluationOptions(timeoutMillis = 5000, deviations = { id, _ -> hits.add(id) })
-                val r = expr.evaluate(c.input?.let { toValue(it) }, emptyMap(), options)
+                val bindings = HashMap<String, Value?>()
+                c.bindings?.fields()?.forEach { (k, v) -> bindings[k] = toValue(v) }
+                val r = expr.evaluate(c.input?.let { toValue(it) }, bindings, options)
                 if (r == null) "undefined" else "json " + JsonWriter.stringify(markFunctions(r))
             } catch (e: JsonataException) {
                 "error " + e.code + " @" + (e.position?.toString() ?: "null") + " " + engineToken(e.token)
@@ -148,30 +210,57 @@ class DiffFuzz(private val nodeDir: File) {
                     val t0 = System.nanoTime()
                     val got = outcomeOf(c)
                     engineMillis[c.id] = (System.nanoTime() - t0) / 1e6
-                    if (want != got) {
-                        val category = if (codeOnly(want) == codeOnly(got)) "error-position-token" else category(want, got)
-                        // DEV-10 changes only the position of an error
-                        val fired = probeHits[c.id].orEmpty().filter { it != Deviations.POSITION_IN_LAMBDA.id || category == "error-position-token" }
-                        val known = if (fired.isNotEmpty()) {
-                            fired.joinToString(", ") { id -> "$id: " + (Deviations.byId(id)?.title ?: "deviation") } + " (probe fired)"
-                        } else if (category == "error-position-token" && want.substringAfter(" @").substringAfter(' ') == got.substringAfter(" @").substringAfter(' ')) {
-                            "reference instability: position kept on a shared function object from an earlier call"
-                        } else if (category == "error-position-token" && functionAsValue.containsMatchIn(c.expr)) {
-                            "reference instability: token of a library function passed as a value depends on earlier calls in the process"
-                        } else {
-                            KnownDifferences.explain(c, codeOnly(want), codeOnly(got))
-                        }
-                        mismatches += Mismatch(c, want, got, category, known)
-                    }
+                    if (want != got) mismatches += classify(c, want, got)
                 }
             }
         }
         return mismatches
     }
 
+    /** Differences explained by the position or token of an error, with the rule that explained them (report sample). */
+    val explainedByPosition = ArrayList<Mismatch>()
+
+    /**
+     * Explains a difference only on a confirming sign (review RV2-4): a deviation probe fired, the reference in a
+     * fresh process agrees with the engine, or a narrow documented rule matches.
+     */
+    fun classify(c: FuzzCase, want: String, got: String): Mismatch {
+        val category = if (codeOnly(want) == codeOnly(got) && want.startsWith("error ")) "error-position-token" else category(want, got)
+        // DEV-10 changes only the position of an error
+        val fired = probeHits[c.id].orEmpty().filter { it != Deviations.POSITION_IN_LAMBDA.id || category == "error-position-token" }
+        val known = when {
+            fired.isNotEmpty() -> fired.joinToString(", ") { id -> "$id: " + (Deviations.byId(id)?.title ?: "deviation") } + " (probe fired)"
+            category == "error-position-token" -> explainPosition(c, want, got)
+            else -> KnownDifferences.explain(c, codeOnly(want), codeOnly(got))
+        }
+        val m = Mismatch(c, want, got, category, known)
+        if (category == "error-position-token" && known != null) explainedByPosition += m
+        return m
+    }
+
+    private fun explainPosition(c: FuzzCase, want: String, got: String): String? {
+        val fresh = Sidecar.fresh(nodeDir, c)
+        if (fresh == got) return "reference instability: position and token of a library function depend on earlier calls in the process (a fresh process agrees)"
+        // DEV-17 (owner's decision): the token of a library function called through a higher-order function or ~> is
+        // its name; a fresh jsonata-js process gives no token and no position
+        val engineToken = got.substringAfter(" @").substringAfter(' ')
+        val freshTail = fresh.substringAfter(" @")
+        if (codeOnly(fresh) == codeOnly(got) && freshTail == "null null" && libraryFunctionAsValue(c.expr, engineToken)) {
+            return "DEV-17: the token of a library function called through a higher-order function or ~> is its name"
+        }
+        return null
+    }
+
+    /** Whether [name] is a library function passed as a value in [expr] (`~> $name`, `$f(x, $name)`), not only called. */
+    private fun libraryFunctionAsValue(expr: String, name: String): Boolean {
+        if (name == "null" || su.seaf.archtool.jsonata.FunctionRegistry.standard().lookup(name) == null) return false
+        return Regex("\\$" + Regex.escape(name) + "\\s*(\\)|,|~>|]|$)").containsMatchIn(expr) || Regex("~>\\s*\\$" + Regex.escape(name) + "\\b(?!\\s*\\()").containsMatchIn(expr)
+    }
+
     private fun category(want: String, got: String): String = when {
         got.startsWith("engine-crash") -> "engine-crash"
         got == "timeout" -> "timeout"
+        want == "reference-timeout" -> "reference-timeout"
         want.startsWith("crash") -> "reference-crash"
         want.startsWith("error") && got.startsWith("error") -> "error-code"
         want.startsWith("error") || got.startsWith("error") -> "error-vs-value"
@@ -198,13 +287,69 @@ object KnownDifferences {
         if (Regex("\\(\\s*\\?|,\\s*\\?\\s*[,)]").containsMatchIn(c.expr) && got.startsWith("error T0410") && !want.startsWith("error")) {
             return "DEV-03: partial application of a native function checks its signature"
         }
-        if (want.startsWith("error ") && got.startsWith("error ") && Regex("[\\[{][^\\]}]*,").containsMatchIn(c.expr)) {
-            return "DEV-09: several failing values of a constructor (jsonata-js reports the first to fail in its async evaluation)"
+        if (want == "reference-timeout") return "the reference did not finish within the case timeout"
+        // DEV-03 p. 3: a partially applied native function coerces its argument by the signature, the reference
+        // calls it unchecked (both sides give a value)
+        if (partialNative.containsMatchIn(c.expr) && !want.startsWith("error") && !got.startsWith("error")) {
+            return "DEV-03: a partially applied native function checks and coerces its arguments by the signature"
+        }
+        // DEV-09 (shared regex): one regex variable used by two or more values of a constructor; jsonata-js shares the
+        // RegExp lastIndex between them in its async evaluation (review RV2-9)
+        if (sharedRegexInConstructor(c.expr)) {
+            return "DEV-09: a regex variable shared by several values of a constructor (lastIndex in the async evaluation of jsonata-js)"
         }
         if (c.expr.contains("{") && want.replace("[null]", "[]") == got) {
             return "DEV-08: object constructor over an empty array does not push undefined into it"
         }
         return null
+    }
+
+    private val partialNative = Regex("\\$[a-zA-Z]+\\([^()]*\\?[^()]*\\)")
+
+    /** A variable bound to a regex literal and referenced inside two or more values of one array or object constructor. */
+    fun sharedRegexInConstructor(expr: String): Boolean {
+        val ast = try {
+            Jsonata.compile(expr).ast()
+        } catch (_: JsonataException) {
+            return false
+        }
+        val regexVars = HashSet<String>()
+        walk(ast) { n ->
+            if (n.type == "bind" && (n["rhs"] as? su.seaf.archtool.jsonata.parser.AstNode)?.type == "regex") {
+                ((n["lhs"] as? su.seaf.archtool.jsonata.parser.AstNode)?.get("value") as? String)?.let { regexVars += it }
+            }
+        }
+        if (regexVars.isEmpty()) return false
+        var shared = false
+        walk(ast) { n ->
+            val values: List<Any?> = when {
+                n.type == "unary" && n.value == "[" -> (n["expressions"] as? List<*>).orEmpty()
+                n.type == "unary" && n.value == "{" -> (n["lhs"] as? List<*>).orEmpty().flatMap { (it as? List<*>).orEmpty() }
+                else -> emptyList()
+            }
+            for (v in regexVars) if (values.count { uses(it, v) } >= 2) shared = true
+        }
+        return shared
+    }
+
+    private fun uses(node: Any?, variable: String): Boolean {
+        var found = false
+        walk(node) { n -> if (n.type == "variable" && n["value"] == variable) found = true }
+        return found
+    }
+
+    private fun walk(root: Any?, visit: (su.seaf.archtool.jsonata.parser.AstNode) -> Unit) {
+        val stack = ArrayList<Any?>()
+        stack.add(root)
+        while (stack.isNotEmpty()) {
+            when (val x = stack.removeAt(stack.size - 1)) {
+                is su.seaf.archtool.jsonata.parser.AstNode -> {
+                    visit(x)
+                    stack.addAll(x.values)
+                }
+                is List<*> -> stack.addAll(x)
+            }
+        }
     }
 
     private fun lastBitsOnly(want: String, got: String): Boolean {
@@ -214,11 +359,22 @@ object KnownDifferences {
     }
 }
 
-/** Replay: cases from a JSONL file of `{"id"?, "expr", "input"?}` (e.g. real expressions with their documents). */
-fun readCases(file: File): List<FuzzCase> = file.readLines().filter { it.isNotBlank() }.mapIndexed { i, line ->
+/**
+ * Replay: cases from a JSONL file, one `{"expr", "data"?, "bindings"?, "id"?, "zone"?}` per line (`input` is accepted
+ * for `data`, as mismatches.jsonl writes it). Other fields fail the run, so that nothing a case needs is silently
+ * dropped (review RV2-5); the bindings reach both engines.
+ */
+fun readCases(file: File): List<FuzzCase> = file.readLines().withIndex().filter { it.value.isNotBlank() }.map { (i, line) ->
     val n = mapper.readTree(line)
-    FuzzCase(n.get("id")?.asText() ?: "${file.nameWithoutExtension}-$i", n.get("zone")?.asText() ?: "replay", n.get("expr").asText(), n.get("input"))
+    val unknown = n.fieldNames().asSequence().filter { it !in REPLAY_FIELDS }.toList()
+    require(unknown.isEmpty()) { "${file.name}:${i + 1}: unsupported fields $unknown (allowed: $REPLAY_FIELDS)" }
+    require(!(n.has("data") && n.has("input"))) { "${file.name}:${i + 1}: both data and input" }
+    val bindings = n.get("bindings")
+    require(bindings == null || bindings.isObject) { "${file.name}:${i + 1}: bindings must be an object" }
+    FuzzCase(n.get("id")?.asText() ?: "${file.nameWithoutExtension}-${i + 1}", n.get("zone")?.asText() ?: "replay", n.get("expr").asText(), n.get("data") ?: n.get("input"), bindings)
 }
+
+private val REPLAY_FIELDS = setOf("id", "zone", "expr", "data", "input", "bindings")
 
 /**
  * `./gradlew :jsonata-compat:fuzz -Pseed=1 -Pcount=20000`: generates cases, compares with jsonata@2.2.2 and writes
@@ -232,6 +388,10 @@ fun main(args: Array<String>) {
     val outDir = File(args.getOrElse(3) { "build/fuzz" }).apply { mkdirs() }
     val replay = args.getOrNull(4)?.takeIf { it.isNotBlank() }?.let { File(it) }
     val cases = if (replay != null) readCases(replay) else Generator(seed).let { gen -> List(count) { gen.next(it, "s$seed") } }
+    Sidecar.unavailable(File(root, "node"))?.let { reason ->
+        System.err.println("fuzzing skipped: $reason")
+        System.exit(2)
+    }
     val t0 = System.nanoTime()
     val fuzz = DiffFuzz(File(root, "node"))
     val mismatches = fuzz.run(cases)
@@ -248,6 +408,11 @@ fun main(args: Array<String>) {
         slow.addObject().put("id", id).put("ms", ms).put("expr", byId.getValue(id).expr)
     }
     report.put("mismatches", mismatches.size)
+    report.put("explainedByPosition", fuzz.explainedByPosition.size)
+    val sample = report.putArray("explainedByPositionSample")
+    fuzz.explainedByPosition.take(20).forEach { m ->
+        sample.addObject().put("id", m.case.id).put("expr", m.case.expr).put("expected", m.expected).put("actual", m.actual).put("known", m.known)
+    }
     report.put("unexplained", mismatches.count { it.known == null })
     val byZone = report.putObject("casesByZone")
     cases.groupingBy { it.zone }.eachCount().toSortedMap().forEach { (z, n) -> byZone.put(z, n) }
@@ -262,6 +427,7 @@ fun main(args: Array<String>) {
                 .put("expr", m.case.expr).put("expected", m.expected).put("actual", m.actual)
             if (m.known != null) n.put("known", m.known)
             if (m.case.input != null) n.set<JsonNode>("input", m.case.input)
+            if (m.case.bindings != null) n.set<JsonNode>("bindings", m.case.bindings)
             w.write(mapper.writeValueAsString(n))
             w.write("\n")
         }

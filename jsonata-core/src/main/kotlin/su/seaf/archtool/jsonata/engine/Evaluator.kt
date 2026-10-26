@@ -186,8 +186,10 @@ internal object Evaluator {
                     }
                 }
             } else if (e.token == null) {
-                // jsonata-js keeps the name of the last direct call on the shared function object, so a library
-                // function called by $map or `~>` still reports its own name
+                // DEV-17 (owner's decision, review round 2): a library function called by $map or `~>` reports its
+                // own name. jsonata-js keeps the place of the last direct call on the shared function object, so it
+                // gives that name after an earlier call in the process and no token in a fresh one; the engine is
+                // deterministic (docs/deviations.md, "Reference instabilities")
                 val name = when (proc) {
                     is NativeFunction -> proc.name
                     is PartialNative -> proc.native.name
@@ -682,10 +684,48 @@ internal object Evaluator {
                 t.remove("@")
                 e = frameFromTuple(env, t)
             }
-            val value = spec.pairs[entry.exprIndex][1].evaluate(context, e)
+            val value = try {
+                spec.pairs[entry.exprIndex][1].evaluate(context, e)
+            } catch (ex: JsonataException) {
+                val rest = jsKeyOrder(groups.keys).dropWhile { it != key }.drop(1)
+                probeOtherFailures(ex, env, spec.position) { j ->
+                    val other = groups[rest.getOrNull(j) ?: throw NoSuchElementException()]!!
+                    spec.pairs[other.exprIndex][1].evaluate(other.data, env)
+                }
+                throw ex
+            }
             if (value != null) result.put(key, value)
         }
         return result
+    }
+
+    /** Errors of limits and of the engine itself, which are not errors of the expression's values. */
+    fun isLimit(code: String): Boolean = code.startsWith("X") || code == "D1011" || code == "D1012" || code == "D2015"
+
+    /**
+     * DEV-09 probe: [failure] ended a constructor; with a deviation sink attached, the remaining values ([next] of 0,
+     * 1, … until NoSuchElementException) are evaluated too, and the probe fires only when another one fails with a
+     * different code — jsonata-js evaluates all values together and may report that one (review RV2-4). Without a
+     * sink nothing is evaluated.
+     */
+    inline fun probeOtherFailures(failure: JsonataException, env: Frame, position: Int?, next: (Int) -> Value?) {
+        if (env.ctx.options.deviations == null || isLimit(failure.code)) return
+        var j = 0
+        while (true) {
+            try {
+                next(j)
+            } catch (_: NoSuchElementException) {
+                return
+            } catch (other: JsonataException) {
+                if (isLimit(other.code)) return
+                if (other.code != failure.code) {
+                    env.ctx.deviation(Deviations.CONSTRUCTOR_ERRORS.id, position)
+                    return
+                }
+            } catch (_: RuntimeException) {
+            }
+            j++
+        }
     }
 
     /**

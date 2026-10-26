@@ -310,7 +310,12 @@ internal class ArrayNode(ast: AstNode, @JvmField val items: Array<Node>, @JvmFie
     override fun eval(input: Value?, env: Frame): Value? {
         var result: Value = ArrayValue(items.size)
         for (i in items.indices) {
-            val value = items[i].evaluate(input, env) ?: continue
+            val value = try {
+                items[i].evaluate(input, env)
+            } catch (e: JsonataException) {
+                Evaluator.probeOtherFailures(e, env, position) { j -> items.getOrNull(i + 1 + j)?.evaluate(input, env) ?: if (i + 1 + j < items.size) null else throw NoSuchElementException() }
+                throw e
+            } ?: continue
             if (nested[i]) {
                 (result as ArrayValue).add(value)
             } else {

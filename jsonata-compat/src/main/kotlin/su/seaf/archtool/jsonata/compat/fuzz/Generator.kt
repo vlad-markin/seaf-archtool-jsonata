@@ -5,7 +5,8 @@ import su.seaf.archtool.jsonata.compat.mapper
 import java.util.SplittableRandom
 
 /** One generated case: an expression, an input document (null = undefined) and the zone that produced it. */
-data class FuzzCase(val id: String, val zone: String, val expr: String, val input: JsonNode?)
+/** One case: an expression, its input document and top-level bindings (replay files may carry them). */
+data class FuzzCase(val id: String, val zone: String, val expr: String, val input: JsonNode?, val bindings: JsonNode? = null)
 
 /**
  * Deterministic generator of JSONata expressions and documents for differential fuzzing (phase 8): a small grammar of

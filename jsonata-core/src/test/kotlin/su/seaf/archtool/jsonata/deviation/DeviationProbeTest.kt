@@ -32,6 +32,24 @@ class DeviationProbeTest {
     private fun scan(expr: String): List<String> = Deviations.scan(Jsonata.compile(expr).ast()).map { "${it.id}@${it.position}" }
 
     @Test
+    fun `DEV-09 the probe fires only when another value of the constructor fails with another code`() {
+        val r = Recorder()
+        assertEquals("T0410", error("{\"a\": (\$pad(2.5, null)), \"b\": (false < \$nothing)}", r).code)
+        assertEquals(listOf("DEV-09"), r.hits.map { it.first })
+        val array = Recorder()
+        assertEquals("T0410", error("[\$pad(2.5, null), 1, false < \$nothing]", array).code)
+        assertEquals(listOf("DEV-09"), array.hits.map { it.first })
+        // one failing value, or the same code twice: no hit
+        for (expr in listOf("{\"a\": 1 + \"x\", \"b\": 2}", "[1 + \"x\", 2 + \"y\"]", "[1 + \"x\"]")) {
+            val n = Recorder()
+            error(expr, n)
+            assertEquals(emptyList(), n.hits.map { it.first }, expr)
+        }
+        // without a sink the other values are not evaluated
+        assertEquals("T0410", assertFailsWith<JsonataException> { Jsonata.compile("[\$pad(2.5, null), \$x()]").evaluate(null) }.code)
+    }
+
+    @Test
     fun `DEV-10 an error inside a lambda keeps the position of the operator`() {
         val r = Recorder()
         val e = error("(\$f := function(){ 1 + \"a\" }; \$f())", r)

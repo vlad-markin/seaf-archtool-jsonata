@@ -39,6 +39,12 @@ public fun interface DeviationSink {
 public object Deviations {
     private const val V010 = "0.1.0"
 
+    public val CONSTRUCTOR_ERRORS: Deviation =
+        Deviation("DEV-09", "ERR", V010, true, "Several failing values of a constructor: the engine reports the first in order")
+
+    public val LIBRARY_FUNCTION_TOKEN: Deviation =
+        Deviation("DEV-17", "ERR-POS", V010, true, "The token of a library function called through a higher-order function or ~> is its name")
+
     public val POSITION_IN_LAMBDA: Deviation =
         Deviation("DEV-10", "ERR-POS", V010, true, "An error inside a lambda keeps the position of the failing operator")
 
@@ -52,7 +58,7 @@ public object Deviations {
         Deviation("DEV-13", "ERR-EVAL", V010, true, "\$eval does not wrap engine errors (X codes) and host exceptions into D3121")
 
     /** Deviations that have a probe or a static rule here, by id. */
-    public val all: List<Deviation> = listOf(POSITION_IN_LAMBDA, BASE64_UTF8, UNDEFINED_IN_SEQUENCES, EVAL_KEEPS_ENGINE_ERRORS)
+    public val all: List<Deviation> = listOf(CONSTRUCTOR_ERRORS, POSITION_IN_LAMBDA, LIBRARY_FUNCTION_TOKEN, BASE64_UTF8, UNDEFINED_IN_SEQUENCES, EVAL_KEEPS_ENGINE_ERRORS)
 
     public fun byId(id: String): Deviation? = all.firstOrNull { it.id == id }
 
