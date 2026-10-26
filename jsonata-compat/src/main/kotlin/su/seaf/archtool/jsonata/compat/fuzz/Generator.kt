@@ -246,7 +246,20 @@ class Generator(seed: Long) {
                 else -> "\$string(" + pick(listOf("meta", "\$", "{\"b\":1,\"2\":[1,{\"1\":2}]}")) + (if (chance(0.3)) ", true" else "") + ")"
             }
         },
-        "grouping" to { path(1) + "{" + pick(listOf("type", "name", "id", "\$string(cost)", "owner.team", "\"k\"")) + ": " + pick(listOf("\$count(\$)", "\$sum(cost)", "name", "\$", "[name]", "{\"n\": name}")) + "}" },
+        "grouping" to {
+            when (int(4)) {
+                0 -> path(1) + "{" + pick(listOf("type", "name", "id", "\$string(cost)", "owner.team", "\"k\"")) + ": " + pick(listOf("\$count(\$)", "\$sum(cost)", "name", "\$", "[name]", "{\"n\": name}")) + "}"
+                // tuple bindings @ and # (review RV3-47: the values of a group are gathered per binding)
+                1 -> pick(listOf("systems.components", "systems", "**.components", "systems.components.deps")) + pick(listOf("@\$o", "#\$i", "@\$o#\$i", "#\$i[\$i > 0]")) + "{" +
+                    pick(listOf("\$o.type", "\$string(\$i % 3)", "type", "\$o.name", "\"k\"")) + ": " +
+                    pick(listOf("\$count(\$o)", "[\$i]", "\$o.name", "\$sum(\$i)", "\$o.tags", "\$", "{\"i\": \$i, \"n\": \$count(\$o)}")) + "}"
+                // numeric keys (JS key order), empty and undefined values
+                2 -> path(1) + "{" + pick(listOf("\$string(\$count(tags))", "\$string(cost % 3)", "\"1\"", "\"01\"", "\"0\"", "\$string(\$count(deps))")) + ": " +
+                    pick(listOf("nope", "[]", "tags", "\$count(\$)", "cost", "\$.nope")) + "}"
+                // the same key from different pairs (D1009) and repeated keys of one pair
+                else -> path(1) + "{" + pick(listOf("type", "\"k\"")) + ": \$count(\$), " + pick(listOf("type", "name", "\"k\"")) + ": " + pick(listOf("name", "1", "\$sum(cost)")) + "}"
+            }
+        },
         "nulls" to {
             pick(strFns + agg) + "(" + pick(listOf("null", "nope", "systems.nope", "owner", "[]", "[null]", "{}", "\$nothing")) + ")"
         },

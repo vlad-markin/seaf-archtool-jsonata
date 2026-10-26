@@ -705,7 +705,7 @@ internal object Evaluator {
             var context = entry.data
             var e = env
             if (reduce) {
-                val t = reduceTupleStream(entry.data)
+                val t = reduceTupleStream(entry.data, env.ctx)
                 context = t["@"]
                 t.remove("@")
                 e = frameFromTuple(env, t)
@@ -782,16 +782,53 @@ internal object Evaluator {
         return keys.filter { ObjectValue.isArrayIndex(it) }.sortedBy { it.toLong() } + keys.filter { !ObjectValue.isArrayIndex(it) }
     }
 
-    /** jsonata.js: reduceTupleStream. */
-    private fun reduceTupleStream(stream: Value?): ObjectValue {
+    /**
+     * jsonata.js: reduceTupleStream. The reference does `result[k] = fn.append(result[k], v)` for every tuple, a copy
+     * of everything gathered so far each time (quadratic in the size of the group). Here a key gets a buffer of its own
+     * on its second value and later values go into it: the same plain arrays, the values of the data never changed
+     * (review RV3-47).
+     */
+    private fun reduceTupleStream(stream: Value?, ctx: EvalContext): ObjectValue {
         if (stream !is ArrayValue) return ObjectValue().also { t -> (stream as ObjectValue).forEach { k, v -> t.put(k, v) } }
         val result = ObjectValue()
         (stream.raw(0) as ObjectValue).forEach { k, v -> result.put(k, v) }
+        val buffers = HashMap<String, ArrayValue>()
         for (ii in 1 until stream.size) {
             val t = stream.raw(ii) as ObjectValue
-            t.forEach { k, v -> append(result[k], v)?.let { result.put(k, it) } }
+            t.forEach { k, v ->
+                ctx.tick()
+                val buffer = buffers[k]
+                if (buffer != null) {
+                    spreadInto(buffer, v, ctx)
+                } else {
+                    val current = result[k]
+                    if (current == null) {
+                        // fn.append(undefined, v) is v itself
+                        result.put(k, v)
+                    } else {
+                        // fn.append(a, v): a new plain array of a (or its items) and v (or its items)
+                        val b = ArrayValue()
+                        spreadInto(b, current, ctx)
+                        spreadInto(b, v, ctx)
+                        buffers[k] = b
+                        result.put(k, b)
+                    }
+                }
+            }
         }
         return result
+    }
+
+    /** Adds [v] to [out] as `Array.prototype.concat` does: the items of an array, any other value itself. */
+    private fun spreadInto(out: ArrayValue, v: Value, ctx: EvalContext) {
+        if (v is ArrayValue) {
+            for (i in 0 until v.size) {
+                ctx.tick()
+                out.addNullable(v.raw(i))
+            }
+        } else {
+            out.add(v)
+        }
     }
 
     // ---- sort ----

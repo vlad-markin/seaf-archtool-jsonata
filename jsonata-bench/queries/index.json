@@ -10,11 +10,11 @@
  {
   "name": "group_agg",
   "desc": "grouping {} with $count/$sum/$max",
-  "sizes": [
+  "js_sizes": [
    10000,
    50000
   ],
-  "note": "O(n^2) in both engines: group values are accumulated with $append-style copying"
+  "note": "jsonata-js 2.2.2 is O(n^2): each item is appended to its group with fn.append (a copy); the engine gathers a group in one buffer"
  },
  {
   "name": "group_nested",

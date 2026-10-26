@@ -398,4 +398,63 @@ class ReviewRound3Test {
         assertTrue(!su.seaf.archtool.jsonata.JsRegexes.compile("^[a-c]\$").test("-"))
         assertEquals("\"-\"", eval("\$match(\"x-\", /[a-c-e]/).match"))
     }
+
+    @Test
+    fun `RV3-47 grouping with tuple bindings gives the reference results`() {
+        val data = Jsonata.compile("""{"items":[{"t":"x","v":[1,2]},{"t":"x","v":[3]},{"t":"y","v":5},{"t":"x","v":[]},{"t":"2"},{"t":"1","v":[[7]]}]}""").evaluate(null)
+        // outcomes of jsonata-js 2.2.2
+        val expected = listOf(
+            "items@\$o{\$o.t: \$o.v}" to """{"1":[[7]],"x":[1,2,3],"y":5}""",
+            "items@\$o{\$o.t: \$count(\$o)}" to """{"1":1,"2":1,"x":3,"y":1}""",
+            "items@\$o#\$i{\$o.t: [\$i]}" to """{"1":[5],"2":[4],"x":[0,1,3],"y":[2]}""",
+            "items#\$i{t: \$i}" to """{"1":5,"2":4,"x":[0,1,3],"y":2}""",
+            // the data is not changed by the grouping
+            "(items@\$o{\$o.t: \$o.v}; items)" to """[{"t":"x","v":[1,2]},{"t":"x","v":[3]},{"t":"y","v":5},{"t":"x","v":[]},{"t":"2"},{"t":"1","v":[[7]]}]""",
+        )
+        for ((expr, want) in expected) assertEquals(want, eval(expr, data), expr)
+        val items = Jsonata.compile("""{"items":[{"t":"a"},{"t":"b"},{"t":"a"},{"t":"a"}]}""").evaluate(null)
+        assertEquals("""{"a":{"i":[0,2,3],"n":3},"b":{"i":1,"n":1}}""", eval("items@\$o#\$i{\$o.t: {\"i\": \$i, \"n\": \$count(\$o)}}", items))
+        assertEquals("""{"b":1,"a":5}""", eval("items#\$i[\$i > 0]{t: \$sum(\$i)}", items))
+    }
+
+    @Test
+    fun `RV3-47 grouping grows linearly`() {
+        fun model(n: Int): Value {
+            val list = su.seaf.archtool.jsonata.value.ArrayValue()
+            for (i in 0 until n) list.add(su.seaf.archtool.jsonata.value.ObjectValue().also { o ->
+                o.put("id", su.seaf.archtool.jsonata.value.StringValue.of("c$i"))
+                o.put("type", su.seaf.archtool.jsonata.value.StringValue.of("t${i % 7}"))
+                o.put("cost", su.seaf.archtool.jsonata.value.NumberValue.of((i % 100).toDouble()))
+            })
+            return su.seaf.archtool.jsonata.value.ObjectValue().also { it.put("items", list) }
+        }
+        // the work of the evaluation: nodes entered and iterations of native loops, read by a host function at the end
+        var work = 0L
+        val registry = su.seaf.archtool.jsonata.FunctionRegistry.create()
+            .register("work", null, { c, _ -> (c as CallContextImpl).frame.ctx.let { work = it.steps + it.ticks }; null })
+            .freeze()
+        val mx = ManagementFactory.getThreadMXBean() as com.sun.management.ThreadMXBean
+        fun measure(expr: String, n: Int): Pair<Long, Long> {
+            val compiled = Jsonata.compile("(\$r := $expr; \$work(); \$r)", su.seaf.archtool.jsonata.CompileOptions(registry))
+            val input = model(n)
+            repeat(3) { compiled.evaluate(input) }
+            var bytes = Long.MAX_VALUE
+            repeat(3) {
+                val b0 = mx.currentThreadAllocatedBytes
+                compiled.evaluate(input)
+                bytes = minOf(bytes, mx.currentThreadAllocatedBytes - b0)
+            }
+            return bytes to work
+        }
+        for (expr in listOf(
+            "items@\$c{\$c.type: \$count(\$c)}",
+            "items#\$i{type: \$count(\$i)}",
+            "items{type: {\"count\": \$count(id), \"cost\": \$sum(cost), \"max\": \$max(cost)}}",
+        )) {
+            val (bytes1, work1) = measure(expr, 10_000)
+            val (bytes4, work4) = measure(expr, 40_000)
+            assertTrue(bytes4 <= 5 * bytes1, "$expr: allocations $bytes1 -> $bytes4")
+            assertTrue(work4 <= 5 * work1, "$expr: work $work1 -> $work4")
+        }
+    }
 }

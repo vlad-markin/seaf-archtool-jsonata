@@ -25,4 +25,14 @@ class FuzzSmokeTest {
         val unexplained = mismatches.filter { it.known == null }
         assertTrue(unexplained.isEmpty(), unexplained.joinToString("\n") { "${it.case.id} [${it.category}] ${it.case.expr}\n  input ${it.case.input}\n  expected ${it.expected}\n  actual   ${it.actual}" })
     }
+
+    @Test
+    fun `grouping cases agree with the reference (RV3-47)`() {
+        assumeTrue(Sidecar.available(node), "Node 22 with compat/node/node_modules is needed")
+        val gen = Generator(20261026)
+        val cases = generateSequence(0) { it + 1 }.map { gen.next(it, "group") }.filter { it.zone == "grouping" }.take(600).toList()
+        assertTrue(cases.count { it.expr.contains("@\$o") || it.expr.contains("#\$i") } > 100)
+        val unexplained = DiffFuzz(node).run(cases).filter { it.known == null }
+        assertTrue(unexplained.isEmpty(), unexplained.joinToString("\n") { "${it.case.id} ${it.case.expr}\n  input ${it.case.input}\n  expected ${it.expected}\n  actual   ${it.actual}" })
+    }
 }

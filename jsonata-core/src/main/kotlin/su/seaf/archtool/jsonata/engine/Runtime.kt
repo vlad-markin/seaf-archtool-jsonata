@@ -241,7 +241,8 @@ internal class EvalContext(
         checkpoint()
     }
 
-    private var ticks = 0
+    /** Iterations of native loops so far ([tick]); with [steps] the work of the evaluation (tests of growth). */
+    @JvmField internal var ticks: Int = 0
 
     /**
      * The last call site of each lambda in this evaluation. jsonata-js records token and position on the lambda object
