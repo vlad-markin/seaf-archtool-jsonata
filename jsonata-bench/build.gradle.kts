@@ -18,7 +18,7 @@ tasks.register<JavaExec>("stand") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("su.seaf.archtool.jsonata.bench.StandKt")
     workingDir = rootProject.projectDir
-    val props = listOf("sizes", "queries", "engines", "xmx", "heap", "warmup", "iters")
+    val props = listOf("sizes", "queries", "engines", "xmx", "heap", "warmup", "iters", "jsTimeout")
     args = props.mapNotNull { p -> project.findProperty("stand.$p")?.let { "--$p=$it" } ?: project.findProperty(p)?.let { "--$p=$it" } }
 }
 tasks.test { systemProperty("jsonata.root", rootProject.projectDir.absolutePath) }

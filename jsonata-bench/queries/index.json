@@ -10,10 +10,6 @@
  {
   "name": "group_agg",
   "desc": "grouping {} with $count/$sum/$max",
-  "js_sizes": [
-   10000,
-   50000
-  ],
   "note": "jsonata-js 2.2.2 is O(n^2): each item is appended to its group with fn.append (a copy); the engine gathers a group in one buffer"
  },
  {
@@ -31,17 +27,11 @@
  {
   "name": "sort_fn",
   "desc": "$sort with a comparator lambda (cost desc, id asc)",
-  "js_sizes": [
-   10000
-  ],
-  "note": "jsonata-js 2.2.2 merge sort is O(n^2) in time and memory (slice(1) recursion); JS OOMs at 50k"
+  "note": "jsonata-js 2.2.2 merge sort is O(n^2) in time and memory (slice(1) recursion); the stand records its OOM or timeout"
  },
  {
   "name": "orderby",
   "desc": "order-by operator ^(>cost, id)",
-  "js_sizes": [
-   10000
-  ],
   "note": "same JS sort implementation as $sort"
  },
  {
@@ -58,11 +48,7 @@
  },
  {
   "name": "recursion_tree",
-  "desc": "recursive walk over the whole document (counts objects), non-tail recursion depth ~7",
-  "js_sizes": [
-   10000,
-   50000
-  ]
+  "desc": "recursive walk over the whole document (counts objects), non-tail recursion depth ~7"
  },
  {
   "name": "tail_loop",

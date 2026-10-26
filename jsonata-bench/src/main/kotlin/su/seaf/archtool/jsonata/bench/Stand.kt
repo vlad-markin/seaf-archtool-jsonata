@@ -15,6 +15,10 @@ import java.util.concurrent.TimeUnit
  * query passes with (`-Xmx` / `--max-old-space-size` bisection).
  *
  * `./gradlew :jsonata-bench:stand -Psizes=10000 -Pqueries=path_filter,sort_fn -Pengines=jvm,js -Pheap=true`
+ *
+ * jsonata-js runs every query at every size in a process of its own, within the heap of `--xmx` and `--jsTimeout`
+ * seconds (600 by default): an OOM or a timeout is recorded as the result instead of not running the pair (review
+ * RV3-45).
  */
 fun main(args: Array<String>) {
     val a = args.associate { it.removePrefix("--").substringBefore('=') to it.substringAfter('=', "") }
@@ -39,9 +43,11 @@ fun main(args: Array<String>) {
             run(listOf(java, "-Xms$xmx", "-Xmx$xmx", "-XX:+UseG1GC", "-Xss16m", "-cp", cp, "su.seaf.archtool.jsonata.bench.StandRunner") + common, root)
         }
         if ("js" in engines) {
-            val jsOnly = queries.filter { it.jsRunsAt(size) }.joinToString(",") { it.name }
-            if (jsOnly.isNotEmpty()) {
-                run(listOf("node", "--expose-gc", "--stack-size=65500", "--max-old-space-size=${mb(xmx)}", "compat/node/stand.mjs") + common.filter { !it.startsWith("--only=") } + "--only=$jsOnly", root)
+            val jsTimeout = a["jsTimeout"]?.toLong() ?: 600
+            for (q in queries.filter { it.runsAt(size) && it.jsRunsAt(size) }) {
+                val cmd = listOf("node", "--expose-gc", "--stack-size=65500", "--max-old-space-size=${mb(xmx)}", "compat/node/stand.mjs") +
+                    common.filter { !it.startsWith("--only=") } + "--only=${q.name}"
+                jsFailure(runLogged(cmd, root, jsTimeout))?.let { failure -> recordFailure(results, "jsonata-js", q.name, size, failure) }
             }
         }
         if (a["heap"] == "true") {
@@ -102,6 +108,49 @@ private fun bisect(max: Int, passes: (Int) -> Boolean): Int? {
     return hi
 }
 
+/** How a process of the stand ended: its exit code, whether it was stopped at the timeout, its output. */
+internal class ProcessOutcome(val exit: Int, val timedOut: Boolean, val output: String)
+
+/** Runs [cmd] with its output in a log (echoed to stderr), stopping it after [timeoutSeconds]. */
+internal fun runLogged(cmd: List<String>, dir: File, timeoutSeconds: Long): ProcessOutcome {
+    val log = File.createTempFile("stand", ".log").apply { deleteOnExit() }
+    val p = ProcessBuilder(cmd).directory(dir).redirectErrorStream(true).redirectOutput(log).start()
+    val finished = p.waitFor(timeoutSeconds, TimeUnit.SECONDS)
+    if (!finished) {
+        p.destroyForcibly()
+        p.waitFor(10, TimeUnit.SECONDS)
+    }
+    val output = log.readText()
+    System.err.print(output)
+    log.delete()
+    return ProcessOutcome(if (finished) p.exitValue() else -1, !finished, output)
+}
+
+/** Why a run of jsonata-js failed — "OOM", "таймаут" or the exit code — or null when it passed. */
+internal fun jsFailure(o: ProcessOutcome): String? = when {
+    o.timedOut -> "таймаут"
+    o.exit == 0 -> null
+    o.output.contains("heap out of memory") || o.output.contains("Allocation failed") || o.output.contains("Invalid array length") -> "OOM"
+    else -> "ошибка (код ${o.exit})"
+}
+
+/** Appends a failed run to the results, unless the runner wrote a record for that pair itself. */
+internal fun recordFailure(results: File, engine: String, query: String, size: Int, failure: String) {
+    val written = results.isFile && results.readLines().any { line ->
+        line.isNotBlank() && (JsonataJson.parse(line) as ObjectValue).let {
+            (it["engine"] as? StringValue)?.value == engine && (it["query"] as? StringValue)?.value == query && (it["size"] as? NumberValue)?.value?.toInt() == size
+        }
+    }
+    if (written) return
+    val rec = ObjectValue().also { o ->
+        o.put("engine", StringValue.of(engine))
+        o.put("query", StringValue.of(query))
+        o.put("size", NumberValue.of(size.toDouble()))
+        o.put("error", StringValue.of(failure))
+    }
+    results.appendText(su.seaf.archtool.jsonata.value.JsonWriter.stringify(rec) + "\n")
+}
+
 private fun run(cmd: List<String>, dir: File, quiet: Boolean = false): Int {
     val pb = ProcessBuilder(cmd).directory(dir)
     if (quiet) pb.redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.DISCARD) else pb.inheritIO()
@@ -113,7 +162,7 @@ private fun run(cmd: List<String>, dir: File, quiet: Boolean = false): Int {
     return p.exitValue()
 }
 
-private fun summary(results: File, dumps: File, queries: List<Query>, sizes: List<Int>, heapRows: List<String>): String {
+internal fun summary(results: File, dumps: File, queries: List<Query>, sizes: List<Int>, heapRows: List<String>): String {
     val recs = if (results.isFile) results.readLines().filter { it.isNotBlank() }.map { JsonataJson.parse(it) as ObjectValue } else emptyList()
     fun rec(engine: String, q: String, size: Int) = recs.lastOrNull { (it["engine"] as StringValue).value.startsWith(engine) && (it["query"] as StringValue).value == q && (it["size"] as NumberValue).value.toInt() == size }
     fun num(r: ObjectValue?, k: String) = (r?.get(k) as? NumberValue)?.value
@@ -138,6 +187,19 @@ private fun summary(results: File, dumps: File, queries: List<Query>, sizes: Lis
         }
         val same = compare(File(dumps, "${q.name}-$size.jvm.json"), File(dumps, "${q.name}-$size.js.json"))
         sb.append("| ${q.name} | $size | ${f(jm)} / ${f(num(j, "eval_ms_p95"))} | $jsNote | $speed | ${f(num(j, "alloc_mb_median"))} | ${f(num(j, "heap_peak_mb"))} | $same | ${f(num(j, "loadavg1"))} |\n")
+    }
+    // TC-21 for the engine, whether or not the reference finished
+    val pairs = queries.mapNotNull { q ->
+        val m50 = num(rec("jsonata-kotlin", q.name, 50_000), "eval_ms_median")
+        val m200 = num(rec("jsonata-kotlin", q.name, 200_000), "eval_ms_median")
+        if (m50 != null && m200 != null && m50 > 0) Triple(q.name, m50, m200) else null
+    }
+    if (pairs.isNotEmpty()) {
+        sb.append("\n## Асимптотика движка (TC-21: 200 тыс. / 50 тыс. ≤ 6)\n\n| запрос | 50 тыс., мс | 200 тыс., мс | отношение |\n|---|---:|---:|---:|\n")
+        for ((name, m50, m200) in pairs) {
+            val ratio = m200 / m50
+            sb.append("| $name | ${f(m50)} | ${f(m200)} | ${if (ratio > 6) "**%.2f**".format(ratio) else "%.2f".format(ratio)} |\n")
+        }
     }
     if (heapRows.isNotEmpty()) {
         sb.append("\n## Минимальная куча, при которой запрос проходит (бисекция, точность 5 %)\n\nОба движка читают модель из строки. «= разбор» — минимум равен минимуму одного разбора: его задаёт разбор, а не запрос.\n\n| запрос | размер | JVM `-Xmx`, МБ | V8 `--max-old-space-size`, МБ | JVM / V8 |\n|---|---:|---:|---:|---:|\n")
