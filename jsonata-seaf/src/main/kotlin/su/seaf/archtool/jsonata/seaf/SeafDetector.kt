@@ -29,7 +29,7 @@ public object SeafDetector {
 
     /** Calls of `$set`/`$get`: the store lives for one evaluation in the engine (DEV-15). */
     @JvmStatic
-    public fun storeCalls(ast: AstNode): List<Finding> = calls(ast).filter { it.second in STORE }.map { (node, name) ->
+    public fun storeCalls(ast: AstNode): List<Finding> = usages(ast).filter { it.second in STORE }.map { (node, name) ->
         Finding("DEV-15", node.position, "\$$name: the store of \$set/\$get lives for one evaluation in the engine; in the core it outlives evaluations of a request")
     }
 
@@ -43,13 +43,14 @@ public object SeafDetector {
     public fun scan(ast: AstNode, manifestFunctions: Value? = null): List<Finding> {
         val checked = ManifestFunctions.parse(manifestFunctions).filter { it.params != null || it.result != null }.map { it.id }.toSet()
         val out = ArrayList<Finding>(storeCalls(ast))
-        for ((node, name) in calls(ast)) {
+        val called = calls(ast).toSet()
+        for ((node, name) in usages(ast)) {
             when {
                 name == "jsonschema" || name in checked -> out += Finding(
                     "DEV-14", node.position,
                     "\$$name: violation messages of JSON Schema are networknt texts, the core's are ajv texts; the violations themselves are the same",
                 )
-                name in CoreFunctions.ALL_NAMES && name !in CoreFunctions.NAMES -> out += Finding(
+                (node to name) in called && name in CoreFunctions.ALL_NAMES && name !in CoreFunctions.NAMES -> out += Finding(
                     "T1006", node.position,
                     "\$$name: this core function is not available in the engine yet (docs/seaf-functions.md)",
                 )
@@ -114,6 +115,33 @@ public object SeafDetector {
     }
 
     private val STORE = setOf("set", "get")
+
+    /**
+     * Calls `$name(...)` and functions passed as values (`$map(x, $get)`, `$s := $set`, `~> $set`), without the names
+     * an expression binds itself (`$set := …`, a lambda parameter `$set`): the rules of `$set`/`$get`/`$jsonschema`
+     * see both (review RV3-40).
+     */
+    private fun usages(ast: AstNode): List<Pair<AstNode, String>> {
+        val bound = HashSet<String>()
+        val definitions = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<AstNode, Boolean>())
+        val procedures = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<AstNode, Boolean>())
+        walk(ast) { n ->
+            when (n.type) {
+                "bind" -> (n["lhs"] as? AstNode)?.let { lhs -> definitions += lhs; (lhs["value"] as? String)?.let { bound += it } }
+                "lambda" -> (n["arguments"] as? List<*>).orEmpty().filterIsInstance<AstNode>().forEach { a -> definitions += a; (a["value"] as? String)?.let { bound += it } }
+                "function", "partial" -> (n["procedure"] as? AstNode)?.let { procedures += it }
+            }
+        }
+        val out = ArrayList<Pair<AstNode, String>>()
+        for ((node, name) in calls(ast)) if (name !in bound) out += node to name
+        walk(ast) { n ->
+            if (n.type == "variable" && n !in definitions && n !in procedures) {
+                val name = n["value"] as? String
+                if (name != null && name.isNotEmpty() && name !in bound) out += n to name
+            }
+        }
+        return out
+    }
 
     /** Function calls `$name(...)` with the called name, in any order. */
     private fun calls(ast: AstNode): List<Pair<AstNode, String>> {

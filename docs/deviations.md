@@ -416,7 +416,7 @@ $jsonschema({"type": "object", "required": ["b"]})({"a": 1})
 движок: undefined
 ```
 
-В корпусе SEAF 0 вызовов. **Тест:** `CoreFunctionsTest` «set and get live for one evaluation». **Проба:** нет. **Статическое правило:** вызов `$set`/`$get` (шаг 3.5, `SeafDetector.storeCalls`).
+В корпусе SEAF 0 вызовов. **Тест:** `CoreFunctionsTest` «set and get live for one evaluation». **Проба:** нет. **Статическое правило:** вызов `$set`/`$get` и передача их значением (`$map(x, $get)`, `$s := $set`, `~> $set`), кроме имён, которые выражение связывает само (`:=`, параметр лямбды) (шаг 3.5, ревью RV3-40, `SeafDetector.storeCalls`).
 
 ## DEV-16. Ошибка внутри функции манифеста сохраняет позицию в `code` (отличие от ядра SEAF)
 

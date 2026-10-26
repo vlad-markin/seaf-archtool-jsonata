@@ -290,4 +290,19 @@ class ReviewRound3SeafTest {
         run("${'$'}load(7)")
         assertEquals(listOf("""{"m":1}""", """{"x":5}""", """{"m":1}""", """{"y":7}"""), host.manifests)
     }
+
+    @Test
+    fun `RV3-40 the detector finds functions passed as values`() {
+        fun ids(expr: String) = SeafDetector.scan(su.seaf.archtool.jsonata.Jsonata.compile(expr).ast()).map { it.id }
+        assertEquals(listOf("DEV-15"), ids("${'$'}map([\"a\"], ${'$'}get)"))
+        assertEquals(listOf("DEV-15"), ids("(${'$'}s := ${'$'}set; ${'$'}s(\"k\", 1))"))
+        assertEquals(listOf("DEV-15"), ids("\"k\" ~> ${'$'}set(1)"))
+        assertEquals(listOf("DEV-14"), ids("${'$'}map([{}], ${'$'}jsonschema)"))
+        // a name the expression binds itself is not the core's function
+        assertEquals(emptyList(), ids("(${'$'}set := function(${'$'}k, ${'$'}v){ ${'$'}v }; ${'$'}set(\"k\", 1); ${'$'}map([1], ${'$'}set))"))
+        assertEquals(emptyList(), ids("${'$'}map([1], function(${'$'}get){ ${'$'}get })"))
+        // calls still found, the T1006 rule only for calls
+        assertEquals(listOf("T1006"), ids("${'$'}wcard(\"a\", \"b\")"))
+        assertEquals(emptyList(), ids("${'$'}map([1], ${'$'}wcard)"))
+    }
 }

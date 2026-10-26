@@ -103,4 +103,4 @@ $lookup([{"b": 1}], "a")                    → []
 
 ## Проверка без загрузки
 
-`SeafDetector` и `jsonata-tools detect [--functions functions.json] <выражения>` находят заранее: конфликты имён (`X0014`), схемы, которые упадут при первом вызове (`X0017`), вызовы `$set`/`$get` (DEV-15), `$jsonschema` и функции манифеста со схемами (DEV-14), нарушения `$jsonschema`, взятые по номеру (`[0]` — порядок, DEV-14), вызовы функций ядра, которых в движке ещё нет. Сборка `jsonata-tools` — из исходников (`./gradlew :jsonata-tools:installDist`).
+`SeafDetector` и `jsonata-tools detect [--functions functions.json] <выражения>` находят заранее: конфликты имён (`X0014`), схемы, которые упадут при первом вызове (`X0017`), вызовы `$set`/`$get` и передачу их значением (DEV-15), `$jsonschema` и функции манифеста со схемами (DEV-14), нарушения `$jsonschema`, взятые по номеру (`[0]` — порядок, DEV-14), вызовы функций ядра, которых в движке ещё нет. Сборка `jsonata-tools` — из исходников (`./gradlew :jsonata-tools:installDist`).
