@@ -28,7 +28,6 @@ import su.seaf.archtool.jsonata.value.NumberValue
 import su.seaf.archtool.jsonata.value.ObjectValue
 import su.seaf.archtool.jsonata.value.StringValue
 import su.seaf.archtool.jsonata.value.Value
-import java.util.IdentityHashMap
 import java.util.Properties
 import java.util.concurrent.atomic.AtomicReference
 
@@ -148,9 +147,10 @@ internal class CoreFunctions(private val host: SeafHost) {
      */
     private fun jsonSchema(c: CallContext, a: List<Value?>): Value {
         val schemaValue = a.getOrNull(0)
-        val cache = c.local(SCHEMA_CACHE) { IdentityHashMap<Any, CompiledSchema>() }
-        val compiled = cache[schemaValue ?: NO_SCHEMA] ?: try {
-            JsonSchemas.compile(schemaValue, SchemaMode.JSONSCHEMA).also { cache[schemaValue ?: NO_SCHEMA] = it }
+        val cache = c.local(SCHEMA_CACHE) { SchemaCache() }
+        val key = Identity(schemaValue ?: NO_SCHEMA)
+        val compiled = cache[key] ?: try {
+            JsonSchemas.compile(schemaValue, SchemaMode.JSONSCHEMA).also { cache[key] = it }
         } catch (e: SchemaCompileException) {
             throw JsonataException("X0012", details = mapOf("message" to e.message))
         }
@@ -197,7 +197,10 @@ internal class CoreFunctions(private val host: SeafHost) {
         private val UNSET = Any()
         private val NO_SCHEMA = Any()
         private val STORE = Any()
-        private val SCHEMA_CACHE = Any()
+        internal val SCHEMA_CACHE = Any()
+
+        /** Compiled schemas kept for one evaluation (review RV3-43: bounded, a schema built per item must not pile up). */
+        internal const val SCHEMA_CACHE_SIZE = 128
 
         /** Errors `$tryexecute` lets through (design §2.3): limits, cancellation, budgets, engine faults. */
         val UNCATCHABLE: Set<String> = setOf("D1011", "D1012", "D2015", "X0002", "X0005", "X0008", "X0009", "X0010", "X0011")
@@ -232,4 +235,15 @@ internal object CoreDocs {
             .map { line -> Example(line!!.substringBeforeLast(" => ").trim(), line.substringAfterLast(" => ").trim()) }.toList()
         return FunctionDoc(text("$name.summary") ?: LocalizedText.ru(name), params, result, examples)
     }
+}
+
+/** A key that compares by identity: the cache of `$jsonschema` is keyed by the schema value itself. */
+private class Identity(val value: Any) {
+    override fun equals(other: Any?): Boolean = other is Identity && other.value === value
+    override fun hashCode(): Int = System.identityHashCode(value)
+}
+
+/** The least recently used schemas beyond [CoreFunctions.SCHEMA_CACHE_SIZE] are dropped (and compiled again if needed). */
+internal class SchemaCache : LinkedHashMap<Any, CompiledSchema>(16, 0.75f, true) {
+    override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Any, CompiledSchema>?): Boolean = size > CoreFunctions.SCHEMA_CACHE_SIZE
 }

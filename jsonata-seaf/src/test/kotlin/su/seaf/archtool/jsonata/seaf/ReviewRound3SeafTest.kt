@@ -324,4 +324,18 @@ class ReviewRound3SeafTest {
         failing("{\"a\": ${'$'}error(\"e\"), \"b\": 1 + \"x\"}")
         assertEquals(listOf("DEV-09"), probes)
     }
+
+    @Test
+    fun `RV3-43 the schema cache of an evaluation is bounded`() {
+        val env = SeafEnvironment.create(SeafEnvironmentTest.NoHost)
+        val functions = env.registry.extend()
+            .register("cacheSize", null, { c, _ -> su.seaf.archtool.jsonata.value.NumberValue.of(c.local(su.seaf.archtool.jsonata.seaf.core.CoreFunctions.SCHEMA_CACHE) { su.seaf.archtool.jsonata.seaf.core.SchemaCache() }.size.toDouble()) })
+            .freeze()
+        val options = env.limits.options().let { o -> EvaluationOptions(o.maxDepth, o.timeoutMillis, o.maxSequence, functions = functions) }
+        val expr = """(${'$'}n := ${'$'}count(${'$'}map([1..1000], function(${'$'}i){ ${'$'}jsonschema({"type":"number","minimum":${'$'}i})(${'$'}i) })); [${'$'}n, ${'$'}cacheSize()])"""
+        assertEquals("[1000,128]", str(env.evaluate(env.compile(expr), null, options = options)))
+        // the case of the review: a schema built per item, 200 000 items
+        val many = """${'$'}count(${'$'}map([1..200000], function(${'$'}i){ ${'$'}jsonschema({"type":"object","properties":{"a":{"type":"number","minimum":${'$'}i}},"required":["a"]})({"a":${'$'}i}) }))"""
+        assertEquals("200000", str(env.evaluate(env.compile(many), null)))
+    }
 }
