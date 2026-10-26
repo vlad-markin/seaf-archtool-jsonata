@@ -269,6 +269,7 @@ internal class EvalContext(
     /** Cancellation (token or interrupt of the current thread) and the deadline. */
     fun checkpoint() {
         if (token != null && token.isCancelled) throw cancelled(null)
+        if (callerInterrupted) throw cancelled(null)
         // an interrupt the host set itself: X0009, the flag stays with the host
         if (Thread.currentThread().isInterrupted) throw cancelled(null)
         if (deadline != 0L && System.nanoTime() - pausedNanos - deadline > 0) throw JsonataException("D1012", value = options.timeoutMillis.toDouble())
@@ -279,11 +280,23 @@ internal class EvalContext(
     private val state = java.util.concurrent.atomic.AtomicInteger(RUNNING)
     @Volatile private var hostThread: Thread? = null
 
-    val isCancelled: Boolean get() = (token != null && token.isCancelled) || Thread.currentThread().isInterrupted
+    /**
+     * The thread that called `evaluate` was interrupted while the evaluation ran on a stack segment thread (review
+     * RV3-1): the interrupt is not forwarded to that thread, the evaluation sees this flag instead.
+     */
+    @Volatile private var callerInterrupted = false
+
+    val isCancelled: Boolean get() = (token != null && token.isCancelled) || callerInterrupted || Thread.currentThread().isInterrupted
 
     fun cancelled(cause: Throwable?): JsonataException = JsonataException("X0009", cause = cause)
 
-    fun isCancelledByToken(): Boolean = token != null && token.isCancelled
+    fun isCancelledByToken(): Boolean = (token != null && token.isCancelled) || callerInterrupted
+
+    /** The caller's thread was interrupted while a segment thread works: cancel as the token does (RV3-1). */
+    fun interruptFromCaller() {
+        callerInterrupted = true
+        cancelFromToken()
+    }
 
     /** Remaining time before the deadline in nanoseconds, [Long.MAX_VALUE] without one. */
     fun remainingNanos(): Long = if (deadline == 0L) Long.MAX_VALUE else maxOf(0L, deadline + pausedNanos - System.nanoTime())
@@ -292,7 +305,7 @@ internal class EvalContext(
     fun enterHost() {
         hostThread = Thread.currentThread()
         if (!state.compareAndSet(RUNNING, IN_HOST)) return
-        if (token != null && token.isCancelled) cancelFromToken()
+        if (isCancelledByToken()) cancelFromToken()
     }
 
     /**
@@ -395,7 +408,7 @@ internal class EvalContext(
         val savedTask = currentTask
         savedTask?.wentDeep = true
         if (segmentsEntered++ == 0) onDeep?.invoke()
-        val task = SegmentPool.run { t ->
+        val task = SegmentPool.run(::interruptFromCaller) { t ->
             segmentBase = base
             segmentLimit = SEGMENT_LIMIT
             currentTask = t

@@ -53,9 +53,11 @@ internal object SegmentPool {
 
     /**
      * Runs [block] on a segment thread and returns its result (or rethrows its exception, the same object) once it has
-     * finished. An interrupt of the waiting thread is passed on to the segment thread and restored afterwards.
+     * finished. An interrupt of the waiting thread is not forwarded to the segment thread (it could arrive after the
+     * task and reach the next one, review RV3-1): [onInterrupt] tells the evaluation, which checks it at its
+     * checkpoint, and the interrupt is restored on the waiting thread afterwards.
      */
-    fun run(block: (Task) -> Any?): Task {
+    fun run(onInterrupt: () -> Unit, block: (Task) -> Any?): Task {
         if (busy.incrementAndGet() > StackSegments.budget) {
             busy.decrementAndGet()
             throw JsonataException("X0005", value = StackSegments.budget.toDouble())
@@ -70,9 +72,8 @@ internal object SegmentPool {
             while (!task.done) {
                 LockSupport.park(task)
                 if (Thread.interrupted()) {
-                    // cancellation reaches the thread that does the work (story 4 checks it at the checkpoint)
+                    if (!interrupted) onInterrupt()
                     interrupted = true
-                    worker.thread.interrupt()
                 }
             }
             if (interrupted) Thread.currentThread().interrupt()
