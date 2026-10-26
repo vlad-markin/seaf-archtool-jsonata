@@ -233,11 +233,13 @@ internal class EvalContext(
      * The last call site of each lambda in this evaluation. jsonata-js records token and position on the lambda object
      * at every call (evaluateFunction, the trampoline) and errors raised inside take them over, so the latest call
      * wins. Kept per evaluation, not on the lambda, so that one lambda can run in several evaluations at once.
+     * Weak keys (a lambda has identity equality): a lambda nobody refers to any more goes away with its closure frame,
+     * so a local function created in every iteration of a `$map` is not kept for the whole evaluation (review RV2-1).
      */
-    private var lastCalls: java.util.IdentityHashMap<Lambda, CallSite>? = null
+    private var lastCalls: java.util.WeakHashMap<Lambda, CallSite>? = null
 
     fun recordCall(lambda: Lambda, site: CallSite) {
-        (lastCalls ?: java.util.IdentityHashMap<Lambda, CallSite>().also { lastCalls = it })[lambda] = site
+        (lastCalls ?: java.util.WeakHashMap<Lambda, CallSite>().also { lastCalls = it })[lambda] = site
     }
 
     fun lastCall(lambda: Lambda): CallSite? = lastCalls?.get(lambda)
