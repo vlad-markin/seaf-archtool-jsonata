@@ -177,14 +177,18 @@ public class DebugSession @JvmOverloads constructor(
      * The options of every expression the debugger evaluates in a frame (watch, condition, logpoint): its own budget
      * (1 s, 1 000 000 steps) and no functions with side effects (X0011).
      */
-    private fun watchOptions(): EvaluationOptions =
-        EvaluationOptions(timeoutMillis = 1000, budgets = su.seaf.archtool.jsonata.Budgets(maxSteps = 1_000_000)).also { it.watch = true }
+    /** The limits of a watch in [frame], with the functions of the stopped evaluation ([EvaluationOptions.functions], RV3-33). */
+    private fun watchOptions(frame: DebugFrame): EvaluationOptions = EvaluationOptions(
+        timeoutMillis = 1000,
+        functions = (frame as FrameView).frame.ctx.registry,
+        budgets = su.seaf.archtool.jsonata.Budgets(maxSteps = 1_000_000),
+    ).also { it.watch = true }
 
     /** Evaluates [w] in [frame] by the watch rules, outside the deadline of the debugged evaluation. */
     private fun evalWatch(w: Watch, input: Value?, frame: DebugFrame): Value? {
         w.error?.let { throw it }
         val ctx = (frame as FrameView).frame.ctx
-        return ctx.paused { w.compiled!!.evaluate(input, scope(frame), watchOptions()) }
+        return ctx.paused { w.compiled!!.evaluate(input, scope(frame), watchOptions(frame)) }
     }
 
     /** `text {expr} text`: literal parts (false) and expressions (true). */
@@ -352,7 +356,7 @@ public class DebugSession @JvmOverloads constructor(
         val task = java.util.concurrent.FutureTask {
             try {
                 val compiled = Jsonata.compile(expression, this.expression.options)
-                EvalOutcome(compiled.evaluate(input, scope(frame), watchOptions()), null)
+                EvalOutcome(compiled.evaluate(input, scope(frame), watchOptions(frame)), null)
             } catch (e: Exception) {
                 EvalOutcome(null, e)
             }

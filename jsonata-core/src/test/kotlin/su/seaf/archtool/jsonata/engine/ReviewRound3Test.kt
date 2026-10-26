@@ -616,4 +616,25 @@ class ReviewRound3Test {
             assertEquals("\"b" + "x".repeat(99) + "\"", JsonWriter.stringify(Jsonata.compile(expr).evaluate(small, emptyMap(), options)!!), expr)
         }
     }
+
+    @Test
+    fun `RV3-33 a watch sees the functions of the evaluation`() {
+        val compile = su.seaf.archtool.jsonata.FunctionRegistry.standard()
+        val perEvaluation = compile.extend()
+            .register(su.seaf.archtool.jsonata.FunctionDefinition("f", null, { _, _ -> su.seaf.archtool.jsonata.value.NumberValue.of(42.0) },
+                su.seaf.archtool.jsonata.FunctionDoc(su.seaf.archtool.jsonata.LocalizedText.ru("Функция вычисления")), sideEffects = false))
+            .freeze()
+        val stops = java.util.concurrent.LinkedBlockingQueue<Any>()
+        val events = object : su.seaf.archtool.jsonata.debug.DebugEvents {
+            override fun stopped(reason: su.seaf.archtool.jsonata.debug.StopReason, at: su.seaf.archtool.jsonata.debug.NodeInfo) { stops.put(at) }
+            override fun terminated(outcome: su.seaf.archtool.jsonata.debug.EvalOutcome) { stops.put(outcome) }
+        }
+        val session = su.seaf.archtool.jsonata.debug.DebugSession(Jsonata.compile("[1].(\$ * \$f())"), events)
+        session.setBreakpoints("main", listOf(su.seaf.archtool.jsonata.debug.BreakpointSpec(1, 8)))
+        Thread { runCatching { session.run(null, emptyMap(), EvaluationOptions(functions = perEvaluation)) } }.start()
+        assertTrue(stops.poll(10, java.util.concurrent.TimeUnit.SECONDS) is su.seaf.archtool.jsonata.debug.NodeInfo)
+        assertEquals("42", session.evaluate(0, "\$f()").toString())
+        session.resume()
+        assertEquals("[42]".removeSurrounding("[", "]"), (stops.poll(10, java.util.concurrent.TimeUnit.SECONDS) as su.seaf.archtool.jsonata.debug.EvalOutcome).toString())
+    }
 }
