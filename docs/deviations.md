@@ -103,6 +103,8 @@ jsonata-js 2.2.2: SyntaxError: Invalid regular expression: /a++/g: Nothing to re
 движок:           X0003 Invalid regular expression "a++": Nothing to repeat
 ```
 
+Сюда же относится `\k` при именованных группах в шаблоне (ревью RV2-14): внутри класса (`/(?<x>a)[\k<x>]/`) и без имени (`/(?<x>a)\k/`) jsonata-js падает с `SyntaxError`, движок даёт `X0003`. Без именованных групп `\k` — буква `k`, как в JS.
+
 Случаев test-suite: нет. Ловушки: `RE-01#4`, `RE-01#5` (`compat/traps`).
 
 ## DEV-05. Кодовые единицы UTF-16 в regex: ограничение эмуляции

@@ -213,12 +213,28 @@ public fun interface HostErrorListener {
     public fun located(error: Throwable, location: ErrorLocation)
 }
 
-/** A function implemented in Kotlin. Arguments are already checked and coerced by the signature, if any. */
+/**
+ * A function implemented in Kotlin. Arguments are already checked and coerced by the signature, if any.
+ *
+ * Contract (design §3.1, review RV2-11):
+ * - **The calling thread is not guaranteed.** A deep evaluation, and from the start an expression with a recursive
+ *   lambda, runs on stack segment threads of the engine (`jsonata-stack-segment-N`, `docs/limits.md`), so a
+ *   `ThreadLocal` of the host (security context, MDC, tracing) set on the thread that called `evaluate` may be
+ *   missing here, and two calls of one function in one evaluation may run on different threads. What the function
+ *   needs from the host comes through bindings, [EvaluationOptions.attributes] ([CallContext.attribute]) or
+ *   [CallContext.local].
+ * - Blocking is allowed; an interrupt means cancellation ([CallContext.cancellation]); the remaining deadline is
+ *   [CallContext.remainingNanos].
+ * - An exception of the function reaches the caller of `evaluate` as the same object.
+ */
 public fun interface NativeImplementation {
     public fun invoke(context: CallContext, args: List<Value?>): Value?
 }
 
-/** What a native function sees of the evaluation (jsonata.js: the `this` of a native function). */
+/**
+ * What a native function sees of the evaluation (jsonata.js: the `this` of a native function). Valid only during the
+ * call, on the thread of the call (which is not always the thread that called `evaluate`, see [NativeImplementation]).
+ */
 public interface CallContext {
     /** The context value at the call (`$`), undefined when called from a higher-order function. */
     public val input: Value?

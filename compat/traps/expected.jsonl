@@ -411,6 +411,9 @@
 {"id":"RV-11#6","json":"{\"match\":\"ab\",\"index\":0,\"groups\":[\"a\",\"b\"]}"}
 {"id":"RV-11#7","json":"{\"match\":\"ÀÉ\",\"index\":0,\"groups\":[]}"}
 {"id":"RV-11#8","json":"{\"match\":\"ПРИВЕТ\",\"index\":0,\"groups\":[]}"}
+{"id":"RV2-14#1","crash":"Invalid regular expression: /(?<x>a)[\\k<x>]/g: Invalid escape"}
+{"id":"RV2-14#2","crash":"Invalid regular expression: /(?<x>a)\\k/g: Invalid named reference"}
+{"id":"RV2-14#3","json":"\"ak\""}
 {"id":"FZ-01#1","json":"\"5v1j4f4ds7c000\""}
 {"id":"FZ-01#2","json":"\"q1ysz911igw00\""}
 {"id":"FZ-01#3","json":"\"2q13lrwvahk00000\""}

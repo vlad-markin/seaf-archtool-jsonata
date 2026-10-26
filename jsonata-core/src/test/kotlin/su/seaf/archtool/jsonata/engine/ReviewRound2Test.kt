@@ -119,4 +119,37 @@ class ReviewRound2Test {
         repeat(5_000_000) { strings.add(s) }
         assertEquals("D1012", assertFailsWith<JsonataException> { Jsonata.compile("\$join(\$)").evaluate(strings, emptyMap(), EvaluationOptions(timeoutMillis = 1)) }.code)
     }
+
+    @Test
+    fun `RV2-11 the thread of a host call is not guaranteed, data comes through the context`() {
+        val local = ThreadLocal<String>()
+        val registry = su.seaf.archtool.jsonata.FunctionRegistry.create()
+            .register("tl", "<:s>", { c, _ -> StringValue.of((local.get() ?: "null") + " " + (c.attribute("user") ?: "-") + " " + Thread.currentThread().name) })
+            .freeze()
+        fun run(expr: String): String {
+            local.set("set")
+            try {
+                return (Jsonata.compile(expr, su.seaf.archtool.jsonata.CompileOptions(registry)).evaluate(null, emptyMap(), EvaluationOptions(attributes = mapOf("user" to "u1"))) as StringValue).value
+            } finally {
+                local.remove()
+            }
+        }
+        // a flat expression: the host's thread
+        assertTrue(run("\$tl()").startsWith("set u1 "), run("\$tl()"))
+        // a recursive lambda runs on stack segment threads: the ThreadLocal is not there, the attribute is
+        for (n in listOf(3, 100, 5000)) {
+            val r = run("(\$f := function(\$n){ \$n = 0 ? \$tl() : \$f(\$n - 1) & '' }; \$f($n))")
+            assertTrue(r.startsWith("null u1 jsonata-stack-segment-"), "$n: $r")
+        }
+    }
+
+    @Test
+    fun `RV2-14 a named reference escape is checked as in JS`() {
+        for (expr in listOf("/(?<x>a)[\\k<x>]/", "/(?<x>a)[\\k]/", "/(?<x>a)\\k/", "/(?<x>a)\\k<y>/")) {
+            assertEquals("X0003", assertFailsWith<JsonataException>(expr) { Jsonata.compile(expr).evaluate(null) }.code, expr)
+        }
+        // without named groups \k is the letter k, also inside a class
+        assertEquals("\"ak\"", eval("\$match(\"ak\", /a[\\k]/).match"))
+        assertEquals("\"aa\"", eval("\$match(\"aa\", /(?<x>a)\\k<x>/).match"))
+    }
 }

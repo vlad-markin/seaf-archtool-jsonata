@@ -18,6 +18,8 @@ class TrapsTest {
 
     /** Case id → why our outcome may differ. */
     private val allowed = mapOf(
+        "RV2-14#1" to "jsonata-js fails with a JS SyntaxError (\\k inside a class with named groups); we report X0003 (DEV-04)",
+        "RV2-14#2" to "jsonata-js fails with a JS SyntaxError (\\k without a name with named groups); we report X0003 (DEV-04)",
         "RE-01#4" to "jsonata-js fails with a JS SyntaxError (not a JSONata error); we report X0003 (docs/deviations.md DEV-04)",
         "RE-01#5" to "the same: (?i) is Java syntax, invalid in JS",
         "AHEAD-01#1" to "jsonata-js 2.2.2 crashes with a TypeError on an undefined matcher; we report T1006",

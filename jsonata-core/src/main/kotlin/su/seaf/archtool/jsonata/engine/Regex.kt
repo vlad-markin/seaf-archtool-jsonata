@@ -104,7 +104,7 @@ internal object JsRegexTranslator {
             val c = src[i]
             when (c) {
                 '\\' -> i = escape(src, i, sb, false, groups, names, unicode)
-                '[' -> i = charClass(src, i, sb, unicode)
+                '[' -> i = charClass(src, i, sb, unicode, names.isNotEmpty())
                 '(' -> {
                     val name = groupNameAt(src, i)
                     if (name != null) {
@@ -237,7 +237,7 @@ internal object JsRegexTranslator {
     }
 
     /** Translates the escape at [start] (a backslash); returns the index after it. */
-    private fun escape(src: String, start: Int, sb: StringBuilder, inClass: Boolean, groups: Int, names: Map<String, String>, unicode: Boolean = false): Int {
+    private fun escape(src: String, start: Int, sb: StringBuilder, inClass: Boolean, groups: Int, names: Map<String, String>, unicode: Boolean = false, hasNamedGroups: Boolean = false): Int {
         if (start + 1 >= src.length) {
             if (unicode) throw IllegalArgumentException("\\ at end of pattern")
             sb.append("\\\\")
@@ -288,15 +288,16 @@ internal object JsRegexTranslator {
                 }
             }
             'k' -> {
-                if (names.isNotEmpty() && !inClass && src.getOrNull(i) == '<') {
-                    val end = src.indexOf('>', i)
-                    if (end > 0) {
-                        val name = src.substring(i + 1, end)
-                        sb.append("\\k<").append(names[name] ?: name).append('>')
-                        i = end + 1
-                    } else {
-                        sb.append('k')
-                    }
+                // with named groups in the pattern `\k` must be a valid named reference outside a class, and is a
+                // syntax error inside one; without them it is the letter k (Annex B; review RV2-14)
+                if (names.isNotEmpty() || (inClass && hasNamedGroups)) {
+                    if (inClass) throw IllegalArgumentException("Invalid escape")
+                    val end = if (src.getOrNull(i) == '<') src.indexOf('>', i) else -1
+                    if (end < 0) throw IllegalArgumentException("Invalid named reference")
+                    val name = src.substring(i + 1, end)
+                    val mapped = names[name] ?: throw IllegalArgumentException("Invalid named capture referenced")
+                    sb.append("\\k<").append(mapped).append('>')
+                    i = end + 1
                 } else {
                     sb.append('k')
                 }
@@ -501,7 +502,7 @@ internal object JsRegexTranslator {
     }
 
     /** Translates the class starting at [start] (a `[`); returns the index after the closing `]`. */
-    private fun charClass(src: String, start: Int, sb: StringBuilder, unicode: Boolean = false): Int {
+    private fun charClass(src: String, start: Int, sb: StringBuilder, unicode: Boolean = false, hasNamedGroups: Boolean = false): Int {
         var i = start + 1
         val negated = i < src.length && src[i] == '^'
         if (negated) i++
@@ -515,7 +516,7 @@ internal object JsRegexTranslator {
         while (i < src.length && src[i] != ']') {
             val c = src[i]
             when (c) {
-                '\\' -> i = escape(src, i, sb, true, 0, emptyMap(), unicode)
+                '\\' -> i = escape(src, i, sb, true, 0, emptyMap(), unicode, hasNamedGroups)
                 '[', '&', '^', '~' -> { sb.append('\\').append(c); i++ }
                 else -> { sb.append(if (unicode) c else JsRegexPattern.unit(c)); i++ }
             }

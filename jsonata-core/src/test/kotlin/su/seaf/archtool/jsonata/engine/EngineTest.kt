@@ -299,10 +299,13 @@ class EngineTest {
     fun `JVM stack exhaustion is reported as X0002`() {
         // a native callback that recurses into the evaluator without passing through a JSONata frame boundary
         val registry = FunctionRegistry.create().register("again", "<f:x>", { c, a -> c.call(a[0] as FunctionValue, listOf(a[0])) })
+        val t0 = System.nanoTime()
         val e = assertFailsWith<JsonataException> {
             Jsonata.compile("\$again(function(\$g){ \$again(\$g) })", CompileOptions(registry)).evaluate(null)
         }
-        assertTrue(e.code == "X0002" || e.code == "D1011", e.code)
+        // the JVM stack runs out inside native code long before the depth limit (DEV-02, design §2.0 p. 2; review RV2-12)
+        assertEquals("X0002", e.code)
+        assertTrue((System.nanoTime() - t0) / 1_000_000 < 2000, "X0002 took ${(System.nanoTime() - t0) / 1_000_000} ms")
     }
 
     @Test

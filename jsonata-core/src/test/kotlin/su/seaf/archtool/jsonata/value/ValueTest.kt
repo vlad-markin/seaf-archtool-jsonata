@@ -30,10 +30,12 @@ class ValueTest {
         val expr = su.seaf.archtool.jsonata.Jsonata.compile("[\$keys(\$), \$string(\$), \$each(\$, function(\$v, \$k){ \$k })]")
         val pool = java.util.concurrent.Executors.newFixedThreadPool(8)
         repeat(200) { round ->
-            // a fresh document per round, so that the first key reads race with each other
-            val doc = ObjectValue()
-            for (i in 0 until 50) doc.put(if (i % 3 == 0) "$i" else "k$i", n(i.toDouble()))
-            val expected = JsonWriter.stringify(expr.evaluate(ObjectValue().also { c -> doc.keys.forEach { c.put(it, doc[it]!!) } }))
+            // a fresh document per round, so that the first key reads race with each other; the expected value comes
+            // from a separate copy, so that nothing reads doc (and fills its cached orders) before the threads start
+            // (review RV2-13)
+            fun build() = ObjectValue().also { d -> for (i in 0 until 50) d.put(if (i % 3 == 0) "$i" else "k$i", n(i.toDouble())) }
+            val doc = build()
+            val expected = JsonWriter.stringify(expr.evaluate(build()))
             val start = java.util.concurrent.CountDownLatch(1)
             val futures = (1..8).map { pool.submit<String> { start.await(); JsonWriter.stringify(expr.evaluate(doc)) } }
             start.countDown()

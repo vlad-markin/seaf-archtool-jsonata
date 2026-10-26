@@ -13,3 +13,6 @@
 {"id": "RV-11#6", "tags": ["review"], "expr": "$match(\"ab\", /(a)\\2(b)/)"}
 {"id": "RV-11#7", "tags": ["review"], "expr": "$match(\"ÀÉ\", /àé/i)"}
 {"id": "RV-11#8", "tags": ["review"], "expr": "$match(\"ПРИВЕТ\", /привет/i)"}
+{"id": "RV2-14#1", "tags": ["review"], "expr": "/(?<x>a)[\\k<x>]/"}
+{"id": "RV2-14#2", "tags": ["review"], "expr": "/(?<x>a)\\k/"}
+{"id": "RV2-14#3", "tags": ["review"], "expr": "$match(\"ak\", /a[\\k]/).match"}
