@@ -93,4 +93,20 @@ class JsonataJsonTest {
         assertFailsWith<Exception> { JsonataJson.parse("[1,") }
         assertFailsWith<Exception> { JsonataJson.parse("1 2") }
     }
+
+    @Test
+    fun `short repeated string values share one instance and keep their text (step 6-3)`() {
+        val text = "[" + (0 until 1000).joinToString(",") { "{\"type\":\"service\",\"id\":\"c$it\",\"d\":\"${"x".repeat(40)}\"}" } + "]"
+        val v = JsonataJson.parse(text) as su.seaf.archtool.jsonata.value.ArrayValue
+        val first = v[0] as su.seaf.archtool.jsonata.value.ObjectValue
+        val last = v[999] as su.seaf.archtool.jsonata.value.ObjectValue
+        kotlin.test.assertSame(first["type"], last["type"])
+        kotlin.test.assertNotSame(first["d"], last["d"]) // longer than 32 characters: not pooled
+        kotlin.test.assertEquals("c999", (last["id"] as su.seaf.archtool.jsonata.value.StringValue).value)
+        kotlin.test.assertEquals(text, JsonataJson.stringify(v))
+        // escapes and non-ASCII are compared by their decoded characters
+        val u = JsonataJson.parse("[\"\\u00e9\", \"é\", \"e\\u0301\"]") as su.seaf.archtool.jsonata.value.ArrayValue
+        kotlin.test.assertSame(u[0], u[1])
+        kotlin.test.assertNotSame(u[0], u[2])
+    }
 }

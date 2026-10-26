@@ -59,8 +59,52 @@ public object JsonataJson {
         return result
     }
 
+    /**
+     * Short string values of one document share one [StringValue] (step 6.3): architecture documents repeat types,
+     * technologies, tags, owners and references many times. Values are immutable and their identity is not observable
+     * in JSONata, so this changes only memory. Bounded, so that a document of unique strings costs a fixed table.
+     */
+    private class StringPool {
+        // open addressing over the characters of the parser: a repeated value allocates nothing
+        private val table = arrayOfNulls<StringValue>(TABLE_SIZE)
+        private var size = 0
+
+        fun of(parser: JsonParser): StringValue {
+            val len = parser.textLength
+            if (len > MAX_POOLED_LENGTH || len == 0) return StringValue.of(parser.text)
+            val chars = parser.textCharacters
+            val off = parser.textOffset
+            var h = len
+            for (i in off until off + len) h = 31 * h + chars[i].code
+            var slot = (h xor (h ushr 16)) and (TABLE_SIZE - 1)
+            while (true) {
+                val v = table[slot] ?: break
+                val t = v.value
+                if (t.length == len && same(t, chars, off, len)) return v
+                slot = (slot + 1) and (TABLE_SIZE - 1)
+            }
+            val v = StringValue.of(String(chars, off, len))
+            if (size < MAX_POOLED) {
+                table[slot] = v
+                size++
+            }
+            return v
+        }
+
+        private fun same(t: String, chars: CharArray, off: Int, len: Int): Boolean {
+            for (i in 0 until len) if (t[i] != chars[off + i]) return false
+            return true
+        }
+    }
+
+    /** Table of the pool: twice the most pooled values, so that probing stays short. */
+    private const val TABLE_SIZE = 1 shl 17
+    private const val MAX_POOLED_LENGTH = 32
+    private const val MAX_POOLED = 1 shl 16
+
     private fun readValue(parser: JsonParser, first: JsonToken): Value {
-        scalar(parser, first)?.let { return it }
+        scalar(parser, first, null)?.let { return it }
+        val strings = StringPool()
         // containers: explicit stack of (container, pending key)
         val stack = ArrayList<Any>()
         val keys = ArrayList<String?>()
@@ -91,14 +135,14 @@ public object JsonataJson {
                     stack += open(token)
                     keys += null
                 }
-                else -> attach(scalar(parser, token) ?: throw JsonFormatException("unexpected token $token"))
+                else -> attach(scalar(parser, token, strings) ?: throw JsonFormatException("unexpected token $token"))
             }
         }
         return root!!
     }
 
-    private fun scalar(parser: JsonParser, token: JsonToken): Value? = when (token) {
-        JsonToken.VALUE_STRING -> StringValue.of(parser.text)
+    private fun scalar(parser: JsonParser, token: JsonToken, strings: StringPool?): Value? = when (token) {
+        JsonToken.VALUE_STRING -> if (strings != null) strings.of(parser) else StringValue.of(parser.text)
         JsonToken.VALUE_NUMBER_INT, JsonToken.VALUE_NUMBER_FLOAT -> NumberValue.of(parser.text.toDouble())
         JsonToken.VALUE_TRUE -> BooleanValue.TRUE
         JsonToken.VALUE_FALSE -> BooleanValue.FALSE
