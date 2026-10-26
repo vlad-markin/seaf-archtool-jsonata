@@ -35,10 +35,53 @@ class FuzzClassifierTest {
     }
 
     @Test
-    fun `partial application giving another value is DEV-03 (RV2-10)`() {
-        assertTrue(KnownDifferences.explain(case("\$count(?)(5)"), "undefined", "json 1")!!.startsWith("DEV-03"))
-        assertNull(KnownDifferences.explain(case("\$count([5])"), "undefined", "json 1"))
+    fun `DEV-08 only for an empty array item and the rewrites of DEV-03 and DEV-09 (RV3-8)`() {
+        val clone = case("[[], \"x\"] ~> |\$|{}|")
+        assertTrue(KnownDifferences.explain(clone, "json [[null],\"x\"]", "json [[],\"x\"]")!!.startsWith("DEV-08"))
+        // inside a string, with another difference, or with no empty array to push into: not DEV-08
+        assertNull(KnownDifferences.explain(case("{\"a\": \"[null]\"}"), "json {\"a\":\"[null]\"}", "json {\"a\":\"[]\"}"))
+        assertNull(KnownDifferences.explain(case("[[], {\"k\": 1}]"), "json [[null],{\"k\":2}]", "json [[],{\"k\":1}]"))
+        assertNull(KnownDifferences.explain(case("{\"a\": [1]}"), "json {\"a\":[null]}", "json {\"a\":[]}"))
+        // DEV-03 and DEV-09 are not explained by the text alone
+        assertNull(KnownDifferences.explain(case("\$count(?)(5)"), "undefined", "json 1"))
+        assertEquals("(function(\$__p1){ \$count(\$__p1) })(5)", KnownDifferences.rewritePartials("\$count(?)(5)"))
+        assertEquals("(function(\$__p1){ \$substring(\"abc\",\$__p1, 1) })(1)", KnownDifferences.rewritePartials("\$substring(\"abc\", ?, 1)(1)"))
+        assertNull(KnownDifferences.rewritePartials("\$count([5])"))
+        assertEquals("(\$r := /a/i; [\$contains(\"A\", /a/i), \$contains(\"b\", /a/i)])",
+            KnownDifferences.rewriteSharedRegex("(\$r := /a/i; [\$contains(\"A\", \$r), \$contains(\"b\", \$r)])"))
     }
+
+    /** The engine with a regression: every `1 + 1` gives 3, in the case and in its rewritten form alike. */
+    private class Regressed(node: File) : DiffFuzz(node) {
+        override fun outcomeOf(c: FuzzCase): String = super.outcomeOf(c).let { if (c.expr.contains("1 + 1")) it.replace("2]", "3]") else it }
+    }
+
+    @Test
+    fun `DEV-03 and DEV-09 only when the rewritten case agrees (RV3-8)`() {
+        assumeTrue(Sidecar.available(node), Sidecar.unavailable(node))
+        fun known(fuzz: DiffFuzz, c: FuzzCase): String? {
+            val got = fuzz.outcomeOf(c)
+            val want = Sidecar.fresh(node, c)
+            assertTrue(want != got, "no difference: $got")
+            return fuzz.classify(c, want, got).known
+        }
+        val fuzz = DiffFuzz(node)
+        val regressed = Regressed(node)
+        // DEV-03: the probe fires, and a direct call makes the reference agree
+        assertTrue(known(fuzz, case("\$count(?)(5)"))!!.startsWith("DEV-03"), known(fuzz, case("\$count(?)(5)")))
+        // the probe fires too, but the other difference stays: unexplained
+        assertNull(known(regressed, case("[\$count(?)(5), 1 + 1]")))
+        // DEV-09: separate regex literals make the reference agree
+        val shared = "(\$r := /a/; [\$match(\"abab\", \$r), \$replace(\"aa\", \$r, \"b\"), \$split(\"bab\", \$r), \$contains(\"xa\", \$r)])"
+        assertTrue(known(fuzz, case(shared))!!.startsWith("DEV-09"))
+        // a shared regex variable where the difference is elsewhere: unexplained
+        assertNull(known(regressed, case("(\$r := /a/; [\$contains(\"a\", \$r), \$contains(\"b\", \$r), 1 + 1])")))
+        assertNull(known(regressed, case("(\$r := /a/; [\$match(\"abab\", \$r), \$replace(\"aa\", \$r, \"b\"), 1 + 1])")))
+        // DEV-08 still explained (its probe)
+        assertTrue(known(fuzz, clone())!!.startsWith("DEV-08"))
+    }
+
+    private fun clone() = case("[[], \"x\"] ~> |\$|{}|")
 
     @Test
     fun `positions are explained only on a confirming sign (RV2-4, DEV-17)`() {

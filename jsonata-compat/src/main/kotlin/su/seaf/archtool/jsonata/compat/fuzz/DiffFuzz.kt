@@ -154,11 +154,11 @@ class Sidecar(private val nodeDir: File, private val caseTimeoutMillis: Long = 1
 data class Mismatch(val case: FuzzCase, val expected: String, val actual: String, val category: String, val known: String?)
 
 /** Runs generated cases on both sides and classifies the differences (phase 8). */
-class DiffFuzz(private val nodeDir: File) {
+open class DiffFuzz(private val nodeDir: File) {
     private val executor = Executors.newVirtualThreadPerTaskExecutor()
 
     /** The engine outcome: `json <JSON.stringify text>` (functions as "<function>"), `undefined`, `error <code>`. */
-    fun outcomeOf(c: FuzzCase): String {
+    open fun outcomeOf(c: FuzzCase): String {
         val hits = java.util.Collections.synchronizedSet(java.util.TreeSet<String>())
         probeHits[c.id] = hits
         val future = executor.submit<String> {
@@ -226,16 +226,41 @@ class DiffFuzz(private val nodeDir: File) {
      */
     fun classify(c: FuzzCase, want: String, got: String): Mismatch {
         val category = if (codeOnly(want) == codeOnly(got) && want.startsWith("error ")) "error-position-token" else category(want, got)
+        // DEV-03 fires on any coercion in the expression: it explains only when the partial calls rewritten into direct
+        // ones make the reference agree with the engine (review RV3-8)
+        val partials by lazy { confirmedByRewrite(c, got, KnownDifferences.rewritePartials(c.expr)) }
         // DEV-10 changes only the position of an error
-        val fired = probeHits[c.id].orEmpty().filter { it != Deviations.POSITION_IN_LAMBDA.id || category == "error-position-token" }
+        val fired = probeHits[c.id].orEmpty()
+            .filter { it != Deviations.POSITION_IN_LAMBDA.id || category == "error-position-token" }
+            .filter { it != Deviations.PARTIAL_SIGNATURE.id || partials }
         val known = when {
             fired.isNotEmpty() -> fired.joinToString(", ") { id -> "$id: " + (Deviations.byId(id)?.title ?: "deviation") } + " (probe fired)"
             category == "error-position-token" -> explainPosition(c, want, got)
-            else -> KnownDifferences.explain(c, codeOnly(want), codeOnly(got))
+            else -> KnownDifferences.explain(c, codeOnly(want), codeOnly(got)) ?: when {
+                KnownDifferences.hasPartialCall(c.expr) && partials ->
+                    "DEV-03: a partially applied native function checks and coerces its arguments by the signature (a direct call agrees)"
+                KnownDifferences.sharedRegexInConstructor(c.expr) && confirmedByRewrite(c, got, KnownDifferences.rewriteSharedRegex(c.expr)) ->
+                    "DEV-09: a regex variable shared by several values of a constructor (lastIndex in the async evaluation of jsonata-js; separate literals agree)"
+                else -> null
+            }
         }
         val m = Mismatch(c, want, got, category, known)
         if (category == "error-position-token" && known != null) explainedByPosition += m
         return m
+    }
+
+    /**
+     * True when [rewritten] (the case with one construct replaced by its equivalent) gives the engine's outcome on both
+     * sides: the engine is unchanged by the rewrite and the reference, in a fresh process, now agrees. Then the
+     * difference is that construct only; any other difference stays (review RV3-8).
+     */
+    private fun confirmedByRewrite(c: FuzzCase, got: String, rewritten: String?): Boolean {
+        if (rewritten == null || rewritten == c.expr) return false
+        val r = c.copy(id = c.id + "~rewritten", expr = rewritten)
+        val engine = outcomeOf(r)
+        probeHits.remove(r.id)
+        if (codeOnly(engine) != codeOnly(got)) return false
+        return codeOnly(Sidecar.fresh(nodeDir, r)) == codeOnly(got)
     }
 
     private fun explainPosition(c: FuzzCase, want: String, got: String): String? {
@@ -284,52 +309,138 @@ object KnownDifferences {
         if (Regex("/[a-z]*i[a-z]*").containsMatchIn(c.expr) && (foldingChars.containsMatchIn(c.expr) || foldingChars.containsMatchIn(c.input?.toString() ?: ""))) {
             return "DEV-06: case folding with the i flag"
         }
-        if (Regex("\\(\\s*\\?|,\\s*\\?\\s*[,)]").containsMatchIn(c.expr) && got.startsWith("error T0410") && !want.startsWith("error")) {
-            return "DEV-03: partial application of a native function checks its signature"
-        }
         if (want == "reference-timeout") return "the reference did not finish within the case timeout"
-        // DEV-03 p. 3: a partially applied native function coerces its argument by the signature, the reference
-        // calls it unchecked (both sides give a value)
-        if (partialNative.containsMatchIn(c.expr) && !want.startsWith("error") && !got.startsWith("error")) {
-            return "DEV-03: a partially applied native function checks and coerces its arguments by the signature"
-        }
-        // DEV-09 (shared regex): one regex variable used by two or more values of a constructor; jsonata-js shares the
-        // RegExp lastIndex between them in its async evaluation (review RV2-9)
-        if (sharedRegexInConstructor(c.expr)) {
-            return "DEV-09: a regex variable shared by several values of a constructor (lastIndex in the async evaluation of jsonata-js)"
-        }
-        if (c.expr.contains("{") && want.replace("[null]", "[]") == got) {
+        // DEV-03 and DEV-09 need the reference on a rewritten expression: DiffFuzz.classify (review RV3-8)
+        if (onlyEmptyArrayItems(c, want, got)) {
             return "DEV-08: object constructor over an empty array does not push undefined into it"
         }
         return null
     }
 
-    private val partialNative = Regex("\\$[a-zA-Z]+\\([^()]*\\?[^()]*\\)")
+    private val partialNative = Regex("\\$([a-zA-Z]+)\\(([^()]*\\?[^()]*)\\)")
+
+    /** Whether [expr] has a partial application `$name(…, ?, …)` (simple arguments, no parentheses). */
+    fun hasPartialCall(expr: String): Boolean = partialNative.findAll(expr).any { m -> splitArguments(m.groupValues[2]).any { it.trim() == "?" } }
+
+    /**
+     * [expr] with each partial application `$f(a, ?, b)` replaced by `(function($__p1){ $f(a, $__p1, b) })`: a direct
+     * call, which checks and coerces its arguments in jsonata-js too. Null when there is none.
+     */
+    fun rewritePartials(expr: String): String? {
+        var changed = false
+        val out = partialNative.replace(expr) { m ->
+            val args = splitArguments(m.groupValues[2])
+            if (args.none { it.trim() == "?" }) return@replace m.value
+            changed = true
+            var n = 0
+            val params = ArrayList<String>()
+            val call = args.joinToString(",") { a -> if (a.trim() == "?") "\$__p${++n}".also { params += it } else a }
+            "(function(${params.joinToString(", ")}){ \$${m.groupValues[1]}($call) })"
+        }
+        return if (changed) out else null
+    }
+
+    /** Splits an argument list at top-level commas (outside brackets, braces and strings). */
+    private fun splitArguments(text: String): List<String> {
+        val out = ArrayList<String>()
+        var depth = 0
+        var quote = 0.toChar()
+        var start = 0
+        var i = 0
+        while (i < text.length) {
+            val ch = text[i]
+            when {
+                quote != 0.toChar() -> if (ch == '\\') i++ else if (ch == quote) quote = 0.toChar()
+                ch == '"' || ch == '\'' -> quote = ch
+                ch == '[' || ch == '{' -> depth++
+                ch == ']' || ch == '}' -> depth--
+                ch == ',' && depth == 0 -> { out += text.substring(start, i); start = i + 1 }
+            }
+            i++
+        }
+        out += text.substring(start)
+        return out
+    }
+
+    /**
+     * DEV-08: the only differences are `[null]` (reference) against `[]` (engine) in the structure of the results, and
+     * the expression or the input has an empty array for jsonata-js to push undefined into (review RV3-8).
+     */
+    fun onlyEmptyArrayItems(c: FuzzCase, want: String, got: String): Boolean {
+        if (!want.startsWith("json ") || !got.startsWith("json ") || !c.expr.contains("{")) return false
+        val w = try { mapper.readTree(want.removePrefix("json ")) } catch (_: Exception) { return false }
+        val g = try { mapper.readTree(got.removePrefix("json ")) } catch (_: Exception) { return false }
+        var found = 0
+        fun same(a: JsonNode, b: JsonNode): Boolean = when {
+            a.isArray && b.isArray && a.size() == 1 && a[0].isNull && b.size() == 0 -> { found++; true }
+            a.isArray && b.isArray -> a.size() == b.size() && (0 until a.size()).all { same(a[it], b[it]) }
+            a.isObject && b.isObject -> a.fieldNames().asSequence().toList() == b.fieldNames().asSequence().toList() &&
+                a.fieldNames().asSequence().all { same(a[it], b[it]) }
+            else -> a == b
+        }
+        if (!same(w, g) || found == 0) return false
+        return emptyArrayIn(c.input) || emptyArrayConstructor(c.expr)
+    }
+
+    private fun emptyArrayIn(n: JsonNode?): Boolean = when {
+        n == null -> false
+        n.isArray -> n.size() == 0 || n.any { emptyArrayIn(it) }
+        n.isObject -> n.any { emptyArrayIn(it) }
+        else -> false
+    }
+
+    private fun emptyArrayConstructor(expr: String): Boolean {
+        val ast = try { Jsonata.compile(expr).ast() } catch (_: JsonataException) { return false }
+        var found = false
+        walk(ast) { n -> if (n.type == "unary" && n.value == "[" && (n["expressions"] as? List<*>).isNullOrEmpty()) found = true }
+        return found
+    }
 
     /** A variable bound to a regex literal and referenced inside two or more values of one array or object constructor. */
-    fun sharedRegexInConstructor(expr: String): Boolean {
+    fun sharedRegexInConstructor(expr: String): Boolean = sharedRegexVariables(expr).isNotEmpty()
+
+    /** The shared regex variables of [sharedRegexInConstructor] and their literals. */
+    private fun sharedRegexVariables(expr: String): Map<String, su.seaf.archtool.jsonata.parser.JsRegex> {
         val ast = try {
             Jsonata.compile(expr).ast()
         } catch (_: JsonataException) {
-            return false
+            return emptyMap()
         }
-        val regexVars = HashSet<String>()
+        val regexVars = HashMap<String, su.seaf.archtool.jsonata.parser.JsRegex>()
         walk(ast) { n ->
-            if (n.type == "bind" && (n["rhs"] as? su.seaf.archtool.jsonata.parser.AstNode)?.type == "regex") {
-                ((n["lhs"] as? su.seaf.archtool.jsonata.parser.AstNode)?.get("value") as? String)?.let { regexVars += it }
+            val rhs = n["rhs"] as? su.seaf.archtool.jsonata.parser.AstNode
+            if (n.type == "bind" && rhs?.type == "regex") {
+                val name = (n["lhs"] as? su.seaf.archtool.jsonata.parser.AstNode)?.get("value") as? String
+                val literal = rhs.value as? su.seaf.archtool.jsonata.parser.JsRegex
+                if (name != null && literal != null) regexVars[name] = literal
             }
         }
-        if (regexVars.isEmpty()) return false
-        var shared = false
+        if (regexVars.isEmpty()) return emptyMap()
+        val shared = HashMap<String, su.seaf.archtool.jsonata.parser.JsRegex>()
         walk(ast) { n ->
             val values: List<Any?> = when {
                 n.type == "unary" && n.value == "[" -> (n["expressions"] as? List<*>).orEmpty()
                 n.type == "unary" && n.value == "{" -> (n["lhs"] as? List<*>).orEmpty().flatMap { (it as? List<*>).orEmpty() }
                 else -> emptyList()
             }
-            for (v in regexVars) if (values.count { uses(it, v) } >= 2) shared = true
+            for ((v, literal) in regexVars) if (values.count { uses(it, v) } >= 2) shared[v] = literal
         }
         return shared
+    }
+
+    /**
+     * [expr] with each use of a shared regex variable replaced by its own copy of the literal: nothing is shared, so
+     * jsonata-js has no `lastIndex` to carry over. Null when no variable is shared.
+     */
+    fun rewriteSharedRegex(expr: String): String? {
+        val shared = sharedRegexVariables(expr)
+        if (shared.isEmpty()) return null
+        var out = expr
+        for ((name, literal) in shared) {
+            val text = "/" + literal.pattern + "/" + literal.flags.replace("g", "")
+            out = Regex("\\$" + Regex.escape(name) + "(?![A-Za-z0-9_])(?!\\s*:=)").replace(out) { text }
+        }
+        return out
     }
 
     private fun uses(node: Any?, variable: String): Boolean {
